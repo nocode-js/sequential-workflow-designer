@@ -1,0 +1,27 @@
+
+.sqd-designer {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: none;
+	background: #F6F6F6;
+}
+
+.sqd-designer svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.sqd-grid-path {
+	stroke: #E3E3E3;
+}
+
+.sqd-activity {
+	filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, .15));
+	cursor: move;
+}
+
+.sqd-activity-text {
+	cursor: move;
+}
