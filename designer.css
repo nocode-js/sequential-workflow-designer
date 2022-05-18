@@ -5,23 +5,85 @@
 	height: 100%;
 	overflow: none;
 	background: #F6F6F6;
+	font-size: 13px;
+	line-height: 1em;
 }
 
-.sqd-designer svg {
+.sqd-canvas {
 	position: absolute;
 	top: 0;
 	left: 0;
+	cursor: move;
 }
 
 .sqd-grid-path {
 	stroke: #E3E3E3;
 }
 
-.sqd-activity {
-	filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, .15));
-	cursor: move;
+.sqd-join {
+	stroke-width: 2;
+	stroke: #000;
 }
 
-.sqd-activity-text {
-	cursor: move;
+.sqd-moving {
+	opacity: 0.25;
+}
+
+/* .sqd-task */
+
+.sqd-task-rect {
+	fill: #FFF;
+	stroke: #C3C3C3;
+	filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, .15));
+	stroke-width: 1;
+}
+.sqd-task-rect.sqd-selected {
+	stroke: #ED4800;
+	stroke-width: 2;
+}
+.sqd-task-text {
+	fill: #000;
+}
+
+/* .sqd-switch */
+
+.sqd-switch-region {
+	stroke: #CECECE;
+	stroke-width: 2;
+	stroke-dasharray: 3;
+}
+.sqd-switch-region.sqd-selected {
+	stroke: #ED4800;
+	stroke-width: 2;
+	stroke-dasharray: 0;
+}
+.sqd-switch-name-rect {
+	fill: #2411DB;
+}
+.sqd-switch-name-text {
+	fill: #FFF;
+}
+.sqd-switch-branch-rect {
+	fill: #000;
+}
+.sqd-switch-branch-text {
+	fill: #FFF;
+}
+
+/* .sqd-anchor */
+
+.sqd-anchor {
+	fill: #2C18DF;
+}
+.sqd-anchor.sqd-selected {
+	fill: #ED4800;
+}
+.sqd-anchor-icon {
+	fill: #FFF;
+}
+
+/* .sqd-placeholder */
+
+.sqd-placeholder {
+	fill: #ED4800;
 }

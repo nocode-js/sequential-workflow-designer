@@ -1,46 +1,42 @@
 import { TaskStep } from '../definition';
-import { createSvgElement } from '../svg';
-import { Component } from './component';
+import { Svg } from '../svg';
+import { StepComponent, StepComponentState } from './component';
 
 const WIDTH = 136;
 const HEIGHT = 44;
 
-export class TaskStepComponent implements Component {
+export class TaskStepComponent implements StepComponent {
 
 	public static create(step: TaskStep) {
-		const rect = createSvgElement('rect', {
+		const rect = Svg.element('rect', {
 			x: 0.5,
 			y: 0.5,
-			class: 'sqd-activity',
+			class: 'sqd-task-rect',
 			width: WIDTH,
 			height: HEIGHT,
-			fill: '#FFF',
-			rx: 4,
-			ry: 5,
-			'stroke-width': 1,
-			stroke: '#C3C3C3'
+			rx: 5,
+			ry: 5
 		});
 
-		const title = createSvgElement('text', {
+		const text = Svg.element('text', {
 			x: WIDTH / 3,
 			y: HEIGHT / 2,
-			class: 'sqd-activity-text',
+			class: 'sqd-task-text',
 			'text-anchor': 'left',
 			'style': 'dominant-baseline: central'
 		});
-		title.textContent = step.name;
+		text.textContent = step.name;
 
 		const imageSize = HEIGHT / 2;
-		const image = createSvgElement('rect', {
+		const image = Svg.element('rect', {
 			x: (WIDTH / 3 - imageSize) / 2,
 			y: (HEIGHT - imageSize) / 2,
 			width: imageSize,
 			height: imageSize,
 			fill: '#2C18DF'
-			// href: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
 		});
 
-		const input = createSvgElement('circle', {
+		const input = Svg.element('circle', {
 			cx: WIDTH / 2,
 			xy: 0,
 			r: 6,
@@ -49,29 +45,61 @@ export class TaskStepComponent implements Component {
 			stroke: '#000'
 		});
 
-		const output = createSvgElement('circle', {
+		const output = Svg.element('circle', {
 			cx: WIDTH / 2,
 			cy: HEIGHT,
 			fill: '#000',
 			r: 4
 		});
 
-		const g = createSvgElement('g', {
-			transform: `translate(100, 100)`,
+		const g = Svg.element('g', {
+			class: 'sqd-task-group'
 		});
 		g.appendChild(rect);
-		g.appendChild(title);
+		g.appendChild(text);
 		g.appendChild(image);
 		g.appendChild(input);
 		g.appendChild(output);
 
-		return new TaskStepComponent(g, WIDTH, HEIGHT, WIDTH / 2);
+		return new TaskStepComponent(g, WIDTH, HEIGHT, WIDTH / 2, rect, input, output);
 	}
 
 	public constructor(
 		public readonly g: SVGGElement,
 		public readonly width: number,
 		public readonly height: number,
-		public readonly connectorX: number) {
+		public readonly joinX: number,
+		private readonly rect: SVGRectElement,
+		private readonly input: SVGCircleElement,
+		private readonly output: SVGCircleElement) {
+	}
+
+	public findComponent(element: SVGElement): StepComponent | null {
+		return Svg.isChildOf(this.g, element)
+			? this
+			: null;
+	}
+
+	public setDropMode(isEnabled: boolean) {
+		const visibility = isEnabled ? 'hidden' : 'visible';
+		Svg.attrs(this.input, { visibility });
+		Svg.attrs(this.output, { visibility });
+	}
+
+	public setState(state: StepComponentState) {
+		switch (state) {
+			case StepComponentState.selected:
+				this.rect.classList.add('sqd-selected');
+				this.g.classList.remove('sqd-moving');
+				break;
+			case StepComponentState.default:
+				this.rect.classList.remove('sqd-selected');
+				this.g.classList.remove('sqd-moving');
+				break;
+			case StepComponentState.moving:
+				this.rect.classList.remove('sqd-selected');
+				this.g.classList.add('sqd-moving');
+				break;
+		}
 	}
 }

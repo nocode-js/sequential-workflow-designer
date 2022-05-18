@@ -1,21 +1,22 @@
 import { AnchorStepComponent } from './components/anchor-step-component';
+import { StepComponent, StepComponentState } from './components/component';
 import { SequenceComponent } from './components/sequence-component';
 import { StepComponentFactory } from './components/step-component-factory';
 import { Sequence } from './definition';
-import { createSvgElement, setAttrs } from './svg';
+import { Svg } from './svg';
 import { Vector } from './vector';
 
-const GRID_SIZE = 8;
+const GRID_SIZE = 50;
 
 export class Designer {
 
 	public static create(parent: HTMLElement, sequence: Sequence) {
-		const defs = createSvgElement('defs');
-		const gridPattern = createSvgElement('pattern', {
+		const defs = Svg.element('defs');
+		const gridPattern = Svg.element('pattern', {
 			id: 'sqd-grid',
 			patternUnits: 'userSpaceOnUse'
 		});
-		const gridPatternPath = createSvgElement('path', {
+		const gridPatternPath = Svg.element('path', {
 			class: 'sqd-grid-path',
 			fill: 'none',
 			'stroke-width': 1
@@ -24,73 +25,125 @@ export class Designer {
 		defs.appendChild(gridPattern);
 		gridPattern.appendChild(gridPatternPath);
 
-		const foreground = createSvgElement('g');
+		const foreground = Svg.element('g');
 
-		const canvas = createSvgElement('svg');
+		const canvas = Svg.element('svg', {
+			class: 'sqd-canvas'
+		});
 		canvas.appendChild(defs);
-		canvas.appendChild(createSvgElement('rect', {
+		canvas.appendChild(Svg.element('rect', {
 			width: '100%',
 			height: '100%',
 			fill: 'url(#sqd-grid)'
 		}));
 		canvas.appendChild(foreground);
 
-		const component = SequenceComponent.createForComponents([
-			AnchorStepComponent.create(),
+		const sequenceComponent = SequenceComponent.createForComponents([
+			AnchorStepComponent.create(true),
 			...sequence.steps.map(StepComponentFactory.create),
-			AnchorStepComponent.create()
+			AnchorStepComponent.create(false)
 		], true);
-		foreground.appendChild(component.g);
+		foreground.appendChild(sequenceComponent.g);
 
 		const container = document.createElement('div');
 		container.className = 'sqd-designer';
 		container.appendChild(canvas);
 		parent.appendChild(container);
 
-		const designer = new Designer(parent, canvas, gridPattern, gridPatternPath, foreground);
+		const designer = new Designer(parent, canvas, gridPattern, gridPatternPath, foreground, sequenceComponent);
 		designer.refreshPosition();
 		designer.refreshSize();
 
 		window.addEventListener('resize', () => designer.refreshSize());
-		container.addEventListener('mousedown', e => designer.onMousedown(e));
-		container.addEventListener('mousemove', e => designer.onMousemove(e));
-		container.addEventListener('mouseup', () => designer.onMouseup());
+		container.addEventListener('mousedown', e => designer.onMouseDown(e));
 		container.addEventListener('wheel', e => designer.onWheel(e));
 		return designer;
 	}
 
-	private mouseStartPos?: Vector;
-	private startPosition?: Vector;
+	private interaction?: {
+		startMousePos: Vector;
+		startPosition: Vector;
+		movingComponent?: StepComponent;
+	};
+
+	private selectedComponent: StepComponent | null = null;
+
 	private position = new Vector(10, 10);
-	private scale = 1;
+	private scale = 1.0;
+
+	private readonly onMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
+	private readonly onMouseUpHandler = () => this.onMouseUp();
 
 	public constructor(
 		private readonly parent: HTMLElement,
 		private readonly canvas: SVGElement,
 		private readonly gridPattern: SVGPatternElement,
 		private readonly gridPatternPath: SVGPathElement,
-		private readonly foreground: SVGGElement) {
+		private readonly foreground: SVGGElement,
+		private readonly sequence: SequenceComponent) {
 	}
 
-	public onMousedown(e: MouseEvent) {
+	public onMouseDown(e: MouseEvent) {
 		e.preventDefault();
-		this.mouseStartPos = new Vector(e.clientX, e.clientY);
-		this.startPosition = this.position;
+
+		if (this.interaction) {
+			this.onMouseUp();
+			return;
+		}
+
+		if (this.selectedComponent) {
+			this.selectedComponent.setState(StepComponentState.default);
+			this.selectedComponent = null;
+		}
+
+		if (e.button !== 1) {
+			this.selectedComponent = this.sequence.findComponent(e.target as SVGElement);
+			if (this.selectedComponent) {
+				this.selectedComponent.setState(StepComponentState.selected);
+			}
+		}
+
+		this.interaction = {
+			startMousePos: new Vector(e.clientX, e.clientY),
+			startPosition: this.position
+		};
+
+		window.addEventListener('mousemove', this.onMouseMoveHandler);
+		window.addEventListener('mouseup', this.onMouseUpHandler);
 	}
 
-	public onMousemove(e: MouseEvent) {
+	public onMouseMove(e: MouseEvent) {
 		e.preventDefault();
 
-		if (this.mouseStartPos && this.startPosition) {
-			const delta = this.mouseStartPos.subtract(new Vector(e.clientX, e.clientY));
-			this.position = this.startPosition.subtract(delta);
-			this.refreshPosition();
+		if (this.interaction) {
+			const delta = this.interaction.startMousePos.subtract(new Vector(e.clientX, e.clientY));
+
+			if (!this.selectedComponent) {
+				this.position = this.interaction.startPosition.subtract(delta);
+				this.refreshPosition();
+			}
+			else if (this.interaction.movingComponent) {
+				// ...
+			}
+			else if (delta.distance() > 5) {
+				this.sequence.setDropMode(true);
+				this.interaction.movingComponent = this.selectedComponent;
+				this.selectedComponent.setState(StepComponentState.moving);
+			}
 		}
 	}
 
-	public onMouseup() {
-		this.mouseStartPos = undefined;
-		this.startPosition = undefined;
+	public onMouseUp() {
+		if (this.interaction) {
+			if (this.interaction.movingComponent && this.selectedComponent) {
+				this.selectedComponent.setState(StepComponentState.default);
+				this.sequence.setDropMode(false);
+			}
+			this.interaction = undefined;
+
+			window.removeEventListener('mousemove', this.onMouseMove);
+			window.removeEventListener('mouseup', this.onMouseUpHandler);
+		}
 	}
 
 	public onWheel(e: WheelEvent) {
@@ -101,22 +154,22 @@ export class Designer {
 
 	public refreshPosition() {
 		const size = GRID_SIZE * this.scale;
-		setAttrs(this.gridPattern, {
+		Svg.attrs(this.gridPattern, {
 			x: this.position.x,
 			y: this.position.y,
 			width: size,
 			height: size
 		});
-		setAttrs(this.gridPatternPath, {
+		Svg.attrs(this.gridPatternPath, {
 			d: `M ${size} 0 L 0 0 0 ${size}`
 		});
-		setAttrs(this.foreground, {
+		Svg.attrs(this.foreground, {
 			transform: `translate(${this.position.x}, ${this.position.y}) scale(${this.scale})`
 		});
 	}
 
 	public refreshSize() {
-		setAttrs(this.canvas, {
+		Svg.attrs(this.canvas, {
 			width: this.parent.offsetWidth,
 			height: this.parent.offsetHeight
 		});

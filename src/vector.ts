@@ -17,4 +17,8 @@ export class Vector {
 	public round(): Vector {
 		return new Vector(Math.round(this.x), Math.round(this.y));
 	}
+
+	public distance(): number {
+		return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+	}
 }
