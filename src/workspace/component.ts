@@ -16,5 +16,7 @@ export enum StepComponentState {
 }
 
 export interface StepComponent extends Component {
+	canDrag: boolean;
+
 	setState(state: StepComponentState): void;
 }

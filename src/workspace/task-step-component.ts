@@ -1,5 +1,5 @@
 import { TaskStep } from '../definition';
-import { Svg } from '../svg';
+import { Svg } from '../core/svg';
 import { StepComponent, StepComponentState } from './component';
 
 const WIDTH = 136;
@@ -63,6 +63,8 @@ export class TaskStepComponent implements StepComponent {
 
 		return new TaskStepComponent(g, WIDTH, HEIGHT, WIDTH / 2, rect, input, output);
 	}
+
+	public readonly canDrag = true;
 
 	public constructor(
 		public readonly g: SVGGElement,

@@ -1,5 +1,5 @@
-import { Designer } from './designer';
 import { TaskStep, Branches, SwitchStep, Step, StepType, Sequence } from './definition';
+import { Designer } from './designer';
 
 function createSequence(nodes: Step[]): Sequence {
 	return { steps: nodes };
@@ -38,7 +38,7 @@ const sequence: Sequence = createSequence([
 					createTask('xxxx')
 				]),
 				'beta': createSequence([
-					//createTask('hihiih'),
+					createTask('hihiih'),
 					createTask('hihiih'),
 				])
 			}),
@@ -48,5 +48,5 @@ const sequence: Sequence = createSequence([
 ]);
 
 window.addEventListener('load', () => {
-	Designer.create(document.getElementById('example') as HTMLElement, sequence);
+	Designer.append(document.getElementById('example') as HTMLElement, sequence);
 });

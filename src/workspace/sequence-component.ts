@@ -1,12 +1,12 @@
+import { Svg } from '../core/svg';
+import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
-import { Svg } from '../svg';
-import { Vector } from '../vector';
 import { Component, StepComponent } from './component';
 import { JoinRenderer } from './join-renderer';
 import { StepComponentFactory } from './step-component-factory';
 
 const PH_WIDTH = 80;
-const PH_HEIGHT = 20;
+const PH_HEIGHT = 24;
 
 export class SequenceComponent implements Component {
 
@@ -77,9 +77,11 @@ export class SequenceComponent implements Component {
 	}
 
 	public setDropMode(isEnabled: boolean) {
-		this.placeholders.forEach(p => Svg.attrs(p, {
-			visibility: isEnabled ? 'visible' : 'hidden'
-		}));
+		this.placeholders.forEach(p => {
+			Svg.attrs(p, {
+				visibility: isEnabled ? 'visible' : 'hidden'
+			});
+		});
 		this.components.forEach(c => c.setDropMode(isEnabled));
 	}
 }

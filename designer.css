@@ -9,8 +9,40 @@
 	line-height: 1em;
 }
 
+.sqd-toolbox {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 20;
+	background: #FFF;
+	padding: 0 10px 10px;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+	border-radius: 10px;
+}
+
+.sqd-toolbox-item {
+	position: relative;
+	border: 1px solid silver;
+	width: 40px;
+	height: 40px;
+	border-radius: 10px;
+	margin-top: 10px;
+	cursor: move;
+}
+
+.sqd-toolbox-item-text {
+	position: absolute;
+	bottom: 13px;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+
+/* .sqd-canvas */
+
 .sqd-canvas {
 	position: absolute;
+	z-index: 10;
 	top: 0;
 	left: 0;
 	cursor: move;

@@ -1,4 +1,4 @@
-import { Svg } from '../svg';
+import { Svg } from '../core/svg';
 import { StepComponent, StepComponentState } from './component';
 
 const SIZE = 30;
@@ -40,6 +40,8 @@ export class AnchorStepComponent implements StepComponent {
 		}
 		return new AnchorStepComponent(g, SIZE, SIZE, SIZE / 2, circle);
 	}
+
+	public readonly canDrag = false;
 
 	public constructor(
 		public readonly g: SVGGElement,

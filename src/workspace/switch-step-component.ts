@@ -1,15 +1,15 @@
+import { Svg } from '../core/svg';
+import { Vector } from '../core/vector';
 import { SwitchStep } from '../definition';
-import { Svg } from '../svg';
-import { Vector } from '../vector';
 import { StepComponent, StepComponentState } from './component';
 import { JoinRenderer } from './join-renderer';
 import { SequenceComponent } from './sequence-component';
 
-const DIAMOND_SIZE = 18;
+const INPUT_SIZE = 18;
 const MIN_CHILDREN_WIDTH = 50;
 const PADDING_X = 20;
-const PADDING_TOP = 18;
-const PADDING_BOTTOM = 6;
+const PADDING_TOP = 20;
+const PADDING_BOTTOM = 10;
 const LABEL_HEIGHT = 22;
 const CONNECTION_HEIGHT = 16;
 
@@ -109,10 +109,10 @@ export class SwitchStepComponent implements StepComponent {
 
 		JoinRenderer.appendStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP);
 
-		const ds2 = DIAMOND_SIZE / 2;
+		const ds2 = INPUT_SIZE / 2;
 		const input = Svg.element('path', {
-			d: `M ${ds2} 0 L ${DIAMOND_SIZE} ${ds2} L ${ds2} ${DIAMOND_SIZE} L 0 ${ds2} Z`,
-			transform: `translate(${containerWidths[0] - DIAMOND_SIZE / 2} ${-DIAMOND_SIZE / 2})`,
+			d: `M ${ds2} 0 L ${INPUT_SIZE} ${ds2} L ${ds2} ${INPUT_SIZE} L 0 ${ds2} Z`,
+			transform: `translate(${containerWidths[0] - INPUT_SIZE / 2} ${-INPUT_SIZE / 2})`,
 			fill: '#FFF',
 			'stroke-width': 2,
 			stroke: '#000'
@@ -131,6 +131,8 @@ export class SwitchStepComponent implements StepComponent {
 	}
 
 	private currentState = StepComponentState.default;
+
+	public readonly canDrag = true;
 
 	public constructor(
 		public readonly g: SVGGElement,
@@ -156,9 +158,7 @@ export class SwitchStepComponent implements StepComponent {
 	}
 
 	public setDropMode(isEnabled: boolean) {
-		if (this.currentState === StepComponentState.default) {
-			this.sequences.forEach(s => s.setDropMode(isEnabled));
-		}
+		this.sequences.forEach(s => s.setDropMode(isEnabled));
 		Svg.attrs(this.input, {
 			visibility: isEnabled ? 'hidden' : 'visible'
 		});

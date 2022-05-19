@@ -1,5 +1,5 @@
-import { Svg } from '../svg';
-import { Vector } from '../vector';
+import { Svg } from '../core/svg';
+import { Vector } from '../core/vector';
 
 export class JoinRenderer {
 
