@@ -1,7 +1,7 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
-import { Sequence } from '../definition';
-import { Component, StepComponent } from './component';
+import { Sequence, Step } from '../definition';
+import { Component, ComponentView, Placeholder, StepComponent } from './component';
 import { JoinRenderer } from './join-renderer';
 import { StepComponentFactory } from './step-component-factory';
 
@@ -11,11 +11,54 @@ const PH_HEIGHT = 24;
 export class SequenceComponent implements Component {
 
 	public static create(sequence: Sequence): SequenceComponent {
-		const components = sequence.steps.map(StepComponentFactory.create);
-		return SequenceComponent.createForComponents(components, false);
+		const components = sequence.steps.map(s => StepComponentFactory.create(s, sequence));
+		return SequenceComponent.createForComponents(components, sequence, false);
 	}
 
-	public static createForComponents(components: Component[], skipFirstPadding: boolean): SequenceComponent {
+	public static createForComponents(components: Component[], sequence: Sequence, skipFirstPadding: boolean): SequenceComponent {
+		const view = SequenceComponentView.create(components, skipFirstPadding);
+		return new SequenceComponent(view, sequence, components);
+	}
+
+	private constructor(
+		public readonly view: SequenceComponentView,
+		private readonly sequence: Sequence,
+		private readonly components: Component[]) {
+	}
+
+	public findStepComponent(element: Element): StepComponent | null {
+		for (let component of this.components) {
+			const sc = component.findStepComponent(element);
+			if (sc) {
+				return sc;
+			}
+		}
+		return null;
+	}
+
+	public findPlaceholder(element: Element): Placeholder | null {
+		const index = this.view.findPlaceholderIndex(element);
+		if (index >= 0) {
+			return new SequencePlaceholder(this.sequence, index);
+		}
+		for (let component of this.components) {
+			const ph = component.findPlaceholder(element);
+			if (ph) {
+				return ph;
+			}
+		}
+		return null;
+	}
+
+	public setDropMode(isEnabled: boolean) {
+		this.view.setDropMode(isEnabled);
+		this.components.forEach(c => c.setDropMode(isEnabled));
+	}
+}
+
+export class SequenceComponentView implements ComponentView {
+
+	public static create(components: Component[], skipFirstPadding: boolean): SequenceComponentView {
 		const g = Svg.element('g');
 
 		if (components.length === 0) {
@@ -24,18 +67,18 @@ export class SequenceComponent implements Component {
 			const placeholder = createPlaceholder(0, 0);
 			g.appendChild(placeholder);
 
-			return new SequenceComponent(g, PH_WIDTH, PH_HEIGHT, PH_WIDTH / 2, components, [placeholder]);
+			return new SequenceComponentView(g, PH_WIDTH, PH_HEIGHT, PH_WIDTH / 2, [placeholder]);
 		}
 
-		const maxJoinX = Math.max(...components.map(c => c.joinX));
-		const maxWidth = Math.max(...components.map(c => c.width));
+		const maxJoinX = Math.max(...components.map(c => c.view.joinX));
+		const maxWidth = Math.max(...components.map(c => c.view.width));
 
 		let offsetY = skipFirstPadding ? 0 : PH_HEIGHT;
 
 		const placeholders: SVGElement[] = [];
 		for (let i = 0; i < components.length; i++) {
 			const component = components[i];
-			const offsetX = maxJoinX - component.joinX;
+			const offsetX = maxJoinX - component.view.joinX;
 
 			if (i !== 0 || !skipFirstPadding) {
 				JoinRenderer.appendStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
@@ -47,33 +90,30 @@ export class SequenceComponent implements Component {
 				placeholders.push(placeholder);
 			}
 
-			Svg.attrs(component.g, {
+			Svg.attrs(component.view.g, {
 				transform: `translate(${offsetX}, ${offsetY})`
 			});
-			g.appendChild(component.g);
-			offsetY += component.height + PH_HEIGHT;
+			g.appendChild(component.view.g);
+			offsetY += component.view.height + PH_HEIGHT;
 		}
 
-		return new SequenceComponent(g, maxWidth, offsetY - PH_HEIGHT, maxJoinX, components, placeholders);
+		return new SequenceComponentView(g, maxWidth, offsetY - PH_HEIGHT, maxJoinX, placeholders);
 	}
 
-	public constructor(
+	private constructor(
 		public readonly g: SVGGElement,
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		private readonly components: Component[],
 		private readonly placeholders: SVGElement[]) {
 	}
 
-	public findComponent(element: SVGElement): StepComponent | null {
-		for (let component of this.components) {
-			const comp = component.findComponent(element);
-			if (comp) {
-				return comp;
-			}
-		}
-		return null;
+	public getPosition(): Vector {
+		throw new Error('Not supported');
+	}
+
+	public findPlaceholderIndex(element: Element): number {
+		return this.placeholders.findIndex(p => p === element);
 	}
 
 	public setDropMode(isEnabled: boolean) {
@@ -82,7 +122,18 @@ export class SequenceComponent implements Component {
 				visibility: isEnabled ? 'visible' : 'hidden'
 			});
 		});
-		this.components.forEach(c => c.setDropMode(isEnabled));
+	}
+}
+
+export class SequencePlaceholder implements Placeholder {
+
+	public constructor(
+		private readonly sequence: Sequence,
+		private readonly index: number) {
+	}
+
+	public append(step: Step) {
+		this.sequence.steps.splice(this.index, 0, step);
 	}
 }
 

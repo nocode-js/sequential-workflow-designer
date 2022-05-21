@@ -1,28 +1,34 @@
-import { SimpleEvent } from '../core/simple-event';
+import { Step, StepType, TaskStep } from '../definition';
+import { DragStepBehavior } from '../behaviors/drag-step-behavior';
+import { BehaviorController } from '../behaviors/behavior-controller';
+import { Workspace } from '../workspace/workspace';
 
 export class ToolboxItem {
 
-	public static append(parent: HTMLElement): ToolboxItem {
+	public static append(parent: HTMLElement, step: Step, behaviorController: BehaviorController, workspace: Workspace): ToolboxItem {
 		const item = document.createElement('div');
 		item.className = 'sqd-toolbox-item';
 
 		const text = document.createElement('span');
 		text.className = 'sqd-toolbox-item-text';
-		text.textContent = 'Test';
+		text.textContent = step.name;
 
 		item.appendChild(text);
 		parent.appendChild(item);
 
-		const i = new ToolboxItem();
-		item.addEventListener('mousedown', e => i.onMouseDown(e));
-		return i;
+		const ti = new ToolboxItem(step, behaviorController, workspace);
+		item.addEventListener('mousedown', e => ti.onMouseDown(e));
+		return ti;
 	}
 
-	public readonly onDragStart = new SimpleEvent<ToolboxItem>();
+	private constructor(
+		private readonly step: Step,
+		private readonly behaviorController: BehaviorController,
+		private readonly workspace: Workspace) {
+	}
 
 	public onMouseDown(e: MouseEvent) {
-		e.preventDefault();
-
-		this.onDragStart.fire(this);
+		const s = structuredClone(this.step);
+		this.behaviorController.start(e, DragStepBehavior.create(this.workspace, s));
 	}
 }

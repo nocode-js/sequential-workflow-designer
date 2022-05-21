@@ -5,19 +5,24 @@
 	height: 100%;
 	overflow: none;
 	background: #F6F6F6;
+}
+
+.sqd-designer, .sqd-drag {
 	font-size: 13px;
 	line-height: 1em;
 }
 
 .sqd-toolbox {
 	position: absolute;
-	top: 10px;
-	left: 10px;
+	top: 0;
+	left: 0;
+	bottom: 0;
 	z-index: 20;
+	width: 60px;
 	background: #FFF;
 	padding: 0 10px 10px;
-	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-	border-radius: 10px;
+	box-sizing: border-box;
+	box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
 }
 
 .sqd-toolbox-item {
@@ -38,6 +43,12 @@
 	text-align: center;
 }
 
+.sqd-drag {
+	position: absolute;
+	z-index: 9999;
+	pointer-events: none;
+}
+
 /* .sqd-canvas */
 
 .sqd-canvas {
@@ -50,6 +61,7 @@
 
 .sqd-grid-path {
 	stroke: #E3E3E3;
+	stroke-width: 1;
 }
 
 .sqd-join {
@@ -118,4 +130,7 @@
 
 .sqd-placeholder {
 	fill: #ED4800;
+}
+.sqd-placeholder:hover {
+	fill: black;
 }

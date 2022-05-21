@@ -1,11 +1,54 @@
 import { Svg } from '../core/svg';
-import { StepComponent, StepComponentState } from './component';
+import { Vector } from '../core/vector';
+import { Sequence, Step } from '../definition';
+import { ComponentView, StepComponent, StepComponentState } from './component';
 
 const SIZE = 30;
 
 export class AnchorStepComponent implements StepComponent {
 
 	public static create(isStart: boolean): AnchorStepComponent {
+		return new AnchorStepComponent(
+			AnchorStepComponentView.create(isStart));
+	}
+
+	public readonly parentSequence: Sequence = null as any;
+	public readonly step: Step = null as any;
+	public readonly canDrag = false;
+
+	private constructor(
+		public readonly view: AnchorStepComponentView) {
+	}
+
+	public findStepComponent(element: Element): StepComponent | null {
+		return this.view.containsElement(element)
+			? this
+			: null;
+	}
+
+	public findPlaceholder(): null {
+		return null;
+	}
+
+	public setDropMode() {
+		// Nothing
+	}
+
+	public setState(state: StepComponentState) {
+		switch (state) {
+			case StepComponentState.default:
+				this.view.setIsSelected(true);
+				break;
+			case StepComponentState.selected:
+				this.view.setIsSelected(false);
+				break;
+		}
+	}
+}
+
+export class AnchorStepComponentView implements ComponentView {
+
+	public static create(isStart: boolean): AnchorStepComponentView {
 		const circle = Svg.element('circle', {
 			class: 'sqd-anchor',
 			cx: SIZE / 2,
@@ -38,12 +81,10 @@ export class AnchorStepComponent implements StepComponent {
 			});
 			g.appendChild(stop);
 		}
-		return new AnchorStepComponent(g, SIZE, SIZE, SIZE / 2, circle);
+		return new AnchorStepComponentView(g, SIZE, SIZE, SIZE / 2, circle);
 	}
 
-	public readonly canDrag = false;
-
-	public constructor(
+	private constructor(
 		public readonly g: SVGGElement,
 		public readonly width: number,
 		public readonly height: number,
@@ -51,24 +92,19 @@ export class AnchorStepComponent implements StepComponent {
 		private readonly circle: SVGCircleElement) {
 	}
 
-	public findComponent(element: SVGElement): StepComponent | null {
-		return Svg.isChildOf(this.g, element)
-			? this
-			: null;
+	public getPosition(): Vector {
+		throw new Error('Not supported');
 	}
 
-	public setDropMode() {
-		// Nothing
+	public containsElement(element: Element): boolean {
+		return this.g.contains(element);
 	}
 
-	public setState(state: StepComponentState) {
-		switch (state) {
-			case StepComponentState.default:
-				this.circle.classList.remove('sqd-selected');
-				break;
-			case StepComponentState.selected:
-				this.circle.classList.add('sqd-selected');
-				break;
+	public setIsSelected(isSelected: boolean) {
+		if (isSelected) {
+			this.circle.classList.add('sqd-selected');
+		} else {
+			this.circle.classList.remove('sqd-selected');
 		}
 	}
 }

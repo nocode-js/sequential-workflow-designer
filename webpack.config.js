@@ -3,8 +3,8 @@ const path = require('path');
 module.exports = {
 	entry: './src/app.ts',
 	target: 'web',
-	mode: 'production',
-	// mode: 'development',
+	// mode: 'production',
+	mode: 'development',
 	output: {
 		path: path.resolve(__dirname),
 		filename: 'designer.js'

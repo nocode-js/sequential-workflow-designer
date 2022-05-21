@@ -27,15 +27,4 @@ export class Svg {
 			element.setAttribute(name, value.toString());
 		});
 	}
-
-	public static isChildOf(parent: SVGElement, child: SVGElement): boolean {
-		let current: Node | null = child;
-		do {
-			if (current === parent) {
-				return true;
-			}
-			current = current.parentNode;
-		} while (current);
-		return false;
-	}
 }

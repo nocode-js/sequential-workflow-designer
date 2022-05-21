@@ -1,7 +1,7 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
-import { SwitchStep } from '../definition';
-import { StepComponent, StepComponentState } from './component';
+import { Sequence, Step, SwitchStep } from '../definition';
+import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 import { JoinRenderer } from './join-renderer';
 import { SequenceComponent } from './sequence-component';
 
@@ -15,7 +15,74 @@ const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponent implements StepComponent {
 
-	public static create(step: SwitchStep): SwitchStepComponent {
+	public static create(step: SwitchStep, parentSequence: Sequence): SwitchStepComponent {
+		const sequenceComponents = Object.keys(step.branches).map(bn => SequenceComponent.create(step.branches[bn]));
+		const view = SwitchStepComponentView.create(step, sequenceComponents);
+		return new SwitchStepComponent(view, step, parentSequence, sequenceComponents);
+	}
+
+	private currentState = StepComponentState.default;
+	public readonly canDrag = true;
+
+	private constructor(
+		public readonly view: SwitchStepComponentView,
+		public readonly step: Step,
+		public readonly parentSequence: Sequence,
+		private readonly sequenceComponents: SequenceComponent[]) {
+	}
+
+	public findStepComponent(element: Element): StepComponent | null {
+		for (const sequence of this.sequenceComponents) {
+			const component = sequence.findStepComponent(element);
+			if (component) {
+				return component;
+			}
+		}
+		if (this.view.containsElement(element)) {
+			return this;
+		}
+		return null;
+	}
+
+	public findPlaceholder(element: Element): Placeholder | null {
+		for (const sequence of this.sequenceComponents) {
+			const ph = sequence.findPlaceholder(element);
+			if (ph) {
+				return ph;
+			}
+		}
+		return null;
+	}
+
+	public setDropMode(isEnabled: boolean) {
+		if (this.currentState !== StepComponentState.moving) {
+			this.sequenceComponents.forEach(s => s.setDropMode(isEnabled));
+		}
+		this.view.setDropMode(isEnabled);
+	}
+
+	public setState(state: StepComponentState) {
+		this.currentState = state;
+		switch (state) {
+			case StepComponentState.default:
+				this.view.setIsSelected(false);
+				this.view.setIsMoving(false);
+				break;
+			case StepComponentState.selected:
+				this.view.setIsSelected(true);
+				this.view.setIsMoving(false);
+				break;
+			case StepComponentState.moving:
+				this.view.setIsSelected(false);
+				this.view.setIsMoving(true);
+				break;
+		}
+	}
+}
+
+export class SwitchStepComponentView implements ComponentView {
+
+	public static create(step: SwitchStep, sequenceComponents: SequenceComponent[]): SwitchStepComponentView {
 		const branchNames = Object.keys(step.branches);
 		const n = branchNames.length;
 
@@ -23,15 +90,13 @@ export class SwitchStepComponent implements StepComponent {
 			class: 'sqd-switch-group'
 		});
 
-		const sequences = branchNames.map(bn => SequenceComponent.create(step.branches[bn]));
-
-		const maxChildHeight = Math.max(...sequences.map(s => s.height));
-		const containerWidths = sequences.map(s => Math.max(s.width, MIN_CHILDREN_WIDTH) + PADDING_X * 2);
+		const maxChildHeight = Math.max(...sequenceComponents.map(s => s.view.height));
+		const containerWidths = sequenceComponents.map(s => Math.max(s.view.width, MIN_CHILDREN_WIDTH) + PADDING_X * 2);
 		const containersWidth = containerWidths.reduce((p, c) => p + c, 0);
 		const containerHeight = maxChildHeight + PADDING_TOP + PADDING_BOTTOM + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT * 2;
 		const containerOffsets: number[] = [];
 
-		const connectorXs = sequences.map(s => Math.max(s.joinX, MIN_CHILDREN_WIDTH / 2));
+		const connectorXs = sequenceComponents.map(s => Math.max(s.view.joinX, MIN_CHILDREN_WIDTH / 2));
 
 		let totalX = 0;
 		for (let i = 0; i < n; i++) {
@@ -40,7 +105,7 @@ export class SwitchStepComponent implements StepComponent {
 		}
 
 		const regions = branchNames.map((_, i) => {
-			const sequence = sequences[i];
+			const sequence = sequenceComponents[i];
 			const offsetX = containerOffsets[i];
 			const region = Svg.element('rect', {
 				class: 'sqd-switch-region',
@@ -72,14 +137,14 @@ export class SwitchStepComponent implements StepComponent {
 			g.appendChild(branchRect);
 			g.appendChild(branchText);
 
-			const sequenceX = offsetX + PADDING_X + Math.max((MIN_CHILDREN_WIDTH - sequence.width) / 2, 0);
+			const sequenceX = offsetX + PADDING_X + Math.max((MIN_CHILDREN_WIDTH - sequence.view.width) / 2, 0);
 			const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
-			Svg.attrs(sequence.g, {
+			Svg.attrs(sequence.view.g, {
 				transform: `translate(${sequenceX}, ${sequenceY})`,
 			});
-			g.appendChild(sequence.g);
+			g.appendChild(sequence.view.g);
 
-			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.height;
+			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
 			JoinRenderer.appendStraightJoin(g, new Vector(containerOffsets[i] + connectorXs[i] + PADDING_X, childEndY),
 				containerHeight - childEndY - CONNECTION_HEIGHT);
 
@@ -127,58 +192,46 @@ export class SwitchStepComponent implements StepComponent {
 			new Vector(containerWidths[0], containerHeight),
 			containerOffsets.map((o, i) => new Vector(o + connectorXs[i] + PADDING_X, PADDING_TOP + PADDING_BOTTOM + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
 
-		return new SwitchStepComponent(g, containersWidth, containerHeight, containerWidths[0], sequences, regions, input);
+		return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], regions, input);
 	}
 
-	private currentState = StepComponentState.default;
-
-	public readonly canDrag = true;
-
-	public constructor(
+	private constructor(
 		public readonly g: SVGGElement,
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		private readonly sequences: SequenceComponent[],
 		private readonly regions: SVGRectElement[],
 		private readonly input: SVGPathElement) {
 	}
 
-	public findComponent(element: SVGElement): StepComponent | null {
-		for (const sequence of this.sequences) {
-			const component = sequence.findComponent(element);
-			if (component) {
-				return component;
-			}
-		}
-		if (Svg.isChildOf(this.g, element)) {
-			return this;
-		}
-		return null;
+	public getPosition(): Vector {
+		const rect = this.regions[0].getBoundingClientRect();
+		return new Vector(rect.x, rect.y);
+	}
+
+	public containsElement(element: Element): boolean {
+		return this.g.contains(element);
 	}
 
 	public setDropMode(isEnabled: boolean) {
-		this.sequences.forEach(s => s.setDropMode(isEnabled));
 		Svg.attrs(this.input, {
 			visibility: isEnabled ? 'hidden' : 'visible'
 		});
 	}
 
-	public setState(state: StepComponentState) {
-		this.currentState = state;
-		switch (state) {
-			case StepComponentState.default:
-				this.regions.forEach(r => r.classList.remove('sqd-selected'));
-				this.g.classList.remove('sqd-moving');
-				break;
-			case StepComponentState.selected:
-				this.regions.forEach(r => r.classList.add('sqd-selected'));
-				this.g.classList.remove('sqd-moving');
-				break;
-			case StepComponentState.moving:
-				this.regions.forEach(r => r.classList.remove('sqd-selected'));
-				this.g.classList.add('sqd-moving');
-				break;
+	public setIsSelected(isSelected: boolean) {
+		if (isSelected) {
+			this.regions.forEach(r => r.classList.add('sqd-selected'));
+		} else {
+			this.regions.forEach(r => r.classList.remove('sqd-selected'));
+		}
+	}
+
+	public setIsMoving(isMoving: boolean) {
+		if (isMoving) {
+			this.g.classList.add('sqd-moving');
+		} else {
+			this.g.classList.remove('sqd-moving');
 		}
 	}
 }
