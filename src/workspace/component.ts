@@ -5,7 +5,7 @@ export interface Component {
 	view: ComponentView;
 
 	findStepComponent(element: Element): StepComponent | null;
-	findPlaceholder(element: Element): Placeholder | null;
+	getPlaceholders(result: Placeholder[]): void;
 	setDropMode(isEnabled: boolean): void;
 }
 
@@ -19,7 +19,9 @@ export interface ComponentView {
 }
 
 export interface Placeholder {
+	element: Element;
 	append(step: Step): void;
+	setIsHover(isHover: boolean): void;
 }
 
 export interface StepComponent extends Component {

@@ -1,7 +1,7 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Sequence, Step } from '../definition';
-import { ComponentView, StepComponent, StepComponentState } from './component';
+import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 
 const SIZE = 30;
 
@@ -26,8 +26,7 @@ export class AnchorStepComponent implements StepComponent {
 			: null;
 	}
 
-	public findPlaceholder(): null {
-		return null;
+	public getPlaceholders(_: Placeholder[]) {
 	}
 
 	public setDropMode() {

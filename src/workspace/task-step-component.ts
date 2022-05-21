@@ -1,7 +1,7 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Sequence, Step, TaskStep } from '../definition';
-import { ComponentView, StepComponent, StepComponentState } from './component';
+import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 
 const WIDTH = 130;
 const HEIGHT = 44;
@@ -30,8 +30,7 @@ export class TaskStepComponent implements StepComponent {
 			: null;
 	}
 
-	public findPlaceholder(): null {
-		return null;
+	public getPlaceholders(_: Placeholder[]) {
 	}
 
 	public setDropMode(isEnabled: boolean) {

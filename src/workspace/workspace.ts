@@ -1,6 +1,7 @@
 import { BehaviorController } from '../behaviors/behavior-controller';
 import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
 import { SelectStepBehavior } from '../behaviors/select-step-behavior';
+import { SimpleEvent } from '../core/simple-event';
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
@@ -30,8 +31,11 @@ export class Workspace {
 	private sequenceComponent?: SequenceComponent;
 	private selectedStep: StepComponent | null = null;
 
-	private position = new Vector(10, 10);
+	private position = new Vector(0, 0);
 	private scale = 1.0;
+
+	public readonly onScaleChanged = new SimpleEvent<void>();
+	public readonly onChanged = new SimpleEvent<void>();
 
 	private constructor(
 		private readonly view: WorkspaceView,
@@ -40,14 +44,12 @@ export class Workspace {
 	}
 
 	public render() {
-		console.time('render');
 		this.sequenceComponent = SequenceComponent.createForComponents([
 			AnchorStepComponent.create(true),
 			...this.sequence.steps.map(s => StepComponentFactory.create(s, this.sequence)),
 			AnchorStepComponent.create(false)
 		], this.sequence, true);
 		this.view.setSequence(this.sequenceComponent);
-		console.timeEnd('render');
 	}
 
 	public onMouseDown(e: MouseEvent) {
@@ -70,6 +72,7 @@ export class Workspace {
 		const delta = e.deltaY > 0 ? -0.1 : 0.1;
 		this.scale = Math.min(Math.max(this.scale + delta, 0.1), 3);
 		this.view.setPositionAndScale(this.position, this.scale);
+		this.onScaleChanged.fire();
 	}
 
 	public setPosition(position: Vector) {
@@ -104,8 +107,12 @@ export class Workspace {
 		this.sequenceComponent?.setDropMode(isEnabled);
 	}
 
-	public findPlaceholder(element: Element): Placeholder | null {
-		return this.sequenceComponent?.findPlaceholder(element) || null;
+	public getPlaceholders(): Placeholder[] {
+		const result: Placeholder[] = [];
+		if (this.sequenceComponent) {
+			this.sequenceComponent.getPlaceholders(result);
+		}
+		return result;
 	}
 }
 

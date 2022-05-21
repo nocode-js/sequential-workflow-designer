@@ -7,7 +7,9 @@ import { DragStepBehavior } from './drag-step-behavior';
 export class SelectStepBehavior implements Behavior {
 
 	public static create(pressedStepComponent: StepComponent, workspace: Workspace): SelectStepBehavior {
-		return new SelectStepBehavior(pressedStepComponent, workspace);
+		return new SelectStepBehavior(
+			pressedStepComponent,
+			workspace);
 	}
 
 	private isCanceled = false;

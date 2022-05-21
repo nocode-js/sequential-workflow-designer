@@ -1,10 +1,11 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
-import { StepComponent, StepComponentState } from '../workspace/component';
+import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
 import { StepComponentFactory } from '../workspace/step-component-factory';
 import { Workspace } from '../workspace/workspace';
 import { Behavior } from './behavior';
+import { PlaceholderFinder } from './placeholder-finder';
 
 const SAFE_OFFSET = 10;
 
@@ -18,8 +19,12 @@ export class DragStepBehavior implements Behavior {
 			sourceStepComponent);
 	}
 
-	private startPosition?: Vector;
-	private offset = new Vector(0, 0);
+	private state?: {
+		finder: PlaceholderFinder;
+		startPosition: Vector;
+		offset: Vector;
+	};
+	private currentPlaceholder?: Placeholder;
 
 	private constructor(
 		private readonly view: DragStepView,
@@ -29,45 +34,71 @@ export class DragStepBehavior implements Behavior {
 	}
 
 	public onStart(position: Vector) {
-		this.startPosition = position;
-
+		let offset: Vector;
 		if (this.pressedStepComponent) {
 			this.pressedStepComponent.setState(StepComponentState.moving);
 
 			const componentPosition = this.pressedStepComponent.view.getPosition();
 
-			this.offset = position.subtract(componentPosition);
+			offset = position.subtract(componentPosition);
 		} else {
-			this.offset = new Vector(this.view.getWidth() / 2, 0);
+			offset = new Vector(this.view.width / 2, this.view.height / 2);
 		}
 
-		this.view.setPosition(position.subtract(this.offset));
+		this.view.setPosition(position.subtract(offset));
 		this.workspace.setDropMode(true);
+
+		this.state = {
+			startPosition: position,
+			finder: PlaceholderFinder.create(this.workspace.getPlaceholders(), this.workspace),
+			offset
+		};
 	}
 
 	public onMove(delta: Vector) {
-		if (this.startPosition) {
-			const newPosition = this.startPosition.subtract(delta).subtract(this.offset);
+		if (this.state) {
+			const newPosition = this.state.startPosition
+				.subtract(delta)
+				.subtract(this.state.offset);
 			this.view.setPosition(newPosition);
+
+			const placeholder = this.state.finder.find(newPosition, this.view.width, this.view.height);
+
+			if (this.currentPlaceholder !== placeholder) {
+				if (this.currentPlaceholder) {
+					this.currentPlaceholder.setIsHover(false);
+				}
+				if (placeholder) {
+					placeholder.setIsHover(true);
+				}
+				this.currentPlaceholder = placeholder;
+			}
 		}
 	}
 
-	public onEnd(target: Element) {
+	public onEnd() {
 		this.view.remove();
 
-		const placeholder = this.workspace.findPlaceholder(target);
-		if (placeholder) {
+		if (this.currentPlaceholder) {
 			if (this.pressedStepComponent) {
 				const index = this.pressedStepComponent.parentSequence.steps.indexOf(this.step);
 				this.pressedStepComponent.parentSequence.steps.splice(index, 1);
 			}
-			placeholder.append(this.step);
+
+			this.currentPlaceholder.append(this.step);
+			this.currentPlaceholder = undefined;
+
 			this.workspace.render();
+			this.workspace.onChanged.fire();
 		} else {
 			if (this.pressedStepComponent) {
 				this.pressedStepComponent.setState(StepComponentState.default);
 			}
 			this.workspace.setDropMode(false);
+		}
+		if (this.state) {
+			this.state.finder.destroy();
+			this.state = undefined;
 		}
 	}
 }
@@ -92,16 +123,13 @@ class DragStepView {
 		layer.appendChild(svg);
 
 		document.body.appendChild(layer);
-		return new DragStepView(layer, stepComponent);
+		return new DragStepView(stepComponent.view.width, stepComponent.view.height, layer);
 	}
 
 	private constructor(
-		private readonly layer: HTMLElement,
-		private readonly stepComponent: StepComponent) {
-	}
-
-	public getWidth(): number {
-		return this.stepComponent.view.width;
+		public readonly width: number,
+		public readonly height: number,
+		private readonly layer: HTMLElement) {
 	}
 
 	public setPosition(position: Vector) {

@@ -5,7 +5,7 @@ import { Component, ComponentView, Placeholder, StepComponent } from './componen
 import { JoinRenderer } from './join-renderer';
 import { StepComponentFactory } from './step-component-factory';
 
-const PH_WIDTH = 80;
+const PH_WIDTH = 100;
 const PH_HEIGHT = 24;
 
 export class SequenceComponent implements Component {
@@ -36,18 +36,11 @@ export class SequenceComponent implements Component {
 		return null;
 	}
 
-	public findPlaceholder(element: Element): Placeholder | null {
-		const index = this.view.findPlaceholderIndex(element);
-		if (index >= 0) {
-			return new SequencePlaceholder(this.sequence, index);
-		}
-		for (let component of this.components) {
-			const ph = component.findPlaceholder(element);
-			if (ph) {
-				return ph;
-			}
-		}
-		return null;
+	public getPlaceholders(result: Placeholder[]) {
+		this.view.placeholders.forEach((ph, i) => {
+			result.push(new SequencePlaceholder(ph, this.sequence, i));
+		});
+		this.components.forEach(c => c.getPlaceholders(result));
 	}
 
 	public setDropMode(isEnabled: boolean) {
@@ -105,15 +98,11 @@ export class SequenceComponentView implements ComponentView {
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		private readonly placeholders: SVGElement[]) {
+		public readonly placeholders: SVGElement[]) {
 	}
 
 	public getPosition(): Vector {
 		throw new Error('Not supported');
-	}
-
-	public findPlaceholderIndex(element: Element): number {
-		return this.placeholders.findIndex(p => p === element);
 	}
 
 	public setDropMode(isEnabled: boolean) {
@@ -128,12 +117,21 @@ export class SequenceComponentView implements ComponentView {
 export class SequencePlaceholder implements Placeholder {
 
 	public constructor(
+		public readonly element: Element,
 		private readonly sequence: Sequence,
 		private readonly index: number) {
 	}
 
 	public append(step: Step) {
 		this.sequence.steps.splice(this.index, 0, step);
+	}
+
+	public setIsHover(isHover: boolean) {
+		if (isHover) {
+			this.element.classList.add('sqd-hover');
+		} else {
+			this.element.classList.remove('sqd-hover');
+		}
 	}
 }
 

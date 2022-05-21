@@ -44,14 +44,10 @@ export class SwitchStepComponent implements StepComponent {
 		return null;
 	}
 
-	public findPlaceholder(element: Element): Placeholder | null {
-		for (const sequence of this.sequenceComponents) {
-			const ph = sequence.findPlaceholder(element);
-			if (ph) {
-				return ph;
-			}
+	public getPlaceholders(result: Placeholder[]) {
+		if (this.currentState !== StepComponentState.moving) {
+			this.sequenceComponents.forEach(sc => sc.getPlaceholders(result));
 		}
-		return null;
 	}
 
 	public setDropMode(isEnabled: boolean) {

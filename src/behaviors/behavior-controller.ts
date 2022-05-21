@@ -10,49 +10,49 @@ export class BehaviorController {
 	private readonly onMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
 	private readonly onMouseUpHandler = (e: MouseEvent) => this.onMouseUp(e);
 
-	private current?: {
+	private state?: {
 		startMousePosition: Vector;
 		behavior: Behavior;
 	};
 
 	public start(e: MouseEvent, behavior: Behavior) {
-		if (this.current) {
+		if (this.state) {
 			this.onMouseUp(e);
 			return;
 		}
 		e.preventDefault();
 
-		this.current = {
+		this.state = {
 			startMousePosition: readMousePosition(e),
 			behavior: behavior
 		};
-		behavior.onStart(this.current.startMousePosition);
+		behavior.onStart(this.state.startMousePosition);
 
 		window.addEventListener('mousemove', this.onMouseMoveHandler);
 		window.addEventListener('mouseup', this.onMouseUpHandler);
 	}
 
-	public onMouseMove(e: MouseEvent) {
+	private onMouseMove(e: MouseEvent) {
 		e.preventDefault();
-		if (this.current) {
-			const delta = this.current.startMousePosition.subtract(readMousePosition(e));
+		if (this.state) {
+			const delta = this.state.startMousePosition.subtract(readMousePosition(e));
 
-			const newBehavior = this.current.behavior.onMove(delta);
+			const newBehavior = this.state.behavior.onMove(delta);
 			if (newBehavior) {
-				this.current.behavior.onEnd(e.target as HTMLElement);
+				this.state.behavior.onEnd();
 
-				this.current.behavior = newBehavior;
-				this.current.startMousePosition = readMousePosition(e);
-				this.current.behavior.onStart(this.current.startMousePosition);
+				this.state.behavior = newBehavior;
+				this.state.startMousePosition = readMousePosition(e);
+				this.state.behavior.onStart(this.state.startMousePosition);
 			}
 		}
 	}
 
-	public onMouseUp(e: MouseEvent) {
+	private onMouseUp(e: MouseEvent) {
 		e.preventDefault();
-		if (this.current) {
-			this.current.behavior.onEnd(e.target as Element);
-			this.current = undefined;
+		if (this.state) {
+			this.state.behavior.onEnd();
+			this.state = undefined;
 		}
 	}
 }

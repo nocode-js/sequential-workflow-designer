@@ -1,6 +1,6 @@
-import { Step, StepType, TaskStep } from '../definition';
-import { DragStepBehavior } from '../behaviors/drag-step-behavior';
 import { BehaviorController } from '../behaviors/behavior-controller';
+import { DragStepBehavior } from '../behaviors/drag-step-behavior';
+import { Step } from '../definition';
 import { Workspace } from '../workspace/workspace';
 
 export class ToolboxItem {
@@ -16,7 +16,10 @@ export class ToolboxItem {
 		item.appendChild(text);
 		parent.appendChild(item);
 
-		const ti = new ToolboxItem(step, behaviorController, workspace);
+		const ti = new ToolboxItem(
+			step,
+			behaviorController,
+			workspace);
 		item.addEventListener('mousedown', e => ti.onMouseDown(e));
 		return ti;
 	}
@@ -27,7 +30,7 @@ export class ToolboxItem {
 		private readonly workspace: Workspace) {
 	}
 
-	public onMouseDown(e: MouseEvent) {
+	private onMouseDown(e: MouseEvent) {
 		const s = structuredClone(this.step);
 		this.behaviorController.start(e, DragStepBehavior.create(this.workspace, s));
 	}

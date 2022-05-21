@@ -5,7 +5,9 @@ import { Behavior } from './behavior';
 export class MoveViewPortBehavior implements Behavior {
 
 	public static create(startPosition: Vector, workspace: Workspace): MoveViewPortBehavior {
-		return new MoveViewPortBehavior(startPosition, workspace);
+		return new MoveViewPortBehavior(
+			startPosition,
+			workspace);
 	}
 
 	private constructor(

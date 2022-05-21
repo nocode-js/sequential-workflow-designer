@@ -7,6 +7,15 @@ export class SimpleEvent<A> {
 		this.listeners.push(listener);
 	}
 
+	public unsubscribe(listener: SimpleEventListener<A>) {
+		const index = this.listeners.indexOf(listener);
+		if (index >= 0) {
+			this.listeners.splice(index, 1);
+		} else {
+			throw new Error('Unknown listener');
+		}
+	}
+
 	public fire(a: A) {
 		this.listeners.forEach(listener => listener(a));
 	}

@@ -133,8 +133,11 @@
 /* .sqd-placeholder */
 
 .sqd-placeholder {
-	fill: #ED4800;
+	fill: #D8D8D8;
+	stroke: #6A6A6A;
+	stroke-width: 1;
+	stroke-dasharray: 3;
 }
-.sqd-placeholder:hover {
-	fill: black;
+.sqd-placeholder.sqd-hover {
+	fill: #ED4800;
 }
