@@ -19,6 +19,7 @@ export class Workspace {
 		const workspace = new Workspace(view, sequence, behaviorController);
 		workspace.view.refreshSize();
 		workspace.render();
+		workspace.center();
 
 		workspace.view.bindResize(() => workspace.view.refreshSize());
 		workspace.view.bindMouseDown(e => workspace.onMouseDown(e));
@@ -39,16 +40,14 @@ export class Workspace {
 	}
 
 	public render() {
+		console.time('render');
 		this.sequenceComponent = SequenceComponent.createForComponents([
 			AnchorStepComponent.create(true),
 			...this.sequence.steps.map(s => StepComponentFactory.create(s, this.sequence)),
 			AnchorStepComponent.create(false)
 		], this.sequence, true);
 		this.view.setSequence(this.sequenceComponent);
-
-		this.setPosition(new Vector(
-			Math.max(0, (this.view.getWidth() - this.sequenceComponent.view.width) / 2),
-			20));
+		console.timeEnd('render');
 	}
 
 	public onMouseDown(e: MouseEvent) {
@@ -60,7 +59,7 @@ export class Workspace {
 			? this.sequenceComponent.findStepComponent(e.target as Element)
 			: null;
 
-		if (clickedStep && clickedStep.canDrag) {
+		if (clickedStep) {
 			this.behaviorController.start(e, SelectStepBehavior.create(clickedStep, this));
 		} else {
 			this.behaviorController.start(e, MoveViewPortBehavior.create(this.position, this));
@@ -70,16 +69,20 @@ export class Workspace {
 	public onWheel(e: WheelEvent) {
 		const delta = e.deltaY > 0 ? -0.1 : 0.1;
 		this.scale = Math.min(Math.max(this.scale + delta, 0.1), 3);
-		this.refreshPosition();
+		this.view.setPositionAndScale(this.position, this.scale);
 	}
 
 	public setPosition(position: Vector) {
 		this.position = position;
-		this.refreshPosition();
+		this.view.setPositionAndScale(this.position, this.scale);
 	}
 
-	public refreshPosition() {
-		this.view.setPositionAndScale(this.position, this.scale);
+	public center() {
+		if (this.sequenceComponent) {
+			this.setPosition(new Vector(
+				Math.max(0, (this.view.getWidth() - this.sequenceComponent.view.width) / 2),
+				20));
+		}
 	}
 
 	public selectStep(step: StepComponent) {
@@ -124,23 +127,23 @@ export class WorkspaceView {
 
 		const foreground = Svg.element('g');
 
-		const canvas = Svg.element('svg', {
-			class: 'sqd-canvas'
+		const workspace = Svg.element('svg', {
+			class: 'sqd-workspace'
 		});
-		canvas.appendChild(defs);
-		canvas.appendChild(Svg.element('rect', {
+		workspace.appendChild(defs);
+		workspace.appendChild(Svg.element('rect', {
 			width: '100%',
 			height: '100%',
 			fill: 'url(#sqd-grid)'
 		}));
-		canvas.appendChild(foreground);
-		parent.appendChild(canvas);
-		return new WorkspaceView(parent, canvas, gridPattern, gridPatternPath, foreground);
+		workspace.appendChild(foreground);
+		parent.appendChild(workspace);
+		return new WorkspaceView(parent, workspace, gridPattern, gridPatternPath, foreground);
 	}
 
 	private constructor(
 		private readonly parent: HTMLElement,
-		private readonly canvas: SVGElement,
+		private readonly workspace: SVGElement,
 		private readonly gridPattern: SVGPatternElement,
 		private readonly gridPatternPath: SVGPathElement,
 		private readonly foreground: SVGGElement) {
@@ -168,14 +171,14 @@ export class WorkspaceView {
 	}
 
 	public refreshSize() {
-		Svg.attrs(this.canvas, {
+		Svg.attrs(this.workspace, {
 			width: this.parent.offsetWidth,
 			height: this.parent.offsetHeight
 		});
 	}
 
 	public getWidth(): number {
-		return this.canvas.clientWidth;
+		return this.workspace.clientWidth;
 	}
 
 	public bindResize(handler: () => void) {
@@ -183,10 +186,10 @@ export class WorkspaceView {
 	}
 
 	public bindMouseDown(handler: (e: MouseEvent) => void) {
-		this.canvas.addEventListener('mousedown', handler);
+		this.workspace.addEventListener('mousedown', handler);
 	}
 
 	public bindWheel(handler: (e: WheelEvent) => void) {
-		this.canvas.addEventListener('wheel', handler);
+		this.workspace.addEventListener('wheel', handler);
 	}
 }

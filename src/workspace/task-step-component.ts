@@ -3,9 +3,11 @@ import { Vector } from '../core/vector';
 import { Sequence, Step, TaskStep } from '../definition';
 import { ComponentView, StepComponent, StepComponentState } from './component';
 
-const WIDTH = 136;
+const WIDTH = 130;
 const HEIGHT = 44;
 const INPUT_SIZE = 6;
+const OUTPUT_SIZE = 4;
+const RADIUS = 5;
 
 export class TaskStepComponent implements StepComponent {
 
@@ -63,8 +65,8 @@ export class TaskStepComponentView implements ComponentView {
 			class: 'sqd-task-rect',
 			width: WIDTH,
 			height: HEIGHT,
-			rx: 5,
-			ry: 5
+			rx: RADIUS,
+			ry: RADIUS
 		});
 
 		const text = Svg.element('text', {
@@ -98,7 +100,7 @@ export class TaskStepComponentView implements ComponentView {
 			cx: WIDTH / 2,
 			cy: HEIGHT,
 			fill: '#000',
-			r: 4
+			r: OUTPUT_SIZE
 		});
 
 		const g = Svg.element('g', {

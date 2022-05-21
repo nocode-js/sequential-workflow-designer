@@ -37,10 +37,10 @@ export class AnchorStepComponent implements StepComponent {
 	public setState(state: StepComponentState) {
 		switch (state) {
 			case StepComponentState.default:
-				this.view.setIsSelected(true);
+				this.view.setIsSelected(false);
 				break;
 			case StepComponentState.selected:
-				this.view.setIsSelected(false);
+				this.view.setIsSelected(true);
 				break;
 		}
 	}

@@ -14,25 +14,29 @@
 
 .sqd-toolbox {
 	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
+	top: 10px;
+	left: 10px;
 	z-index: 20;
 	width: 60px;
 	background: #FFF;
 	padding: 0 10px 10px;
 	box-sizing: border-box;
-	box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
+	border-radius: 10px;
 }
 
 .sqd-toolbox-item {
 	position: relative;
-	border: 1px solid silver;
+	border: 1px solid #C3C3C3;
 	width: 40px;
 	height: 40px;
-	border-radius: 10px;
+	border-radius: 5px;
 	margin-top: 10px;
 	cursor: move;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, .15);
+}
+.sqd-toolbox-item:hover {
+	border-color: #939393;
 }
 
 .sqd-toolbox-item-text {
@@ -49,9 +53,9 @@
 	pointer-events: none;
 }
 
-/* .sqd-canvas */
+/* .sqd-workspace */
 
-.sqd-canvas {
+.sqd-workspace {
 	position: absolute;
 	z-index: 10;
 	top: 0;
