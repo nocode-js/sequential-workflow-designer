@@ -2,6 +2,7 @@ import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
+import { SequenceModifier } from '../workspace/sequence-modifier';
 import { StepComponentFactory } from '../workspace/step-component-factory';
 import { Workspace } from '../workspace/workspace';
 import { Behavior } from './behavior';
@@ -81,21 +82,26 @@ export class DragStepBehavior implements Behavior {
 
 		if (this.currentPlaceholder) {
 			if (this.pressedStepComponent) {
-				const index = this.pressedStepComponent.parentSequence.steps.indexOf(this.step);
-				this.pressedStepComponent.parentSequence.steps.splice(index, 1);
+				SequenceModifier.moveStep(
+					this.pressedStepComponent.parentSequence,
+					this.pressedStepComponent.step,
+					this.currentPlaceholder.parentSequence,
+					this.currentPlaceholder.index);
+			} else {
+				SequenceModifier.insertStep(
+					this.step,
+					this.currentPlaceholder.parentSequence,
+					this.currentPlaceholder.index);
 			}
-
-			this.currentPlaceholder.append(this.step);
-			this.currentPlaceholder = undefined;
-
-			this.workspace.render();
-			this.workspace.onChanged.fire();
+			this.workspace.notifyChanged();
 		} else {
 			if (this.pressedStepComponent) {
 				this.pressedStepComponent.setState(StepComponentState.default);
 			}
 			this.workspace.setDropMode(false);
 		}
+		this.currentPlaceholder = undefined;
+
 		if (this.state) {
 			this.state.finder.destroy();
 			this.state = undefined;
@@ -116,9 +122,7 @@ class DragStepView {
 			width: stepComponent.view.width + SAFE_OFFSET * 2,
 			height: stepComponent.view.height + SAFE_OFFSET * 2
 		});
-		Svg.attrs(stepComponent.view.g, {
-			transform: `translate(${SAFE_OFFSET}, ${SAFE_OFFSET})`
-		});
+		Svg.translate(stepComponent.view.g, SAFE_OFFSET, SAFE_OFFSET);
 		svg.appendChild(stepComponent.view.g);
 		layer.appendChild(svg);
 

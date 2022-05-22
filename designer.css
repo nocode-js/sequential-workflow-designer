@@ -25,6 +25,13 @@
 	border-radius: 10px;
 }
 
+.sqd-toolbox-title {
+	font-size: 11px;
+	display: block;
+	text-align: center;
+	padding: 10px 0 0;
+}
+
 .sqd-toolbox-item {
 	position: relative;
 	border: 1px solid #C3C3C3;
@@ -58,6 +65,14 @@
 .sqd-workspace {
 	position: absolute;
 	z-index: 10;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 300px;
+}
+
+.sqd-workspace-canvas {
+	position: absolute;
 	top: 0;
 	left: 0;
 	cursor: move;
@@ -75,6 +90,19 @@
 
 .sqd-moving {
 	opacity: 0.25;
+}
+
+/* .sqd-smart-editor */
+
+.sqd-smart-editor {
+	position: absolute;
+	z-index: 20;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 300px;
+	background: #FFF;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .15);
 }
 
 /* .sqd-task */
@@ -118,15 +146,12 @@
 	fill: #FFF;
 }
 
-/* .sqd-anchor */
+/* .sqd-start-stop */
 
-.sqd-anchor {
+.sqd-start-stop {
 	fill: #2C18DF;
 }
-.sqd-anchor.sqd-selected {
-	fill: #ED4800;
-}
-.sqd-anchor-icon {
+.sqd-start-stop-icon {
 	fill: #FFF;
 }
 

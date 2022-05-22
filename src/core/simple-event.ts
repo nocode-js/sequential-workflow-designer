@@ -1,13 +1,13 @@
 
-export class SimpleEvent<A> {
+export class SimpleEvent<T> {
 
-	private readonly listeners: SimpleEventListener<A>[] = [];
+	private readonly listeners: SimpleEventListener<T>[] = [];
 
-	public subscribe(listener: SimpleEventListener<A>) {
+	public subscribe(listener: SimpleEventListener<T>) {
 		this.listeners.push(listener);
 	}
 
-	public unsubscribe(listener: SimpleEventListener<A>) {
+	public unsubscribe(listener: SimpleEventListener<T>) {
 		const index = this.listeners.indexOf(listener);
 		if (index >= 0) {
 			this.listeners.splice(index, 1);
@@ -16,8 +16,8 @@ export class SimpleEvent<A> {
 		}
 	}
 
-	public fire(a: A) {
-		this.listeners.forEach(listener => listener(a));
+	public forward(value: T) {
+		this.listeners.forEach(listener => listener(value));
 	}
 
 	public count(): number {
@@ -25,4 +25,4 @@ export class SimpleEvent<A> {
 	}
 }
 
-export type SimpleEventListener<A> = (a: A) => void;
+export type SimpleEventListener<T> = (value: T) => void;

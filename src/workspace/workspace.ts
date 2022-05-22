@@ -4,11 +4,9 @@ import { SelectStepBehavior } from '../behaviors/select-step-behavior';
 import { SimpleEvent } from '../core/simple-event';
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
-import { Sequence } from '../definition';
-import { AnchorStepComponent } from './anchor-step-component';
-import { Placeholder, StepComponent, StepComponentState } from './component';
-import { SequenceComponent } from './sequence-component';
-import { StepComponentFactory } from './step-component-factory';
+import { Sequence, Step } from '../definition';
+import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
+import { StartStopComponent } from './start-stop-component';
 
 const GRID_SIZE = 50;
 
@@ -28,13 +26,14 @@ export class Workspace {
 		return workspace;
 	}
 
-	private sequenceComponent?: SequenceComponent;
+	private mainComponent?: StartStopComponent;
 	private selectedStep: StepComponent | null = null;
 
 	private position = new Vector(0, 0);
 	private scale = 1.0;
 
 	public readonly onScaleChanged = new SimpleEvent<void>();
+	public readonly onSelectedStepChanged = new SimpleEvent<Step | null>();
 	public readonly onChanged = new SimpleEvent<void>();
 
 	private constructor(
@@ -43,22 +42,18 @@ export class Workspace {
 		private readonly behaviorController: BehaviorController) {
 	}
 
-	public render() {
-		this.sequenceComponent = SequenceComponent.createForComponents([
-			AnchorStepComponent.create(true),
-			...this.sequence.steps.map(s => StepComponentFactory.create(s, this.sequence)),
-			AnchorStepComponent.create(false)
-		], this.sequence, true);
-		this.view.setSequence(this.sequenceComponent);
+	private render() {
+		this.mainComponent = StartStopComponent.create(this.sequence);
+		this.view.setView(this.mainComponent.view);
 	}
 
-	public onMouseDown(e: MouseEvent) {
-		if (!this.sequenceComponent) {
+	private onMouseDown(e: MouseEvent) {
+		if (!this.mainComponent) {
 			return;
 		}
 		const isNotScrollClick = (e.button !== 1);
 		const clickedStep = isNotScrollClick
-			? this.sequenceComponent.findStepComponent(e.target as Element)
+			? this.mainComponent.findStepComponent(e.target as Element)
 			: null;
 
 		if (clickedStep) {
@@ -68,11 +63,11 @@ export class Workspace {
 		}
 	}
 
-	public onWheel(e: WheelEvent) {
+	private onWheel(e: WheelEvent) {
 		const delta = e.deltaY > 0 ? -0.1 : 0.1;
 		this.scale = Math.min(Math.max(this.scale + delta, 0.1), 3);
 		this.view.setPositionAndScale(this.position, this.scale);
-		this.onScaleChanged.fire();
+		this.onScaleChanged.forward();
 	}
 
 	public setPosition(position: Vector) {
@@ -81,9 +76,9 @@ export class Workspace {
 	}
 
 	public center() {
-		if (this.sequenceComponent) {
+		if (this.mainComponent) {
 			this.setPosition(new Vector(
-				Math.max(0, (this.view.getWidth() - this.sequenceComponent.view.width) / 2),
+				Math.max(0, (this.view.getWidth() - this.mainComponent.view.width) / 2),
 				20));
 		}
 	}
@@ -94,31 +89,39 @@ export class Workspace {
 		}
 		this.selectedStep = step;
 		this.selectedStep.setState(StepComponentState.selected);
+		this.onSelectedStepChanged.forward(step.step);
 	}
 
 	public clearSelectedStep() {
 		if (this.selectedStep) {
 			this.selectedStep.setState(StepComponentState.default);
 			this.selectedStep = null;
+			this.onSelectedStepChanged.forward(null);
 		}
 	}
 
 	public setDropMode(isEnabled: boolean) {
-		this.sequenceComponent?.setDropMode(isEnabled);
+		this.mainComponent?.setDropMode(isEnabled);
 	}
 
 	public getPlaceholders(): Placeholder[] {
 		const result: Placeholder[] = [];
-		if (this.sequenceComponent) {
-			this.sequenceComponent.getPlaceholders(result);
+		if (this.mainComponent) {
+			this.mainComponent.getPlaceholders(result);
 		}
 		return result;
+	}
+
+	public notifyChanged() {
+		this.clearSelectedStep();
+		this.render();
+		this.onChanged.forward();
 	}
 }
 
 export class WorkspaceView {
 
-	public static create(parent: HTMLElement): WorkspaceView {
+	public static create(root: HTMLElement): WorkspaceView {
 		const defs = Svg.element('defs');
 		const gridPattern = Svg.element('pattern', {
 			id: 'sqd-grid',
@@ -134,31 +137,40 @@ export class WorkspaceView {
 
 		const foreground = Svg.element('g');
 
-		const workspace = Svg.element('svg', {
-			class: 'sqd-workspace'
+		const workspace = document.createElement('div');
+		workspace.className = 'sqd-workspace';
+
+		const canvas = Svg.element('svg', {
+			class: 'sqd-workspace-canvas'
 		});
-		workspace.appendChild(defs);
-		workspace.appendChild(Svg.element('rect', {
+		canvas.appendChild(defs);
+		canvas.appendChild(Svg.element('rect', {
 			width: '100%',
 			height: '100%',
 			fill: 'url(#sqd-grid)'
 		}));
-		workspace.appendChild(foreground);
-		parent.appendChild(workspace);
-		return new WorkspaceView(parent, workspace, gridPattern, gridPatternPath, foreground);
+		canvas.appendChild(foreground);
+		workspace.appendChild(canvas);
+		root.appendChild(workspace);
+		return new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground);
 	}
 
+	private view?: ComponentView;
+
 	private constructor(
-		private readonly parent: HTMLElement,
-		private readonly workspace: SVGElement,
+		private readonly workspace: HTMLElement,
+		private readonly canvas: SVGElement,
 		private readonly gridPattern: SVGPatternElement,
 		private readonly gridPatternPath: SVGPathElement,
 		private readonly foreground: SVGGElement) {
 	}
 
-	public setSequence(cequenceComponent: SequenceComponent) {
-		this.foreground.innerHTML = '';
-		this.foreground.appendChild(cequenceComponent.view.g);
+	public setView(view: ComponentView) {
+		if (this.view) {
+			this.foreground.removeChild(this.view.g);
+		}
+		this.foreground.appendChild(view.g);
+		this.view = view;
 	}
 
 	public setPositionAndScale(p: Vector, scale: number) {
@@ -178,14 +190,14 @@ export class WorkspaceView {
 	}
 
 	public refreshSize() {
-		Svg.attrs(this.workspace, {
-			width: this.parent.offsetWidth,
-			height: this.parent.offsetHeight
+		Svg.attrs(this.canvas, {
+			width: this.workspace.offsetWidth,
+			height: this.workspace.offsetHeight
 		});
 	}
 
 	public getWidth(): number {
-		return this.workspace.clientWidth;
+		return this.canvas.clientWidth;
 	}
 
 	public bindResize(handler: () => void) {
@@ -193,10 +205,10 @@ export class WorkspaceView {
 	}
 
 	public bindMouseDown(handler: (e: MouseEvent) => void) {
-		this.workspace.addEventListener('mousedown', handler);
+		this.canvas.addEventListener('mousedown', handler);
 	}
 
 	public bindWheel(handler: (e: WheelEvent) => void) {
-		this.workspace.addEventListener('wheel', handler);
+		this.canvas.addEventListener('wheel', handler);
 	}
 }

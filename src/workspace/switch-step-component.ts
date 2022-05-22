@@ -9,7 +9,6 @@ const INPUT_SIZE = 18;
 const MIN_CHILDREN_WIDTH = 50;
 const PADDING_X = 20;
 const PADDING_TOP = 20;
-const PADDING_BOTTOM = 10;
 const LABEL_HEIGHT = 22;
 const CONNECTION_HEIGHT = 16;
 
@@ -22,7 +21,6 @@ export class SwitchStepComponent implements StepComponent {
 	}
 
 	private currentState = StepComponentState.default;
-	public readonly canDrag = true;
 
 	private constructor(
 		public readonly view: SwitchStepComponentView,
@@ -89,7 +87,7 @@ export class SwitchStepComponentView implements ComponentView {
 		const maxChildHeight = Math.max(...sequenceComponents.map(s => s.view.height));
 		const containerWidths = sequenceComponents.map(s => Math.max(s.view.width, MIN_CHILDREN_WIDTH) + PADDING_X * 2);
 		const containersWidth = containerWidths.reduce((p, c) => p + c, 0);
-		const containerHeight = maxChildHeight + PADDING_TOP + PADDING_BOTTOM + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT * 2;
+		const containerHeight = maxChildHeight + PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT * 2;
 		const containerOffsets: number[] = [];
 
 		const connectorXs = sequenceComponents.map(s => Math.max(s.view.joinX, MIN_CHILDREN_WIDTH / 2));
@@ -135,15 +133,15 @@ export class SwitchStepComponentView implements ComponentView {
 
 			const sequenceX = offsetX + PADDING_X + Math.max((MIN_CHILDREN_WIDTH - sequence.view.width) / 2, 0);
 			const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
-			Svg.attrs(sequence.view.g, {
-				transform: `translate(${sequenceX}, ${sequenceY})`,
-			});
+			Svg.translate(sequence.view.g, sequenceX, sequenceY);
 			g.appendChild(sequence.view.g);
 
 			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
-			JoinRenderer.appendStraightJoin(g, new Vector(containerOffsets[i] + connectorXs[i] + PADDING_X, childEndY),
-				containerHeight - childEndY - CONNECTION_HEIGHT);
 
+			const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
+			if (fillingHeight > 0) {
+				JoinRenderer.appendStraightJoin(g, new Vector(containerOffsets[i] + connectorXs[i] + PADDING_X, childEndY), fillingHeight);
+			}
 			return region;
 		});
 
@@ -186,7 +184,7 @@ export class SwitchStepComponentView implements ComponentView {
 
 		JoinRenderer.appendJoins(g,
 			new Vector(containerWidths[0], containerHeight),
-			containerOffsets.map((o, i) => new Vector(o + connectorXs[i] + PADDING_X, PADDING_TOP + PADDING_BOTTOM + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
+			containerOffsets.map((o, i) => new Vector(o + connectorXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
 
 		return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], regions, input);
 	}

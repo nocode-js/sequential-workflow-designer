@@ -16,8 +16,6 @@ export class TaskStepComponent implements StepComponent {
 		return new TaskStepComponent(view, step, parentSequence);
 	}
 
-	public readonly canDrag = true;
-
 	private constructor(
 		public readonly view: TaskStepComponentView,
 		public readonly step: Step,

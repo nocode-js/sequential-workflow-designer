@@ -23,7 +23,7 @@ export class SelectStepBehavior implements Behavior {
 	}
 
 	public onMove(delta: Vector): Behavior | void {
-		if (this.pressedStepComponent.canDrag && delta.distance() > 2) {
+		if (delta.distance() > 2) {
 			this.isCanceled = true;
 			this.workspace.clearSelectedStep();
 			return DragStepBehavior.create(this.workspace, this.pressedStepComponent.step, this.pressedStepComponent);

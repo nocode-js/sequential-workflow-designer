@@ -1,8 +1,9 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
-import { Sequence, Step } from '../definition';
+import { Sequence } from '../definition';
 import { Component, ComponentView, Placeholder, StepComponent } from './component';
 import { JoinRenderer } from './join-renderer';
+import { SequencePlaceholder } from './sequence-placeholder';
 import { StepComponentFactory } from './step-component-factory';
 
 const PH_WIDTH = 100;
@@ -12,11 +13,7 @@ export class SequenceComponent implements Component {
 
 	public static create(sequence: Sequence): SequenceComponent {
 		const components = sequence.steps.map(s => StepComponentFactory.create(s, sequence));
-		return SequenceComponent.createForComponents(components, sequence, false);
-	}
-
-	public static createForComponents(components: Component[], sequence: Sequence, skipFirstPadding: boolean): SequenceComponent {
-		const view = SequenceComponentView.create(components, skipFirstPadding);
+		const view = SequenceComponentView.create(components);
 		return new SequenceComponent(view, sequence, components);
 	}
 
@@ -37,8 +34,8 @@ export class SequenceComponent implements Component {
 	}
 
 	public getPlaceholders(result: Placeholder[]) {
-		this.view.placeholders.forEach((ph, i) => {
-			result.push(new SequencePlaceholder(ph, this.sequence, i));
+		this.view.placeholders.forEach((ph, index) => {
+			result.push(new SequencePlaceholder(ph, this.sequence, index));
 		});
 		this.components.forEach(c => c.getPlaceholders(result));
 	}
@@ -51,46 +48,38 @@ export class SequenceComponent implements Component {
 
 export class SequenceComponentView implements ComponentView {
 
-	public static create(components: Component[], skipFirstPadding: boolean): SequenceComponentView {
+	public static create(components: Component[]): SequenceComponentView {
 		const g = Svg.element('g');
 
-		if (components.length === 0) {
-			JoinRenderer.appendStraightJoin(g, new Vector(PH_WIDTH / 2, 0), PH_HEIGHT);
+		const maxJoinX = (components.length > 0)
+			? Math.max(...components.map(c => c.view.joinX))
+			: (PH_WIDTH / 2);
+		const maxWidth = (components.length > 0)
+			? Math.max(...components.map(c => c.view.width))
+			: PH_WIDTH;
 
-			const placeholder = createPlaceholder(0, 0);
-			g.appendChild(placeholder);
-
-			return new SequenceComponentView(g, PH_WIDTH, PH_HEIGHT, PH_WIDTH / 2, [placeholder]);
-		}
-
-		const maxJoinX = Math.max(...components.map(c => c.view.joinX));
-		const maxWidth = Math.max(...components.map(c => c.view.width));
-
-		let offsetY = skipFirstPadding ? 0 : PH_HEIGHT;
+		let offsetY = PH_HEIGHT;
 
 		const placeholders: SVGElement[] = [];
 		for (let i = 0; i < components.length; i++) {
 			const component = components[i];
 			const offsetX = maxJoinX - component.view.joinX;
 
-			if (i !== 0 || !skipFirstPadding) {
-				JoinRenderer.appendStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+			JoinRenderer.appendStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 
-				const placeholder = createPlaceholder(
-					maxJoinX - PH_WIDTH / 2,
-					offsetY - PH_HEIGHT);
-				g.appendChild(placeholder);
-				placeholders.push(placeholder);
-			}
+			placeholders.push(appendPlaceholder(g,
+				maxJoinX - PH_WIDTH / 2,
+				offsetY - PH_HEIGHT));
 
-			Svg.attrs(component.view.g, {
-				transform: `translate(${offsetX}, ${offsetY})`
-			});
+			Svg.translate(component.view.g, offsetX, offsetY);
 			g.appendChild(component.view.g);
 			offsetY += component.view.height + PH_HEIGHT;
 		}
 
-		return new SequenceComponentView(g, maxWidth, offsetY - PH_HEIGHT, maxJoinX, placeholders);
+		JoinRenderer.appendStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+		placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
+
+		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders);
 	}
 
 	private constructor(
@@ -114,29 +103,8 @@ export class SequenceComponentView implements ComponentView {
 	}
 }
 
-export class SequencePlaceholder implements Placeholder {
-
-	public constructor(
-		public readonly element: Element,
-		private readonly sequence: Sequence,
-		private readonly index: number) {
-	}
-
-	public append(step: Step) {
-		this.sequence.steps.splice(this.index, 0, step);
-	}
-
-	public setIsHover(isHover: boolean) {
-		if (isHover) {
-			this.element.classList.add('sqd-hover');
-		} else {
-			this.element.classList.remove('sqd-hover');
-		}
-	}
-}
-
-function createPlaceholder(x: number, y: number) {
-	return Svg.element('rect', {
+function appendPlaceholder(g: SVGGElement, x: number, y: number): SVGElement {
+	const rect = Svg.element('rect', {
 		class: 'sqd-placeholder',
 		width: PH_WIDTH,
 		height: PH_HEIGHT,
@@ -146,4 +114,6 @@ function createPlaceholder(x: number, y: number) {
 		ry: 6,
 		visibility: 'hidden'
 	});
+	g.appendChild(rect);
+	return rect;
 }

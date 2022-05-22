@@ -14,35 +14,35 @@ function createSwitch(name: string, branches: Branches): SwitchStep {
 }
 
 const sequence: Sequence = createSequence([
-	createTask('lorem'),
-	createTask('ipsum'),
+	createTask('alfa'),
+	createTask('beta'),
 	createSwitch('if', {
 		'true': createSequence([
-			createTask('hihiih'),
-			createTask('hihiih'),
+			createTask('gamma'),
+			createTask('111'),
 			createSwitch('if2', {
 				'alfa': createSequence([
 					// createTask('xxxx')
 				]),
 				'beta': createSequence([
-					createTask('hihiih'),
-					createTask('hihiih'),
+					createTask('222'),
+					createTask('333'),
 				])
 			})
 		]),
 		'false': createSequence([
-			createTask('huehue'),
-			createTask('hihiih'),
+			createTask('444'),
+			createTask('555'),
 			createSwitch('if2', {
 				'alfa': createSequence([
-					createTask('xxxx')
+					createTask('666')
 				]),
 				'beta': createSequence([
-					createTask('hihiih'),
-					createTask('hihiih'),
+					createTask('777'),
+					createTask('888'),
 				])
 			}),
-			createTask('hihiih')
+			createTask('999')
 		])
 	})
 ]);

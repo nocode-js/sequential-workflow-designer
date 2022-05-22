@@ -1,20 +1,22 @@
-import { Sequence } from './definition';
 import { BehaviorController } from './behaviors/behavior-controller';
+import { Sequence } from './definition';
+import { SmartEditor } from './smart-editor/smart-editor';
 import { Toolbox } from './toolbox/toolbox';
 import { Workspace } from './workspace/workspace';
 
 export class Designer {
 
 	public static append(parent: HTMLElement, sequence: Sequence): Designer {
-		const container = document.createElement('div');
-		container.className = 'sqd-designer';
+		const root = document.createElement('div');
+		root.className = 'sqd-designer';
 
-		parent.appendChild(container);
+		parent.appendChild(root);
 
 		const behaviorController = new BehaviorController();
 
-		const workspace = Workspace.append(container, sequence, behaviorController);
-		Toolbox.append(container, behaviorController, workspace);
+		const workspace = Workspace.append(root, sequence, behaviorController);
+		Toolbox.append(root, behaviorController, workspace);
+		SmartEditor.append(root, workspace);
 
 		const designer = new Designer();
 		return designer;

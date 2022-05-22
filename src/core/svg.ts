@@ -27,4 +27,8 @@ export class Svg {
 			element.setAttribute(name, value.toString());
 		});
 	}
+
+	public static translate(element: Element, x: number, y: number) {
+		element.setAttribute('transform', `translate(${x}, ${y})`);
+	}
 }

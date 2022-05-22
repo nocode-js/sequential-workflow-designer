@@ -20,14 +20,16 @@ export interface ComponentView {
 
 export interface Placeholder {
 	element: Element;
-	append(step: Step): void;
+	parentSequence: Sequence;
+	index: number;
+
 	setIsHover(isHover: boolean): void;
 }
 
 export interface StepComponent extends Component {
 	step: Step;
 	parentSequence: Sequence;
-	canDrag: boolean;
+
 	setState(state: StepComponentState): void;
 }
 

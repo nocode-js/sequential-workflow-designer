@@ -9,6 +9,11 @@ export class Toolbox {
 		const toolbox = document.createElement('div');
 		toolbox.className = 'sqd-toolbox';
 
+		const title = document.createElement('span');
+		title.className = 'sqd-toolbox-title';
+		title.innerText = 'Toolbox';
+		toolbox.appendChild(title);
+
 		const taskStep = {
 			type: StepType.task,
 			name: 'x'
