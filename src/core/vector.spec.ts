@@ -16,6 +16,18 @@ describe('Vector', () => {
 		expect(r.y).toEqual(9);
 	});
 
+	it('multiplyByScalar() returns proper value', () => {
+		const r = P.multiplyByScalar(5);
+		expect(r.x).toEqual(10);
+		expect(r.y).toEqual(50);
+	});
+
+	it('divideByScalar() returns proper value', () => {
+		const r = P.divideByScalar(2);
+		expect(r.x).toEqual(1);
+		expect(r.y).toEqual(5);
+	});
+
 	it('round() returns proper value', () => {
 		const d = new Vector(1.6, 1.3).round();
 		expect(d.x).toEqual(2);

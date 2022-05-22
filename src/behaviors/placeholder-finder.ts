@@ -6,7 +6,7 @@ export class PlaceholderFinder {
 
 	public static create(placeholders: Placeholder[], workspace: Workspace): PlaceholderFinder {
 		const checker = new PlaceholderFinder(placeholders, workspace);
-		workspace.onScaleChanged.subscribe(checker.clearCacheHandler);
+		workspace.onViewPortChanged.subscribe(checker.clearCacheHandler);
 		return checker;
 	}
 
@@ -46,7 +46,7 @@ export class PlaceholderFinder {
 	}
 
 	public destroy() {
-		this.workspace.onScaleChanged.unsubscribe(this.clearCacheHandler);
+		this.workspace.onViewPortChanged.unsubscribe(this.clearCacheHandler);
 	}
 
 	private clearCache() {

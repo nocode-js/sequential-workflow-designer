@@ -17,7 +17,9 @@ export class SimpleEvent<T> {
 	}
 
 	public forward(value: T) {
-		this.listeners.forEach(listener => listener(value));
+		if (this.listeners.length > 0) {
+			this.listeners.forEach(listener => listener(value));
+		}
 	}
 
 	public count(): number {

@@ -32,7 +32,7 @@ export class Workspace {
 	private position = new Vector(0, 0);
 	private scale = 1.0;
 
-	public readonly onScaleChanged = new SimpleEvent<void>();
+	public readonly onViewPortChanged = new SimpleEvent<void>();
 	public readonly onSelectedStepChanged = new SimpleEvent<Step | null>();
 	public readonly onChanged = new SimpleEvent<void>();
 
@@ -64,15 +64,24 @@ export class Workspace {
 	}
 
 	private onWheel(e: WheelEvent) {
-		const delta = e.deltaY > 0 ? -0.1 : 0.1;
-		this.scale = Math.min(Math.max(this.scale + delta, 0.1), 3);
+		const mousePoint = new Vector(e.pageX, e.pageY).subtract(this.view.getPosition());
+		// The real point is point on canvas with no scale.
+		const mouseRealPoint = mousePoint.divideByScalar(this.scale).subtract(this.position.divideByScalar(this.scale));
+
+		const wheelDelta = (e.deltaY > 0 ? -0.1 : 0.1);
+		const newScale = Math.min(Math.max(this.scale + wheelDelta, 0.1), 3);
+
+		this.position = mouseRealPoint.multiplyByScalar(-newScale).add(mousePoint);
+		this.scale = newScale;
+
 		this.view.setPositionAndScale(this.position, this.scale);
-		this.onScaleChanged.forward();
+		this.onViewPortChanged.forward();
 	}
 
 	public setPosition(position: Vector) {
 		this.position = position;
 		this.view.setPositionAndScale(this.position, this.scale);
+		this.onViewPortChanged.forward();
 	}
 
 	public center() {
@@ -194,6 +203,11 @@ export class WorkspaceView {
 			width: this.workspace.offsetWidth,
 			height: this.workspace.offsetHeight
 		});
+	}
+
+	public getPosition(): Vector {
+		const rect = this.canvas.getBoundingClientRect();
+		return new Vector(rect.x, rect.y);
 	}
 
 	public getWidth(): number {
