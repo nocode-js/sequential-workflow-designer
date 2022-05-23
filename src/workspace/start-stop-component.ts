@@ -32,8 +32,8 @@ export class StartStopComponent implements Component {
 		this.sequenceComponent.getPlaceholders(result);
 	}
 
-	public setDropMode(isEnabled: boolean) {
-		this.sequenceComponent.setDropMode(isEnabled);
+	public setIsDropModeEnabled(isEnabled: boolean) {
+		this.sequenceComponent.setIsDropModeEnabled(isEnabled);
 	}
 }
 

@@ -1,4 +1,4 @@
-import { Sequence, Step } from "../definition";
+import { Sequence, Step } from '../definition';
 
 export class SequenceModifier {
 
@@ -22,5 +22,13 @@ export class SequenceModifier {
 
 	public static insertStep(step: Step, sequence: Sequence, index: number) {
 		sequence.steps.splice(index, 0, step);
+	}
+
+	public static deleteStep(step: Step, sequence: Sequence) {
+		const index = sequence.steps.indexOf(step);
+		if (index < 0) {
+			throw new Error('Unknown step');
+		}
+		sequence.steps.splice(index, 1);
 	}
 }

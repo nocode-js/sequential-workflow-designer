@@ -1,24 +1,29 @@
-import { BehaviorController } from '../behaviors/behavior-controller';
 import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
 import { SelectStepBehavior } from '../behaviors/select-step-behavior';
 import { SimpleEvent } from '../core/simple-event';
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
-import { Sequence, Step } from '../definition';
-import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
+import { Step } from '../definition';
+import { DesignerContext } from '../designer-context';
+import { ComponentView, Placeholder } from './component';
 import { StartStopComponent } from './start-stop-component';
 
 const GRID_SIZE = 50;
 
 export class Workspace {
 
-	public static append(parent: HTMLElement, sequence: Sequence, behaviorController: BehaviorController): Workspace {
+	public static append(parent: HTMLElement, context: DesignerContext): Workspace {
 		const view = WorkspaceView.create(parent);
 
-		const workspace = new Workspace(view, sequence, behaviorController);
+		const workspace = new Workspace(view, context);
 		workspace.view.refreshSize();
 		workspace.render();
 		workspace.center();
+
+		context.onDefinitionChanged.subscribe(() => workspace.render());
+		context.onIsDropModeEnabledChanged.subscribe(i => workspace.setIsDropModeEnabled(i));
+		context.onCenterViewPortRequested.subscribe(() => workspace.center());
+		context.setPlaceholdersProvider(() => workspace.getPlaceholders());
 
 		workspace.view.bindResize(() => workspace.view.refreshSize());
 		workspace.view.bindMouseDown(e => workspace.onMouseDown(e));
@@ -27,25 +32,16 @@ export class Workspace {
 	}
 
 	private mainComponent?: StartStopComponent;
-	private selectedStep: StepComponent | null = null;
-
-	private isReadonly = false;
 	private position = new Vector(0, 0);
 	private scale = 1.0;
 
-	public readonly onSelectedStepChanged = new SimpleEvent<Step | null>();
-	public readonly onViewPortChanged = new SimpleEvent<void>();
-	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
-	public readonly onChanged = new SimpleEvent<void>();
-
 	private constructor(
 		private readonly view: WorkspaceView,
-		private readonly sequence: Sequence,
-		private readonly behaviorController: BehaviorController) {
+		private readonly context: DesignerContext) {
 	}
 
 	private render() {
-		this.mainComponent = StartStopComponent.create(this.sequence);
+		this.mainComponent = StartStopComponent.create(this.context.definition.sequence);
 		this.view.setView(this.mainComponent.view);
 	}
 
@@ -54,14 +50,14 @@ export class Workspace {
 			return;
 		}
 		const isNotScrollClick = (e.button !== 1);
-		const clickedStep = isNotScrollClick && !this.isReadonly
+		const clickedStep = isNotScrollClick && !this.context.isMovingDisabled
 			? this.mainComponent.findStepComponent(e.target as Element)
 			: null;
 
 		if (clickedStep) {
-			this.behaviorController.start(e, SelectStepBehavior.create(clickedStep, this));
+			this.context.behaviorController.start(e, SelectStepBehavior.create(clickedStep, this.context));
 		} else {
-			this.behaviorController.start(e, MoveViewPortBehavior.create(this.position, this));
+			this.context.behaviorController.start(e, MoveViewPortBehavior.create(this.position, this, this.context));
 		}
 	}
 
@@ -77,72 +73,36 @@ export class Workspace {
 		this.scale = newScale;
 
 		this.view.setPositionAndScale(this.position, this.scale);
-		this.onViewPortChanged.forward();
+		this.context.notifiyViewPortChanged();
 	}
 
 	public setPosition(position: Vector) {
 		this.position = position;
 		this.view.setPositionAndScale(this.position, this.scale);
-		this.onViewPortChanged.forward();
+		this.context.notifiyViewPortChanged();
 	}
 
-	public center() {
+	private center() {
 		if (this.mainComponent) {
 			const size = this.view.getSize();
 			const x = Math.max(0, (size.x - this.mainComponent.view.width) / 2);
-			const y = Math.max(20, (size.y - this.mainComponent.view.height) / 2);
+			const y = Math.max(0, (size.y - this.mainComponent.view.height) / 2);
 
 			this.position = new Vector(x, y);
 			this.scale = 1;
 			this.view.setPositionAndScale(this.position, this.scale);
-			this.onViewPortChanged.forward();
+			this.context.notifiyViewPortChanged();
 		}
 	}
 
-	public selectStep(step: StepComponent) {
-		if (this.selectedStep) {
-			this.selectedStep.setState(StepComponentState.default);
-		}
-		this.selectedStep = step;
-		this.selectedStep.setState(StepComponentState.selected);
-		this.onSelectedStepChanged.forward(step.step);
+	private setIsDropModeEnabled(isEnabled: boolean) {
+		this.mainComponent?.setIsDropModeEnabled(isEnabled);
 	}
 
-	public clearSelectedStep() {
-		if (this.selectedStep) {
-			this.selectedStep.setState(StepComponentState.default);
-			this.selectedStep = null;
-			this.onSelectedStepChanged.forward(null);
-		}
-	}
-
-	public removeSelectedStep() {
-		if (this.selectedStep) {
-			const index = this.selectedStep.parentSequence.steps.indexOf(this.selectedStep.step);
-			this.selectedStep.parentSequence.steps.splice(index, 1);
-			this.notifyChanged();
-		}
-	}
-
-	public setDropMode(isEnabled: boolean) {
-		this.mainComponent?.setDropMode(isEnabled);
-	}
-
-	public getPlaceholders(): Placeholder[] {
+	private getPlaceholders(): Placeholder[] {
 		const result: Placeholder[] = [];
 		this.mainComponent?.getPlaceholders(result);
 		return result;
-	}
-
-	public notifyChanged() {
-		this.clearSelectedStep();
-		this.render();
-		this.onChanged.forward();
-	}
-
-	public toggleIsReadonly() {
-		this.isReadonly = !this.isReadonly;
-		this.onIsReadonlyChanged.forward(this.isReadonly);
 	}
 }
 

@@ -48,9 +48,9 @@ export class SwitchStepComponent implements StepComponent {
 		}
 	}
 
-	public setDropMode(isEnabled: boolean) {
+	public setIsDropModeEnabled(isEnabled: boolean) {
 		if (this.currentState !== StepComponentState.moving) {
-			this.sequenceComponents.forEach(s => s.setDropMode(isEnabled));
+			this.sequenceComponents.forEach(s => s.setIsDropModeEnabled(isEnabled));
 		}
 		this.view.setDropMode(isEnabled);
 	}

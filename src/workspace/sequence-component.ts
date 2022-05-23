@@ -40,9 +40,9 @@ export class SequenceComponent implements Component {
 		this.components.forEach(c => c.getPlaceholders(result));
 	}
 
-	public setDropMode(isEnabled: boolean) {
+	public setIsDropModeEnabled(isEnabled: boolean) {
 		this.view.setDropMode(isEnabled);
-		this.components.forEach(c => c.setDropMode(isEnabled));
+		this.components.forEach(c => c.setIsDropModeEnabled(isEnabled));
 	}
 }
 

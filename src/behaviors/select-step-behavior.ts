@@ -1,22 +1,22 @@
 import { Vector } from '../core/vector';
+import { DesignerContext } from '../designer-context';
 import { StepComponent } from '../workspace/component';
-import { Workspace } from '../workspace/workspace';
 import { Behavior } from './behavior';
 import { DragStepBehavior } from './drag-step-behavior';
 
 export class SelectStepBehavior implements Behavior {
 
-	public static create(pressedStepComponent: StepComponent, workspace: Workspace): SelectStepBehavior {
+	public static create(pressedStepComponent: StepComponent, context: DesignerContext): SelectStepBehavior {
 		return new SelectStepBehavior(
 			pressedStepComponent,
-			workspace);
+			context);
 	}
 
 	private isCanceled = false;
 
 	private constructor(
 		private readonly pressedStepComponent: StepComponent,
-		private readonly workspace: Workspace) {
+		private readonly context: DesignerContext) {
 	}
 
 	public onStart() {
@@ -25,14 +25,14 @@ export class SelectStepBehavior implements Behavior {
 	public onMove(delta: Vector): Behavior | void {
 		if (delta.distance() > 2) {
 			this.isCanceled = true;
-			this.workspace.clearSelectedStep();
-			return DragStepBehavior.create(this.workspace, this.pressedStepComponent.step, this.pressedStepComponent);
+			this.context.setSelectedStepComponent(null);
+			return DragStepBehavior.create(this.context, this.pressedStepComponent.step, this.pressedStepComponent);
 		}
 	}
 
 	public onEnd() {
 		if (!this.isCanceled) {
-			this.workspace.selectStep(this.pressedStepComponent);
+			this.context.setSelectedStepComponent(this.pressedStepComponent);
 		}
 	}
 }

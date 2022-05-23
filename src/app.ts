@@ -1,4 +1,4 @@
-import { TaskStep, Branches, SwitchStep, Step, StepType, Sequence } from './definition';
+import { TaskStep, Branches, SwitchStep, Step, StepType, Sequence, Definition } from './definition';
 import { Designer } from './designer';
 
 function createSequence(nodes: Step[]): Sequence {
@@ -47,6 +47,10 @@ const sequence: Sequence = createSequence([
 	})
 ]);
 
+const wf: Definition = {
+	sequence: sequence
+};
+
 window.addEventListener('load', () => {
-	Designer.append(document.getElementById('example') as HTMLElement, sequence);
+	Designer.append(document.getElementById('example') as HTMLElement, wf, {});
 });

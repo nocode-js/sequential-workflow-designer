@@ -31,7 +31,7 @@ export class TaskStepComponent implements StepComponent {
 	public getPlaceholders(_: Placeholder[]) {
 	}
 
-	public setDropMode(isEnabled: boolean) {
+	public setIsDropModeEnabled(isEnabled: boolean) {
 		this.view.setDropMode(isEnabled);
 	}
 

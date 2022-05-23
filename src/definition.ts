@@ -1,5 +1,5 @@
 
-export interface Workflow {
+export interface Definition {
 	sequence: Sequence;
 	properties?: Properties;
 }

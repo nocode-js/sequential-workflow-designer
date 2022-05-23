@@ -1,11 +1,10 @@
-import { BehaviorController } from '../behaviors/behavior-controller';
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
 import { Step } from '../definition';
-import { Workspace } from '../workspace/workspace';
+import { DesignerContext } from '../designer-context';
 
 export class ToolboxItem {
 
-	public static append(parent: HTMLElement, step: Step, behaviorController: BehaviorController, workspace: Workspace): ToolboxItem {
+	public static append(parent: HTMLElement, step: Step, context: DesignerContext): ToolboxItem {
 		const item = document.createElement('div');
 		item.className = 'sqd-toolbox-item';
 
@@ -18,20 +17,18 @@ export class ToolboxItem {
 
 		const ti = new ToolboxItem(
 			step,
-			behaviorController,
-			workspace);
+			context);
 		item.addEventListener('mousedown', e => ti.onMouseDown(e));
 		return ti;
 	}
 
 	private constructor(
 		private readonly step: Step,
-		private readonly behaviorController: BehaviorController,
-		private readonly workspace: Workspace) {
+		private readonly context: DesignerContext) {
 	}
 
 	private onMouseDown(e: MouseEvent) {
 		const s = structuredClone(this.step);
-		this.behaviorController.start(e, DragStepBehavior.create(this.workspace, s));
+		this.context.behaviorController.start(e, DragStepBehavior.create(this.context, s));
 	}
 }

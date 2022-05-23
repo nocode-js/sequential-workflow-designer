@@ -1,12 +1,12 @@
 import { Vector } from '../core/vector';
+import { DesignerContext } from '../designer-context';
 import { Placeholder } from '../workspace/component';
-import { Workspace } from '../workspace/workspace';
 
 export class PlaceholderFinder {
 
-	public static create(placeholders: Placeholder[], workspace: Workspace): PlaceholderFinder {
-		const checker = new PlaceholderFinder(placeholders, workspace);
-		workspace.onViewPortChanged.subscribe(checker.clearCacheHandler);
+	public static create(placeholders: Placeholder[], context: DesignerContext): PlaceholderFinder {
+		const checker = new PlaceholderFinder(placeholders, context);
+		context.onViewPortChanged.subscribe(checker.clearCacheHandler);
 		return checker;
 	}
 
@@ -20,7 +20,7 @@ export class PlaceholderFinder {
 
 	private constructor(
 		private readonly placeholders: Placeholder[],
-		private readonly workspace: Workspace) {
+		private readonly context: DesignerContext) {
 	}
 
 	public find(vLt: Vector, vWidth: number, vHeight: number): Placeholder | undefined {
@@ -46,7 +46,7 @@ export class PlaceholderFinder {
 	}
 
 	public destroy() {
-		this.workspace.onViewPortChanged.unsubscribe(this.clearCacheHandler);
+		this.context.onViewPortChanged.unsubscribe(this.clearCacheHandler);
 	}
 
 	private clearCache() {

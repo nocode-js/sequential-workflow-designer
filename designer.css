@@ -91,12 +91,12 @@
 .sqd-control-bar-button:hover {
 	border-color: #939393;
 }
-.sqd-control-bar-button svg {
+.sqd-control-bar-button-icon {
 	width: 24px;
 	height: 24px;
 	margin: 3px 0 0 3px;
 }
-.sqd-control-bar-button.sqd-disabled svg {
+.sqd-control-bar-button.sqd-disabled .sqd-control-bar-button-icon {
 	opacity: .2;
 }
 

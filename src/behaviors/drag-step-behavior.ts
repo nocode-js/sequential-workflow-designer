@@ -1,10 +1,10 @@
+import { SequenceModifier } from '../core/sequence-modifier';
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
+import { DesignerContext } from '../designer-context';
 import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
-import { SequenceModifier } from '../workspace/sequence-modifier';
 import { StepComponentFactory } from '../workspace/step-component-factory';
-import { Workspace } from '../workspace/workspace';
 import { Behavior } from './behavior';
 import { PlaceholderFinder } from './placeholder-finder';
 
@@ -12,12 +12,12 @@ const SAFE_OFFSET = 10;
 
 export class DragStepBehavior implements Behavior {
 
-	public static create(workspace: Workspace, step: Step, sourceStepComponent?: StepComponent): DragStepBehavior {
+	public static create(context: DesignerContext, step: Step, pressedStepComponent?: StepComponent): DragStepBehavior {
 		return new DragStepBehavior(
 			DragStepView.create(step),
-			workspace,
+			context,
 			step,
-			sourceStepComponent);
+			pressedStepComponent);
 	}
 
 	private state?: {
@@ -29,7 +29,7 @@ export class DragStepBehavior implements Behavior {
 
 	private constructor(
 		private readonly view: DragStepView,
-		private readonly workspace: Workspace,
+		private readonly context: DesignerContext,
 		private readonly step: Step,
 		private readonly pressedStepComponent?: StepComponent) {
 	}
@@ -47,11 +47,11 @@ export class DragStepBehavior implements Behavior {
 		}
 
 		this.view.setPosition(position.subtract(offset));
-		this.workspace.setDropMode(true);
+		this.context.setIsDropModeEnabled(true);
 
 		this.state = {
 			startPosition: position,
-			finder: PlaceholderFinder.create(this.workspace.getPlaceholders(), this.workspace),
+			finder: PlaceholderFinder.create(this.context.getPlacehodlers(), this.context),
 			offset
 		};
 	}
@@ -93,12 +93,12 @@ export class DragStepBehavior implements Behavior {
 					this.currentPlaceholder.parentSequence,
 					this.currentPlaceholder.index);
 			}
-			this.workspace.notifyChanged();
+			this.context.notifiyDefinitionChanged();
 		} else {
 			if (this.pressedStepComponent) {
 				this.pressedStepComponent.setState(StepComponentState.default);
 			}
-			this.workspace.setDropMode(false);
+			this.context.setIsDropModeEnabled(false);
 		}
 		this.currentPlaceholder = undefined;
 

@@ -1,16 +1,16 @@
-import { Step } from '../definition';
-import { Workspace } from '../workspace/workspace';
+import { DesignerContext } from '../designer-context';
+import { StepComponent } from '../workspace/component';
 import { EditorView } from './editor';
 import { GlobalEditor } from './global-editor';
 import { StepEditor } from './step-editor';
 
 export class SmartEditor {
 
-	public static append(parent: HTMLElement, workspace: Workspace): SmartEditor {
+	public static append(parent: HTMLElement, context: DesignerContext): SmartEditor {
 		const view = SmartEditorView.create(parent);
 		const editor = new SmartEditor(view);
 		editor.onSelectedStepChanged(null);
-		workspace.onSelectedStepChanged.subscribe(s => editor.onSelectedStepChanged(s));
+		context.onSelectedStepComponentChanged.subscribe(s => editor.onSelectedStepChanged(s));
 		return editor;
 	}
 
@@ -18,9 +18,9 @@ export class SmartEditor {
 		private readonly view: SmartEditorView) {
 	}
 
-	private onSelectedStepChanged(step: Step | null) {
-		const editor = step
-			? StepEditor.create(step)
+	private onSelectedStepChanged(stepComponent: StepComponent | null) {
+		const editor = stepComponent
+			? StepEditor.create(stepComponent.step)
 			: GlobalEditor.create();
 		this.view.setView(editor.view);
 	}
