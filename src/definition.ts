@@ -1,16 +1,17 @@
 
-export interface Sequence {
-	steps: Step[];
+export interface Workflow {
+	sequence: Sequence;
+	properties?: Properties;
 }
 
-export interface Branches {
-	[branchName: string]: Sequence;
+export interface Sequence {
+	steps: Step[];
 }
 
 export interface Step {
 	type: StepType;
 	name: string;
-	properties?: StepProperties;
+	properties?: Properties;
 }
 
 export enum StepType {
@@ -27,6 +28,10 @@ export interface SwitchStep extends Step {
 	branches: Branches;
 }
 
-export interface StepProperties {
+export interface Branches {
+	[branchName: string]: Sequence;
+}
+
+export interface Properties {
 	[name: string]: string | number;
 }

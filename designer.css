@@ -12,6 +12,12 @@
 	line-height: 1em;
 }
 
+.sqd-hidden {
+	display: none !important;
+}
+
+/* .sqd-toolbox */
+
 .sqd-toolbox {
 	position: absolute;
 	top: 10px;
@@ -58,6 +64,40 @@
 	position: absolute;
 	z-index: 9999;
 	pointer-events: none;
+}
+
+/* .sqd-control-bar */
+
+.sqd-control-bar {
+	position: absolute;
+	bottom: 10px;
+	right: 310px;
+	z-index: 20;
+	background: #FFF;
+	padding: 10px 0 10px 10px;
+	border-radius: 10px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
+}
+
+.sqd-control-bar-button {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	border: 1px solid #C3C3C3;
+	border-radius: 5px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+.sqd-control-bar-button:hover {
+	border-color: #939393;
+}
+.sqd-control-bar-button svg {
+	width: 24px;
+	height: 24px;
+	margin: 3px 0 0 3px;
+}
+.sqd-control-bar-button.sqd-disabled svg {
+	opacity: .2;
 }
 
 /* .sqd-workspace */

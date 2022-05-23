@@ -29,11 +29,13 @@ export class Workspace {
 	private mainComponent?: StartStopComponent;
 	private selectedStep: StepComponent | null = null;
 
+	private isReadonly = false;
 	private position = new Vector(0, 0);
 	private scale = 1.0;
 
-	public readonly onViewPortChanged = new SimpleEvent<void>();
 	public readonly onSelectedStepChanged = new SimpleEvent<Step | null>();
+	public readonly onViewPortChanged = new SimpleEvent<void>();
+	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
 	public readonly onChanged = new SimpleEvent<void>();
 
 	private constructor(
@@ -52,7 +54,7 @@ export class Workspace {
 			return;
 		}
 		const isNotScrollClick = (e.button !== 1);
-		const clickedStep = isNotScrollClick
+		const clickedStep = isNotScrollClick && !this.isReadonly
 			? this.mainComponent.findStepComponent(e.target as Element)
 			: null;
 
@@ -86,9 +88,14 @@ export class Workspace {
 
 	public center() {
 		if (this.mainComponent) {
-			this.setPosition(new Vector(
-				Math.max(0, (this.view.getWidth() - this.mainComponent.view.width) / 2),
-				20));
+			const size = this.view.getSize();
+			const x = Math.max(0, (size.x - this.mainComponent.view.width) / 2);
+			const y = Math.max(20, (size.y - this.mainComponent.view.height) / 2);
+
+			this.position = new Vector(x, y);
+			this.scale = 1;
+			this.view.setPositionAndScale(this.position, this.scale);
+			this.onViewPortChanged.forward();
 		}
 	}
 
@@ -109,15 +116,21 @@ export class Workspace {
 		}
 	}
 
+	public removeSelectedStep() {
+		if (this.selectedStep) {
+			const index = this.selectedStep.parentSequence.steps.indexOf(this.selectedStep.step);
+			this.selectedStep.parentSequence.steps.splice(index, 1);
+			this.notifyChanged();
+		}
+	}
+
 	public setDropMode(isEnabled: boolean) {
 		this.mainComponent?.setDropMode(isEnabled);
 	}
 
 	public getPlaceholders(): Placeholder[] {
 		const result: Placeholder[] = [];
-		if (this.mainComponent) {
-			this.mainComponent.getPlaceholders(result);
-		}
+		this.mainComponent?.getPlaceholders(result);
 		return result;
 	}
 
@@ -125,6 +138,11 @@ export class Workspace {
 		this.clearSelectedStep();
 		this.render();
 		this.onChanged.forward();
+	}
+
+	public toggleIsReadonly() {
+		this.isReadonly = !this.isReadonly;
+		this.onIsReadonlyChanged.forward(this.isReadonly);
 	}
 }
 
@@ -210,8 +228,8 @@ export class WorkspaceView {
 		return new Vector(rect.x, rect.y);
 	}
 
-	public getWidth(): number {
-		return this.canvas.clientWidth;
+	public getSize(): Vector {
+		return new Vector(this.canvas.clientWidth, this.canvas.clientHeight);
 	}
 
 	public bindResize(handler: () => void) {
