@@ -26,13 +26,13 @@ export class ControlBar {
 		root.appendChild(moveButton);
 
 		parent.appendChild(root);
-		const cb = new ControlBar(deleteButton, moveButton, context);
-		context.onSelectedStepComponentChanged.subscribe(s => cb.onSelectedStepChanged(s));
-		context.onIsMovingDisabledChanged.subscribe(i => cb.onIsMovingDisabledChanged(i));
-		deleteButton.addEventListener('click', e => cb.onDeleteButtonClicked(e));
-		centerButton.addEventListener('click', e => cb.onCenterButtonClicked(e));
-		moveButton.addEventListener('click', e => cb.onMoveButtonClicked(e));
-		return cb;
+		const bar = new ControlBar(deleteButton, moveButton, context);
+		context.onSelectedStepComponentChanged.subscribe(s => bar.onSelectedStepChanged(s));
+		context.onIsMovingDisabledChanged.subscribe(i => bar.onIsMovingDisabledChanged(i));
+		deleteButton.addEventListener('click', e => bar.onDeleteButtonClicked(e));
+		centerButton.addEventListener('click', e => bar.onCenterButtonClicked(e));
+		moveButton.addEventListener('click', e => bar.onMoveButtonClicked(e));
+		return bar;
 	}
 
 	private constructor(
@@ -63,6 +63,7 @@ export class ControlBar {
 			SequenceModifier.deleteStep(
 				this.context.selectedStepComponent.step,
 				this.context.selectedStepComponent.parentSequence);
+			this.context.setSelectedStepComponent(null);
 			this.context.notifiyDefinitionChanged();
 		}
 	}

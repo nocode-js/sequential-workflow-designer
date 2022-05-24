@@ -2,6 +2,7 @@ import { SequenceModifier } from '../core/sequence-modifier';
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
+import { DesignerConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
 import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
 import { StepComponentFactory } from '../workspace/step-component-factory';
@@ -14,7 +15,7 @@ export class DragStepBehavior implements Behavior {
 
 	public static create(context: DesignerContext, step: Step, pressedStepComponent?: StepComponent): DragStepBehavior {
 		return new DragStepBehavior(
-			DragStepView.create(step),
+			DragStepView.create(step, context.configuration),
 			context,
 			step,
 			pressedStepComponent);
@@ -47,7 +48,7 @@ export class DragStepBehavior implements Behavior {
 		}
 
 		this.view.setPosition(position.subtract(offset));
-		this.context.setIsDropModeEnabled(true);
+		this.context.setIsMoving(true);
 
 		this.state = {
 			startPosition: position,
@@ -98,7 +99,7 @@ export class DragStepBehavior implements Behavior {
 			if (this.pressedStepComponent) {
 				this.pressedStepComponent.setState(StepComponentState.default);
 			}
-			this.context.setIsDropModeEnabled(false);
+			this.context.setIsMoving(false);
 		}
 		this.currentPlaceholder = undefined;
 
@@ -111,12 +112,12 @@ export class DragStepBehavior implements Behavior {
 
 class DragStepView {
 
-	public static create(step: Step): DragStepView {
+	public static create(step: Step, configuration: DesignerConfiguration): DragStepView {
 		const layer = document.createElement('div');
 		layer.className = 'sqd-drag';
 
 		const fakeSequence = { steps: [] };
-		const stepComponent = StepComponentFactory.create(step, fakeSequence);
+		const stepComponent = StepComponentFactory.create(step, fakeSequence, configuration);
 
 		const svg = Svg.element('svg', {
 			width: stepComponent.view.width + SAFE_OFFSET * 2,

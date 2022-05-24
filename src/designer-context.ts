@@ -7,14 +7,14 @@ import { Placeholder, StepComponent, StepComponentState } from './workspace/comp
 export class DesignerContext {
 
 	public readonly onSelectedStepComponentChanged = new SimpleEvent<StepComponent | null>();
-	public readonly onIsDropModeEnabledChanged = new SimpleEvent<boolean>();
+	public readonly onIsMovingChanged = new SimpleEvent<boolean>();
 	public readonly onIsMovingDisabledChanged = new SimpleEvent<boolean>();
 	public readonly onViewPortChanged = new SimpleEvent<void>();
 	public readonly onCenterViewPortRequested = new SimpleEvent<void>();
 	public readonly onDefinitionChanged = new SimpleEvent<void>();
 
 	public selectedStepComponent: StepComponent | null = null;
-	public isDropModeEnabled = false;
+	public isMoving = false;
 	public isMovingDisabled = false;
 
 	private placeholdersProvider?: PlaceholdersProvider;
@@ -39,9 +39,9 @@ export class DesignerContext {
 		}
 	}
 
-	public setIsDropModeEnabled(isEnabled: boolean) {
-		this.isDropModeEnabled = isEnabled;
-		this.onIsDropModeEnabledChanged.forward(isEnabled);
+	public setIsMoving(isMoving: boolean) {
+		this.isMoving = isMoving;
+		this.onIsMovingChanged.forward(isMoving);
 	}
 
 	public toggleIsMovingDisabled() {

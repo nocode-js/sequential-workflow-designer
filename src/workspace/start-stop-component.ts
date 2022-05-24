@@ -1,6 +1,7 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Sequence, Step } from '../definition';
+import { DesignerConfiguration } from '../designer-configuration';
 import { Component, ComponentView, Placeholder, StepComponent } from './component';
 import { SequenceComponent, SequenceComponentView } from './sequence-component';
 
@@ -8,8 +9,8 @@ const SIZE = 30;
 
 export class StartStopComponent implements Component {
 
-	public static create(sequence: Sequence): StartStopComponent {
-		const sequenceComponent = SequenceComponent.create(sequence);
+	public static create(sequence: Sequence, configuration: DesignerConfiguration): StartStopComponent {
+		const sequenceComponent = SequenceComponent.create(sequence, configuration);
 		const view = AnchorStepComponentView.create(sequenceComponent.view);
 		return new StartStopComponent(
 			view,
@@ -32,8 +33,8 @@ export class StartStopComponent implements Component {
 		this.sequenceComponent.getPlaceholders(result);
 	}
 
-	public setIsDropModeEnabled(isEnabled: boolean) {
-		this.sequenceComponent.setIsDropModeEnabled(isEnabled);
+	public setIsMoving(isEnabled: boolean) {
+		this.sequenceComponent.setIsMoving(isEnabled);
 	}
 }
 

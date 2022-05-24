@@ -3,10 +3,10 @@ import { SequenceModifier } from "./sequence-modifier";
 
 describe('SequenceModifier', () => {
 
-	const A: TaskStep = { name: 'A', type: StepType.task };
-	const B: TaskStep = { name: 'B', type: StepType.task };
-	const C: TaskStep = { name: 'C', type: StepType.task };
-	const D: TaskStep = { name: 'D', type: StepType.task };
+	const A: TaskStep = { name: 'A', type: StepType.task, internalType: 'a' };
+	const B: TaskStep = { name: 'B', type: StepType.task, internalType: 'b' };
+	const C: TaskStep = { name: 'C', type: StepType.task, internalType: 'c' };
+	const D: TaskStep = { name: 'D', type: StepType.task, internalType: 'd' };
 
 	function flatABC(): Sequence {
 		return {
@@ -53,5 +53,14 @@ describe('SequenceModifier', () => {
 		expect(seq.steps[1]).toEqual(A);
 		expect(seq.steps[2]).toEqual(B);
 		expect(seq.steps[3]).toEqual(C);
+	});
+
+	it('deleteStep() deletes a step', () => {
+		const seq = flatABC();
+		SequenceModifier.deleteStep(B, seq);
+
+		expect(seq.steps.length).toEqual(2);
+		expect(seq.steps[0]).toEqual(A);
+		expect(seq.steps[1]).toEqual(C);
 	});
 });

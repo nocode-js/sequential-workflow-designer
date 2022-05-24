@@ -1,10 +1,12 @@
 import { Step } from '../definition';
+import { DesignerConfiguration } from '../designer-configuration';
 import { Editor, EditorView } from './editor';
 
 export class StepEditor implements Editor {
 
-	public static create(step: Step): StepEditor {
-		const view = StepEditorView.create(step);
+	public static create(step: Step, configuration: DesignerConfiguration): StepEditor {
+		const content = configuration.stepEditorProvider(step);
+		const view = StepEditorView.create(content);
 		return new StepEditor(view);
 	}
 
@@ -15,14 +17,14 @@ export class StepEditor implements Editor {
 
 class StepEditorView implements EditorView {
 
-	public static create(step: Step): StepEditorView {
-		const se = document.createElement('div');
-		se.className = 'sqd-step-editor';
-		se.innerText = 'step editor: ' + step.name;
-		return new StepEditorView(se);
+	public static create(content: HTMLElement): StepEditorView {
+		const root = document.createElement('div');
+		root.className = 'sqd-step-editor';
+		root.appendChild(content);
+		return new StepEditorView(root);
 	}
 
 	private constructor(
-		public readonly element: HTMLElement) {
+		public readonly root: HTMLElement) {
 	}
 }

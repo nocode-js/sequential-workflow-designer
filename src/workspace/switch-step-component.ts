@@ -1,6 +1,7 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Sequence, Step, SwitchStep } from '../definition';
+import { DesignerConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 import { JoinRenderer } from './join-renderer';
 import { SequenceComponent } from './sequence-component';
@@ -14,8 +15,8 @@ const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponent implements StepComponent {
 
-	public static create(step: SwitchStep, parentSequence: Sequence): SwitchStepComponent {
-		const sequenceComponents = Object.keys(step.branches).map(bn => SequenceComponent.create(step.branches[bn]));
+	public static create(step: SwitchStep, parentSequence: Sequence, configuration: DesignerConfiguration): SwitchStepComponent {
+		const sequenceComponents = Object.keys(step.branches).map(bn => SequenceComponent.create(step.branches[bn], configuration));
 		const view = SwitchStepComponentView.create(step, sequenceComponents);
 		return new SwitchStepComponent(view, step, parentSequence, sequenceComponents);
 	}
@@ -48,11 +49,11 @@ export class SwitchStepComponent implements StepComponent {
 		}
 	}
 
-	public setIsDropModeEnabled(isEnabled: boolean) {
+	public setIsMoving(isEnabled: boolean) {
 		if (this.currentState !== StepComponentState.moving) {
-			this.sequenceComponents.forEach(s => s.setIsDropModeEnabled(isEnabled));
+			this.sequenceComponents.forEach(s => s.setIsMoving(isEnabled));
 		}
-		this.view.setDropMode(isEnabled);
+		this.view.setIsMoving(isEnabled);
 	}
 
 	public setState(state: StepComponentState) {
@@ -60,15 +61,15 @@ export class SwitchStepComponent implements StepComponent {
 		switch (state) {
 			case StepComponentState.default:
 				this.view.setIsSelected(false);
-				this.view.setIsMoving(false);
+				this.view.setIsDisabled(false);
 				break;
 			case StepComponentState.selected:
 				this.view.setIsSelected(true);
-				this.view.setIsMoving(false);
+				this.view.setIsDisabled(false);
 				break;
 			case StepComponentState.moving:
 				this.view.setIsSelected(false);
-				this.view.setIsMoving(true);
+				this.view.setIsDisabled(true);
 				break;
 		}
 	}
@@ -120,7 +121,7 @@ export class SwitchStepComponentView implements ComponentView {
 				ry: 10
 			});
 
-			const branchText = Svg.centralText({
+			const branchText = Svg.element('text', {
 				class: 'sqd-switch-branch-text',
 				x: offsetX + connectorXs[i]+ PADDING_X,
 				y: PADDING_TOP + LABEL_HEIGHT * 1.5 + CONNECTION_HEIGHT
@@ -156,7 +157,7 @@ export class SwitchStepComponentView implements ComponentView {
 			ry: 10
 		});
 
-		const nameText = Svg.centralText({
+		const nameText = Svg.element('text', {
 			class: 'sqd-switch-name-text',
 			x: containerWidths[0],
 			y: PADDING_TOP + LABEL_HEIGHT / 2
@@ -207,7 +208,7 @@ export class SwitchStepComponentView implements ComponentView {
 		return this.g.contains(element);
 	}
 
-	public setDropMode(isEnabled: boolean) {
+	public setIsMoving(isEnabled: boolean) {
 		Svg.attrs(this.input, {
 			visibility: isEnabled ? 'hidden' : 'visible'
 		});
@@ -221,11 +222,11 @@ export class SwitchStepComponentView implements ComponentView {
 		}
 	}
 
-	public setIsMoving(isMoving: boolean) {
-		if (isMoving) {
-			this.g.classList.add('sqd-moving');
+	public setIsDisabled(isDisabled: boolean) {
+		if (isDisabled) {
+			this.g.classList.add('sqd-disabled');
 		} else {
-			this.g.classList.remove('sqd-moving');
+			this.g.classList.remove('sqd-disabled');
 		}
 	}
 }

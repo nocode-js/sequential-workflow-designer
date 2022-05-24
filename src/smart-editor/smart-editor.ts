@@ -7,33 +7,34 @@ import { StepEditor } from './step-editor';
 export class SmartEditor {
 
 	public static append(parent: HTMLElement, context: DesignerContext): SmartEditor {
-		const view = SmartEditorView.create(parent);
-		const editor = new SmartEditor(view);
+		const view = SmartEditorView.append(parent);
+		const editor = new SmartEditor(view, context);
 		editor.onSelectedStepChanged(null);
 		context.onSelectedStepComponentChanged.subscribe(s => editor.onSelectedStepChanged(s));
 		return editor;
 	}
 
 	private constructor(
-		private readonly view: SmartEditorView) {
+		private readonly view: SmartEditorView,
+		private readonly context: DesignerContext) {
 	}
 
 	private onSelectedStepChanged(stepComponent: StepComponent | null) {
 		const editor = stepComponent
-			? StepEditor.create(stepComponent.step)
-			: GlobalEditor.create();
+			? StepEditor.create(stepComponent.step, this.context.configuration)
+			: GlobalEditor.create(this.context.definition, this.context.configuration);
 		this.view.setView(editor.view);
 	}
 }
 
 class SmartEditorView {
 
-	public static create(parent: HTMLElement): SmartEditorView {
-		const editor = document.createElement('div');
-		editor.className = 'sqd-smart-editor';
+	public static append(parent: HTMLElement): SmartEditorView {
+		const root = document.createElement('div');
+		root.className = 'sqd-smart-editor';
 
-		parent.appendChild(editor);
-		return new SmartEditorView(editor);
+		parent.appendChild(root);
+		return new SmartEditorView(root);
 	}
 
 	private view?: EditorView;
@@ -44,9 +45,9 @@ class SmartEditorView {
 
 	public setView(view: EditorView) {
 		if (this.view) {
-			this.editor.removeChild(this.view.element);
+			this.editor.removeChild(this.view.root);
 		}
-		this.editor.appendChild(view.element);
+		this.editor.appendChild(view.root);
 		this.view = view;
 	}
 }

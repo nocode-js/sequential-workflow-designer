@@ -1,6 +1,7 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
+import { DesignerConfiguration } from '../designer-configuration';
 import { Component, ComponentView, Placeholder, StepComponent } from './component';
 import { JoinRenderer } from './join-renderer';
 import { SequencePlaceholder } from './sequence-placeholder';
@@ -11,8 +12,8 @@ const PH_HEIGHT = 24;
 
 export class SequenceComponent implements Component {
 
-	public static create(sequence: Sequence): SequenceComponent {
-		const components = sequence.steps.map(s => StepComponentFactory.create(s, sequence));
+	public static create(sequence: Sequence, configuration: DesignerConfiguration): SequenceComponent {
+		const components = sequence.steps.map(s => StepComponentFactory.create(s, sequence, configuration));
 		const view = SequenceComponentView.create(components);
 		return new SequenceComponent(view, sequence, components);
 	}
@@ -40,9 +41,9 @@ export class SequenceComponent implements Component {
 		this.components.forEach(c => c.getPlaceholders(result));
 	}
 
-	public setIsDropModeEnabled(isEnabled: boolean) {
-		this.view.setDropMode(isEnabled);
-		this.components.forEach(c => c.setIsDropModeEnabled(isEnabled));
+	public setIsMoving(isEnabled: boolean) {
+		this.view.setIsMoving(isEnabled);
+		this.components.forEach(c => c.setIsMoving(isEnabled));
 	}
 }
 
@@ -94,10 +95,10 @@ export class SequenceComponentView implements ComponentView {
 		throw new Error('Not supported');
 	}
 
-	public setDropMode(isEnabled: boolean) {
+	public setIsMoving(isMoving: boolean) {
 		this.placeholders.forEach(p => {
 			Svg.attrs(p, {
-				visibility: isEnabled ? 'visible' : 'hidden'
+				visibility: isMoving ? 'visible' : 'hidden'
 			});
 		});
 	}

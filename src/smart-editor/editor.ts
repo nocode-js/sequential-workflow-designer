@@ -4,6 +4,5 @@ export interface Editor {
 }
 
 export interface EditorView {
-	element: HTMLElement;
-};
-
+	root: HTMLElement;
+}

@@ -1,11 +1,9 @@
 import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
 import { SelectStepBehavior } from '../behaviors/select-step-behavior';
-import { SimpleEvent } from '../core/simple-event';
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
-import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { ComponentView, Placeholder } from './component';
+import { Component, ComponentView, Placeholder } from './component';
 import { StartStopComponent } from './start-stop-component';
 
 const GRID_SIZE = 50;
@@ -21,7 +19,7 @@ export class Workspace {
 		workspace.center();
 
 		context.onDefinitionChanged.subscribe(() => workspace.render());
-		context.onIsDropModeEnabledChanged.subscribe(i => workspace.setIsDropModeEnabled(i));
+		context.onIsMovingChanged.subscribe(i => workspace.setIsMoving(i));
 		context.onCenterViewPortRequested.subscribe(() => workspace.center());
 		context.setPlaceholdersProvider(() => workspace.getPlaceholders());
 
@@ -31,7 +29,7 @@ export class Workspace {
 		return workspace;
 	}
 
-	private mainComponent?: StartStopComponent;
+	private rootComponent?: Component;
 	private position = new Vector(0, 0);
 	private scale = 1.0;
 
@@ -41,17 +39,17 @@ export class Workspace {
 	}
 
 	private render() {
-		this.mainComponent = StartStopComponent.create(this.context.definition.sequence);
-		this.view.setView(this.mainComponent.view);
+		this.rootComponent = StartStopComponent.create(this.context.definition.sequence, this.context.configuration);
+		this.view.setView(this.rootComponent.view);
 	}
 
 	private onMouseDown(e: MouseEvent) {
-		if (!this.mainComponent) {
+		if (!this.rootComponent) {
 			return;
 		}
 		const isNotScrollClick = (e.button !== 1);
 		const clickedStep = isNotScrollClick && !this.context.isMovingDisabled
-			? this.mainComponent.findStepComponent(e.target as Element)
+			? this.rootComponent.findStepComponent(e.target as Element)
 			: null;
 
 		if (clickedStep) {
@@ -83,10 +81,10 @@ export class Workspace {
 	}
 
 	private center() {
-		if (this.mainComponent) {
+		if (this.rootComponent) {
 			const size = this.view.getSize();
-			const x = Math.max(0, (size.x - this.mainComponent.view.width) / 2);
-			const y = Math.max(0, (size.y - this.mainComponent.view.height) / 2);
+			const x = Math.max(0, (size.x - this.rootComponent.view.width) / 2);
+			const y = Math.max(0, (size.y - this.rootComponent.view.height) / 2);
 
 			this.position = new Vector(x, y);
 			this.scale = 1;
@@ -95,13 +93,13 @@ export class Workspace {
 		}
 	}
 
-	private setIsDropModeEnabled(isEnabled: boolean) {
-		this.mainComponent?.setIsDropModeEnabled(isEnabled);
+	private setIsMoving(isMoving: boolean) {
+		this.rootComponent?.setIsMoving(isMoving);
 	}
 
 	private getPlaceholders(): Placeholder[] {
 		const result: Placeholder[] = [];
-		this.mainComponent?.getPlaceholders(result);
+		this.rootComponent?.getPlaceholders(result);
 		return result;
 	}
 }

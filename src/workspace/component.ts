@@ -6,7 +6,7 @@ export interface Component {
 
 	findStepComponent(element: Element): StepComponent | null;
 	getPlaceholders(result: Placeholder[]): void;
-	setIsDropModeEnabled(isEnabled: boolean): void;
+	setIsMoving(isMoving: boolean): void;
 }
 
 export interface ComponentView {

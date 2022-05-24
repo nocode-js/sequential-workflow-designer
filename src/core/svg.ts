@@ -14,13 +14,6 @@ export class Svg {
 		return element;
 	}
 
-	public static centralText(attributes?: Attributes): SVGTextElement {
-		return Svg.element('text', Object.assign(attributes || {}, {
-			'text-anchor': 'middle',
-			'style': 'dominant-baseline: central'
-		}))
-	}
-
 	public static attrs(element: Element, attributes: Attributes) {
 		Object.keys(attributes).forEach(name => {
 			const value = attributes[name];

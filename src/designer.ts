@@ -9,16 +9,16 @@ import { Workspace } from './workspace/workspace';
 
 export class Designer {
 
-	public static append(parent: HTMLElement, definition: Definition, configuration: DesignerConfiguration): Designer {
+	public static create(container: HTMLElement, definition: Definition, configuration: DesignerConfiguration): Designer {
 		const root = document.createElement('div');
 		root.className = 'sqd-designer';
 
-		parent.appendChild(root);
+		container.appendChild(root);
 
 		const behaviorController = new BehaviorController();
 		const context = new DesignerContext(definition, behaviorController, configuration);
 
-		const workspace = Workspace.append(root, context);
+		Workspace.append(root, context);
 		Toolbox.append(root, context);
 		ControlBar.append(root, context);
 		SmartEditor.append(root, context);

@@ -5,21 +5,38 @@ import { DesignerContext } from '../designer-context';
 export class ToolboxItem {
 
 	public static append(parent: HTMLElement, step: Step, context: DesignerContext): ToolboxItem {
-		const item = document.createElement('div');
-		item.className = 'sqd-toolbox-item';
+		const root = document.createElement('div');
+		root.className = 'sqd-toolbox-item';
+
+		const iconUrl = context.configuration.stepIconUrlProvider
+			? context.configuration.stepIconUrlProvider(step.type, step.internalType)
+			: null;
+
+		const icon = document.createElement('span');
+		icon.className = 'sqd-toolbox-item-icon';
+
+		if (iconUrl) {
+			const iconImage = document.createElement('img');
+			iconImage.setAttribute('src', iconUrl);
+			iconImage.className = 'sqd-toolbox-item-icon-image';
+			icon.appendChild(iconImage);
+		} else {
+			icon.classList.add('sqd-no-icon');
+		}
 
 		const text = document.createElement('span');
 		text.className = 'sqd-toolbox-item-text';
-		text.textContent = step.name;
+		text.textContent = step.internalType;
 
-		item.appendChild(text);
-		parent.appendChild(item);
+		root.appendChild(icon);
+		root.appendChild(text);
+		parent.appendChild(root);
 
-		const ti = new ToolboxItem(
+		const item = new ToolboxItem(
 			step,
 			context);
-		item.addEventListener('mousedown', e => ti.onMouseDown(e));
-		return ti;
+		root.addEventListener('mousedown', e => item.onMouseDown(e));
+		return item;
 	}
 
 	private constructor(

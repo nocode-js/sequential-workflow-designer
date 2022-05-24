@@ -1,6 +1,7 @@
 import { Svg } from '../core/svg';
 import { Vector } from '../core/vector';
 import { Sequence, Step, TaskStep } from '../definition';
+import { DesignerConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 
 const WIDTH = 130;
@@ -11,8 +12,8 @@ const RADIUS = 5;
 
 export class TaskStepComponent implements StepComponent {
 
-	public static create(step: TaskStep, parentSequence: Sequence): TaskStepComponent {
-		const view = TaskStepComponentView.create(step);
+	public static create(step: TaskStep, parentSequence: Sequence, configuration: DesignerConfiguration): TaskStepComponent {
+		const view = TaskStepComponentView.create(step, configuration);
 		return new TaskStepComponent(view, step, parentSequence);
 	}
 
@@ -31,22 +32,22 @@ export class TaskStepComponent implements StepComponent {
 	public getPlaceholders(_: Placeholder[]) {
 	}
 
-	public setIsDropModeEnabled(isEnabled: boolean) {
-		this.view.setDropMode(isEnabled);
+	public setIsMoving(isMoving: boolean) {
+		this.view.setIsMoving(isMoving);
 	}
 
 	public setState(state: StepComponentState) {
 		switch (state) {
 			case StepComponentState.default:
 				this.view.setIsSelected(false);
-				this.view.setIsMoving(false);
+				this.view.setIsDisabled(false);
 				break;
 			case StepComponentState.selected:
-				this.view.setIsMoving(false);
+				this.view.setIsDisabled(false);
 				this.view.setIsSelected(true);
 				break;
 			case StepComponentState.moving:
-				this.view.setIsMoving(true);
+				this.view.setIsDisabled(true);
 				this.view.setIsSelected(false);
 				break;
 		}
@@ -55,7 +56,7 @@ export class TaskStepComponent implements StepComponent {
 
 export class TaskStepComponentView implements ComponentView {
 
-	public static create(step: TaskStep): TaskStepComponentView {
+	public static create(step: TaskStep, configuration: DesignerConfiguration): TaskStepComponentView {
 		const rect = Svg.element('rect', {
 			x: 0.5,
 			y: 0.5,
@@ -75,13 +76,24 @@ export class TaskStepComponentView implements ComponentView {
 		});
 		text.textContent = step.name;
 
-		const imageSize = HEIGHT / 2;
-		const image = Svg.element('rect', {
-			x: (WIDTH / 3 - imageSize) / 2,
-			y: (HEIGHT - imageSize) / 2,
-			width: imageSize,
-			height: imageSize,
-			fill: '#2C18DF'
+		const iconSize = HEIGHT / 2;
+		const iconUrl = configuration.stepIconUrlProvider
+			? configuration.stepIconUrlProvider(step.type, step.internalType)
+			: null;
+		const icon = iconUrl
+			? Svg.element('image', {
+				href: iconUrl
+			})
+			: Svg.element('rect', {
+				class: 'sqd-task-empty-icon',
+				rx: 4,
+				ry: 4
+			});
+		Svg.attrs(icon, {
+			x: (WIDTH / 3 - iconSize) / 2,
+			y: (HEIGHT - iconSize) / 2,
+			width: iconSize,
+			height: iconSize,
 		});
 
 		const input = Svg.element('circle', {
@@ -105,7 +117,7 @@ export class TaskStepComponentView implements ComponentView {
 		});
 		g.appendChild(rect);
 		g.appendChild(text);
-		g.appendChild(image);
+		g.appendChild(icon);
 		g.appendChild(input);
 		g.appendChild(output);
 		return new TaskStepComponentView(g, WIDTH, HEIGHT, WIDTH / 2, rect, input, output);
@@ -130,17 +142,17 @@ export class TaskStepComponentView implements ComponentView {
 		return this.g.contains(element);
 	}
 
-	public setDropMode(isEnabled: boolean) {
+	public setIsMoving(isEnabled: boolean) {
 		const visibility = isEnabled ? 'hidden' : 'visible';
 		Svg.attrs(this.input, { visibility });
 		Svg.attrs(this.output, { visibility });
 	}
 
-	public setIsMoving(isMoving: boolean) {
-		if (isMoving) {
-			this.g.classList.add('sqd-moving');
+	public setIsDisabled(isDisabled: boolean) {
+		if (isDisabled) {
+			this.g.classList.add('sqd-disabled');
 		} else {
-			this.g.classList.remove('sqd-moving');
+			this.g.classList.remove('sqd-disabled');
 		}
 	}
 

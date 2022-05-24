@@ -10,13 +10,14 @@ export interface Sequence {
 
 export interface Step {
 	type: StepType;
+	internalType: string;
 	name: string;
 	properties?: Properties;
 }
 
 export enum StepType {
-	task,
-	switch
+	task = 'task',
+	switch = 'switch'
 }
 
 export interface TaskStep extends Step {
