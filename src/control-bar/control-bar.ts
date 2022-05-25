@@ -47,7 +47,7 @@ export class ControlBar {
 	}
 
 	private onIsMovingDisabledChanged(isDisabled: boolean) {
-		Dom.toggleClass(this.moveButton, isDisabled, 'sqd-disabled');
+		Dom.toggleClass(this.moveButton, !isDisabled, 'sqd-disabled');
 	}
 
 	private onDeleteButtonClicked(e: MouseEvent) {

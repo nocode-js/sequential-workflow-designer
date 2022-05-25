@@ -19,19 +19,26 @@
 	<div id="designer"></div>
 
 	<script>
-		function task(internalType, name) {
+		function uid() {
+			return Math.ceil(Math.random() * 10**16).toString(16);
+		}
+
+		function task(type, name) {
 			return {
-				type: 'task',
-				internalType,
-				name
+				id: uid(),
+				componentType: 'task',
+				type,
+				name,
+				properties: {}
 			};
 		}
 
 		function ifElse(iff, els) {
 			return {
-				type: 'switch',
-				internalType: 'if',
-				name: 'if',
+				id: uid(),
+				componentType: 'switch',
+				type: 'if',
+				name: 'If',
 				branches: {
 					'true': {
 						steps: iff
@@ -39,7 +46,8 @@
 					'false': {
 						steps: els
 					}
-				}
+				},
+				properties: {}
 			};
 		}
 
@@ -47,50 +55,60 @@
 			return {
 				name,
 				steps: [
-					task('saveFile', 'Save file'),
-					task('sendEmail', 'Send email'),
+					task('save-file', 'Save file'),
+					task('send-email', 'Send email'),
 					ifElse([], [])
-				]
+				],
+				properties: {}
 			};
 		}
 
 		const configuration = {
-			stepIconUrlProvider: (type, internalType) => {
-				return `./icon-${internalType}.svg`
+
+			toolbox: {
+				isHidden: false,
+				groups: [
+					toolboxGroup('Main'),
+					toolboxGroup('File system'),
+					toolboxGroup('E-mail')
+				]
 			},
 
-			toolboxGroups: [
-				toolboxGroup('Main'),
-				toolboxGroup('File system'),
-				toolboxGroup('E-mail')
-			],
+			steps: {
+				iconUrlProvider: (componentType, type) => {
+					return `./icon-${type}.svg`
+				},
 
-			stepValidator: (step) => {
-				return (step.name.length % 2) === 0;
+				validator: (step) => {
+					return Math.random() > .5;
+				}
 			},
 
-			globalEditorProvider: () => {
-				const e = document.createElement('div');
-				e.innerText = 'global';
-				return e;
-			},
+			editors: {
+				globalEditorProvider: (d) => {
+					const e = document.createElement('div');
+					e.innerText = JSON.stringify(d);
+					return e;
+				},
 
-			stepEditorProvider: (step) => {
-				const e = document.createElement('div');
-				e.innerText = step.name;
-				return e;
+				stepEditorProvider: (step) => {
+					const e = document.createElement('div');
+					e.innerText = JSON.stringify(step);
+					return e;
+				}
 			}
 		};
 
 		const definition = {
+			properties: {},
 			sequence: {
 				steps: [
 					ifElse(
 						[
-							task('saveFile', 'Save file')
+							task('save-file', 'Save file')
 						],
 						[
-							task('sendEmail', 'Send email')
+							task('send-email', 'Send email')
 						]
 					)
 				]

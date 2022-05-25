@@ -1,5 +1,6 @@
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
 import { Dom } from '../core/dom';
+import { Uid } from '../core/uid';
 import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
 
@@ -10,8 +11,8 @@ export class ToolboxItem {
 			class: 'sqd-toolbox-item'
 		});
 
-		const iconUrl = context.configuration.stepIconUrlProvider
-			? context.configuration.stepIconUrlProvider(step.type, step.internalType)
+		const iconUrl = context.configuration.steps.iconUrlProvider
+			? context.configuration.steps.iconUrlProvider(step.componentType, step.type)
 			: null;
 
 		const icon = Dom.element('div', {
@@ -31,7 +32,7 @@ export class ToolboxItem {
 		const text = Dom.element('div', {
 			class: 'sqd-toolbox-item-text'
 		});
-		text.textContent = step.internalType;
+		text.textContent = step.name;
 
 		root.appendChild(icon);
 		root.appendChild(text);
@@ -51,6 +52,7 @@ export class ToolboxItem {
 
 	private onMouseDown(e: MouseEvent) {
 		const s = structuredClone(this.step);
+		s.id = Uid.next();
 		this.context.behaviorController.start(e, DragStepBehavior.create(this.context, s));
 	}
 }

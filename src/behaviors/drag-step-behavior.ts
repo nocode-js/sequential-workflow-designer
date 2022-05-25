@@ -1,8 +1,8 @@
-import { SequenceModifier } from '../core/sequence-modifier';
 import { Dom } from '../core/dom';
+import { SequenceModifier } from '../core/sequence-modifier';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
-import { DesignerConfiguration } from '../designer-configuration';
+import { StepsConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
 import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
 import { StepComponentFactory } from '../workspace/step-component-factory';
@@ -15,7 +15,7 @@ export class DragStepBehavior implements Behavior {
 
 	public static create(context: DesignerContext, step: Step, pressedStepComponent?: StepComponent): DragStepBehavior {
 		return new DragStepBehavior(
-			DragStepView.create(step, context.configuration),
+			DragStepView.create(step, context.configuration.steps),
 			context,
 			step,
 			pressedStepComponent);
@@ -112,7 +112,7 @@ export class DragStepBehavior implements Behavior {
 
 class DragStepView {
 
-	public static create(step: Step, configuration: DesignerConfiguration): DragStepView {
+	public static create(step: Step, configuration: StepsConfiguration): DragStepView {
 		const layer = Dom.element('div', {
 			class: 'sqd-drag'
 		});

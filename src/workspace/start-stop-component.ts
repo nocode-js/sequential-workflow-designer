@@ -1,7 +1,7 @@
 import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Sequence, Step } from '../definition';
-import { DesignerConfiguration } from '../designer-configuration';
+import { StepsConfiguration } from '../designer-configuration';
 import { Component, ComponentView, Placeholder, StepComponent } from './component';
 import { SequenceComponent, SequenceComponentView } from './sequence-component';
 
@@ -9,7 +9,7 @@ const SIZE = 30;
 
 export class StartStopComponent implements Component {
 
-	public static create(sequence: Sequence, configuration: DesignerConfiguration): StartStopComponent {
+	public static create(sequence: Sequence, configuration: StepsConfiguration): StartStopComponent {
 		const sequenceComponent = SequenceComponent.create(sequence, configuration);
 		const view = AnchorStepComponentView.create(sequenceComponent.view);
 		return new StartStopComponent(
@@ -33,8 +33,12 @@ export class StartStopComponent implements Component {
 		this.sequenceComponent.getPlaceholders(result);
 	}
 
-	public setIsMoving(isEnabled: boolean) {
-		this.sequenceComponent.setIsMoving(isEnabled);
+	public setIsMoving(isMoving: boolean) {
+		this.sequenceComponent.setIsMoving(isMoving);
+	}
+
+	public validate(): boolean {
+		return this.sequenceComponent.validate();
 	}
 }
 

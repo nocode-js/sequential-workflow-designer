@@ -1,12 +1,12 @@
-import { Sequence, StepType, TaskStep } from "../definition";
+import { Sequence, ComponentType, TaskStep } from "../definition";
 import { SequenceModifier } from "./sequence-modifier";
 
 describe('SequenceModifier', () => {
 
-	const A: TaskStep = { name: 'A', type: StepType.task, internalType: 'a' };
-	const B: TaskStep = { name: 'B', type: StepType.task, internalType: 'b' };
-	const C: TaskStep = { name: 'C', type: StepType.task, internalType: 'c' };
-	const D: TaskStep = { name: 'D', type: StepType.task, internalType: 'd' };
+	const A: TaskStep = { id: '0x1', name: 'A', componentType: ComponentType.task, type: 'a', properties: {} };
+	const B: TaskStep = { id: '0x2', name: 'B', componentType: ComponentType.task, type: 'b', properties: {} };
+	const C: TaskStep = { id: '0x3', name: 'C', componentType: ComponentType.task, type: 'c', properties: {} };
+	const D: TaskStep = { id: '0x4', name: 'D', componentType: ComponentType.task, type: 'd', properties: {} };
 
 	function flatABC(): Sequence {
 		return {

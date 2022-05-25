@@ -1,11 +1,11 @@
 import { Dom } from '../core/dom';
 import { Definition } from '../definition';
-import { DesignerConfiguration } from '../designer-configuration';
+import { EditorsConfiguration } from '../designer-configuration';
 import { Editor, EditorView } from './editor';
 
 export class GlobalEditor implements Editor {
 
-	public static create(definition: Definition, configuration: DesignerConfiguration): GlobalEditor {
+	public static create(definition: Definition, configuration: EditorsConfiguration): GlobalEditor {
 		const content = configuration.globalEditorProvider(definition);
 		const view = GlobalEditorView.create(content);
 		return new GlobalEditor(view);

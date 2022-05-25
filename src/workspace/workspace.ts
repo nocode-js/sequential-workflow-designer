@@ -29,6 +29,8 @@ export class Workspace {
 		return workspace;
 	}
 
+	public isValid = false;
+
 	private rootComponent?: Component;
 	private position = new Vector(0, 0);
 	private scale = 1.0;
@@ -38,8 +40,13 @@ export class Workspace {
 		private readonly context: DesignerContext) {
 	}
 
+	public revalidate() {
+		this.isValid = this.rootComponent?.validate() || false;
+	}
+
 	private render() {
-		this.rootComponent = StartStopComponent.create(this.context.definition.sequence, this.context.configuration);
+		this.rootComponent = StartStopComponent.create(this.context.definition.sequence, this.context.configuration.steps);
+		this.revalidate();
 		this.view.setView(this.rootComponent.view);
 	}
 

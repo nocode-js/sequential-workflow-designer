@@ -1,11 +1,11 @@
 import { Dom } from '../core/dom';
 import { Step } from '../definition';
-import { DesignerConfiguration } from '../designer-configuration';
+import { EditorsConfiguration } from '../designer-configuration';
 import { Editor, EditorView } from './editor';
 
 export class StepEditor implements Editor {
 
-	public static create(step: Step, configuration: DesignerConfiguration): StepEditor {
+	public static create(step: Step, configuration: EditorsConfiguration): StepEditor {
 		const content = configuration.stepEditorProvider(step);
 		const view = StepEditorView.create(content);
 		return new StepEditor(view);

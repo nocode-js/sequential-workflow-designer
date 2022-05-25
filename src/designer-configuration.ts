@@ -1,12 +1,22 @@
-import { Definition, Step, StepType } from './definition';
+import { ComponentType, Definition, Step } from './definition';
 
 export interface DesignerConfiguration {
+	toolbox: ToolboxConfiguration;
+	steps: StepsConfiguration;
+	editors: EditorsConfiguration;
+}
 
-	toolboxGroups: ToolboxGroupConfiguration[];
+export interface ToolboxConfiguration {
+	isHidden?: boolean;
+	groups: ToolboxGroupConfiguration[];
+}
 
-	stepIconUrlProvider?: (type: StepType, internalType: string) => string | null;
-	stepValidator?: (step: Step) => boolean;
+export interface StepsConfiguration {
+	iconUrlProvider?: (componentType: ComponentType, type: string) => string | null;
+	validator?: (step: Step) => boolean;
+}
 
+export interface EditorsConfiguration {
 	stepEditorProvider: (step: Step) => HTMLElement;
 	globalEditorProvider: (definition: Definition) => HTMLElement;
 }

@@ -22,8 +22,8 @@ export class SmartEditor {
 
 	private onSelectedStepChanged(stepComponent: StepComponent | null) {
 		const editor = stepComponent
-			? StepEditor.create(stepComponent.step, this.context.configuration)
-			: GlobalEditor.create(this.context.definition, this.context.configuration);
+			? StepEditor.create(stepComponent.step, this.context.configuration.editors)
+			: GlobalEditor.create(this.context.definition, this.context.configuration.editors);
 		this.view.setView(editor.view);
 	}
 }

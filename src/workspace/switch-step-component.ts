@@ -1,7 +1,7 @@
 import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Sequence, Step, SwitchStep } from '../definition';
-import { DesignerConfiguration } from '../designer-configuration';
+import { StepsConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 import { JoinRenderer } from './join-renderer';
 import { SequenceComponent } from './sequence-component';
@@ -16,13 +16,11 @@ const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponent implements StepComponent {
 
-	public static create(step: SwitchStep, parentSequence: Sequence, configuration: DesignerConfiguration): SwitchStepComponent {
+	public static create(step: SwitchStep, parentSequence: Sequence, configuration: StepsConfiguration): SwitchStepComponent {
 		const sequenceComponents = Object.keys(step.branches).map(bn => SequenceComponent.create(step.branches[bn], configuration));
-		const isValid = configuration.stepValidator
-			? configuration.stepValidator(step)
-			: true;
-		const view = SwitchStepComponentView.create(step, isValid, sequenceComponents);
-		return new SwitchStepComponent(view, step, parentSequence, sequenceComponents);
+
+		const view = SwitchStepComponentView.create(step, sequenceComponents);
+		return new SwitchStepComponent(view, step, parentSequence, sequenceComponents, configuration);
 	}
 
 	private currentState = StepComponentState.default;
@@ -31,7 +29,8 @@ export class SwitchStepComponent implements StepComponent {
 		public readonly view: SwitchStepComponentView,
 		public readonly step: Step,
 		public readonly parentSequence: Sequence,
-		private readonly sequenceComponents: SequenceComponent[]) {
+		private readonly sequenceComponents: SequenceComponent[],
+		private readonly configuration: StepsConfiguration) {
 	}
 
 	public findStepComponent(element: Element): StepComponent | null {
@@ -77,11 +76,20 @@ export class SwitchStepComponent implements StepComponent {
 				break;
 		}
 	}
+
+	public validate(): boolean {
+		const isValid = this.configuration.validator
+			? this.configuration.validator(this.step)
+			: true;
+		this.view.setIsValidationErrorHidden(isValid);
+		const isChildrenValid = this.sequenceComponents.every(c => c.validate());
+		return isValid && isChildrenValid;
+	}
 }
 
 export class SwitchStepComponentView implements ComponentView {
 
-	public static create(step: SwitchStep, isValid: boolean, sequenceComponents: SequenceComponent[]): SwitchStepComponentView {
+	public static create(step: SwitchStep, sequenceComponents: SequenceComponent[]): SwitchStepComponentView {
 		const branchNames = Object.keys(step.branches);
 		const n = branchNames.length;
 
@@ -191,11 +199,9 @@ export class SwitchStepComponentView implements ComponentView {
 			new Vector(containerWidths[0], containerHeight),
 			containerOffsets.map((o, i) => new Vector(o + connectorXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
 
-		if (!isValid) {
-			ValidationErrorRenderer.append(g, containersWidth, 0);
-		}
+		const validationError = ValidationErrorRenderer.append(g, containersWidth, 0);
 
-		return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], regions, input);
+		return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], regions, input, validationError);
 	}
 
 	private constructor(
@@ -204,7 +210,8 @@ export class SwitchStepComponentView implements ComponentView {
 		public readonly height: number,
 		public readonly joinX: number,
 		private readonly regions: SVGRectElement[],
-		private readonly input: SVGPathElement) {
+		private readonly input: SVGPathElement,
+		private readonly validationError: SVGElement) {
 	}
 
 	public getPosition(): Vector {
@@ -230,5 +237,9 @@ export class SwitchStepComponentView implements ComponentView {
 
 	public setIsDisabled(isDisabled: boolean) {
 		Dom.toggleClass(this.g, isDisabled, 'sqd-disabled');
+	}
+
+	public setIsValidationErrorHidden(isHidden: boolean) {
+		Dom.toggleClass(this.validationError, isHidden, 'sqd-hidden');
 	}
 }

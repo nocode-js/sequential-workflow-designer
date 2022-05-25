@@ -14,25 +14,41 @@ export class Designer {
 	public static create(container: HTMLElement, definition: Definition, configuration: DesignerConfiguration): Designer {
 		const root = Dom.element('div', {
 			class: 'sqd-designer'
-		})
+		});
 
 		container.appendChild(root);
 
 		const behaviorController = new BehaviorController();
 		const context = new DesignerContext(definition, behaviorController, configuration);
 
-		Workspace.append(root, context);
-		Toolbox.append(root, context);
+		const workspace = Workspace.append(root, context);
+		if (!configuration.toolbox.isHidden) {
+			Toolbox.append(root, context);
+		}
 		ControlBar.append(root, context);
 		SmartEditor.append(root, context);
 
-		const designer = new Designer();
+		const designer = new Designer(context, workspace);
 		context.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.definition));
 		return designer;
 	}
 
-	private constructor() {
+	private constructor(
+		private readonly context: DesignerContext,
+		private readonly workspace: Workspace) {
 	}
 
 	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
+
+	public getDefiniton(): Definition {
+		return this.context.definition;
+	}
+
+	public revalidate() {
+		this.workspace.revalidate();
+	}
+
+	public isValid(): boolean {
+		return this.workspace.isValid;
+	}
 }

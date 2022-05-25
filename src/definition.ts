@@ -1,7 +1,7 @@
 
 export interface Definition {
 	sequence: Sequence;
-	properties?: Properties;
+	properties: Properties;
 }
 
 export interface Sequence {
@@ -9,23 +9,24 @@ export interface Sequence {
 }
 
 export interface Step {
-	type: StepType;
-	internalType: string;
+	id: string;
+	componentType: ComponentType;
+	type: string;
 	name: string;
-	properties?: Properties;
+	properties: Properties;
 }
 
-export enum StepType {
+export enum ComponentType {
 	task = 'task',
 	switch = 'switch'
 }
 
 export interface TaskStep extends Step {
-	type: StepType.task;
+	componentType: ComponentType.task;
 }
 
 export interface SwitchStep extends Step {
-	type: StepType.switch;
+	componentType: ComponentType.switch;
 	branches: Branches;
 }
 

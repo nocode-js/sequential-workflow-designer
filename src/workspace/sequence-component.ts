@@ -1,7 +1,7 @@
 import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
-import { DesignerConfiguration } from '../designer-configuration';
+import { StepsConfiguration } from '../designer-configuration';
 import { Component, ComponentView, Placeholder, StepComponent } from './component';
 import { JoinRenderer } from './join-renderer';
 import { SequencePlaceholder } from './sequence-placeholder';
@@ -12,7 +12,7 @@ const PH_HEIGHT = 24;
 
 export class SequenceComponent implements Component {
 
-	public static create(sequence: Sequence, configuration: DesignerConfiguration): SequenceComponent {
+	public static create(sequence: Sequence, configuration: StepsConfiguration): SequenceComponent {
 		const components = sequence.steps.map(s => StepComponentFactory.create(s, sequence, configuration));
 		const view = SequenceComponentView.create(components);
 		return new SequenceComponent(view, sequence, components);
@@ -44,6 +44,10 @@ export class SequenceComponent implements Component {
 	public setIsMoving(isEnabled: boolean) {
 		this.view.setIsMoving(isEnabled);
 		this.components.forEach(c => c.setIsMoving(isEnabled));
+	}
+
+	public validate(): boolean {
+		return this.components.every(c => c.validate());
 	}
 }
 

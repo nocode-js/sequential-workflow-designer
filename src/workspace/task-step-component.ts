@@ -1,7 +1,7 @@
 import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Sequence, Step, TaskStep } from '../definition';
-import { DesignerConfiguration } from '../designer-configuration';
+import { StepsConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 import { ValidationErrorRenderer } from './validation-error-renderer';
 
@@ -13,21 +13,19 @@ const RECT_RADIUS = 5;
 
 export class TaskStepComponent implements StepComponent {
 
-	public static create(step: TaskStep, parentSequence: Sequence, configuration: DesignerConfiguration): TaskStepComponent {
-		const isValid = configuration.stepValidator
-			? configuration.stepValidator(step)
-			: true;
-		const iconUrl = configuration.stepIconUrlProvider
-			? configuration.stepIconUrlProvider(step.type, step.internalType)
+	public static create(step: TaskStep, parentSequence: Sequence, configuration: StepsConfiguration): TaskStepComponent {
+		const iconUrl = configuration.iconUrlProvider
+			? configuration.iconUrlProvider(step.componentType, step.type)
 			: null;
-		const view = TaskStepComponentView.create(step, isValid, iconUrl);
-		return new TaskStepComponent(view, step, parentSequence);
+		const view = TaskStepComponentView.create(step, iconUrl);
+		return new TaskStepComponent(view, step, parentSequence, configuration);
 	}
 
 	private constructor(
 		public readonly view: TaskStepComponentView,
 		public readonly step: Step,
-		public readonly parentSequence: Sequence) {
+		public readonly parentSequence: Sequence,
+		private readonly configuration: StepsConfiguration) {
 	}
 
 	public findStepComponent(element: Element): StepComponent | null {
@@ -59,11 +57,19 @@ export class TaskStepComponent implements StepComponent {
 				break;
 		}
 	}
+
+	public validate(): boolean {
+		const isValid = this.configuration.validator
+			? this.configuration.validator(this.step)
+			: true;
+		this.view.setIsValidationErrorHidden(isValid);
+		return isValid;
+	}
 }
 
 export class TaskStepComponentView implements ComponentView {
 
-	public static create(step: TaskStep, isValid: boolean, iconUrl: string | null): TaskStepComponentView {
+	public static create(step: TaskStep, iconUrl: string | null): TaskStepComponentView {
 		const rect = Dom.svg('rect', {
 			x: 0.5,
 			y: 0.5,
@@ -120,10 +126,10 @@ export class TaskStepComponentView implements ComponentView {
 		g.appendChild(icon);
 		g.appendChild(input);
 		g.appendChild(output);
-		if (!isValid) {
-			ValidationErrorRenderer.append(g, WIDTH, 0);
-		}
-		return new TaskStepComponentView(g, WIDTH, HEIGHT, WIDTH / 2, rect, input, output);
+
+		const validationError = ValidationErrorRenderer.append(g, WIDTH, 0);
+
+		return new TaskStepComponentView(g, WIDTH, HEIGHT, WIDTH / 2, rect, input, output, validationError);
 	}
 
 	private constructor(
@@ -133,7 +139,8 @@ export class TaskStepComponentView implements ComponentView {
 		public readonly joinX: number,
 		private readonly rect: SVGRectElement,
 		private readonly input: SVGCircleElement,
-		private readonly output: SVGCircleElement) {
+		private readonly output: SVGCircleElement,
+		private readonly validationError: SVGElement) {
 	}
 
 	public getPosition(): Vector {
@@ -157,5 +164,9 @@ export class TaskStepComponentView implements ComponentView {
 
 	public setIsSelected(isSelected: boolean) {
 		Dom.toggleClass(this.rect, isSelected, 'sqd-selected');
+	}
+
+	public setIsValidationErrorHidden(isHidden: boolean) {
+		Dom.toggleClass(this.validationError, isHidden, 'sqd-hidden');
 	}
 }

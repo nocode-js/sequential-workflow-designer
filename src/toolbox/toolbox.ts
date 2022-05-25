@@ -48,7 +48,7 @@ export class Toolbox {
 	}
 
 	private render() {
-		const groups: ToolboxGroupConfiguration[] = this.context.configuration.toolboxGroups.map(g => {
+		const groups: ToolboxGroupConfiguration[] = this.context.configuration.toolbox.groups.map(g => {
 			return {
 				name: g.name,
 				steps: g.steps.filter(s => {

@@ -7,6 +7,7 @@ export interface Component {
 	findStepComponent(element: Element): StepComponent | null;
 	getPlaceholders(result: Placeholder[]): void;
 	setIsMoving(isMoving: boolean): void;
+	validate(): boolean;
 }
 
 export interface ComponentView {
