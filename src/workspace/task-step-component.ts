@@ -1,19 +1,26 @@
-import { Svg } from '../core/svg';
+import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Sequence, Step, TaskStep } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
+import { ValidationErrorRenderer } from './validation-error-renderer';
 
 const WIDTH = 130;
 const HEIGHT = 44;
 const INPUT_SIZE = 6;
 const OUTPUT_SIZE = 4;
-const RADIUS = 5;
+const RECT_RADIUS = 5;
 
 export class TaskStepComponent implements StepComponent {
 
 	public static create(step: TaskStep, parentSequence: Sequence, configuration: DesignerConfiguration): TaskStepComponent {
-		const view = TaskStepComponentView.create(step, configuration);
+		const isValid = configuration.stepValidator
+			? configuration.stepValidator(step)
+			: true;
+		const iconUrl = configuration.stepIconUrlProvider
+			? configuration.stepIconUrlProvider(step.type, step.internalType)
+			: null;
+		const view = TaskStepComponentView.create(step, isValid, iconUrl);
 		return new TaskStepComponent(view, step, parentSequence);
 	}
 
@@ -56,63 +63,56 @@ export class TaskStepComponent implements StepComponent {
 
 export class TaskStepComponentView implements ComponentView {
 
-	public static create(step: TaskStep, configuration: DesignerConfiguration): TaskStepComponentView {
-		const rect = Svg.element('rect', {
+	public static create(step: TaskStep, isValid: boolean, iconUrl: string | null): TaskStepComponentView {
+		const rect = Dom.svg('rect', {
 			x: 0.5,
 			y: 0.5,
 			class: 'sqd-task-rect',
 			width: WIDTH,
 			height: HEIGHT,
-			rx: RADIUS,
-			ry: RADIUS
+			rx: RECT_RADIUS,
+			ry: RECT_RADIUS
 		});
 
-		const text = Svg.element('text', {
+		const text = Dom.svg('text', {
 			x: WIDTH / 3,
 			y: HEIGHT / 2,
-			class: 'sqd-task-text',
-			'text-anchor': 'left',
-			'style': 'dominant-baseline: central'
+			class: 'sqd-task-text'
 		});
 		text.textContent = step.name;
 
 		const iconSize = HEIGHT / 2;
-		const iconUrl = configuration.stepIconUrlProvider
-			? configuration.stepIconUrlProvider(step.type, step.internalType)
-			: null;
 		const icon = iconUrl
-			? Svg.element('image', {
+			? Dom.svg('image', {
 				href: iconUrl
 			})
-			: Svg.element('rect', {
+			: Dom.svg('rect', {
 				class: 'sqd-task-empty-icon',
 				rx: 4,
 				ry: 4
 			});
-		Svg.attrs(icon, {
+		Dom.attrs(icon, {
 			x: (WIDTH / 3 - iconSize) / 2,
 			y: (HEIGHT - iconSize) / 2,
 			width: iconSize,
 			height: iconSize,
 		});
 
-		const input = Svg.element('circle', {
+		const input = Dom.svg('circle', {
+			class: 'sqd-task-input',
 			cx: WIDTH / 2,
 			xy: 0,
-			r: INPUT_SIZE,
-			fill: '#FFF',
-			'stroke-width': 2,
-			stroke: '#000'
+			r: INPUT_SIZE
 		});
 
-		const output = Svg.element('circle', {
+		const output = Dom.svg('circle', {
+			class: 'sqd-task-output',
 			cx: WIDTH / 2,
 			cy: HEIGHT,
-			fill: '#000',
 			r: OUTPUT_SIZE
 		});
 
-		const g = Svg.element('g', {
+		const g = Dom.svg('g', {
 			class: 'sqd-task-group'
 		});
 		g.appendChild(rect);
@@ -120,6 +120,9 @@ export class TaskStepComponentView implements ComponentView {
 		g.appendChild(icon);
 		g.appendChild(input);
 		g.appendChild(output);
+		if (!isValid) {
+			ValidationErrorRenderer.append(g, WIDTH, 0);
+		}
 		return new TaskStepComponentView(g, WIDTH, HEIGHT, WIDTH / 2, rect, input, output);
 	}
 
@@ -144,23 +147,15 @@ export class TaskStepComponentView implements ComponentView {
 
 	public setIsMoving(isEnabled: boolean) {
 		const visibility = isEnabled ? 'hidden' : 'visible';
-		Svg.attrs(this.input, { visibility });
-		Svg.attrs(this.output, { visibility });
+		Dom.attrs(this.input, { visibility });
+		Dom.attrs(this.output, { visibility });
 	}
 
 	public setIsDisabled(isDisabled: boolean) {
-		if (isDisabled) {
-			this.g.classList.add('sqd-disabled');
-		} else {
-			this.g.classList.remove('sqd-disabled');
-		}
+		Dom.toggleClass(this.g, isDisabled, 'sqd-disabled');
 	}
 
 	public setIsSelected(isSelected: boolean) {
-		if (isSelected) {
-			this.rect.classList.add('sqd-selected');
-		} else {
-			this.rect.classList.remove('sqd-selected');
-		}
+		Dom.toggleClass(this.rect, isSelected, 'sqd-selected');
 	}
 }

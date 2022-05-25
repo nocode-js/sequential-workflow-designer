@@ -1,5 +1,5 @@
 import { SequenceModifier } from '../core/sequence-modifier';
-import { Svg } from '../core/svg';
+import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
@@ -80,6 +80,7 @@ export class DragStepBehavior implements Behavior {
 
 	public onEnd() {
 		this.view.remove();
+		this.context.setIsMoving(false);
 
 		if (this.currentPlaceholder) {
 			if (this.pressedStepComponent) {
@@ -99,7 +100,6 @@ export class DragStepBehavior implements Behavior {
 			if (this.pressedStepComponent) {
 				this.pressedStepComponent.setState(StepComponentState.default);
 			}
-			this.context.setIsMoving(false);
 		}
 		this.currentPlaceholder = undefined;
 
@@ -113,17 +113,18 @@ export class DragStepBehavior implements Behavior {
 class DragStepView {
 
 	public static create(step: Step, configuration: DesignerConfiguration): DragStepView {
-		const layer = document.createElement('div');
-		layer.className = 'sqd-drag';
+		const layer = Dom.element('div', {
+			class: 'sqd-drag'
+		});
 
 		const fakeSequence = { steps: [] };
 		const stepComponent = StepComponentFactory.create(step, fakeSequence, configuration);
 
-		const svg = Svg.element('svg', {
+		const svg = Dom.svg('svg', {
 			width: stepComponent.view.width + SAFE_OFFSET * 2,
 			height: stepComponent.view.height + SAFE_OFFSET * 2
 		});
-		Svg.translate(stepComponent.view.g, SAFE_OFFSET, SAFE_OFFSET);
+		Dom.translate(stepComponent.view.g, SAFE_OFFSET, SAFE_OFFSET);
 		svg.appendChild(stepComponent.view.g);
 		layer.appendChild(svg);
 

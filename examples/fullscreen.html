@@ -43,18 +43,31 @@
 			};
 		}
 
-		const designer = document.getElementById('designer');
+		function toolboxGroup(name) {
+			return {
+				name,
+				steps: [
+					task('saveFile', 'Save file'),
+					task('sendEmail', 'Send email'),
+					ifElse([], [])
+				]
+			};
+		}
 
 		const configuration = {
 			stepIconUrlProvider: (type, internalType) => {
 				return `./icon-${internalType}.svg`
 			},
 
-			toolboxSteps: [
-				task('saveFile', 'Save file'),
-				task('sendEmail', 'Send email'),
-				ifElse([], [])
+			toolboxGroups: [
+				toolboxGroup('Main'),
+				toolboxGroup('File system'),
+				toolboxGroup('E-mail')
 			],
+
+			stepValidator: (step) => {
+				return (step.name.length % 2) === 0;
+			},
 
 			globalEditorProvider: () => {
 				const e = document.createElement('div');
@@ -84,7 +97,11 @@
 			}
 		};
 
-		window.sequentialWorkflowDesigner.create(designer, definition, configuration);
+		const placeholder = document.getElementById('designer');
+		const designer = window.sequentialWorkflowDesigner.create(placeholder, definition, configuration);
+		designer.onDefinitionChanged.subscribe(() => {
+			console.log('the definition has changed');
+		});
 	</script>
 </body>
 </html>

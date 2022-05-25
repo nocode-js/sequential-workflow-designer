@@ -1,10 +1,11 @@
-import { Svg } from '../core/svg';
+import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Sequence, Step, SwitchStep } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 import { JoinRenderer } from './join-renderer';
 import { SequenceComponent } from './sequence-component';
+import { ValidationErrorRenderer } from './validation-error-renderer';
 
 const INPUT_SIZE = 18;
 const MIN_CHILDREN_WIDTH = 50;
@@ -17,7 +18,10 @@ export class SwitchStepComponent implements StepComponent {
 
 	public static create(step: SwitchStep, parentSequence: Sequence, configuration: DesignerConfiguration): SwitchStepComponent {
 		const sequenceComponents = Object.keys(step.branches).map(bn => SequenceComponent.create(step.branches[bn], configuration));
-		const view = SwitchStepComponentView.create(step, sequenceComponents);
+		const isValid = configuration.stepValidator
+			? configuration.stepValidator(step)
+			: true;
+		const view = SwitchStepComponentView.create(step, isValid, sequenceComponents);
 		return new SwitchStepComponent(view, step, parentSequence, sequenceComponents);
 	}
 
@@ -77,11 +81,11 @@ export class SwitchStepComponent implements StepComponent {
 
 export class SwitchStepComponentView implements ComponentView {
 
-	public static create(step: SwitchStep, sequenceComponents: SequenceComponent[]): SwitchStepComponentView {
+	public static create(step: SwitchStep, isValid: boolean, sequenceComponents: SequenceComponent[]): SwitchStepComponentView {
 		const branchNames = Object.keys(step.branches);
 		const n = branchNames.length;
 
-		const g = Svg.element('g', {
+		const g = Dom.svg('g', {
 			class: 'sqd-switch-group'
 		});
 
@@ -102,7 +106,7 @@ export class SwitchStepComponentView implements ComponentView {
 		const regions = branchNames.map((_, i) => {
 			const sequence = sequenceComponents[i];
 			const offsetX = containerOffsets[i];
-			const region = Svg.element('rect', {
+			const region = Dom.svg('rect', {
 				class: 'sqd-switch-region',
 				width: containerWidths[i],
 				height: containerHeight,
@@ -111,7 +115,7 @@ export class SwitchStepComponentView implements ComponentView {
 			});
 
 			const branchWidth = 50;
-			const branchRect = Svg.element('rect', {
+			const branchRect = Dom.svg('rect', {
 				class: 'sqd-switch-branch-rect',
 				x: offsetX + connectorXs[i] + PADDING_X - branchWidth / 2,
 				y: PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT,
@@ -121,7 +125,7 @@ export class SwitchStepComponentView implements ComponentView {
 				ry: 10
 			});
 
-			const branchText = Svg.element('text', {
+			const branchText = Dom.svg('text', {
 				class: 'sqd-switch-branch-text',
 				x: offsetX + connectorXs[i]+ PADDING_X,
 				y: PADDING_TOP + LABEL_HEIGHT * 1.5 + CONNECTION_HEIGHT
@@ -134,7 +138,7 @@ export class SwitchStepComponentView implements ComponentView {
 
 			const sequenceX = offsetX + PADDING_X + Math.max((MIN_CHILDREN_WIDTH - sequence.view.width) / 2, 0);
 			const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
-			Svg.translate(sequence.view.g, sequenceX, sequenceY);
+			Dom.translate(sequence.view.g, sequenceX, sequenceY);
 			g.appendChild(sequence.view.g);
 
 			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
@@ -147,7 +151,7 @@ export class SwitchStepComponentView implements ComponentView {
 		});
 
 		const nameWidth = 70;
-		const nameRect = Svg.element('rect', {
+		const nameRect = Dom.svg('rect', {
 			class: 'sqd-switch-name-rect',
 			width: nameWidth,
 			height: LABEL_HEIGHT,
@@ -157,7 +161,7 @@ export class SwitchStepComponentView implements ComponentView {
 			ry: 10
 		});
 
-		const nameText = Svg.element('text', {
+		const nameText = Dom.svg('text', {
 			class: 'sqd-switch-name-text',
 			x: containerWidths[0],
 			y: PADDING_TOP + LABEL_HEIGHT / 2
@@ -170,7 +174,7 @@ export class SwitchStepComponentView implements ComponentView {
 		JoinRenderer.appendStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP);
 
 		const ds2 = INPUT_SIZE / 2;
-		const input = Svg.element('path', {
+		const input = Dom.svg('path', {
 			d: `M ${ds2} 0 L ${INPUT_SIZE} ${ds2} L ${ds2} ${INPUT_SIZE} L 0 ${ds2} Z`,
 			transform: `translate(${containerWidths[0] - INPUT_SIZE / 2} ${-INPUT_SIZE / 2})`,
 			fill: '#FFF',
@@ -186,6 +190,10 @@ export class SwitchStepComponentView implements ComponentView {
 		JoinRenderer.appendJoins(g,
 			new Vector(containerWidths[0], containerHeight),
 			containerOffsets.map((o, i) => new Vector(o + connectorXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
+
+		if (!isValid) {
+			ValidationErrorRenderer.append(g, containersWidth, 0);
+		}
 
 		return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], regions, input);
 	}
@@ -209,24 +217,18 @@ export class SwitchStepComponentView implements ComponentView {
 	}
 
 	public setIsMoving(isEnabled: boolean) {
-		Svg.attrs(this.input, {
+		Dom.attrs(this.input, {
 			visibility: isEnabled ? 'hidden' : 'visible'
 		});
 	}
 
 	public setIsSelected(isSelected: boolean) {
-		if (isSelected) {
-			this.regions.forEach(r => r.classList.add('sqd-selected'));
-		} else {
-			this.regions.forEach(r => r.classList.remove('sqd-selected'));
-		}
+		this.regions.forEach(region => {
+			Dom.toggleClass(region, isSelected, 'sqd-selected');
+		});
 	}
 
 	public setIsDisabled(isDisabled: boolean) {
-		if (isDisabled) {
-			this.g.classList.add('sqd-disabled');
-		} else {
-			this.g.classList.remove('sqd-disabled');
-		}
+		Dom.toggleClass(this.g, isDisabled, 'sqd-disabled');
 	}
 }

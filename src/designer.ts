@@ -1,5 +1,7 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { ControlBar } from './control-bar/control-bar';
+import { Dom } from './core/dom';
+import { SimpleEvent } from './core/simple-event';
 import { Definition } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
@@ -10,8 +12,9 @@ import { Workspace } from './workspace/workspace';
 export class Designer {
 
 	public static create(container: HTMLElement, definition: Definition, configuration: DesignerConfiguration): Designer {
-		const root = document.createElement('div');
-		root.className = 'sqd-designer';
+		const root = Dom.element('div', {
+			class: 'sqd-designer'
+		})
 
 		container.appendChild(root);
 
@@ -24,6 +27,12 @@ export class Designer {
 		SmartEditor.append(root, context);
 
 		const designer = new Designer();
+		context.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.definition));
 		return designer;
 	}
+
+	private constructor() {
+	}
+
+	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
 }

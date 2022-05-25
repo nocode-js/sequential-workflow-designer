@@ -1,3 +1,4 @@
+import { Dom } from '../core/dom';
 import { Definition } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { Editor, EditorView } from './editor';
@@ -18,8 +19,9 @@ export class GlobalEditor implements Editor {
 class GlobalEditorView implements EditorView {
 
 	public static create(content: HTMLElement): GlobalEditorView {
-		const se = document.createElement('div');
-		se.className = 'sqd-global-editor';
+		const se = Dom.element('div', {
+			class: 'sqd-global-editor'
+		});
 		se.appendChild(content);
 		return new GlobalEditorView(se);
 	}

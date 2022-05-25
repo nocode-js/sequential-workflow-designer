@@ -1,5 +1,5 @@
+import { Dom } from '../core/dom';
 import { SequenceModifier } from '../core/sequence-modifier';
-import { Svg } from '../core/svg';
 import { DesignerContext } from '../designer-context';
 import { StepComponent } from '../workspace/component';
 
@@ -10,8 +10,9 @@ const MOVE_ICON = '<path d="M20 18h8v-6h6l-10-10-10 10h6v6zm-2 2h-6v-6l-10 10 10
 export class ControlBar {
 
 	public static append(parent: HTMLElement, context: DesignerContext): ControlBar {
-		const root = document.createElement('div');
-		root.className = 'sqd-control-bar';
+		const root = Dom.element('div', {
+			class: 'sqd-control-bar'
+		});
 
 		const deleteButton = createButton(DELETE_ICON, 'Delete selected step');
 		deleteButton.classList.add('sqd-hidden');
@@ -42,19 +43,11 @@ export class ControlBar {
 	}
 
 	private onSelectedStepChanged(step: StepComponent | null) {
-		if (step) {
-			this.deleteButton.classList.remove('sqd-hidden');
-		} else {
-			this.deleteButton.classList.add('sqd-hidden');
-		}
+		Dom.toggleClass(this.deleteButton, !step, 'sqd-hidden');
 	}
 
 	private onIsMovingDisabledChanged(isDisabled: boolean) {
-		if (isDisabled) {
-			this.moveButton.classList.remove('sqd-disabled');
-		} else {
-			this.moveButton.classList.add('sqd-disabled');
-		}
+		Dom.toggleClass(this.moveButton, isDisabled, 'sqd-disabled');
 	}
 
 	private onDeleteButtonClicked(e: MouseEvent) {
@@ -80,10 +73,11 @@ export class ControlBar {
 }
 
 function createButton(iconContent: string, title: string): HTMLElement {
-	const button = document.createElement('div');
-	button.className = 'sqd-control-bar-button';
-	button.setAttribute('title', title);
-	const icon = Svg.element('svg', {
+	const button = Dom.element('div', {
+		class: 'sqd-control-bar-button',
+		title
+	});
+	const icon = Dom.svg('svg', {
 		class: 'sqd-control-bar-button-icon',
 		viewBox: '0 0 48 48'
 	});

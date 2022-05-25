@@ -3,10 +3,6 @@ import { Behavior } from './behavior';
 
 export class BehaviorController {
 
-	public static create(): BehaviorController {
-		return new BehaviorController();
-	}
-
 	private readonly onMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
 	private readonly onMouseUpHandler = (e: MouseEvent) => this.onMouseUp(e);
 
@@ -24,7 +20,7 @@ export class BehaviorController {
 
 		this.state = {
 			startMousePosition: readMousePosition(e),
-			behavior: behavior
+			behavior
 		};
 		behavior.onStart(this.state.startMousePosition);
 

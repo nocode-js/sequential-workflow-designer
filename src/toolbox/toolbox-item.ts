@@ -1,31 +1,36 @@
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
+import { Dom } from '../core/dom';
 import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
 
 export class ToolboxItem {
 
 	public static append(parent: HTMLElement, step: Step, context: DesignerContext): ToolboxItem {
-		const root = document.createElement('div');
-		root.className = 'sqd-toolbox-item';
+		const root = Dom.element('div', {
+			class: 'sqd-toolbox-item'
+		});
 
 		const iconUrl = context.configuration.stepIconUrlProvider
 			? context.configuration.stepIconUrlProvider(step.type, step.internalType)
 			: null;
 
-		const icon = document.createElement('span');
-		icon.className = 'sqd-toolbox-item-icon';
+		const icon = Dom.element('div', {
+			class: 'sqd-toolbox-item-icon'
+		});
 
 		if (iconUrl) {
-			const iconImage = document.createElement('img');
-			iconImage.setAttribute('src', iconUrl);
-			iconImage.className = 'sqd-toolbox-item-icon-image';
+			const iconImage = Dom.element('img', {
+				class: 'sqd-toolbox-item-icon-image',
+				src: iconUrl
+			});
 			icon.appendChild(iconImage);
 		} else {
 			icon.classList.add('sqd-no-icon');
 		}
 
-		const text = document.createElement('span');
-		text.className = 'sqd-toolbox-item-text';
+		const text = Dom.element('div', {
+			class: 'sqd-toolbox-item-text'
+		});
 		text.textContent = step.internalType;
 
 		root.appendChild(icon);

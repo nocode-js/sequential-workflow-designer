@@ -1,4 +1,4 @@
-import { Svg } from '../core/svg';
+import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Sequence, Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
@@ -41,17 +41,17 @@ export class StartStopComponent implements Component {
 export class AnchorStepComponentView implements ComponentView {
 
 	public static create(view: SequenceComponentView): AnchorStepComponentView {
-		const g = Svg.element('g');
+		const g = Dom.svg('g');
 
 		const startCircle = createCircle(true);
-		Svg.translate(startCircle, view.joinX - SIZE / 2, 0);
+		Dom.translate(startCircle, view.joinX - SIZE / 2, 0);
 		g.appendChild(startCircle);
 
-		Svg.translate(view.g, 0, SIZE);
+		Dom.translate(view.g, 0, SIZE);
 		g.appendChild(view.g);
 
 		const endCircle = createCircle(false);
-		Svg.translate(endCircle, view.joinX - SIZE / 2, SIZE + view.height);
+		Dom.translate(endCircle, view.joinX - SIZE / 2, SIZE + view.height);
 		g.appendChild(endCircle);
 
 		return new AnchorStepComponentView(g, view.width, view.height + SIZE * 2, view.joinX);
@@ -70,28 +70,28 @@ export class AnchorStepComponentView implements ComponentView {
 }
 
 function createCircle(isStart: boolean): SVGGElement {
-	const circle = Svg.element('circle', {
+	const circle = Dom.svg('circle', {
 		class: 'sqd-start-stop',
 		cx: SIZE / 2,
 		cy: SIZE / 2,
 		r: SIZE / 2
 	});
 
-	const g = Svg.element('g');
+	const g = Dom.svg('g');
 	g.appendChild(circle);
 
 	const s = SIZE * 0.5;
 	const m = (SIZE - s) / 2;
 
 	if (isStart) {
-		const start = Svg.element('path', {
+		const start = Dom.svg('path', {
 			class: 'sqd-start-stop-icon',
 			transform: `translate(${m}, ${m})`,
 			d: `M ${s * 0.2} 0 L ${s} ${s / 2} L ${s * 0.2} ${s} Z`
 		});
 		g.appendChild(start);
 	} else {
-		const stop = Svg.element('rect', {
+		const stop = Dom.svg('rect', {
 			class: 'sqd-start-stop-icon',
 			x: m,
 			y: m,

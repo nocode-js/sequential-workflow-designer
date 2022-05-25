@@ -1,4 +1,4 @@
-import { Svg } from '../core/svg';
+import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
@@ -50,7 +50,7 @@ export class SequenceComponent implements Component {
 export class SequenceComponentView implements ComponentView {
 
 	public static create(components: Component[]): SequenceComponentView {
-		const g = Svg.element('g');
+		const g = Dom.svg('g');
 
 		const maxJoinX = (components.length > 0)
 			? Math.max(...components.map(c => c.view.joinX))
@@ -72,7 +72,7 @@ export class SequenceComponentView implements ComponentView {
 				maxJoinX - PH_WIDTH / 2,
 				offsetY - PH_HEIGHT));
 
-			Svg.translate(component.view.g, offsetX, offsetY);
+			Dom.translate(component.view.g, offsetX, offsetY);
 			g.appendChild(component.view.g);
 			offsetY += component.view.height + PH_HEIGHT;
 		}
@@ -97,7 +97,7 @@ export class SequenceComponentView implements ComponentView {
 
 	public setIsMoving(isMoving: boolean) {
 		this.placeholders.forEach(p => {
-			Svg.attrs(p, {
+			Dom.attrs(p, {
 				visibility: isMoving ? 'visible' : 'hidden'
 			});
 		});
@@ -105,7 +105,7 @@ export class SequenceComponentView implements ComponentView {
 }
 
 function appendPlaceholder(g: SVGGElement, x: number, y: number): SVGElement {
-	const rect = Svg.element('rect', {
+	const rect = Dom.svg('rect', {
 		class: 'sqd-placeholder',
 		width: PH_WIDTH,
 		height: PH_HEIGHT,

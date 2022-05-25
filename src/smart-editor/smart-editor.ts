@@ -1,3 +1,4 @@
+import { Dom } from '../core/dom';
 import { DesignerContext } from '../designer-context';
 import { StepComponent } from '../workspace/component';
 import { EditorView } from './editor';
@@ -30,9 +31,9 @@ export class SmartEditor {
 class SmartEditorView {
 
 	public static append(parent: HTMLElement): SmartEditorView {
-		const root = document.createElement('div');
-		root.className = 'sqd-smart-editor';
-
+		const root = Dom.element('div', {
+			class: 'sqd-smart-editor'
+		});
 		parent.appendChild(root);
 		return new SmartEditorView(root);
 	}

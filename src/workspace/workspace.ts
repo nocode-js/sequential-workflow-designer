@@ -1,12 +1,12 @@
 import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
 import { SelectStepBehavior } from '../behaviors/select-step-behavior';
-import { Svg } from '../core/svg';
+import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { DesignerContext } from '../designer-context';
 import { Component, ComponentView, Placeholder } from './component';
 import { StartStopComponent } from './start-stop-component';
 
-const GRID_SIZE = 50;
+const GRID_SIZE = 48;
 
 export class Workspace {
 
@@ -107,12 +107,12 @@ export class Workspace {
 export class WorkspaceView {
 
 	public static create(root: HTMLElement): WorkspaceView {
-		const defs = Svg.element('defs');
-		const gridPattern = Svg.element('pattern', {
+		const defs = Dom.svg('defs');
+		const gridPattern = Dom.svg('pattern', {
 			id: 'sqd-grid',
 			patternUnits: 'userSpaceOnUse'
 		});
-		const gridPatternPath = Svg.element('path', {
+		const gridPatternPath = Dom.svg('path', {
 			class: 'sqd-grid-path',
 			fill: 'none'
 		});
@@ -120,16 +120,16 @@ export class WorkspaceView {
 		defs.appendChild(gridPattern);
 		gridPattern.appendChild(gridPatternPath);
 
-		const foreground = Svg.element('g');
+		const foreground = Dom.svg('g');
 
-		const workspace = document.createElement('div');
-		workspace.className = 'sqd-workspace';
-
-		const canvas = Svg.element('svg', {
+		const workspace = Dom.element('div', {
+			class: 'sqd-workspace'
+		});
+		const canvas = Dom.svg('svg', {
 			class: 'sqd-workspace-canvas'
 		});
 		canvas.appendChild(defs);
-		canvas.appendChild(Svg.element('rect', {
+		canvas.appendChild(Dom.svg('rect', {
 			width: '100%',
 			height: '100%',
 			fill: 'url(#sqd-grid)'
@@ -160,22 +160,22 @@ export class WorkspaceView {
 
 	public setPositionAndScale(p: Vector, scale: number) {
 		const size = GRID_SIZE * scale;
-		Svg.attrs(this.gridPattern, {
+		Dom.attrs(this.gridPattern, {
 			x: p.x,
 			y: p.y,
 			width: size,
 			height: size
 		});
-		Svg.attrs(this.gridPatternPath, {
+		Dom.attrs(this.gridPatternPath, {
 			d: `M ${size} 0 L 0 0 0 ${size}`
 		});
-		Svg.attrs(this.foreground, {
+		Dom.attrs(this.foreground, {
 			transform: `translate(${p.x}, ${p.y}) scale(${scale})`
 		});
 	}
 
 	public refreshSize() {
-		Svg.attrs(this.canvas, {
+		Dom.attrs(this.canvas, {
 			width: this.workspace.offsetWidth,
 			height: this.workspace.offsetHeight
 		});

@@ -6,46 +6,74 @@
 	overflow: none;
 	background: #F6F6F6;
 }
-
 .sqd-designer, .sqd-drag {
 	font-size: 13px;
 	line-height: 1em;
 }
-
 .sqd-hidden {
 	display: none !important;
 }
-
 .sqd-disabled {
 	opacity: 0.25;
 }
 
 /* .sqd-toolbox */
 
+.sqd-toolbox, .sqd-toolbox-filter {
+	font-size: 11px;
+	line-height: 1.2em;
+}
 .sqd-toolbox {
 	position: absolute;
+	display: flex;
+	flex-direction: column;
 	top: 10px;
 	left: 10px;
 	z-index: 20;
 	background: #FFF;
-	padding: 0 10px 10px;
 	box-sizing: border-box;
 	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
 	border-radius: 10px;
+	max-height: 50%;
 }
-
+.sqd-toolbox-header {
+	padding: 10px;
+}
 .sqd-toolbox-title {
-	font-size: 11px;
 	display: block;
 	text-align: center;
-	padding: 10px 0 0;
+	margin-bottom: 10px;
 }
-
+.sqd-toolbox-filter {
+	display: block;
+	padding: 8px;
+	border: 1px solid #C3C3C3;
+	outline: none;
+	width: 100px;
+	margin: 0 auto;
+	box-sizing: border-box;
+	border-radius: 10px;
+}
+.sqd-toolbox-filter:focus {
+	border-color: #939393;
+}
+.sqd-toolbox-container {
+	flex: 1;
+	padding: 0 10px;
+	overflow: auto;
+}
+.sqd-toolbox-group-title {
+	text-align: center;
+	padding: 5px 0;
+	background: #E5E5E5;
+	margin: 0 0 10px;
+	border-radius: 10px;
+}
 .sqd-toolbox-item {
 	position: relative;
 	border: 1px solid #C3C3C3;
 	border-radius: 5px;
-	margin-top: 10px;
+	margin: 0 0 10px;
 	cursor: move;
 	box-shadow: 0 2px 2px rgba(0, 0, 0, .15);
 }
@@ -72,7 +100,6 @@
 	position: relative;
 	display: block;
 	padding: 10px 10px 10px 30px;
-	font-size: 12px;
 }
 
 .sqd-drag {
@@ -93,7 +120,6 @@
 	border-radius: 10px;
 	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
 }
-
 .sqd-control-bar-button {
 	display: inline-block;
 	width: 30px;
@@ -125,19 +151,16 @@
 	bottom: 0;
 	right: 300px;
 }
-
 .sqd-workspace-canvas {
 	position: absolute;
 	top: 0;
 	left: 0;
 	cursor: move;
 }
-
 .sqd-grid-path {
 	stroke: #E3E3E3;
 	stroke-width: 1;
 }
-
 .sqd-join {
 	stroke-width: 2;
 	stroke: #000;
@@ -170,9 +193,19 @@
 }
 .sqd-task-text {
 	fill: #000;
+	text-anchor: left;
+	dominant-baseline: central;
 }
 .sqd-task-empty-icon {
 	fill: #C6C6C6;
+}
+.sqd-task-input {
+	fill: #FFF;
+	stroke-width: 2;
+	stroke: #000;
+}
+.sqd-task-output {
+	fill: #000;
 }
 
 /* .sqd-switch */
@@ -223,4 +256,8 @@
 }
 .sqd-placeholder.sqd-hover {
 	fill: #ED4800;
+}
+
+.sqd-validation-error {
+	fill: #FFA200;
 }
