@@ -1,6 +1,8 @@
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
+import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Dom } from '../core/dom';
 import { Uid } from '../core/uid';
+import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
 
@@ -42,6 +44,7 @@ export class ToolboxItem {
 			step,
 			context);
 		root.addEventListener('mousedown', e => item.onMouseDown(e));
+		root.addEventListener('touchstart', e => item.onTouchStart(e));
 		return item;
 	}
 
@@ -50,9 +53,20 @@ export class ToolboxItem {
 		private readonly context: DesignerContext) {
 	}
 
+	private onTouchStart(e: TouchEvent) {
+		e.preventDefault();
+		this.startDrag(readTouchPosition(e));
+
+	}
+
 	private onMouseDown(e: MouseEvent) {
+		e.preventDefault();
+		this.startDrag(readMousePosition(e));
+	}
+
+	private startDrag(position: Vector) {
 		const s = structuredClone(this.step);
 		s.id = Uid.next();
-		this.context.behaviorController.start(e, DragStepBehavior.create(this.context, s));
+		this.context.behaviorController.start(position, DragStepBehavior.create(this.context, s));
 	}
 }

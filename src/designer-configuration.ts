@@ -1,6 +1,8 @@
 import { ComponentType, Definition, Step } from './definition';
 
 export interface DesignerConfiguration {
+	theme?: string;
+
 	toolbox: ToolboxConfiguration;
 	steps: StepsConfiguration;
 	editors: EditorsConfiguration;
@@ -11,17 +13,18 @@ export interface ToolboxConfiguration {
 	groups: ToolboxGroupConfiguration[];
 }
 
+export interface ToolboxGroupConfiguration {
+	name: string;
+	steps: Step[];
+}
+
 export interface StepsConfiguration {
 	iconUrlProvider?: (componentType: ComponentType, type: string) => string | null;
 	validator?: (step: Step) => boolean;
 }
 
 export interface EditorsConfiguration {
+	isHidden?: boolean;
 	stepEditorProvider: (step: Step) => HTMLElement;
 	globalEditorProvider: (definition: Definition) => HTMLElement;
-}
-
-export interface ToolboxGroupConfiguration {
-	name: string;
-	steps: Step[];
 }

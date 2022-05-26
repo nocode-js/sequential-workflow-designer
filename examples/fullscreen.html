@@ -58,11 +58,11 @@
 					task('save-file', 'Save file'),
 					task('send-email', 'Send email'),
 					ifElse([], [])
-				],
-				properties: {}
+				]
 			};
 		}
 
+		let designer;
 		const configuration = {
 
 			toolbox: {
@@ -76,25 +76,36 @@
 
 			steps: {
 				iconUrlProvider: (componentType, type) => {
-					return `./icon-${type}.svg`
+					return `./assets/icon-${type}.svg`
 				},
 
 				validator: (step) => {
-					return Math.random() > .5;
+					return !step.properties['isInvalid'];
 				}
 			},
 
 			editors: {
-				globalEditorProvider: (d) => {
-					const e = document.createElement('div');
-					e.innerText = JSON.stringify(d);
-					return e;
+				isHidden: false,
+				globalEditorProvider: (definition) => {
+					const root = document.createElement('div');
+					root.innerHTML = '<textarea style="width: 100%; border: 0;" rows="50"></textarea>';
+					const textarea = root.getElementsByTagName('textarea')[0];
+					textarea.value = JSON.stringify(definition, null, 2);
+					return root;
 				},
 
 				stepEditorProvider: (step) => {
-					const e = document.createElement('div');
-					e.innerText = JSON.stringify(step);
-					return e;
+					const root = document.createElement('div');
+					root.innerHTML = '<h5></h5> <p>is invalid: <input type="checkbox" /></p>';
+					const title = root.getElementsByTagName('h5')[0];
+					title.innerText = step.name;
+					const input = root.getElementsByTagName('input')[0];
+					input.checked = !!step.properties['isInvalid'];
+					input.addEventListener('click', () => {
+						step.properties['isInvalid'] = !!input.checked;
+						designer.revalidate();
+					});
+					return root;
 				}
 			}
 		};
@@ -116,7 +127,7 @@
 		};
 
 		const placeholder = document.getElementById('designer');
-		const designer = window.sequentialWorkflowDesigner.create(placeholder, definition, configuration);
+		designer = window.sequentialWorkflowDesigner.create(placeholder, definition, configuration);
 		designer.onDefinitionChanged.subscribe(() => {
 			console.log('the definition has changed');
 		});

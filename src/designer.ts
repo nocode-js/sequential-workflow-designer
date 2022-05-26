@@ -12,8 +12,9 @@ import { Workspace } from './workspace/workspace';
 export class Designer {
 
 	public static create(container: HTMLElement, definition: Definition, configuration: DesignerConfiguration): Designer {
+		const theme = configuration.theme || 'light';
 		const root = Dom.element('div', {
-			class: 'sqd-designer'
+			class: `sqd-designer sqd-theme-${theme}`
 		});
 
 		container.appendChild(root);
@@ -26,7 +27,9 @@ export class Designer {
 			Toolbox.append(root, context);
 		}
 		ControlBar.append(root, context);
-		SmartEditor.append(root, context);
+		if (!configuration.editors.isHidden) {
+			SmartEditor.append(root, context);
+		}
 
 		const designer = new Designer(context, workspace);
 		context.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.definition));

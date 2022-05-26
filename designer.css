@@ -1,10 +1,10 @@
 
 .sqd-designer {
 	position: relative;
+	display: flex;
 	width: 100%;
 	height: 100%;
 	overflow: none;
-	background: #F6F6F6;
 }
 .sqd-designer, .sqd-drag {
 	font-size: 13px;
@@ -30,11 +30,9 @@
 	top: 10px;
 	left: 10px;
 	z-index: 20;
-	background: #FFF;
 	box-sizing: border-box;
-	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
 	border-radius: 10px;
-	max-height: 50%;
+	max-height: 70%;
 }
 .sqd-toolbox-header {
 	padding: 10px;
@@ -46,16 +44,12 @@
 }
 .sqd-toolbox-filter {
 	display: block;
-	padding: 8px;
-	border: 1px solid #C3C3C3;
+	padding: 6px 8px;
 	outline: none;
 	width: 100px;
 	margin: 0 auto;
 	box-sizing: border-box;
 	border-radius: 10px;
-}
-.sqd-toolbox-filter:focus {
-	border-color: #939393;
 }
 .sqd-toolbox-container {
 	flex: 1;
@@ -65,20 +59,14 @@
 .sqd-toolbox-group-title {
 	text-align: center;
 	padding: 5px 0;
-	background: #E5E5E5;
 	margin: 0 0 10px;
 	border-radius: 10px;
 }
 .sqd-toolbox-item {
 	position: relative;
-	border: 1px solid #C3C3C3;
 	border-radius: 5px;
 	margin: 0 0 10px;
 	cursor: move;
-	box-shadow: 0 2px 2px rgba(0, 0, 0, .15);
-}
-.sqd-toolbox-item:hover {
-	border-color: #939393;
 }
 .sqd-toolbox-item-icon {
 	position: absolute;
@@ -89,7 +77,6 @@
 	height: 20px;
 }
 .sqd-toolbox-item-icon.sqd-no-icon {
-	background: #C6C6C6;
 	border-radius: 4px;
 }
 .sqd-toolbox-item-icon-image {
@@ -112,25 +99,19 @@
 
 .sqd-control-bar {
 	position: absolute;
-	top: 10px;
-	right: 310px;
+	bottom: 10px;
+	left: 10px;
 	z-index: 20;
-	background: #FFF;
-	padding: 10px 0 10px 10px;
+	padding: 8px 0 8px 8px;
 	border-radius: 10px;
-	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
 }
 .sqd-control-bar-button {
 	display: inline-block;
 	width: 30px;
 	height: 30px;
-	border: 1px solid #C3C3C3;
 	border-radius: 5px;
-	margin-right: 10px;
+	margin-right: 8px;
 	cursor: pointer;
-}
-.sqd-control-bar-button:hover {
-	border-color: #939393;
 }
 .sqd-control-bar-button-icon {
 	width: 24px;
@@ -144,12 +125,10 @@
 /* .sqd-workspace */
 
 .sqd-workspace {
-	position: absolute;
-	z-index: 10;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	right: 300px;
+	display: block;
+	flex: 1;
+	position: relative;
+	height: 100%;
 }
 .sqd-workspace-canvas {
 	position: absolute;
@@ -158,106 +137,186 @@
 	cursor: move;
 }
 .sqd-grid-path {
-	stroke: #E3E3E3;
 	stroke-width: 1;
 }
 .sqd-join {
 	stroke-width: 2;
-	stroke: #000;
 }
 
 /* .sqd-smart-editor */
 
 .sqd-smart-editor {
-	position: absolute;
-	z-index: 20;
-	top: 0;
-	right: 0;
-	bottom: 0;
 	width: 300px;
-	background: #FFF;
-	box-shadow: 0 0 8px rgba(0, 0, 0, .15);
+	height: 100%;
 }
 
 /* .sqd-task */
 
 .sqd-task-rect {
-	fill: #FFF;
-	stroke: #C3C3C3;
-	filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, .15));
 	stroke-width: 1;
 }
 .sqd-task-rect.sqd-selected {
-	stroke: #ED4800;
 	stroke-width: 2;
 }
 .sqd-task-text {
-	fill: #000;
 	text-anchor: left;
 	dominant-baseline: central;
 }
-.sqd-task-empty-icon {
-	fill: #C6C6C6;
-}
 .sqd-task-input {
-	fill: #FFF;
 	stroke-width: 2;
-	stroke: #000;
-}
-.sqd-task-output {
-	fill: #000;
 }
 
 /* .sqd-switch */
 
 .sqd-switch-region {
-	stroke: #CECECE;
 	stroke-width: 2;
 	stroke-dasharray: 3;
 }
 .sqd-switch-region.sqd-selected {
-	stroke: #ED4800;
 	stroke-width: 2;
 	stroke-dasharray: 0;
 }
-.sqd-switch-name-rect {
-	fill: #2411DB;
-}
 .sqd-switch-name-text {
-	fill: #FFF;
 	text-anchor: middle;
 	dominant-baseline: central;
-}
-.sqd-switch-branch-rect {
-	fill: #000;
 }
 .sqd-switch-branch-text {
-	fill: #FFF;
 	text-anchor: middle;
 	dominant-baseline: central;
-}
-
-/* .sqd-start-stop */
-
-.sqd-start-stop {
-	fill: #2C18DF;
-}
-.sqd-start-stop-icon {
-	fill: #FFF;
 }
 
 /* .sqd-placeholder */
 
 .sqd-placeholder {
-	fill: #D8D8D8;
-	stroke: #6A6A6A;
 	stroke-width: 1;
 	stroke-dasharray: 3;
 }
-.sqd-placeholder.sqd-hover {
+
+/********* light *********/
+
+.sqd-theme-light.sqd-designer {
+	background: #F6F6F6;
+}
+
+/* light > .sqd-toolbox */
+
+.sqd-theme-light .sqd-toolbox {
+	background: #FFF;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
+}
+.sqd-theme-light .sqd-toolbox-filter {
+	border: 1px solid #C3C3C3;
+}
+.sqd-theme-light .sqd-toolbox-filter:focus {
+	border-color: #939393;
+}
+.sqd-theme-light .sqd-toolbox-group-title {
+	background: #E5E5E5;
+}
+.sqd-theme-light .sqd-toolbox-item {
+	border: 1px solid #C3C3C3;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, .15);
+}
+.sqd-theme-light .sqd-toolbox-item:hover {
+	border: 1px solid #939393;
+}
+.sqd-theme-light .sqd-toolbox-item-icon.sqd-no-icon {
+	background: #C6C6C6;
+}
+
+/* light > .sqd-control-bar */
+
+.sqd-theme-light .sqd-control-bar {
+	background: #FFF;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
+}
+.sqd-theme-light .sqd-control-bar-button {
+	border: 1px solid #C3C3C3;
+}
+.sqd-theme-light .sqd-control-bar-button:hover {
+	border-color: #939393;
+}
+
+/* light > .sqd-workspace */
+
+.sqd-theme-light .sqd-grid-path {
+	stroke: #E3E3E3;
+}
+.sqd-theme-light .sqd-join {
+	stroke: #000;
+}
+
+/* light > .sqd-smart-editor */
+
+.sqd-theme-light .sqd-smart-editor {
+	background: #FFF;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .15);
+}
+
+/* light > .sqd-task */
+
+.sqd-theme-light .sqd-task-rect {
+	fill: #FFF;
+	stroke: #C3C3C3;
+	filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, .15));
+}
+.sqd-theme-light .sqd-task-rect.sqd-selected {
+	stroke: #ED4800;
+}
+.sqd-theme-light .sqd-task-text {
+	fill: #000;
+}
+.sqd-theme-light .sqd-task-empty-icon {
+	fill: #C6C6C6;
+}
+.sqd-theme-light .sqd-task-input {
+	fill: #FFF;
+	stroke: #000;
+}
+.sqd-theme-light .sqd-task-output {
+	fill: #000;
+}
+
+/* light > .sqd-switch */
+
+.sqd-theme-light .sqd-switch-region {
+	stroke: #CECECE;
+}
+.sqd-theme-light .sqd-switch-region.sqd-selected {
+	stroke: #ED4800;
+}
+.sqd-theme-light .sqd-switch-name-rect {
+	fill: #2411DB;
+}
+.sqd-theme-light .sqd-switch-name-text {
+	fill: #FFF;
+}
+.sqd-theme-light .sqd-switch-branch-rect {
+	fill: #000;
+}
+.sqd-theme-light .sqd-switch-branch-text {
+	fill: #FFF;
+}
+
+/* light > .sqd-start-stop */
+
+.sqd-theme-light .sqd-start-stop {
+	fill: #2C18DF;
+}
+.sqd-theme-light .sqd-start-stop-icon {
+	fill: #FFF;
+}
+
+/* light > .sqd-placeholder */
+
+.sqd-theme-light .sqd-placeholder {
+	fill: #D8D8D8;
+	stroke: #6A6A6A;
+}
+.sqd-theme-light .sqd-placeholder.sqd-hover {
 	fill: #ED4800;
 }
 
-.sqd-validation-error {
+.sqd-theme-light .sqd-validation-error {
 	fill: #FFA200;
 }

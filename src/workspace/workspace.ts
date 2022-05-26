@@ -1,3 +1,4 @@
+import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
 import { SelectStepBehavior } from '../behaviors/select-step-behavior';
 import { Dom } from '../core/dom';
@@ -14,9 +15,11 @@ export class Workspace {
 		const view = WorkspaceView.create(parent);
 
 		const workspace = new Workspace(view, context);
-		workspace.view.refreshSize();
-		workspace.render();
-		workspace.center();
+		setTimeout(() => {
+			workspace.render();
+			workspace.view.refreshSize();
+			workspace.center();
+		});
 
 		context.onDefinitionChanged.subscribe(() => workspace.render());
 		context.onIsMovingChanged.subscribe(i => workspace.setIsMoving(i));
@@ -25,6 +28,7 @@ export class Workspace {
 
 		workspace.view.bindResize(() => workspace.view.refreshSize());
 		workspace.view.bindMouseDown(e => workspace.onMouseDown(e));
+		workspace.view.bindTouchStart(e => workspace.onTouchStart(e));
 		workspace.view.bindWheel(e => workspace.onWheel(e));
 		return workspace;
 	}
@@ -44,6 +48,12 @@ export class Workspace {
 		this.isValid = this.rootComponent?.validate() || false;
 	}
 
+	public setPosition(position: Vector) {
+		this.position = position;
+		this.view.setPositionAndScale(this.position, this.scale);
+		this.context.notifiyViewPortChanged();
+	}
+
 	private render() {
 		this.rootComponent = StartStopComponent.create(this.context.definition.sequence, this.context.configuration.steps);
 		this.revalidate();
@@ -51,18 +61,31 @@ export class Workspace {
 	}
 
 	private onMouseDown(e: MouseEvent) {
-		if (!this.rootComponent) {
-			return;
-		}
-		const isNotScrollClick = (e.button !== 1);
-		const clickedStep = isNotScrollClick && !this.context.isMovingDisabled
-			? this.rootComponent.findStepComponent(e.target as Element)
-			: null;
+		e.preventDefault();
+		const isMiddleButton = (e.button === 1);
+		this.startBehavior(e.target as Element, readMousePosition(e), isMiddleButton);
+	}
 
-		if (clickedStep) {
-			this.context.behaviorController.start(e, SelectStepBehavior.create(clickedStep, this.context));
-		} else {
-			this.context.behaviorController.start(e, MoveViewPortBehavior.create(this.position, this, this.context));
+	private onTouchStart(e: TouchEvent) {
+		e.preventDefault();
+		const position = readTouchPosition(e);
+		const element = document.elementFromPoint(position.x, position.y);
+		if (element) {
+			this.startBehavior(element, position, false);
+		}
+	}
+
+	private startBehavior(target: Element, position: Vector, forceMoving: boolean) {
+		if (this.rootComponent) {
+			const clickedStep = !forceMoving && !this.context.isMovingDisabled
+				? this.rootComponent.findStepComponent(target as Element)
+				: null;
+
+			if (clickedStep) {
+				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
+			} else {
+				this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.position, this, this.context));
+			}
 		}
 	}
 
@@ -77,12 +100,6 @@ export class Workspace {
 		this.position = mouseRealPoint.multiplyByScalar(-newScale).add(mousePoint);
 		this.scale = newScale;
 
-		this.view.setPositionAndScale(this.position, this.scale);
-		this.context.notifiyViewPortChanged();
-	}
-
-	public setPosition(position: Vector) {
-		this.position = position;
 		this.view.setPositionAndScale(this.position, this.scale);
 		this.context.notifiyViewPortChanged();
 	}
@@ -203,6 +220,10 @@ export class WorkspaceView {
 
 	public bindMouseDown(handler: (e: MouseEvent) => void) {
 		this.canvas.addEventListener('mousedown', handler);
+	}
+
+	public bindTouchStart(handler: (e: TouchEvent) => void) {
+		this.canvas.addEventListener('touchstart', handler);
 	}
 
 	public bindWheel(handler: (e: WheelEvent) => void) {

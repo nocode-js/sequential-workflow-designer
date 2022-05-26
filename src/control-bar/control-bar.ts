@@ -22,9 +22,9 @@ export class ControlBar {
 		const moveButton = createButton(MOVE_ICON, 'Turn on/off drag and drop');
 		moveButton.classList.add('sqd-disabled');
 
-		root.appendChild(deleteButton);
 		root.appendChild(centerButton);
 		root.appendChild(moveButton);
+		root.appendChild(deleteButton);
 
 		parent.appendChild(root);
 		const bar = new ControlBar(deleteButton, moveButton, context);
@@ -56,6 +56,7 @@ export class ControlBar {
 			SequenceModifier.deleteStep(
 				this.context.selectedStepComponent.step,
 				this.context.selectedStepComponent.parentSequence);
+
 			this.context.setSelectedStepComponent(null);
 			this.context.notifiyDefinitionChanged();
 		}

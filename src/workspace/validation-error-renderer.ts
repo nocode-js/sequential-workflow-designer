@@ -4,12 +4,19 @@ const SIZE = 20;
 
 export class ValidationErrorRenderer {
 
-	public static append(g: SVGGElement, x: number, y: number): SVGElement {
+	public static append(parent: SVGGElement, x: number, y: number): SVGElement {
+		const g = Dom.svg('g', {
+			class: 'sqd-hidden'
+		});
+		Dom.translate(g, x, y);
+
 		const circle = Dom.svg('path', {
 			class: 'sqd-validation-error',
-			d: `M ${x} ${y - SIZE / 2} l ${SIZE / 2} ${SIZE} l ${-SIZE} 0 Z`
+			d: `M 0 ${-SIZE / 2} l ${SIZE / 2} ${SIZE} l ${-SIZE} 0 Z`
 		});
+
 		g.appendChild(circle);
-		return circle;
+		parent.appendChild(g);
+		return g;
 	}
 }

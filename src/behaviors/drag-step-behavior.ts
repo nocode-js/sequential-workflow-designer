@@ -2,7 +2,7 @@ import { Dom } from '../core/dom';
 import { SequenceModifier } from '../core/sequence-modifier';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
-import { StepsConfiguration } from '../designer-configuration';
+import { DesignerConfiguration, StepsConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
 import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
 import { StepComponentFactory } from '../workspace/step-component-factory';
@@ -14,8 +14,9 @@ const SAFE_OFFSET = 10;
 export class DragStepBehavior implements Behavior {
 
 	public static create(context: DesignerContext, step: Step, pressedStepComponent?: StepComponent): DragStepBehavior {
+		const view = DragStepView.create(step, context.configuration);
 		return new DragStepBehavior(
-			DragStepView.create(step, context.configuration.steps),
+			view,
 			context,
 			step,
 			pressedStepComponent);
@@ -112,13 +113,14 @@ export class DragStepBehavior implements Behavior {
 
 class DragStepView {
 
-	public static create(step: Step, configuration: StepsConfiguration): DragStepView {
+	public static create(step: Step, configuration: DesignerConfiguration): DragStepView {
+		const theme = configuration.theme || 'light';
 		const layer = Dom.element('div', {
-			class: 'sqd-drag'
+			class: `sqd-drag sqd-theme-${theme}`
 		});
 
 		const fakeSequence = { steps: [] };
-		const stepComponent = StepComponentFactory.create(step, fakeSequence, configuration);
+		const stepComponent = StepComponentFactory.create(step, fakeSequence, configuration.steps);
 
 		const svg = Dom.svg('svg', {
 			width: stepComponent.view.width + SAFE_OFFSET * 2,

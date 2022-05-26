@@ -10,8 +10,9 @@ export class SmartEditor {
 	public static append(parent: HTMLElement, context: DesignerContext): SmartEditor {
 		const view = SmartEditorView.append(parent);
 		const editor = new SmartEditor(view, context);
-		editor.onSelectedStepChanged(null);
+		editor.render(null);
 		context.onSelectedStepComponentChanged.subscribe(s => editor.onSelectedStepChanged(s));
+		context.onDefinitionChanged.subscribe(() => editor.onDefinitionChanged());
 		return editor;
 	}
 
@@ -20,11 +21,19 @@ export class SmartEditor {
 		private readonly context: DesignerContext) {
 	}
 
-	private onSelectedStepChanged(stepComponent: StepComponent | null) {
+	private render(stepComponent: StepComponent | null) {
 		const editor = stepComponent
 			? StepEditor.create(stepComponent.step, this.context.configuration.editors)
 			: GlobalEditor.create(this.context.definition, this.context.configuration.editors);
 		this.view.setView(editor.view);
+	}
+
+	private onSelectedStepChanged(stepComponent: StepComponent | null) {
+		this.render(stepComponent);
+	}
+
+	private onDefinitionChanged() {
+		this.render(null);
 	}
 }
 
