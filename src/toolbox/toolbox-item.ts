@@ -1,6 +1,7 @@
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
-import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Dom } from '../core/dom';
+import { readMousePosition, readTouchPosition } from '../core/event-readers';
+import { ObjectCloner } from '../core/object-cloner';
 import { Uid } from '../core/uid';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
@@ -65,8 +66,10 @@ export class ToolboxItem {
 	}
 
 	private startDrag(position: Vector) {
-		const s = structuredClone(this.step);
-		s.id = Uid.next();
-		this.context.behaviorController.start(position, DragStepBehavior.create(this.context, s));
+		if (!this.context.isReadonly) {
+			const newStep = ObjectCloner.deepClone(this.step);
+			newStep.id = Uid.next();
+			this.context.behaviorController.start(position, DragStepBehavior.create(this.context, newStep));
+		}
 	}
 }

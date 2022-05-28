@@ -3,15 +3,15 @@ import { SelectStepBehavior } from '../behaviors/select-step-behavior';
 import { Dom } from '../core/dom';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
-import { Sequence } from '../definition';
+import { Sequence, Step } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
-import { DesignerContext } from '../designer-context';
-import { Placeholder } from './component';
+import { DesignerComponentProvider, DesignerContext } from '../designer-context';
+import { Placeholder, StepComponent, StepComponentState } from './component';
 import { StartStopComponent } from './start-stop-component';
 
 const GRID_SIZE = 48;
 
-export class Workspace {
+export class Workspace implements DesignerComponentProvider {
 
 	public static create(parent: HTMLElement, context: DesignerContext): Workspace {
 		const view = WorkspaceView.create(parent, context.configuration.steps);
@@ -23,10 +23,11 @@ export class Workspace {
 			workspace.center();
 		});
 
+		context.setProvider(workspace);
 		context.onDefinitionChanged.subscribe(() => workspace.render());
-		context.onIsMovingChanged.subscribe(i => workspace.setIsMoving(i));
+		context.onSelectedStepChanged.subscribe(s => workspace.onSelectedStepChanged(s));
+		context.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
 		context.onCenterViewPortRequested.subscribe(() => workspace.center());
-		context.setPlaceholdersProvider(() => workspace.getPlaceholders());
 
 		workspace.view.bindResize(() => workspace.view.refreshSize());
 		workspace.view.bindMouseDown(e => workspace.onMouseDown(e));
@@ -37,6 +38,7 @@ export class Workspace {
 
 	public isValid = false;
 
+	private selectedStepComponent: StepComponent | null = null;
 	private position = new Vector(0, 0);
 	private scale = 1.0;
 
@@ -46,7 +48,7 @@ export class Workspace {
 	}
 
 	public revalidate() {
-		this.isValid = this.view.rootComponent?.validate() || false;
+		this.isValid = this.getRootComponent().validate();
 	}
 
 	public setPosition(position: Vector) {
@@ -55,9 +57,27 @@ export class Workspace {
 		this.context.notifiyViewPortChanged();
 	}
 
-	private render() {
+	public render() {
 		this.view.render(this.context.definition.sequence);
+		this.trySelectStep(this.context.selectedStep);
 		this.revalidate();
+	}
+
+	public getPlaceholders(): Placeholder[] {
+		const result: Placeholder[] = [];
+		this.getRootComponent().getPlaceholders(result);
+		return result;
+	}
+
+	public getSelectedStepComponent(): StepComponent {
+		if (this.selectedStepComponent) {
+			return this.selectedStepComponent;
+		}
+		throw new Error('Nothing selected');
+	}
+
+	public findStepComponentById(stepId: string): StepComponent | null {
+		return this.getRootComponent().findById(stepId);
 	}
 
 	private onMouseDown(e: MouseEvent) {
@@ -75,17 +95,15 @@ export class Workspace {
 		}
 	}
 
-	private startBehavior(target: Element, position: Vector, forceMoving: boolean) {
-		if (this.view.rootComponent) {
-			const clickedStep = !forceMoving && !this.context.isMovingDisabled
-				? this.view.rootComponent.findStepComponent(target as Element)
-				: null;
+	private startBehavior(target: Element, position: Vector, forceMoveMode: boolean) {
+		const clickedStep = !forceMoveMode && !this.context.isMoveModeEnabled
+			? this.getRootComponent().findByElement(target as Element)
+			: null;
 
-			if (clickedStep) {
-				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
-			} else {
-				this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.position, this, this.context));
-			}
+		if (clickedStep) {
+			this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
+		} else {
+			this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.position, this, this.context));
 		}
 	}
 
@@ -105,26 +123,43 @@ export class Workspace {
 	}
 
 	private center() {
-		if (this.view.rootComponent) {
-			const clientSize = this.view.getClientSize();
-			const x = Math.max(0, (clientSize.x - this.view.rootComponent.view.width) / 2);
-			const y = Math.max(0, (clientSize.y - this.view.rootComponent.view.height) / 2);
+		const rcv = this.getRootComponent().view;
+		const clientSize = this.view.getClientSize();
+		const x = Math.max(0, (clientSize.x - rcv.width) / 2);
+		const y = Math.max(0, (clientSize.y - rcv.height) / 2);
 
-			this.position = new Vector(x, y);
-			this.scale = 1;
-			this.view.setPositionAndScale(this.position, this.scale);
-			this.context.notifiyViewPortChanged();
+		this.position = new Vector(x, y);
+		this.scale = 1;
+		this.view.setPositionAndScale(this.position, this.scale);
+		this.context.notifiyViewPortChanged();
+	}
+
+	private onIsDraggingChanged(isDragging: boolean) {
+		this.getRootComponent().setIsDragging(isDragging);
+	}
+
+	private onSelectedStepChanged(step: Step | null) {
+		this.trySelectStep(step);
+	}
+
+	private trySelectStep(step: Step | null) {
+		if (this.selectedStepComponent) {
+			this.selectedStepComponent.setState(StepComponentState.default);
+			this.selectedStepComponent = null;
+		}
+		if (step) {
+			this.selectedStepComponent = this.getRootComponent().findById(step.id);
+			if (this.selectedStepComponent) {
+				this.selectedStepComponent.setState(StepComponentState.selected);
+			}
 		}
 	}
 
-	private setIsMoving(isMoving: boolean) {
-		this.view.rootComponent?.setIsMoving(isMoving);
-	}
-
-	private getPlaceholders(): Placeholder[] {
-		const result: Placeholder[] = [];
-		this.view.rootComponent?.getPlaceholders(result);
-		return result;
+	private getRootComponent(): StartStopComponent {
+		if (this.view.rootComponent) {
+			return this.view.rootComponent;
+		}
+		throw new Error('Root component not found');
 	}
 }
 

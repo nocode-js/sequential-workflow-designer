@@ -1,6 +1,6 @@
 import { Dom } from '../core/dom';
+import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { StepComponent } from '../workspace/component';
 import { EditorView } from './editor';
 import { GlobalEditor } from './global-editor';
 import { StepEditor } from './step-editor';
@@ -11,7 +11,7 @@ export class SmartEditor {
 		const view = SmartEditorView.create(parent);
 		const editor = new SmartEditor(view, context);
 		editor.render(null);
-		context.onSelectedStepComponentChanged.subscribe(s => editor.onSelectedStepChanged(s));
+		context.onSelectedStepChanged.subscribe(s => editor.onSelectedStepChanged(s));
 		context.onDefinitionChanged.subscribe(() => editor.onDefinitionChanged());
 		return editor;
 	}
@@ -21,19 +21,19 @@ export class SmartEditor {
 		private readonly context: DesignerContext) {
 	}
 
-	private render(stepComponent: StepComponent | null) {
-		const editor = stepComponent
-			? StepEditor.create(stepComponent.step, this.context.configuration.editors)
+	private render(step: Step | null) {
+		const editor = step
+			? StepEditor.create(step, this.context.configuration.editors)
 			: GlobalEditor.create(this.context.definition, this.context.configuration.editors);
 		this.view.setView(editor.view);
 	}
 
-	private onSelectedStepChanged(stepComponent: StepComponent | null) {
-		this.render(stepComponent);
+	private onSelectedStepChanged(step: Step | null) {
+		this.render(step);
 	}
 
 	private onDefinitionChanged() {
-		this.render(null);
+		this.render(this.context.selectedStep);
 	}
 }
 

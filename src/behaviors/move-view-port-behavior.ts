@@ -19,7 +19,7 @@ export class MoveViewPortBehavior implements Behavior {
 	}
 
 	public onStart() {
-		this.context.setSelectedStepComponent(null);
+		this.context.setSelectedStep(null);
 	}
 
 	public onMove(delta: Vector) {

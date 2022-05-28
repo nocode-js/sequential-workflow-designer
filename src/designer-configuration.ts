@@ -2,6 +2,7 @@ import { ComponentType, Definition, Step } from './definition';
 
 export interface DesignerConfiguration {
 	theme?: string;
+	isReadonly?: boolean;
 
 	toolbox: ToolboxConfiguration;
 	steps: StepsConfiguration;

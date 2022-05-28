@@ -39,7 +39,7 @@ export class DragStepBehavior implements Behavior {
 	public onStart(position: Vector) {
 		let offset: Vector;
 		if (this.pressedStepComponent) {
-			this.pressedStepComponent.setState(StepComponentState.moving);
+			this.pressedStepComponent.setState(StepComponentState.dragging);
 
 			const clientPosition = this.pressedStepComponent.view.getClientPosition();
 			offset = position.subtract(clientPosition);
@@ -48,7 +48,7 @@ export class DragStepBehavior implements Behavior {
 		}
 
 		this.view.setPosition(position.subtract(offset));
-		this.context.setIsMoving(true);
+		this.context.setIsDragging(true);
 
 		this.state = {
 			startPosition: position,
@@ -80,7 +80,7 @@ export class DragStepBehavior implements Behavior {
 
 	public onEnd() {
 		this.view.remove();
-		this.context.setIsMoving(false);
+		this.context.setIsDragging(false);
 
 		if (this.currentPlaceholder) {
 			if (this.pressedStepComponent) {

@@ -32,11 +32,11 @@ export class SwitchStepComponent implements StepComponent {
 		private readonly configuration: StepsConfiguration) {
 	}
 
-	public findStepComponent(element: Element): StepComponent | null {
+	public findByElement(element: Element): StepComponent | null {
 		for (const sequence of this.view.sequenceComponents) {
-			const component = sequence.findStepComponent(element);
-			if (component) {
-				return component;
+			const sc = sequence.findByElement(element);
+			if (sc) {
+				return sc;
 			}
 		}
 		if (this.view.containsElement(element)) {
@@ -45,17 +45,30 @@ export class SwitchStepComponent implements StepComponent {
 		return null;
 	}
 
+	public findById(stepId: string): StepComponent | null {
+		if (this.step.id === stepId) {
+			return this;
+		}
+		for (const sequence of this.view.sequenceComponents) {
+			const sc = sequence.findById(stepId);
+			if (sc) {
+				return sc;
+			}
+		}
+		return null;
+	}
+
 	public getPlaceholders(result: Placeholder[]) {
-		if (this.currentState !== StepComponentState.moving) {
+		if (this.currentState !== StepComponentState.dragging) {
 			this.view.sequenceComponents.forEach(sc => sc.getPlaceholders(result));
 		}
 	}
 
-	public setIsMoving(isEnabled: boolean) {
-		if (this.currentState !== StepComponentState.moving) {
-			this.view.sequenceComponents.forEach(s => s.setIsMoving(isEnabled));
+	public setIsDragging(isDragging: boolean) {
+		if (this.currentState !== StepComponentState.dragging) {
+			this.view.sequenceComponents.forEach(s => s.setIsDragging(isDragging));
 		}
-		this.view.setIsMoving(isEnabled);
+		this.view.setIsDragging(isDragging);
 	}
 
 	public setState(state: StepComponentState) {
@@ -69,7 +82,7 @@ export class SwitchStepComponent implements StepComponent {
 				this.view.setIsSelected(true);
 				this.view.setIsDisabled(false);
 				break;
-			case StepComponentState.moving:
+			case StepComponentState.dragging:
 				this.view.setIsSelected(false);
 				this.view.setIsDisabled(true);
 				break;
@@ -225,9 +238,9 @@ export class SwitchStepComponentView implements ComponentView {
 		return this.g.contains(element);
 	}
 
-	public setIsMoving(isEnabled: boolean) {
+	public setIsDragging(isDragging: boolean) {
 		Dom.attrs(this.input, {
-			visibility: isEnabled ? 'hidden' : 'visible'
+			visibility: isDragging ? 'hidden' : 'visible'
 		});
 	}
 

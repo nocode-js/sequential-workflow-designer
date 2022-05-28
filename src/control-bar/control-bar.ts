@@ -1,7 +1,6 @@
 import { Dom } from '../core/dom';
 import { SequenceModifier } from '../core/sequence-modifier';
 import { DesignerContext } from '../designer-context';
-import { StepComponent } from '../workspace/component';
 
 const CENTER_ICON = '<path d="M0 0h48v48h-48z" fill="none"/><path d="M24 16c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-14 14h-4v8c0 2.21 1.79 4 4 4h8v-4h-8v-8zm0-20h8v-4h-8c-2.21 0-4 1.79-4 4v8h4v-8zm28-4h-8v4h8v8h4v-8c0-2.21-1.79-4-4-4zm0 32h-8v4h8c2.21 0 4-1.79 4-4v-8h-4v8z"/>';
 const DELETE_ICON = '<path d="M24 4c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20-8.95-20-20-20zm10 27.17l-2.83 2.83-7.17-7.17-7.17 7.17-2.83-2.83 7.17-7.17-7.17-7.17 2.83-2.83 7.17 7.17 7.17-7.17 2.83 2.83-7.17 7.17 7.17 7.17z" fill="#E01A24"/><path d="M0 0h48v48h-48z" fill="none"/>';
@@ -28,8 +27,9 @@ export class ControlBar {
 
 		parent.appendChild(root);
 		const bar = new ControlBar(deleteButton, moveButton, context);
-		context.onSelectedStepComponentChanged.subscribe(s => bar.onSelectedStepChanged(s));
-		context.onIsMovingDisabledChanged.subscribe(i => bar.onIsMovingDisabledChanged(i));
+		context.onIsReadonlyChanged.subscribe(() => bar.onIsReadonlyChanged());
+		context.onSelectedStepChanged.subscribe(() => bar.onSelectedStepChanged());
+		context.onIsMoveModeEnabledChanged.subscribe(i => bar.onIsMoveModeEnabledChanged(i));
 		deleteButton.addEventListener('click', e => bar.onDeleteButtonClicked(e));
 		centerButton.addEventListener('click', e => bar.onCenterButtonClicked(e));
 		moveButton.addEventListener('click', e => bar.onMoveButtonClicked(e));
@@ -42,22 +42,27 @@ export class ControlBar {
 		private readonly context: DesignerContext) {
 	}
 
-	private onSelectedStepChanged(step: StepComponent | null) {
-		Dom.toggleClass(this.deleteButton, !step, 'sqd-hidden');
+	private onIsReadonlyChanged() {
+		this.refreshDeleteButtonVisibility();
 	}
 
-	private onIsMovingDisabledChanged(isDisabled: boolean) {
-		Dom.toggleClass(this.moveButton, !isDisabled, 'sqd-disabled');
+	private onSelectedStepChanged() {
+		this.refreshDeleteButtonVisibility();
+	}
+
+	private onIsMoveModeEnabledChanged(isEnabled: boolean) {
+		Dom.toggleClass(this.moveButton, !isEnabled, 'sqd-disabled');
 	}
 
 	private onDeleteButtonClicked(e: MouseEvent) {
 		e.preventDefault();
-		if (this.context.selectedStepComponent) {
+		if (this.context.selectedStep) {
+			const component = this.context.getSelectedStepComponent();
 			SequenceModifier.deleteStep(
-				this.context.selectedStepComponent.step,
-				this.context.selectedStepComponent.parentSequence);
+				this.context.selectedStep,
+				component.parentSequence);
 
-			this.context.setSelectedStepComponent(null);
+			this.context.setSelectedStep(null);
 			this.context.notifiyDefinitionChanged();
 		}
 	}
@@ -69,7 +74,12 @@ export class ControlBar {
 
 	private onMoveButtonClicked(e: MouseEvent) {
 		e.preventDefault();
-		this.context.toggleIsMovingDisabled();
+		this.context.toggleIsDraggingDisabled();
+	}
+
+	private refreshDeleteButtonVisibility() {
+		const isButtonHidden = !this.context.selectedStep || this.context.isReadonly;
+		Dom.toggleClass(this.deleteButton, isButtonHidden, 'sqd-hidden');
 	}
 }
 

@@ -20,8 +20,8 @@ describe('SwitchStepComponent', () => {
 			steps: [step]
 		};
 
-		const svg = Dom.svg('svg');
-		const component = SwitchStepComponent.create(svg, step, parentSequence, {});
+		const parent = Dom.svg('svg');
+		const component = SwitchStepComponent.create(parent, step, parentSequence, {});
 
 		expect(component).toBeDefined();
 	});

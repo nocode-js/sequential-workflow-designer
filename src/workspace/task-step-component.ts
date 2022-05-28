@@ -27,8 +27,14 @@ export class TaskStepComponent implements StepComponent {
 		private readonly configuration: StepsConfiguration) {
 	}
 
-	public findStepComponent(element: Element): StepComponent | null {
+	public findByElement(element: Element): StepComponent | null {
 		return this.view.containsElement(element)
+			? this
+			: null;
+	}
+
+	public findById(stepId: string): StepComponent | null {
+		return (this.step.id === stepId)
 			? this
 			: null;
 	}
@@ -36,8 +42,8 @@ export class TaskStepComponent implements StepComponent {
 	public getPlaceholders(_: Placeholder[]) {
 	}
 
-	public setIsMoving(isMoving: boolean) {
-		this.view.setIsMoving(isMoving);
+	public setIsDragging(isDragging: boolean) {
+		this.view.setIsDragging(isDragging);
 	}
 
 	public setState(state: StepComponentState) {
@@ -50,7 +56,7 @@ export class TaskStepComponent implements StepComponent {
 				this.view.setIsDisabled(false);
 				this.view.setIsSelected(true);
 				break;
-			case StepComponentState.moving:
+			case StepComponentState.dragging:
 				this.view.setIsDisabled(true);
 				this.view.setIsSelected(false);
 				break;
@@ -160,8 +166,8 @@ export class TaskStepComponentView implements ComponentView {
 		return this.g.contains(element);
 	}
 
-	public setIsMoving(isEnabled: boolean) {
-		const visibility = isEnabled ? 'hidden' : 'visible';
+	public setIsDragging(isDragging: boolean) {
+		const visibility = isDragging ? 'hidden' : 'visible';
 		Dom.attrs(this.input, { visibility });
 		Dom.attrs(this.output, { visibility });
 	}

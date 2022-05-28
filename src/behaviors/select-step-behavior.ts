@@ -23,16 +23,16 @@ export class SelectStepBehavior implements Behavior {
 	}
 
 	public onMove(delta: Vector): Behavior | void {
-		if (delta.distance() > 2) {
+		if (!this.context.isReadonly && delta.distance() > 2) {
 			this.isCanceled = true;
-			this.context.setSelectedStepComponent(null);
+			this.context.setSelectedStep(null);
 			return DragStepBehavior.create(this.context, this.pressedStepComponent.step, this.pressedStepComponent);
 		}
 	}
 
 	public onEnd() {
 		if (!this.isCanceled) {
-			this.context.setSelectedStepComponent(this.pressedStepComponent);
+			this.context.setSelectedStep(this.pressedStepComponent.step);
 		}
 	}
 }

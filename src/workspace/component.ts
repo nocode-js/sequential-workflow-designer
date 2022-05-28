@@ -4,9 +4,10 @@ import { Sequence, Step } from '../definition';
 export interface Component {
 	view: ComponentView;
 
-	findStepComponent(element: Element): StepComponent | null;
+	findById(stepId: string): StepComponent | null;
+	findByElement(element: Element): StepComponent | null;
 	getPlaceholders(result: Placeholder[]): void;
-	setIsMoving(isMoving: boolean): void;
+	setIsDragging(isDragging: boolean): void;
 	validate(): boolean;
 }
 
@@ -37,5 +38,5 @@ export interface StepComponent extends Component {
 export enum StepComponentState {
 	default,
 	selected,
-	moving
+	dragging
 }

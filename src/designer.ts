@@ -1,6 +1,7 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { ControlBar } from './control-bar/control-bar';
 import { Dom } from './core/dom';
+import { ObjectCloner } from './core/object-cloner';
 import { SimpleEvent } from './core/simple-event';
 import { Definition } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
@@ -11,8 +12,10 @@ import { Workspace } from './workspace/workspace';
 
 export class Designer {
 
-	public static create(container: HTMLElement, definition: Definition, configuration: DesignerConfiguration): Designer {
+	public static create(container: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
 		const theme = configuration.theme || 'light';
+		const definition = ObjectCloner.deepClone(startDefinition);
+
 		const root = Dom.element('div', {
 			class: `sqd-designer sqd-theme-${theme}`
 		});
@@ -43,7 +46,7 @@ export class Designer {
 
 	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
 
-	public getDefiniton(): Definition {
+	public getDefinition(): Definition {
 		return this.context.definition;
 	}
 
@@ -53,5 +56,29 @@ export class Designer {
 
 	public isValid(): boolean {
 		return this.workspace.isValid;
+	}
+
+	public isReadonly(): boolean {
+		return this.context.isReadonly;
+	}
+
+	public notifiyDefinitionChanged() {
+		this.context.notifiyDefinitionChanged();
+	}
+
+	public setIsReadonly(isReadonly: boolean) {
+		this.context.setIsReadonly(isReadonly);
+	}
+
+	public getSelectedStepId(): string | null {
+		return this.context.selectedStep?.id || null;
+	}
+
+	public selectStepById(stepId: string) {
+		this.context.selectStepById(stepId);
+	}
+
+	public clearSelectedStep() {
+		this.context.setSelectedStep(null);
 	}
 }

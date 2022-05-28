@@ -22,9 +22,19 @@ export class SequenceComponent implements Component {
 		private readonly sequence: Sequence) {
 	}
 
-	public findStepComponent(element: Element): StepComponent | null {
+	public findByElement(element: Element): StepComponent | null {
 		for (let component of this.view.components) {
-			const sc = component.findStepComponent(element);
+			const sc = component.findByElement(element);
+			if (sc) {
+				return sc;
+			}
+		}
+		return null;
+	}
+
+	public findById(stepId: string): StepComponent | null {
+		for (let component of this.view.components) {
+			const sc = component.findById(stepId);
 			if (sc) {
 				return sc;
 			}
@@ -39,9 +49,9 @@ export class SequenceComponent implements Component {
 		this.view.components.forEach(c => c.getPlaceholders(result));
 	}
 
-	public setIsMoving(isEnabled: boolean) {
-		this.view.setIsMoving(isEnabled);
-		this.view.components.forEach(c => c.setIsMoving(isEnabled));
+	public setIsDragging(isDragging: boolean) {
+		this.view.setIsDragging(isDragging);
+		this.view.components.forEach(c => c.setIsDragging(isDragging));
 	}
 
 	public validate(): boolean {
@@ -100,10 +110,10 @@ export class SequenceComponentView implements ComponentView {
 		throw new Error('Not supported');
 	}
 
-	public setIsMoving(isMoving: boolean) {
+	public setIsDragging(isDragging: boolean) {
 		this.placeholders.forEach(p => {
 			Dom.attrs(p, {
-				visibility: isMoving ? 'visible' : 'hidden'
+				visibility: isDragging ? 'visible' : 'hidden'
 			});
 		});
 	}

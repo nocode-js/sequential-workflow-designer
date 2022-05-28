@@ -1,52 +1,65 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { SimpleEvent } from './core/simple-event';
-import { Definition } from './definition';
+import { Definition, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
-import { Placeholder, StepComponent, StepComponentState } from './workspace/component';
+import { Placeholder, StepComponent } from './workspace/component';
 
 export class DesignerContext {
 
-	public readonly onSelectedStepComponentChanged = new SimpleEvent<StepComponent | null>();
-	public readonly onIsMovingChanged = new SimpleEvent<boolean>();
-	public readonly onIsMovingDisabledChanged = new SimpleEvent<boolean>();
+	public readonly onSelectedStepChanged = new SimpleEvent<Step | null>();
+	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
+	public readonly onIsDraggingChanged = new SimpleEvent<boolean>();
+	public readonly onIsMoveModeEnabledChanged = new SimpleEvent<boolean>();
 	public readonly onViewPortChanged = new SimpleEvent<void>();
 	public readonly onCenterViewPortRequested = new SimpleEvent<void>();
 	public readonly onDefinitionChanged = new SimpleEvent<void>();
 
-	public selectedStepComponent: StepComponent | null = null;
-	public isMoving = false;
-	public isMovingDisabled = false;
+	public selectedStep: Step | null = null;
+	public isReadonly: boolean;
+	public isDragging = false;
+	public isMoveModeEnabled = false;
 
-	private placeholdersProvider?: PlaceholdersProvider;
+	private provider?: DesignerComponentProvider;
 
 	public constructor(
 		public readonly definition: Definition,
 		public readonly behaviorController: BehaviorController,
 		public readonly configuration: DesignerConfiguration) {
+		this.isReadonly = !!configuration.isReadonly;
 	}
 
-	public setSelectedStepComponent(stepComponent: StepComponent | null) {
-		if (this.selectedStepComponent) {
-			this.selectedStepComponent.setState(StepComponentState.default);
-		}
-		const isChanged = (this.selectedStepComponent !== stepComponent);
-		this.selectedStepComponent = stepComponent;
-		if (stepComponent) {
-			stepComponent.setState(StepComponentState.selected);
-		}
+	public setSelectedStep(step: Step | null) {
+		const isChanged = (this.selectedStep !== step);
+		this.selectedStep = step;
 		if (isChanged) {
-			this.onSelectedStepComponentChanged.forward(stepComponent);
+			this.onSelectedStepChanged.forward(step);
 		}
 	}
 
-	public setIsMoving(isMoving: boolean) {
-		this.isMoving = isMoving;
-		this.onIsMovingChanged.forward(isMoving);
+	public selectStepById(stepId: string) {
+		const sc = this.getProvider().findStepComponentById(stepId);
+		if (sc) {
+			this.setSelectedStep(sc.step);
+		}
 	}
 
-	public toggleIsMovingDisabled() {
-		this.isMovingDisabled = !this.isMovingDisabled;
-		this.onIsMovingDisabledChanged.forward(this.isMovingDisabled);
+	public getSelectedStepComponent(): StepComponent {
+		return this.getProvider().getSelectedStepComponent();
+	}
+
+	public setIsReadonly(isReadonly: boolean) {
+		this.isReadonly = isReadonly;
+		this.onIsReadonlyChanged.forward(isReadonly);
+	}
+
+	public setIsDragging(isDragging: boolean) {
+		this.isDragging = isDragging;
+		this.onIsDraggingChanged.forward(isDragging);
+	}
+
+	public toggleIsDraggingDisabled() {
+		this.isMoveModeEnabled = !this.isMoveModeEnabled;
+		this.onIsMoveModeEnabledChanged.forward(this.isMoveModeEnabled);
 	}
 
 	public notifiyViewPortChanged() {
@@ -58,20 +71,27 @@ export class DesignerContext {
 	}
 
 	public notifiyDefinitionChanged() {
-		this.selectedStepComponent = null;
 		this.onDefinitionChanged.forward();
 	}
 
-	public setPlaceholdersProvider(provider: PlaceholdersProvider) {
-		this.placeholdersProvider = provider;
+	public getPlacehodlers(): Placeholder[] {
+		return this.getProvider().getPlaceholders();
 	}
 
-	public getPlacehodlers(): Placeholder[] {
-		if (!this.placeholdersProvider) {
-			throw new Error('No provider');
+	public setProvider(provider: DesignerComponentProvider) {
+		this.provider = provider;
+	}
+
+	private getProvider(): DesignerComponentProvider {
+		if (!this.provider) {
+			throw new Error('Provider is not set');
 		}
-		return this.placeholdersProvider();
+		return this.provider;
 	}
 }
 
-export type PlaceholdersProvider = () => Placeholder[];
+export interface DesignerComponentProvider {
+	getPlaceholders(): Placeholder[];
+	getSelectedStepComponent(): StepComponent;
+	findStepComponentById(stepId: string): StepComponent | null;
+}
