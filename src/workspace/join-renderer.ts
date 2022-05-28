@@ -3,7 +3,7 @@ import { Vector } from '../core/vector';
 
 export class JoinRenderer {
 
-	public static appendStraightJoin(g: SVGGElement, start: Vector, height: number) {
+	public static createStraightJoin(parent: SVGElement, start: Vector, height: number) {
 		const join = Dom.svg('line', {
 			class: 'sqd-join',
 			x1: start.x,
@@ -11,10 +11,10 @@ export class JoinRenderer {
 			x2: start.x,
 			y2: start.y + height
 		});
-		g.appendChild(join);
+		parent.insertBefore(join, parent.firstChild);
 	}
 
-	public static appendJoins(g: SVGGElement, start: Vector, targets: Vector[]) {
+	public static createJoins(parent: SVGElement, start: Vector, targets: Vector[]) {
 		for (const target of targets) {
 			const c = Math.abs(start.y - target.y) / 2; // size of a corner
 			const l = Math.abs(start.x - target.x) - c * 2; // size of the line between corners
@@ -27,7 +27,7 @@ export class JoinRenderer {
 				fill: 'none',
 				d: `M ${start.x} ${start.y} q ${x * c * 0.3} ${y * c * 0.8} ${x * c} ${y * c} l ${x * l} 0 q ${x * c * 0.7} ${y * c * 0.2} ${x * c} ${y * c}`
 			});
-			g.appendChild(join);
+			parent.insertBefore(join, parent.firstChild);
 		}
 	}
 }

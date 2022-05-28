@@ -1,18 +1,20 @@
-import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
 import { SelectStepBehavior } from '../behaviors/select-step-behavior';
 import { Dom } from '../core/dom';
+import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
+import { Sequence } from '../definition';
+import { StepsConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
-import { Component, ComponentView, Placeholder } from './component';
+import { Placeholder } from './component';
 import { StartStopComponent } from './start-stop-component';
 
 const GRID_SIZE = 48;
 
 export class Workspace {
 
-	public static append(parent: HTMLElement, context: DesignerContext): Workspace {
-		const view = WorkspaceView.create(parent);
+	public static create(parent: HTMLElement, context: DesignerContext): Workspace {
+		const view = WorkspaceView.create(parent, context.configuration.steps);
 
 		const workspace = new Workspace(view, context);
 		setTimeout(() => {
@@ -35,7 +37,6 @@ export class Workspace {
 
 	public isValid = false;
 
-	private rootComponent?: Component;
 	private position = new Vector(0, 0);
 	private scale = 1.0;
 
@@ -45,7 +46,7 @@ export class Workspace {
 	}
 
 	public revalidate() {
-		this.isValid = this.rootComponent?.validate() || false;
+		this.isValid = this.view.rootComponent?.validate() || false;
 	}
 
 	public setPosition(position: Vector) {
@@ -55,9 +56,8 @@ export class Workspace {
 	}
 
 	private render() {
-		this.rootComponent = StartStopComponent.create(this.context.definition.sequence, this.context.configuration.steps);
+		this.view.render(this.context.definition.sequence);
 		this.revalidate();
-		this.view.setView(this.rootComponent.view);
 	}
 
 	private onMouseDown(e: MouseEvent) {
@@ -76,9 +76,9 @@ export class Workspace {
 	}
 
 	private startBehavior(target: Element, position: Vector, forceMoving: boolean) {
-		if (this.rootComponent) {
+		if (this.view.rootComponent) {
 			const clickedStep = !forceMoving && !this.context.isMovingDisabled
-				? this.rootComponent.findStepComponent(target as Element)
+				? this.view.rootComponent.findStepComponent(target as Element)
 				: null;
 
 			if (clickedStep) {
@@ -105,10 +105,10 @@ export class Workspace {
 	}
 
 	private center() {
-		if (this.rootComponent) {
-			const size = this.view.getSize();
-			const x = Math.max(0, (size.x - this.rootComponent.view.width) / 2);
-			const y = Math.max(0, (size.y - this.rootComponent.view.height) / 2);
+		if (this.view.rootComponent) {
+			const clientSize = this.view.getClientSize();
+			const x = Math.max(0, (clientSize.x - this.view.rootComponent.view.width) / 2);
+			const y = Math.max(0, (clientSize.y - this.view.rootComponent.view.height) / 2);
 
 			this.position = new Vector(x, y);
 			this.scale = 1;
@@ -118,19 +118,19 @@ export class Workspace {
 	}
 
 	private setIsMoving(isMoving: boolean) {
-		this.rootComponent?.setIsMoving(isMoving);
+		this.view.rootComponent?.setIsMoving(isMoving);
 	}
 
 	private getPlaceholders(): Placeholder[] {
 		const result: Placeholder[] = [];
-		this.rootComponent?.getPlaceholders(result);
+		this.view.rootComponent?.getPlaceholders(result);
 		return result;
 	}
 }
 
 export class WorkspaceView {
 
-	public static create(root: HTMLElement): WorkspaceView {
+	public static create(parent: HTMLElement, configuration: StepsConfiguration): WorkspaceView {
 		const defs = Dom.svg('defs');
 		const gridPattern = Dom.svg('pattern', {
 			id: 'sqd-grid',
@@ -160,41 +160,41 @@ export class WorkspaceView {
 		}));
 		canvas.appendChild(foreground);
 		workspace.appendChild(canvas);
-		root.appendChild(workspace);
-		return new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground);
+		parent.appendChild(workspace);
+		return new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, configuration);
 	}
 
-	private view?: ComponentView;
+	public rootComponent?: StartStopComponent;
 
 	private constructor(
 		private readonly workspace: HTMLElement,
 		private readonly canvas: SVGElement,
 		private readonly gridPattern: SVGPatternElement,
 		private readonly gridPatternPath: SVGPathElement,
-		private readonly foreground: SVGGElement) {
+		private readonly foreground: SVGGElement,
+		private readonly configuration: StepsConfiguration) {
 	}
 
-	public setView(view: ComponentView) {
-		if (this.view) {
-			this.foreground.removeChild(this.view.g);
+	public render(sequence: Sequence) {
+		if (this.rootComponent) {
+			this.rootComponent.view.destroy();
 		}
-		this.foreground.appendChild(view.g);
-		this.view = view;
+		this.rootComponent = StartStopComponent.create(this.foreground, sequence, this.configuration);
 	}
 
-	public setPositionAndScale(p: Vector, scale: number) {
-		const size = GRID_SIZE * scale;
+	public setPositionAndScale(position: Vector, scale: number) {
+		const gridSize = GRID_SIZE * scale;
 		Dom.attrs(this.gridPattern, {
-			x: p.x,
-			y: p.y,
-			width: size,
-			height: size
+			x: position.x,
+			y: position.y,
+			width: gridSize,
+			height: gridSize
 		});
 		Dom.attrs(this.gridPatternPath, {
-			d: `M ${size} 0 L 0 0 0 ${size}`
+			d: `M ${gridSize} 0 L 0 0 0 ${gridSize}`
 		});
 		Dom.attrs(this.foreground, {
-			transform: `translate(${p.x}, ${p.y}) scale(${scale})`
+			transform: `translate(${position.x}, ${position.y}) scale(${scale})`
 		});
 	}
 
@@ -210,7 +210,7 @@ export class WorkspaceView {
 		return new Vector(rect.x, rect.y);
 	}
 
-	public getSize(): Vector {
+	public getClientSize(): Vector {
 		return new Vector(this.canvas.clientWidth, this.canvas.clientHeight);
 	}
 

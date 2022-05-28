@@ -3,73 +3,77 @@ import { Vector } from '../core/vector';
 import { Sequence, Step } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
 import { Component, ComponentView, Placeholder, StepComponent } from './component';
-import { SequenceComponent, SequenceComponentView } from './sequence-component';
+import { SequenceComponent } from './sequence-component';
 
 const SIZE = 30;
 
 export class StartStopComponent implements Component {
 
-	public static create(sequence: Sequence, configuration: StepsConfiguration): StartStopComponent {
-		const sequenceComponent = SequenceComponent.create(sequence, configuration);
-		const view = AnchorStepComponentView.create(sequenceComponent.view);
-		return new StartStopComponent(
-			view,
-			sequenceComponent);
+	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): StartStopComponent {
+		const view = AnchorStepComponentView.create(parent, sequence, configuration);
+		return new StartStopComponent(view);
 	}
 
 	public readonly parentSequence: Sequence = null as any;
 	public readonly step: Step = null as any;
 
 	private constructor(
-		public readonly view: AnchorStepComponentView,
-		private readonly sequenceComponent: SequenceComponent) {
+		public readonly view: AnchorStepComponentView) {
 	}
 
 	public findStepComponent(element: Element): StepComponent | null {
-		return this.sequenceComponent.findStepComponent(element);
+		return this.view.component.findStepComponent(element);
 	}
 
 	public getPlaceholders(result: Placeholder[]) {
-		this.sequenceComponent.getPlaceholders(result);
+		this.view.component.getPlaceholders(result);
 	}
 
 	public setIsMoving(isMoving: boolean) {
-		this.sequenceComponent.setIsMoving(isMoving);
+		this.view.component.setIsMoving(isMoving);
 	}
 
 	public validate(): boolean {
-		return this.sequenceComponent.validate();
+		return this.view.component.validate();
 	}
 }
 
 export class AnchorStepComponentView implements ComponentView {
 
-	public static create(view: SequenceComponentView): AnchorStepComponentView {
+	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): AnchorStepComponentView {
 		const g = Dom.svg('g');
+		parent.appendChild(g);
+
+		const sequenceComponent = SequenceComponent.create(g, sequence, configuration);
+		const view = sequenceComponent.view;
 
 		const startCircle = createCircle(true);
 		Dom.translate(startCircle, view.joinX - SIZE / 2, 0);
 		g.appendChild(startCircle);
 
 		Dom.translate(view.g, 0, SIZE);
-		g.appendChild(view.g);
 
 		const endCircle = createCircle(false);
 		Dom.translate(endCircle, view.joinX - SIZE / 2, SIZE + view.height);
 		g.appendChild(endCircle);
 
-		return new AnchorStepComponentView(g, view.width, view.height + SIZE * 2, view.joinX);
+		return new AnchorStepComponentView(g, view.width, view.height + SIZE * 2, view.joinX, sequenceComponent);
 	}
 
 	private constructor(
 		public readonly g: SVGGElement,
 		public readonly width: number,
 		public readonly height: number,
-		public readonly joinX: number) {
+		public readonly joinX: number,
+		public readonly component: SequenceComponent) {
 	}
 
-	public getPosition(): Vector {
+	public getClientPosition(): Vector {
 		throw new Error('Not supported');
+	}
+
+	public destroy() {
+		this.g.parentNode?.removeChild(this.g);
 	}
 }
 

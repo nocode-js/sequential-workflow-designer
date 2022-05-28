@@ -16,7 +16,7 @@ export interface ComponentView {
 	height: number;
 	joinX: number;
 
-	getPosition(): Vector;
+	getClientPosition(): Vector;
 }
 
 export interface Placeholder {

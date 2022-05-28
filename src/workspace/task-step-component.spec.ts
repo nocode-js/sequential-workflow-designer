@@ -1,3 +1,4 @@
+import { Dom } from '../core/dom';
 import { ComponentType, Sequence, TaskStep } from '../definition';
 import { TaskStepComponent } from './task-step-component';
 
@@ -15,7 +16,8 @@ describe('TaskStepComponent', () => {
 			steps: [step]
 		};
 
-		const component = TaskStepComponent.create(step, parentSequence, {});
+		const parent = Dom.svg('svg');
+		const component = TaskStepComponent.create(parent, step, parentSequence, {});
 
 		expect(component).toBeDefined();
 	});

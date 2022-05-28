@@ -41,9 +41,8 @@ export class DragStepBehavior implements Behavior {
 		if (this.pressedStepComponent) {
 			this.pressedStepComponent.setState(StepComponentState.moving);
 
-			const componentPosition = this.pressedStepComponent.view.getPosition();
-
-			offset = position.subtract(componentPosition);
+			const clientPosition = this.pressedStepComponent.view.getClientPosition();
+			offset = position.subtract(clientPosition);
 		} else {
 			offset = new Vector(this.view.width / 2, this.view.height / 2);
 		}
@@ -118,19 +117,21 @@ class DragStepView {
 		const layer = Dom.element('div', {
 			class: `sqd-drag sqd-theme-${theme}`
 		});
+		document.body.appendChild(layer);
+
+		const svg = Dom.svg('svg');
+		layer.appendChild(svg);
 
 		const fakeSequence = { steps: [] };
-		const stepComponent = StepComponentFactory.create(step, fakeSequence, configuration.steps);
+		const stepComponent = StepComponentFactory.create(svg, step, fakeSequence, configuration.steps);
 
-		const svg = Dom.svg('svg', {
+		Dom.attrs(svg, {
 			width: stepComponent.view.width + SAFE_OFFSET * 2,
 			height: stepComponent.view.height + SAFE_OFFSET * 2
 		});
-		Dom.translate(stepComponent.view.g, SAFE_OFFSET, SAFE_OFFSET);
-		svg.appendChild(stepComponent.view.g);
-		layer.appendChild(svg);
 
-		document.body.appendChild(layer);
+		Dom.translate(stepComponent.view.g, SAFE_OFFSET, SAFE_OFFSET);
+
 		return new DragStepView(stepComponent.view.width, stepComponent.view.height, layer);
 	}
 

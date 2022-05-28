@@ -7,8 +7,8 @@ import { StepEditor } from './step-editor';
 
 export class SmartEditor {
 
-	public static append(parent: HTMLElement, context: DesignerContext): SmartEditor {
-		const view = SmartEditorView.append(parent);
+	public static create(parent: HTMLElement, context: DesignerContext): SmartEditor {
+		const view = SmartEditorView.create(parent);
 		const editor = new SmartEditor(view, context);
 		editor.render(null);
 		context.onSelectedStepComponentChanged.subscribe(s => editor.onSelectedStepChanged(s));
@@ -39,7 +39,7 @@ export class SmartEditor {
 
 class SmartEditorView {
 
-	public static append(parent: HTMLElement): SmartEditorView {
+	public static create(parent: HTMLElement): SmartEditorView {
 		const root = Dom.element('div', {
 			class: 'sqd-smart-editor'
 		});

@@ -9,7 +9,7 @@ const MOVE_ICON = '<path d="M20 18h8v-6h6l-10-10-10 10h6v6zm-2 2h-6v-6l-10 10 10
 
 export class ControlBar {
 
-	public static append(parent: HTMLElement, context: DesignerContext): ControlBar {
+	public static create(parent: HTMLElement, context: DesignerContext): ControlBar {
 		const root = Dom.element('div', {
 			class: 'sqd-control-bar'
 		});

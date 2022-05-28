@@ -4,7 +4,7 @@ const SIZE = 20;
 
 export class ValidationErrorRenderer {
 
-	public static append(parent: SVGGElement, x: number, y: number): SVGElement {
+	public static create(parent: SVGElement, x: number, y: number): SVGElement {
 		const g = Dom.svg('g', {
 			class: 'sqd-hidden'
 		});

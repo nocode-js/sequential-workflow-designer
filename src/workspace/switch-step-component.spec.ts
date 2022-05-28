@@ -1,3 +1,4 @@
+import { Dom } from '../core/dom';
 import { ComponentType, Sequence, SwitchStep } from '../definition';
 import { SwitchStepComponent } from './switch-step-component';
 
@@ -19,7 +20,8 @@ describe('SwitchStepComponent', () => {
 			steps: [step]
 		};
 
-		const component = SwitchStepComponent.create(step, parentSequence, {});
+		const svg = Dom.svg('svg');
+		const component = SwitchStepComponent.create(svg, step, parentSequence, {});
 
 		expect(component).toBeDefined();
 	});

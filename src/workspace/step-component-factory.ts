@@ -6,12 +6,12 @@ import { TaskStepComponent } from './task-step-component';
 
 export class StepComponentFactory {
 
-	public static create(step: Step, parentSequence: Sequence, configuration: StepsConfiguration): StepComponent {
+	public static create(parent: SVGElement, step: Step, parentSequence: Sequence, configuration: StepsConfiguration): StepComponent {
 		switch (step.componentType) {
 			case ComponentType.task:
-				return TaskStepComponent.create(step as TaskStep, parentSequence, configuration);
+				return TaskStepComponent.create(parent, step as TaskStep, parentSequence, configuration);
 			case ComponentType.switch:
-				return SwitchStepComponent.create(step as SwitchStep, parentSequence, configuration);
+				return SwitchStepComponent.create(parent, step as SwitchStep, parentSequence, configuration);
 			default:
 				throw new Error(`Unknown component type: ${step.componentType}`);
 		}

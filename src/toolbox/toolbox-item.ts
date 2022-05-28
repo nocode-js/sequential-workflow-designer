@@ -8,7 +8,7 @@ import { DesignerContext } from '../designer-context';
 
 export class ToolboxItem {
 
-	public static append(parent: HTMLElement, step: Step, context: DesignerContext): ToolboxItem {
+	public static create(parent: HTMLElement, step: Step, context: DesignerContext): ToolboxItem {
 		const root = Dom.element('div', {
 			class: 'sqd-toolbox-item'
 		});

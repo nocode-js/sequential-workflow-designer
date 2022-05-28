@@ -5,7 +5,7 @@ import { ToolboxItem } from './toolbox-item';
 
 export class Toolbox {
 
-	public static append(parent: HTMLElement, context: DesignerContext): Toolbox {
+	public static create(parent: HTMLElement, context: DesignerContext): Toolbox {
 		const root = Dom.element('div', {
 			class: 'sqd-toolbox'
 		});
@@ -67,7 +67,7 @@ export class Toolbox {
 			groupTitle.innerText = group.name;
 			this.container.appendChild(groupTitle);
 
-			group.steps.forEach(s => ToolboxItem.append(this.container, s, this.context));
+			group.steps.forEach(s => ToolboxItem.create(this.container, s, this.context));
 		});
 	}
 

@@ -22,13 +22,13 @@ export class Designer {
 		const behaviorController = new BehaviorController();
 		const context = new DesignerContext(definition, behaviorController, configuration);
 
-		const workspace = Workspace.append(root, context);
+		const workspace = Workspace.create(root, context);
 		if (!configuration.toolbox.isHidden) {
-			Toolbox.append(root, context);
+			Toolbox.create(root, context);
 		}
-		ControlBar.append(root, context);
+		ControlBar.create(root, context);
 		if (!configuration.editors.isHidden) {
-			SmartEditor.append(root, context);
+			SmartEditor.create(root, context);
 		}
 
 		const designer = new Designer(context, workspace);

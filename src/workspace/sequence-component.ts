@@ -12,20 +12,18 @@ const PH_HEIGHT = 24;
 
 export class SequenceComponent implements Component {
 
-	public static create(sequence: Sequence, configuration: StepsConfiguration): SequenceComponent {
-		const components = sequence.steps.map(s => StepComponentFactory.create(s, sequence, configuration));
-		const view = SequenceComponentView.create(components);
-		return new SequenceComponent(view, sequence, components);
+	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): SequenceComponent {
+		const view = SequenceComponentView.create(parent, sequence, configuration);
+		return new SequenceComponent(view, sequence);
 	}
 
 	private constructor(
 		public readonly view: SequenceComponentView,
-		private readonly sequence: Sequence,
-		private readonly components: Component[]) {
+		private readonly sequence: Sequence) {
 	}
 
 	public findStepComponent(element: Element): StepComponent | null {
-		for (let component of this.components) {
+		for (let component of this.view.components) {
 			const sc = component.findStepComponent(element);
 			if (sc) {
 				return sc;
@@ -38,23 +36,26 @@ export class SequenceComponent implements Component {
 		this.view.placeholders.forEach((ph, index) => {
 			result.push(new SequencePlaceholder(ph, this.sequence, index));
 		});
-		this.components.forEach(c => c.getPlaceholders(result));
+		this.view.components.forEach(c => c.getPlaceholders(result));
 	}
 
 	public setIsMoving(isEnabled: boolean) {
 		this.view.setIsMoving(isEnabled);
-		this.components.forEach(c => c.setIsMoving(isEnabled));
+		this.view.components.forEach(c => c.setIsMoving(isEnabled));
 	}
 
 	public validate(): boolean {
-		return this.components.every(c => c.validate());
+		return this.view.components.every(c => c.validate());
 	}
 }
 
 export class SequenceComponentView implements ComponentView {
 
-	public static create(components: Component[]): SequenceComponentView {
+	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): SequenceComponentView {
 		const g = Dom.svg('g');
+		parent.appendChild(g);
+
+		const components = sequence.steps.map(s => StepComponentFactory.create(g, s, sequence, configuration));
 
 		const maxJoinX = (components.length > 0)
 			? Math.max(...components.map(c => c.view.joinX))
@@ -70,21 +71,20 @@ export class SequenceComponentView implements ComponentView {
 			const component = components[i];
 			const offsetX = maxJoinX - component.view.joinX;
 
-			JoinRenderer.appendStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+			JoinRenderer.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 
 			placeholders.push(appendPlaceholder(g,
 				maxJoinX - PH_WIDTH / 2,
 				offsetY - PH_HEIGHT));
 
 			Dom.translate(component.view.g, offsetX, offsetY);
-			g.appendChild(component.view.g);
 			offsetY += component.view.height + PH_HEIGHT;
 		}
 
-		JoinRenderer.appendStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+		JoinRenderer.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 		placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
 
-		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders);
+		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
 	}
 
 	private constructor(
@@ -92,10 +92,11 @@ export class SequenceComponentView implements ComponentView {
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		public readonly placeholders: SVGElement[]) {
+		public readonly placeholders: SVGElement[],
+		public readonly components: Component[]) {
 	}
 
-	public getPosition(): Vector {
+	public getClientPosition(): Vector {
 		throw new Error('Not supported');
 	}
 

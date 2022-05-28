@@ -5,19 +5,18 @@ import { StepsConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
 import { ValidationErrorRenderer } from './validation-error-renderer';
 
-const WIDTH = 130;
-const HEIGHT = 44;
+const PADDING_X = 12;
+const PADDING_Y = 10;
+const MIN_TEXT_WIDTH = 70;
+const ICON_SIZE = 22;
 const INPUT_SIZE = 6;
 const OUTPUT_SIZE = 4;
 const RECT_RADIUS = 5;
 
 export class TaskStepComponent implements StepComponent {
 
-	public static create(step: TaskStep, parentSequence: Sequence, configuration: StepsConfiguration): TaskStepComponent {
-		const iconUrl = configuration.iconUrlProvider
-			? configuration.iconUrlProvider(step.componentType, step.type)
-			: null;
-		const view = TaskStepComponentView.create(step, iconUrl);
+	public static create(parent: SVGElement, step: TaskStep, parentSequence: Sequence, configuration: StepsConfiguration): TaskStepComponent {
+		const view = TaskStepComponentView.create(parent, step, configuration);
 		return new TaskStepComponent(view, step, parentSequence, configuration);
 	}
 
@@ -69,25 +68,39 @@ export class TaskStepComponent implements StepComponent {
 
 export class TaskStepComponentView implements ComponentView {
 
-	public static create(step: TaskStep, iconUrl: string | null): TaskStepComponentView {
+	public static create(parent: SVGElement, step: TaskStep, configuration: StepsConfiguration): TaskStepComponentView {
+		const g = Dom.svg('g', {
+			class: 'sqd-task-group'
+		});
+		parent.appendChild(g);
+
+		const boxHeight = ICON_SIZE + PADDING_Y * 2;
+
+		const text = Dom.svg('text', {
+			x: (ICON_SIZE + PADDING_X * 2),
+			y: boxHeight / 2,
+			class: 'sqd-task-text'
+		});
+		text.textContent = step.name;
+		g.appendChild(text);
+		const textWidth = Math.max(text.getBBox().width, MIN_TEXT_WIDTH);
+
+		const boxWidth = ICON_SIZE + PADDING_X * 3 + textWidth;
+
 		const rect = Dom.svg('rect', {
 			x: 0.5,
 			y: 0.5,
 			class: 'sqd-task-rect',
-			width: WIDTH,
-			height: HEIGHT,
+			width: boxWidth,
+			height: boxHeight,
 			rx: RECT_RADIUS,
 			ry: RECT_RADIUS
 		});
+		g.insertBefore(rect, text);
 
-		const text = Dom.svg('text', {
-			x: WIDTH / 3,
-			y: HEIGHT / 2,
-			class: 'sqd-task-text'
-		});
-		text.textContent = step.name;
-
-		const iconSize = HEIGHT / 2;
+		const iconUrl = configuration.iconUrlProvider
+			? configuration.iconUrlProvider(step.componentType, step.type)
+			: null;
 		const icon = iconUrl
 			? Dom.svg('image', {
 				href: iconUrl
@@ -98,38 +111,33 @@ export class TaskStepComponentView implements ComponentView {
 				ry: 4
 			});
 		Dom.attrs(icon, {
-			x: (WIDTH / 3 - iconSize) / 2,
-			y: (HEIGHT - iconSize) / 2,
-			width: iconSize,
-			height: iconSize,
+			x: PADDING_X,
+			y: PADDING_Y,
+			width: ICON_SIZE,
+			height: ICON_SIZE,
 		});
 
 		const input = Dom.svg('circle', {
 			class: 'sqd-task-input',
-			cx: WIDTH / 2,
+			cx: boxWidth / 2,
 			xy: 0,
 			r: INPUT_SIZE
 		});
 
 		const output = Dom.svg('circle', {
 			class: 'sqd-task-output',
-			cx: WIDTH / 2,
-			cy: HEIGHT,
+			cx: boxWidth / 2,
+			cy: boxHeight,
 			r: OUTPUT_SIZE
 		});
 
-		const g = Dom.svg('g', {
-			class: 'sqd-task-group'
-		});
-		g.appendChild(rect);
-		g.appendChild(text);
 		g.appendChild(icon);
 		g.appendChild(input);
 		g.appendChild(output);
 
-		const validationError = ValidationErrorRenderer.append(g, WIDTH, 0);
+		const validationError = ValidationErrorRenderer.create(g, boxWidth, 0);
 
-		return new TaskStepComponentView(g, WIDTH, HEIGHT, WIDTH / 2, rect, input, output, validationError);
+		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, input, output, validationError);
 	}
 
 	private constructor(
@@ -143,7 +151,7 @@ export class TaskStepComponentView implements ComponentView {
 		private readonly validationError: SVGElement) {
 	}
 
-	public getPosition(): Vector {
+	public getClientPosition(): Vector {
 		const rect = this.rect.getBoundingClientRect();
 		return new Vector(rect.x, rect.y);
 	}
