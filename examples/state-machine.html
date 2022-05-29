@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>State machine - Sequential Workflow Designer</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+	<script src="../designer.js"></script>
+	<link href="../designer.css" rel="stylesheet">
+
+	<style>
+		body, input, button {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
+		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden;}
+
+		#designer {position: absolute; left: 0; top: 0; width: 70vw; height: 100vh;}
+		.sqd-global-editor, .sqd-step-editor {padding: 10px;}
+		.sqd-smart-editor p {margin: 0; padding: 0 0 10px;}
+		.sqd-smart-editor label {display: block; padding: 0 0 10px;}
+		.sqd-smart-editor input[type=text] {width: 100%; box-sizing: border-box; border: 1px solid silver; padding: 6px; border-radius: 5px;}
+
+		#result {position: absolute; right: 0; bottom: 0; width: 30vw; height: 100vh; padding: 10px; box-sizing: border-box; color: #FFF; background: #2C18DF;}
+		#result button {padding: 10px; color: #000; background: #FFF; border: 0; border-radius: 5px; cursor: pointer;}
+		#result button:hover {opacity: 0.8;}
+	</style>
+</head>
+<body>
+	<div id="designer"></div>
+
+	<div id="result">
+		<button id="play">Run state machine 🚀</button>
+
+		<h5>State</h5>
+
+		<pre id="state"></pre>
+
+		<h5>Logs</h5>
+
+		<pre id="logs"></pre>
+	</div>
+
+	<script>
+		let designer;
+
+		function uid() {
+			return Math.ceil(Math.random() * 10**16).toString(16);
+		}
+
+		function createMathStep(type, name, varName, val) {
+			return {
+				id: uid(),
+				componentType: 'task',
+				type,
+				name,
+				properties: {
+					var: varName,
+					val
+				}
+			};
+		}
+
+		function createPrintStep(message) {
+			return {
+				id: uid(),
+				componentType: 'task',
+				type: 'print',
+				name: message,
+				properties: {
+					val: message
+				}
+			};
+		}
+
+		function createIfStep(varName, val, name, trueSteps, falseSteps) {
+			return {
+				id: uid(),
+				componentType: 'switch',
+				type: 'if',
+				name,
+				branches: {
+					'true': { steps: trueSteps || [] },
+					'false': { steps: falseSteps || [] }
+				},
+				properties: {
+					var: varName,
+					val
+				}
+			};
+		}
+
+		function appendTitle(parent, text) {
+			const title = document.createElement('h4');
+			title.innerText = text;
+			parent.appendChild(title);
+		}
+
+		function appendTextField(parent, label, startValue, set) {
+			const field = document.createElement('p');
+			parent.appendChild(field);
+			field.innerHTML = `<label></label> <input type="text">`;
+			field.querySelector('label').innerText = label;
+			const input = field.querySelector('input');
+			input.value = startValue;
+			field.addEventListener('change', () => set(input.value));
+		}
+
+		const configuration = {
+			toolbox: {
+				isHidden: false,
+				groups: [
+					{
+						name: 'Filters',
+						steps: [
+							createMathStep('add', 'Add', 'x', 10),
+							createMathStep('sub', 'Subtract', 'x', 10),
+							createMathStep('mul', 'Multiply', 'x', 10),
+							createMathStep('div', 'Divide', 'x', 10),
+							createPrintStep('Message!'),
+							createIfStep('x', 10, 'If')
+						]
+					}
+				]
+			},
+
+			steps: {
+				iconUrlProvider: (componentType, type) => {
+					return `./assets/icon-filter.svg`
+				},
+
+				validator: (step) => true
+			},
+
+			editors: {
+				globalEditorProvider: (definition) => {
+					const container = document.createElement('span');
+					appendTitle(container, 'State machine config');
+					appendTextField(container, 'Speed (ms)', definition.properties['speed'],
+							v => definition.properties['speed'] = parseInt(v, 10));
+					return container;
+				},
+				stepEditorProvider: (step) => {
+					const container = document.createElement('div');
+					appendTitle(container, 'Step ' + step.type);
+
+					appendTextField(container, 'Name', step.name,
+						v => {
+							step.name = v;
+							designer.notifiyDefinitionChanged();
+						});
+					if (step.properties['var'] !== undefined) {
+						appendTextField(container, 'Variable', step.properties['var'],
+							v => step.properties['var'] = v);
+					}
+					if (step.properties['val']) {
+						appendTextField(container, 'Value', step.properties['val'],
+							v => step.properties['val'] = parseInt(v, 10));
+					}
+					return container;
+				}
+			}
+		};
+
+		function createVariableIfNeeded(varName, state) {
+			if (!state.vars[varName]) {
+				state.vars[varName] = 0;
+			}
+		}
+
+		function executeMathStep(step, state) {
+			const varName = step.properties['var'];
+			const value = step.properties['val'];
+			createVariableIfNeeded(varName, state);
+			switch (step.type) {
+				case 'add':
+					state.vars[varName] += value;
+					break;
+				case 'sub':
+					state.vars[varName] -= value;
+					break;
+				case 'mul':
+					state.vars[varName] *= value;
+					break;
+				case 'div':
+					state.vars[varName] /= value;
+					break;
+			}
+		}
+
+		function executeIfStep(step, state) {
+			var varName = step.properties['var'];
+			createVariableIfNeeded(varName, state);
+			const branchName = (state.vars[varName] > step.properties['val'])
+				? 'true'
+				: 'false';
+			state.stack.push(step.branches[branchName].steps);
+			state.stepIndex.push(0);
+		}
+
+		function printState(state) {
+			document.getElementById('state').innerText = JSON.stringify({
+				stepIndex: state.stepIndex,
+				vars: state.vars
+			}, null, 2);
+		}
+
+		function clearLog() {
+			document.getElementById('logs').innerText = '';
+		}
+
+		function printLog(message) {
+			document.getElementById('logs').innerText += message + '\r\n';
+		}
+
+		function play() {
+			if (designer.isReadonly()) {
+				return;
+			}
+			clearLog();
+
+			const definition = designer.getDefinition();
+			designer.setIsReadonly(true);
+
+			const speed = definition.properties['speed'];
+			const state = {
+				stack: [definition.sequence.steps],
+				stepIndex: [0],
+				vars: {}
+			};
+
+			function tick() {
+				const stackLevel = state.stack.length - 1;
+
+				if (state.stack[stackLevel].length === state.stepIndex[stackLevel]) {
+					if (stackLevel > 0) {
+						state.stack.pop();
+						state.stepIndex.pop();
+						tick();
+					} else {
+						designer.setIsReadonly(false);
+						designer.clearSelectedStep();
+					}
+					return;
+				}
+
+				const step = state.stack[stackLevel][state.stepIndex[stackLevel]];
+				state.stepIndex[stackLevel]++;
+
+				switch (step.type) {
+					case 'add':
+					case 'sub':
+					case 'div':
+					case 'mul':
+						executeMathStep(step, state);
+						break;
+					case 'print':
+						printLog(step.properties['val']);
+						break;
+					case 'if':
+						executeIfStep(step, state);
+						break;
+				}
+
+				designer.selectStepById(step.id);
+				printState(state);
+				setTimeout(tick, speed);
+			}
+
+			tick();
+		}
+
+		const startDefinition = {
+			properties: {
+				speed: 300
+			},
+			sequence: {
+				steps: [
+					createMathStep('add', 'Add 50', 'x', 50),
+					createMathStep('mul', 'Mul 2', 'x', 2),
+					createIfStep('x', 50, 'If x > 50',
+						[ createPrintStep('True!') ],
+						[ createPrintStep('False!')]),
+					createMathStep('sub', 'Sub 20', 'x', 20),
+					createPrintStep('The end')
+				]
+			}
+		};
+		const placeholder = document.getElementById('designer');
+		designer = window.sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
+		document.getElementById('play').addEventListener('click', play);
+	</script>
+</body>
+</html>

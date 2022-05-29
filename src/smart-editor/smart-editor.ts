@@ -10,30 +10,35 @@ export class SmartEditor {
 	public static create(parent: HTMLElement, context: DesignerContext): SmartEditor {
 		const view = SmartEditorView.create(parent);
 		const editor = new SmartEditor(view, context);
-		editor.render(null);
+		editor.tryRender(null);
 		context.onSelectedStepChanged.subscribe(s => editor.onSelectedStepChanged(s));
 		context.onDefinitionChanged.subscribe(() => editor.onDefinitionChanged());
 		return editor;
 	}
+
+	private currentStep?: Step | null = undefined;
 
 	private constructor(
 		private readonly view: SmartEditorView,
 		private readonly context: DesignerContext) {
 	}
 
-	private render(step: Step | null) {
-		const editor = step
-			? StepEditor.create(step, this.context.configuration.editors)
-			: GlobalEditor.create(this.context.definition, this.context.configuration.editors);
-		this.view.setView(editor.view);
-	}
-
 	private onSelectedStepChanged(step: Step | null) {
-		this.render(step);
+		this.tryRender(step);
 	}
 
 	private onDefinitionChanged() {
-		this.render(this.context.selectedStep);
+		this.tryRender(this.context.selectedStep);
+	}
+
+	private tryRender(step: Step | null) {
+		if (this.currentStep !== step) {
+			const editor = step
+				? StepEditor.create(step, this.context.configuration.editors)
+				: GlobalEditor.create(this.context.definition, this.context.configuration.editors);
+			this.currentStep = step;
+			this.view.setView(editor.view);
+		}
 	}
 }
 

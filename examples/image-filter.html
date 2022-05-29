@@ -142,7 +142,7 @@
 			}
 		};
 
-		const definition = {
+		const startDefinition = {
 			properties: {},
 			sequence: {
 				steps: [
@@ -152,11 +152,11 @@
 		};
 
 		const placeholder = document.getElementById('designer');
-		const designer = window.sequentialWorkflowDesigner.create(placeholder, definition, configuration);
+		const designer = window.sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
 		designer.onDefinitionChanged.subscribe(() => {
-			renderImage(definition);
+			renderImage(designer.getDefinition());
 		});
-		renderImage(definition);
+		renderImage(startDefinition);
 	</script>
 </body>
 </html>
