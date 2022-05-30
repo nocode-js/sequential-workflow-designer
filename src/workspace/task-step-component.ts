@@ -3,13 +3,14 @@ import { Vector } from '../core/vector';
 import { Sequence, Step, TaskStep } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
-import { ValidationErrorRenderer } from './validation-error-renderer';
+import { InputView } from './views/input-view';
+import { OutputView } from './views/output-view';
+import { ValidationErrorView } from './views/validation-error-view';
 
 const PADDING_X = 12;
 const PADDING_Y = 10;
 const MIN_TEXT_WIDTH = 70;
 const ICON_SIZE = 22;
-const INPUT_SIZE = 6;
 const OUTPUT_SIZE = 4;
 const RECT_RADIUS = 5;
 
@@ -67,7 +68,7 @@ export class TaskStepComponent implements StepComponent {
 		const isValid = this.configuration.validator
 			? this.configuration.validator(this.step)
 			: true;
-		this.view.setIsValidationErrorHidden(isValid);
+		this.view.setIsValid(isValid);
 		return isValid;
 	}
 }
@@ -122,28 +123,14 @@ export class TaskStepComponentView implements ComponentView {
 			width: ICON_SIZE,
 			height: ICON_SIZE,
 		});
-
-		const input = Dom.svg('circle', {
-			class: 'sqd-task-input',
-			cx: boxWidth / 2,
-			xy: 0,
-			r: INPUT_SIZE
-		});
-
-		const output = Dom.svg('circle', {
-			class: 'sqd-task-output',
-			cx: boxWidth / 2,
-			cy: boxHeight,
-			r: OUTPUT_SIZE
-		});
-
 		g.appendChild(icon);
-		g.appendChild(input);
-		g.appendChild(output);
 
-		const validationError = ValidationErrorRenderer.create(g, boxWidth, 0);
+		const inputView = InputView.addRoundInput(g, boxWidth / 2, 0)
+		const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
 
-		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, input, output, validationError);
+		const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
+
+		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView, validationErrorView);
 	}
 
 	private constructor(
@@ -152,9 +139,9 @@ export class TaskStepComponentView implements ComponentView {
 		public readonly height: number,
 		public readonly joinX: number,
 		private readonly rect: SVGRectElement,
-		private readonly input: SVGCircleElement,
-		private readonly output: SVGCircleElement,
-		private readonly validationError: SVGElement) {
+		private readonly inputView: InputView,
+		private readonly outputView: OutputView,
+		private readonly validationErrorView: ValidationErrorView) {
 	}
 
 	public getClientPosition(): Vector {
@@ -167,9 +154,8 @@ export class TaskStepComponentView implements ComponentView {
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		const visibility = isDragging ? 'hidden' : 'visible';
-		Dom.attrs(this.input, { visibility });
-		Dom.attrs(this.output, { visibility });
+		this.inputView.setIsHidden(isDragging);
+		this.outputView.setIsHidden(isDragging);
 	}
 
 	public setIsDisabled(isDisabled: boolean) {
@@ -180,7 +166,7 @@ export class TaskStepComponentView implements ComponentView {
 		Dom.toggleClass(this.rect, isSelected, 'sqd-selected');
 	}
 
-	public setIsValidationErrorHidden(isHidden: boolean) {
-		Dom.toggleClass(this.validationError, isHidden, 'sqd-hidden');
+	public setIsValid(isValid: boolean) {
+		this.validationErrorView.setIsHidden(isValid);
 	}
 }

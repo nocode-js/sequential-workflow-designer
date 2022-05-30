@@ -23,7 +23,7 @@
 			return Math.ceil(Math.random() * 10**16).toString(16);
 		}
 
-		function task(type, name) {
+		function createTaskStep(type, name) {
 			return {
 				id: uid(),
 				componentType: 'task',
@@ -33,7 +33,7 @@
 			};
 		}
 
-		function ifElse(iff, els) {
+		function createIfStep(iff, els) {
 			return {
 				id: uid(),
 				componentType: 'switch',
@@ -51,13 +51,25 @@
 			};
 		}
 
+		function createContainerStep(steps) {
+			return {
+				id: uid(),
+				componentType: 'container',
+				type: 'loop',
+				name: 'Loop',
+				properties: {},
+				sequence: { steps }
+			};
+		}
+
 		function toolboxGroup(name) {
 			return {
 				name,
 				steps: [
-					task('save-file', 'Save file'),
-					task('send-email', 'Send email'),
-					ifElse([], [])
+					createTaskStep('save', 'Save file'),
+					createTaskStep('text', 'Send email'),
+					createIfStep([], []),
+					createContainerStep([])
 				]
 			};
 		}
@@ -114,14 +126,13 @@
 			properties: {},
 			sequence: {
 				steps: [
-					ifElse(
-						[
-							task('save-file', 'Save file')
-						],
-						[
-							task('send-email', 'Send email')
-						]
-					)
+					createIfStep(
+						[ createTaskStep('save', 'Save file') ],
+						[ createTaskStep('text', 'Send email') ]
+					),
+					createContainerStep([
+						createTaskStep('save', 'Save file')
+					])
 				]
 			}
 		};

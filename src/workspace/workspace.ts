@@ -5,7 +5,7 @@ import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence, Step } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
-import { DesignerComponentProvider, DesignerContext } from '../designer-context';
+import { DesignerComponentProvider, DesignerContext, ViewPort } from '../designer-context';
 import { Placeholder, StepComponent, StepComponentState } from './component';
 import { StartStopComponent } from './start-stop-component';
 
@@ -20,14 +20,14 @@ export class Workspace implements DesignerComponentProvider {
 		setTimeout(() => {
 			workspace.render();
 			workspace.view.refreshSize();
-			workspace.center();
+			workspace.resetViewPort();
 		});
 
 		context.setProvider(workspace);
 		context.onDefinitionChanged.subscribe(() => workspace.render());
+		context.onViewPortChanged.subscribe(vp => workspace.onViewPortChanged(vp));
 		context.onSelectedStepChanged.subscribe(s => workspace.onSelectedStepChanged(s));
 		context.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
-		context.onCenterViewPortRequested.subscribe(() => workspace.center());
 
 		workspace.view.bindResize(() => workspace.view.refreshSize());
 		workspace.view.bindMouseDown(e => workspace.onMouseDown(e));
@@ -39,8 +39,6 @@ export class Workspace implements DesignerComponentProvider {
 	public isValid = false;
 
 	private selectedStepComponent: StepComponent | null = null;
-	private position = new Vector(0, 0);
-	private scale = 1.0;
 
 	private constructor(
 		private readonly view: WorkspaceView,
@@ -49,12 +47,6 @@ export class Workspace implements DesignerComponentProvider {
 
 	public revalidate() {
 		this.isValid = this.getRootComponent().validate();
-	}
-
-	public setPosition(position: Vector) {
-		this.position = position;
-		this.view.setPositionAndScale(this.position, this.scale);
-		this.context.notifiyViewPortChanged();
 	}
 
 	public render() {
@@ -80,6 +72,26 @@ export class Workspace implements DesignerComponentProvider {
 		return this.getRootComponent().findById(stepId);
 	}
 
+	public resetViewPort() {
+		const rcv = this.getRootComponent().view;
+		const clientSize = this.view.getClientSize();
+		const x = Math.max(0, (clientSize.x - rcv.width) / 2);
+		const y = Math.max(0, (clientSize.y - rcv.height) / 2);
+
+		this.context.setViewPort(new Vector(x, y), 1);
+	}
+
+	public moveViewPortToStep(stepComponent: StepComponent) {
+		const vp = this.context.viewPort;
+		const componentPosition = stepComponent.view.getClientPosition();
+		const clientSize = this.view.getClientSize();
+
+		const realPos = vp.position.divideByScalar(vp.scale).subtract(componentPosition.divideByScalar(vp.scale));
+		const componentOffset = new Vector(stepComponent.view.width, stepComponent.view.height).divideByScalar(2);
+
+		this.context.animateViewPort(realPos.add(clientSize.divideByScalar(2)).subtract(componentOffset), 1);
+	}
+
 	private onMouseDown(e: MouseEvent) {
 		e.preventDefault();
 		const isMiddleButton = (e.button === 1);
@@ -103,39 +115,31 @@ export class Workspace implements DesignerComponentProvider {
 		if (clickedStep) {
 			this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
 		} else {
-			this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.position, this, this.context));
+			this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.context));
 		}
 	}
 
 	private onWheel(e: WheelEvent) {
-		const mousePoint = new Vector(e.pageX, e.pageY).subtract(this.view.getPosition());
+		const viewPort = this.context.viewPort;
+		const mousePoint = new Vector(e.pageX, e.pageY).subtract(this.view.getClientPosition());
 		// The real point is point on canvas with no scale.
-		const mouseRealPoint = mousePoint.divideByScalar(this.scale).subtract(this.position.divideByScalar(this.scale));
+		const mouseRealPoint = mousePoint.divideByScalar(viewPort.scale).subtract(viewPort.position.divideByScalar(viewPort.scale));
 
 		const wheelDelta = (e.deltaY > 0 ? -0.1 : 0.1);
-		const newScale = Math.min(Math.max(this.scale + wheelDelta, 0.1), 3);
+		const newScale = Math.min(Math.max(viewPort.scale + wheelDelta, 0.1), 3);
 
-		this.position = mouseRealPoint.multiplyByScalar(-newScale).add(mousePoint);
-		this.scale = newScale;
+		const position = mouseRealPoint.multiplyByScalar(-newScale).add(mousePoint);
+		const scale = newScale;
 
-		this.view.setPositionAndScale(this.position, this.scale);
-		this.context.notifiyViewPortChanged();
-	}
-
-	private center() {
-		const rcv = this.getRootComponent().view;
-		const clientSize = this.view.getClientSize();
-		const x = Math.max(0, (clientSize.x - rcv.width) / 2);
-		const y = Math.max(0, (clientSize.y - rcv.height) / 2);
-
-		this.position = new Vector(x, y);
-		this.scale = 1;
-		this.view.setPositionAndScale(this.position, this.scale);
-		this.context.notifiyViewPortChanged();
+		this.context.setViewPort(position, scale);
 	}
 
 	private onIsDraggingChanged(isDragging: boolean) {
 		this.getRootComponent().setIsDragging(isDragging);
+	}
+
+	private onViewPortChanged(viewPort: ViewPort) {
+		this.view.setPositionAndScale(viewPort.position, viewPort.scale);
 	}
 
 	private onSelectedStepChanged(step: Step | null) {
@@ -240,7 +244,7 @@ export class WorkspaceView {
 		});
 	}
 
-	public getPosition(): Vector {
+	public getClientPosition(): Vector {
 		const rect = this.canvas.getBoundingClientRect();
 		return new Vector(rect.x, rect.y);
 	}

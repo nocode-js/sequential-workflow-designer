@@ -2,7 +2,7 @@ import { Dom } from '../core/dom';
 import { SequenceModifier } from '../core/sequence-modifier';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
-import { DesignerConfiguration, StepsConfiguration } from '../designer-configuration';
+import { DesignerConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
 import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
 import { StepComponentFactory } from '../workspace/step-component-factory';

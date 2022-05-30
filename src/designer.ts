@@ -81,4 +81,8 @@ export class Designer {
 	public clearSelectedStep() {
 		this.context.setSelectedStep(null);
 	}
+
+	public moveViewPortToStep(stepId: string) {
+		this.context.moveViewPortToStep(stepId);
+	}
 }

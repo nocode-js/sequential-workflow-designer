@@ -16,12 +16,12 @@ export class ControlBar {
 		const deleteButton = createButton(DELETE_ICON, 'Delete selected step');
 		deleteButton.classList.add('sqd-hidden');
 
-		const centerButton = createButton(CENTER_ICON, 'Center');
+		const resetButton = createButton(CENTER_ICON, 'Reset');
 
 		const moveButton = createButton(MOVE_ICON, 'Turn on/off drag and drop');
 		moveButton.classList.add('sqd-disabled');
 
-		root.appendChild(centerButton);
+		root.appendChild(resetButton);
 		root.appendChild(moveButton);
 		root.appendChild(deleteButton);
 
@@ -31,7 +31,7 @@ export class ControlBar {
 		context.onSelectedStepChanged.subscribe(() => bar.onSelectedStepChanged());
 		context.onIsMoveModeEnabledChanged.subscribe(i => bar.onIsMoveModeEnabledChanged(i));
 		deleteButton.addEventListener('click', e => bar.onDeleteButtonClicked(e));
-		centerButton.addEventListener('click', e => bar.onCenterButtonClicked(e));
+		resetButton.addEventListener('click', e => bar.onResetButtonClicked(e));
 		moveButton.addEventListener('click', e => bar.onMoveButtonClicked(e));
 		return bar;
 	}
@@ -57,24 +57,24 @@ export class ControlBar {
 	private onDeleteButtonClicked(e: MouseEvent) {
 		e.preventDefault();
 		if (this.context.selectedStep) {
-			const component = this.context.getSelectedStepComponent();
+			const parentSequence = this.context.getSelectedStepParentSequence();
 			SequenceModifier.deleteStep(
 				this.context.selectedStep,
-				component.parentSequence);
+				parentSequence);
 
 			this.context.setSelectedStep(null);
 			this.context.notifiyDefinitionChanged();
 		}
 	}
 
-	private onCenterButtonClicked(e: MouseEvent) {
+	private onResetButtonClicked(e: MouseEvent) {
 		e.preventDefault();
-		this.context.centerViewPort();
+		this.context.resetViewPort();
 	}
 
 	private onMoveButtonClicked(e: MouseEvent) {
 		e.preventDefault();
-		this.context.toggleIsDraggingDisabled();
+		this.context.toggleIsMoveModeEnabled();
 	}
 
 	private refreshDeleteButtonVisibility() {

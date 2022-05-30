@@ -1,7 +1,7 @@
-import { Dom } from '../core/dom';
-import { Vector } from '../core/vector';
+import { Dom } from '../../core/dom';
+import { Vector } from '../../core/vector';
 
-export class JoinRenderer {
+export class JoinView {
 
 	public static createStraightJoin(parent: SVGElement, start: Vector, height: number) {
 		const join = Dom.svg('line', {

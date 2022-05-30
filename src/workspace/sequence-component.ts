@@ -3,7 +3,7 @@ import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
 import { Component, ComponentView, Placeholder, StepComponent } from './component';
-import { JoinRenderer } from './join-renderer';
+import { JoinView } from './views/join-view';
 import { SequencePlaceholder } from './sequence-placeholder';
 import { StepComponentFactory } from './step-component-factory';
 
@@ -81,7 +81,7 @@ export class SequenceComponentView implements ComponentView {
 			const component = components[i];
 			const offsetX = maxJoinX - component.view.joinX;
 
-			JoinRenderer.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+			JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 
 			placeholders.push(appendPlaceholder(g,
 				maxJoinX - PH_WIDTH / 2,
@@ -91,7 +91,7 @@ export class SequenceComponentView implements ComponentView {
 			offsetY += component.view.height + PH_HEIGHT;
 		}
 
-		JoinRenderer.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+		JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 		placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
 
 		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);

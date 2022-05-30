@@ -28,15 +28,15 @@
 	<div id="designer"></div>
 
 	<div id="result">
-		<button id="play">Run state machine 🚀</button>
+		<button id="run">Run state machine 🚀</button>
 
 		<h5>State</h5>
 
 		<pre id="state"></pre>
 
-		<h5>Logs</h5>
+		<h5>Console</h5>
 
-		<pre id="logs"></pre>
+		<pre id="console"></pre>
 	</div>
 
 	<script>
@@ -59,11 +59,11 @@
 			};
 		}
 
-		function createPrintStep(message) {
+		function createTextStep(message) {
 			return {
 				id: uid(),
 				componentType: 'task',
-				type: 'print',
+				type: 'text',
 				name: message,
 				properties: {
 					val: message
@@ -88,6 +88,22 @@
 			};
 		}
 
+		function createLoopStep(varName, val, name, steps) {
+			return {
+				id: uid(),
+				componentType: 'container',
+				type: 'loop',
+				name,
+				sequence: {
+					steps: steps || []
+				},
+				properties: {
+					var: varName,
+					val
+				}
+			};
+		}
+
 		function appendTitle(parent, text) {
 			const title = document.createElement('h4');
 			title.innerText = text;
@@ -101,64 +117,8 @@
 			field.querySelector('label').innerText = label;
 			const input = field.querySelector('input');
 			input.value = startValue;
-			field.addEventListener('change', () => set(input.value));
+			field.addEventListener('input', () => set(input.value));
 		}
-
-		const configuration = {
-			toolbox: {
-				isHidden: false,
-				groups: [
-					{
-						name: 'Filters',
-						steps: [
-							createMathStep('add', 'Add', 'x', 10),
-							createMathStep('sub', 'Subtract', 'x', 10),
-							createMathStep('mul', 'Multiply', 'x', 10),
-							createMathStep('div', 'Divide', 'x', 10),
-							createPrintStep('Message!'),
-							createIfStep('x', 10, 'If')
-						]
-					}
-				]
-			},
-
-			steps: {
-				iconUrlProvider: (componentType, type) => {
-					return `./assets/icon-filter.svg`
-				},
-
-				validator: (step) => true
-			},
-
-			editors: {
-				globalEditorProvider: (definition) => {
-					const container = document.createElement('span');
-					appendTitle(container, 'State machine config');
-					appendTextField(container, 'Speed (ms)', definition.properties['speed'],
-							v => definition.properties['speed'] = parseInt(v, 10));
-					return container;
-				},
-				stepEditorProvider: (step) => {
-					const container = document.createElement('div');
-					appendTitle(container, 'Step ' + step.type);
-
-					appendTextField(container, 'Name', step.name,
-						v => {
-							step.name = v;
-							designer.notifiyDefinitionChanged();
-						});
-					if (step.properties['var'] !== undefined) {
-						appendTextField(container, 'Variable', step.properties['var'],
-							v => step.properties['var'] = v);
-					}
-					if (step.properties['val']) {
-						appendTextField(container, 'Value', step.properties['val'],
-							v => step.properties['val'] = parseInt(v, 10));
-					}
-					return container;
-				}
-			}
-		};
 
 		function createVariableIfNeeded(varName, state) {
 			if (!state.vars[varName]) {
@@ -186,14 +146,42 @@
 			}
 		}
 
+		function unwindStack(state) {
+			state.callstack.pop();
+		}
+
 		function executeIfStep(step, state) {
 			var varName = step.properties['var'];
 			createVariableIfNeeded(varName, state);
 			const branchName = (state.vars[varName] > step.properties['val'])
 				? 'true'
 				: 'false';
-			state.stack.push(step.branches[branchName].steps);
-			state.stepIndex.push(0);
+
+			state.callstack.push({
+				steps: step.branches[branchName].steps,
+				index: 0,
+				unwind: unwindStack
+			});
+		}
+
+		function executeLoopStep(step, state) {
+			const varName = step.properties['var'];
+			state.vars[varName] = step.properties['val'];
+
+			const program = {
+				steps: step.sequence.steps,
+				index: 0,
+				unwind: () => {
+					console.log(state.vars[varName]);
+					if (state.vars[varName] > 0) {
+						program.index = 0;
+						state.vars[varName]--;
+					} else {
+						unwindStack(state);
+					}
+				}
+			};
+			state.callstack.push(program);
 		}
 
 		function printState(state) {
@@ -203,37 +191,43 @@
 			}, null, 2);
 		}
 
-		function clearLog() {
-			document.getElementById('logs').innerText = '';
+		function clearConsole() {
+			document.getElementById('console').innerText = '';
 		}
 
-		function printLog(message) {
-			document.getElementById('logs').innerText += message + '\r\n';
+		function printConsole(message) {
+			const time = (new Date()).toLocaleTimeString();
+			document.getElementById('console').innerText += `<${time}> ${message}\r\n`;
 		}
 
-		function play() {
+		function run() {
 			if (designer.isReadonly()) {
 				return;
 			}
-			clearLog();
+			clearConsole();
 
 			const definition = designer.getDefinition();
 			designer.setIsReadonly(true);
 
 			const speed = definition.properties['speed'];
 			const state = {
-				stack: [definition.sequence.steps],
-				stepIndex: [0],
+				callstack: [
+					{
+						steps: definition.sequence.steps,
+						index: 0,
+						unwind: null
+					}
+				],
 				vars: {}
 			};
 
 			function tick() {
-				const stackLevel = state.stack.length - 1;
+				const depth = state.callstack.length - 1;
+				const program = state.callstack[depth];
 
-				if (state.stack[stackLevel].length === state.stepIndex[stackLevel]) {
-					if (stackLevel > 0) {
-						state.stack.pop();
-						state.stepIndex.pop();
+				if (program.steps.length === program.index) {
+					if (depth > 0) {
+						program.unwind(state);
 						tick();
 					} else {
 						designer.setIsReadonly(false);
@@ -242,8 +236,8 @@
 					return;
 				}
 
-				const step = state.stack[stackLevel][state.stepIndex[stackLevel]];
-				state.stepIndex[stackLevel]++;
+				const step = program.steps[program.index];
+				program.index++;
 
 				switch (step.type) {
 					case 'add':
@@ -252,15 +246,19 @@
 					case 'mul':
 						executeMathStep(step, state);
 						break;
-					case 'print':
-						printLog(step.properties['val']);
+					case 'text':
+						printConsole(step.properties['val']);
 						break;
 					case 'if':
 						executeIfStep(step, state);
 						break;
+					case 'loop':
+						executeLoopStep(step, state);
+						break;
 				}
 
 				designer.selectStepById(step.id);
+				designer.moveViewPortToStep(step.id);
 				printState(state);
 				setTimeout(tick, speed);
 			}
@@ -268,25 +266,99 @@
 			tick();
 		}
 
+		const configuration = {
+			toolbox: {
+				isHidden: false,
+				groups: [
+					{
+						name: 'Tasks',
+						steps: [
+							createMathStep('add', 'Add', 'x', 10),
+							createMathStep('sub', 'Subtract', 'x', 10),
+							createMathStep('mul', 'Multiply', 'x', 10),
+							createMathStep('div', 'Divide', 'x', 10),
+							createTextStep('Message!')
+						]
+					},
+					{
+						name: 'Logic',
+						steps: [
+							createIfStep('x', 10, 'If'),
+							createLoopStep('index', 3, 'Loop')
+						]
+					}
+				]
+			},
+
+			steps: {
+				iconUrlProvider: (componentType, type) => {
+					const supportedIcons = ['if', 'loop', 'text'];
+					const fileName = supportedIcons.includes(type) ? type : 'task';
+					return `./assets/icon-${fileName}.svg`;
+				},
+
+				validator: (step) => {
+					return Object.keys(step.properties).every(n => !!step.properties[n]);
+				}
+			},
+
+			editors: {
+				globalEditorProvider: (definition) => {
+					const container = document.createElement('span');
+					appendTitle(container, 'State machine config');
+					appendTextField(container, 'Speed (ms)', definition.properties['speed'],
+							v => definition.properties['speed'] = parseInt(v, 10));
+					return container;
+				},
+				stepEditorProvider: (step) => {
+					const container = document.createElement('div');
+					appendTitle(container, 'Step ' + step.type);
+
+					appendTextField(container, 'Name', step.name,
+						v => {
+							step.name = v;
+							designer.notifiyDefinitionChanged();
+						});
+					if (step.properties['var'] !== undefined) {
+						appendTextField(container, 'Variable', step.properties['var'],
+							v => {
+								step.properties['var'] = v;
+								designer.revalidate();
+							});
+					}
+					if (step.properties['val']) {
+						appendTextField(container, 'Value', step.properties['val'],
+							v => {
+								step.properties['val'] = parseInt(v, 10);
+								designer.revalidate();
+							});
+					}
+					return container;
+				}
+			}
+		};
+
 		const startDefinition = {
 			properties: {
 				speed: 300
 			},
 			sequence: {
 				steps: [
-					createMathStep('add', 'Add 50', 'x', 50),
-					createMathStep('mul', 'Mul 2', 'x', 2),
-					createIfStep('x', 50, 'If x > 50',
-						[ createPrintStep('True!') ],
-						[ createPrintStep('False!')]),
-					createMathStep('sub', 'Sub 20', 'x', 20),
-					createPrintStep('The end')
+					createTextStep('start!'),
+					createLoopStep('index', 4, 'Loop', [
+						createMathStep('add', 'x += 3', 'x', 3),
+						createMathStep('mul', 'x *= 2', 'x', 2),
+						createIfStep('x', 50, 'If x > 50',
+							[ createTextStep('yes!') ],
+							[ createTextStep('no...')]),
+					]),
+					createTextStep('the end')
 				]
 			}
 		};
 		const placeholder = document.getElementById('designer');
 		designer = window.sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
-		document.getElementById('play').addEventListener('click', play);
+		document.getElementById('run').addEventListener('click', run);
 	</script>
 </body>
 </html>

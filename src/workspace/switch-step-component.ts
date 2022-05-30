@@ -3,17 +3,17 @@ import { Vector } from '../core/vector';
 import { Sequence, Step, SwitchStep } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
 import { ComponentView, Placeholder, StepComponent, StepComponentState } from './component';
-import { JoinRenderer } from './join-renderer';
+import { InputView } from './views/input-view';
+import { JoinView } from './views/join-view';
+import { LabelView } from './views/label-view';
+import { RegionView } from './views/region-view';
+import { ValidationErrorView } from './views/validation-error-view';
 import { SequenceComponent } from './sequence-component';
-import { ValidationErrorRenderer } from './validation-error-renderer';
 
-const INPUT_SIZE = 18;
 const MIN_CHILDREN_WIDTH = 50;
 const PADDING_X = 20;
 const PADDING_TOP = 20;
 const LABEL_HEIGHT = 22;
-const LABEL_PADDING_X = 10;
-const MIN_LABEL_WIDTH = 50;
 const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponent implements StepComponent {
@@ -93,7 +93,7 @@ export class SwitchStepComponent implements StepComponent {
 		const isValid = this.configuration.validator
 			? this.configuration.validator(this.step)
 			: true;
-		this.view.setIsValidationErrorHidden(isValid);
+		this.view.setIsValid(isValid);
 		const isChildrenValid = this.view.sequenceComponents.every(c => c.validate());
 		return isValid && isChildrenValid;
 	}
@@ -124,98 +124,46 @@ export class SwitchStepComponentView implements ComponentView {
 			totalX += containerWidths[i];
 		}
 
-		const regions = branchNames.map((branchName, i) => {
+		branchNames.forEach((branchName, i) => {
 			const sequence = sequenceComponents[i];
 			const offsetX = containerOffsets[i];
-			const region = Dom.svg('rect', {
-				class: 'sqd-switch-region',
-				width: containerWidths[i],
-				height: containerHeight,
-				x: offsetX,
-				fill: 'transparent'
-			});
 
-			const branchText = Dom.svg('text', {
-				class: 'sqd-switch-branch-text',
-				x: offsetX + joinXs[i]+ PADDING_X,
-				y: PADDING_TOP + LABEL_HEIGHT * 1.5 + CONNECTION_HEIGHT
-			});
-			branchText.textContent = branchName;
-			g.appendChild(branchText);
-			const branchTextWidth = Math.max(branchText.getBBox().width + LABEL_PADDING_X * 2, MIN_LABEL_WIDTH);
-
-			const branchRect = Dom.svg('rect', {
-				class: 'sqd-switch-branch-rect',
-				x: offsetX + joinXs[i] + PADDING_X - branchTextWidth / 2,
-				y: PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT,
-				width: branchTextWidth,
-				height: LABEL_HEIGHT,
-				rx: 10,
-				ry: 10
-			});
-			g.insertBefore(branchRect, branchText);
+			LabelView.create(g, offsetX + joinXs[i]+ PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT, branchName, 'secondary');
 
 			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
 
 			const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
 			if (fillingHeight > 0) {
-				JoinRenderer.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X, childEndY), fillingHeight);
+				JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X, childEndY), fillingHeight);
 			}
 
 			const sequenceX = offsetX + PADDING_X + Math.max((MIN_CHILDREN_WIDTH - sequence.view.width) / 2, 0);
 			const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
 			Dom.translate(sequence.view.g, sequenceX, sequenceY);
-
-			return region;
 		});
 
+		LabelView.create(g, containerWidths[0], PADDING_TOP, step.name);
 
-		const nameText = Dom.svg('text', {
-			class: 'sqd-switch-name-text',
-			x: containerWidths[0],
-			y: PADDING_TOP + LABEL_HEIGHT / 2
-		});
-		nameText.textContent = step.name;
-		g.appendChild(nameText);
-		const nameWidth = Math.max(nameText.getBBox().width + LABEL_PADDING_X * 2, MIN_LABEL_WIDTH);
+		JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP);
 
-		const nameRect = Dom.svg('rect', {
-			class: 'sqd-switch-name-rect',
-			width: nameWidth,
-			height: LABEL_HEIGHT,
-			x: containerWidths[0] - nameWidth / 2,
-			y: PADDING_TOP,
-			rx: 10,
-			ry: 10
-		});
-		g.insertBefore(nameRect, nameText);
+		const iconUrl = configuration.iconUrlProvider
+			? configuration.iconUrlProvider(step.componentType, step.type)
+			: null;
+		const inputView = InputView.addRectInput(g, containerWidths[0], 0, iconUrl);
 
-		JoinRenderer.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP);
-
-		const inputHalfSize = INPUT_SIZE / 2;
-		const input = Dom.svg('path', {
-			d: `M ${inputHalfSize} 0 L ${INPUT_SIZE} ${inputHalfSize} L ${inputHalfSize} ${INPUT_SIZE} L 0 ${inputHalfSize} Z`,
-			transform: `translate(${containerWidths[0] - INPUT_SIZE / 2} ${-INPUT_SIZE / 2})`,
-			fill: '#FFF',
-			'stroke-width': 2,
-			stroke: '#000'
-		});
-		g.appendChild(input);
-
-		JoinRenderer.createJoins(g,
+		JoinView.createJoins(g,
 			new Vector(containerWidths[0], PADDING_TOP + LABEL_HEIGHT),
 			containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT)));
 
-		JoinRenderer.createJoins(g,
+		JoinView.createJoins(g,
 			new Vector(containerWidths[0], containerHeight),
 			containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
 
-		regions.forEach(region =>
-			g.insertBefore(region, g.firstChild));
+		const regionView = RegionView.create(g, containerWidths, containerHeight);
 
-		const validationError = ValidationErrorRenderer.create(g, containersWidth, 0);
+		const validationErrorView = ValidationErrorView.create(g, containersWidth, 0);
 
-		return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], sequenceComponents, regions, input, validationError);
+		return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], sequenceComponents, regionView, inputView, validationErrorView);
 	}
 
 	private constructor(
@@ -224,14 +172,13 @@ export class SwitchStepComponentView implements ComponentView {
 		public readonly height: number,
 		public readonly joinX: number,
 		public readonly sequenceComponents: SequenceComponent[],
-		private readonly regions: SVGRectElement[],
-		private readonly input: SVGPathElement,
-		private readonly validationError: SVGElement) {
+		private readonly regionView: RegionView,
+		private readonly inputView: InputView,
+		private readonly validationErrorView: ValidationErrorView) {
 	}
 
 	public getClientPosition(): Vector {
-		const rect = this.regions[0].getBoundingClientRect();
-		return new Vector(rect.x, rect.y);
+		return this.regionView.getClientPosition();
 	}
 
 	public containsElement(element: Element): boolean {
@@ -239,22 +186,18 @@ export class SwitchStepComponentView implements ComponentView {
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		Dom.attrs(this.input, {
-			visibility: isDragging ? 'hidden' : 'visible'
-		});
+		this.inputView.setIsHidden(isDragging);
 	}
 
 	public setIsSelected(isSelected: boolean) {
-		this.regions.forEach(region => {
-			Dom.toggleClass(region, isSelected, 'sqd-selected');
-		});
+		this.regionView.setIsSelected(isSelected);
 	}
 
 	public setIsDisabled(isDisabled: boolean) {
 		Dom.toggleClass(this.g, isDisabled, 'sqd-disabled');
 	}
 
-	public setIsValidationErrorHidden(isHidden: boolean) {
-		Dom.toggleClass(this.validationError, isHidden, 'sqd-hidden');
+	public setIsValid(isValid: boolean) {
+		this.validationErrorView.setIsHidden(isValid);
 	}
 }
