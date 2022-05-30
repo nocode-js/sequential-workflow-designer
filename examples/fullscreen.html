@@ -138,7 +138,7 @@
 		};
 
 		const placeholder = document.getElementById('designer');
-		designer = window.sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
+		designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
 		designer.onDefinitionChanged.subscribe(() => {
 			console.log('the definition has changed');
 		});

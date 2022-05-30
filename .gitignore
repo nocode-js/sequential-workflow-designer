@@ -1,4 +1,7 @@
 build/
 node_modules/
-designer.js
 coverage/
+designer.js
+designer.d.ts
+designer.js.map
+

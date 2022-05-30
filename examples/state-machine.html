@@ -172,7 +172,6 @@
 				steps: step.sequence.steps,
 				index: 0,
 				unwind: () => {
-					console.log(state.vars[varName]);
 					if (state.vars[varName] > 0) {
 						program.index = 0;
 						state.vars[varName]--;
@@ -357,7 +356,7 @@
 			}
 		};
 		const placeholder = document.getElementById('designer');
-		designer = window.sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
+		designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
 		document.getElementById('run').addEventListener('click', run);
 	</script>
 </body>

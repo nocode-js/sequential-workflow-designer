@@ -152,7 +152,7 @@
 		};
 
 		const placeholder = document.getElementById('designer');
-		const designer = window.sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
+		const designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
 		designer.onDefinitionChanged.subscribe(() => {
 			renderImage(designer.getDefinition());
 		});

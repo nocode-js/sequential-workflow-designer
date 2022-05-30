@@ -10,7 +10,7 @@ import { SmartEditor } from './smart-editor/smart-editor';
 import { Toolbox } from './toolbox/toolbox';
 import { Workspace } from './workspace/workspace';
 
-export class Designer {
+export default class Designer {
 
 	public static create(container: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
 		const theme = configuration.theme || 'light';

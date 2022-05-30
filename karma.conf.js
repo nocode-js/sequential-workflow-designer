@@ -1,6 +1,9 @@
-module.exports = function(config) {
+module.exports = config => {
 	config.set({
-		frameworks: ['jasmine', 'karma-typescript'],
+		frameworks: [
+			'jasmine',
+			'karma-typescript'
+		],
 		files: [
 			{ pattern: 'src/**/*.ts' }
 		],
@@ -8,7 +11,6 @@ module.exports = function(config) {
 		  'src/**/*.ts': [ 'karma-typescript' ]
 		},
 		exclude: [
-			'src/browser.ts'
 		],
 		karmaTypescriptConfig: {
 			tsconfig: './tsconfig.json',
@@ -19,7 +21,10 @@ module.exports = function(config) {
 			require('karma-typescript'),
 			require('karma-spec-reporter')
 		],
-		reporters: [ 'progress', 'karma-typescript' ],
+		reporters: [
+			'progress',
+			'karma-typescript'
+		],
 		browsers: [
 			'ChromeHeadless'
 			// 'Chrome'
@@ -32,4 +37,4 @@ module.exports = function(config) {
 			}
 		}
 	})
-}
+};
