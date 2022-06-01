@@ -4,9 +4,7 @@ export interface Definition {
 	properties: Properties;
 }
 
-export interface Sequence {
-	steps: Step[];
-}
+export type Sequence = Step[];
 
 export interface Step {
 	id: string;

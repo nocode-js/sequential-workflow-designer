@@ -11,14 +11,12 @@ describe('SwitchStepComponent', () => {
 			name: 'Foo',
 			properties: {},
 			branches: {
-				'true': { steps: [] },
-				'false': { steps: [] }
+				'true': [],
+				'false': []
 			},
 			type: 'foo'
 		};
-		const parentSequence: Sequence = {
-			steps: [step]
-		};
+		const parentSequence: Sequence = [step];
 
 		const parent = Dom.svg('svg');
 		const component = SwitchStepComponent.create(parent, step, parentSequence, {});

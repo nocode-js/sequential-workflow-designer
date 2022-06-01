@@ -12,9 +12,7 @@ describe('TaskStepComponent', () => {
 			properties: {},
 			type: 'foo'
 		};
-		const parentSequence: Sequence = {
-			steps: [step]
-		};
+		const parentSequence: Sequence = [step];
 
 		const parent = Dom.svg('svg');
 		const component = TaskStepComponent.create(parent, step, parentSequence, {});

@@ -33,19 +33,15 @@
 			};
 		}
 
-		function createIfStep(iff, els) {
+		function createIfStep(_true, _false) {
 			return {
 				id: uid(),
 				componentType: 'switch',
 				type: 'if',
 				name: 'If',
 				branches: {
-					'true': {
-						steps: iff
-					},
-					'false': {
-						steps: els
-					}
+					'true': _true,
+					'false': _false
 				},
 				properties: {}
 			};
@@ -58,7 +54,7 @@
 				type: 'loop',
 				name: 'Loop',
 				properties: {},
-				sequence: { steps }
+				sequence: steps
 			};
 		}
 
@@ -124,17 +120,15 @@
 
 		const startDefinition = {
 			properties: {},
-			sequence: {
-				steps: [
-					createIfStep(
-						[ createTaskStep('save', 'Save file') ],
-						[ createTaskStep('text', 'Send email') ]
-					),
-					createContainerStep([
-						createTaskStep('save', 'Save file')
-					])
-				]
-			}
+			sequence: [
+				createIfStep(
+					[ createTaskStep('save', 'Save file') ],
+					[ createTaskStep('text', 'Send email') ]
+				),
+				createContainerStep([
+					createTaskStep('save', 'Save file')
+				])
+			]
 		};
 
 		const placeholder = document.getElementById('designer');

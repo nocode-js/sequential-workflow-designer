@@ -1,7 +1,7 @@
 import { Dom } from '../core/dom';
 import { SequenceModifier } from '../core/sequence-modifier';
 import { Vector } from '../core/vector';
-import { Step } from '../definition';
+import { Sequence, Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
 import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
@@ -122,7 +122,7 @@ class DragStepView {
 		const svg = Dom.svg('svg');
 		layer.appendChild(svg);
 
-		const fakeSequence = { steps: [] };
+		const fakeSequence: Sequence = [];
 		const stepComponent = StepComponentFactory.create(svg, step, fakeSequence, configuration.steps);
 
 		Dom.attrs(svg, {

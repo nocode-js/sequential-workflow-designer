@@ -81,7 +81,7 @@
 			context.drawImage(image, 0, 0);
 			const imageData = context.getImageData(0, 0, image.width, image.height);
 
-			definition.sequence.steps.forEach(step => {
+			definition.sequence.forEach(step => {
 				switch (step.type) {
 					case 'grayscale':
 						grayscaleImage(imageData.data);
@@ -101,7 +101,7 @@
 			context.putImageData(imageData, 0, 0);
 		}
 
-		function task(type, name) {
+		function createTaskStep(type, name) {
 			return {
 				id: '0x0',
 				componentType: 'task',
@@ -118,10 +118,10 @@
 					{
 						name: 'Filters',
 						steps: [
-							task('grayscale', 'Grayscale'),
-							task('reverse-color', 'Reverse color'),
-							task('contrast', 'Contrast'),
-							task('shift-color', 'Shift color')
+							createTaskStep('grayscale', 'Grayscale'),
+							createTaskStep('reverse-color', 'Reverse color'),
+							createTaskStep('contrast', 'Contrast'),
+							createTaskStep('shift-color', 'Shift color')
 						]
 					}
 				]
@@ -144,11 +144,9 @@
 
 		const startDefinition = {
 			properties: {},
-			sequence: {
-				steps: [
-					task('contrast', 'Contrast')
-				]
-			}
+			sequence: [
+				createTaskStep('contrast', 'Contrast')
+			]
 		};
 
 		const placeholder = document.getElementById('designer');

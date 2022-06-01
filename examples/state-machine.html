@@ -66,7 +66,7 @@
 				type: 'text',
 				name: message,
 				properties: {
-					val: message
+					text: message
 				}
 			};
 		}
@@ -78,8 +78,8 @@
 				type: 'if',
 				name,
 				branches: {
-					'true': { steps: trueSteps || [] },
-					'false': { steps: falseSteps || [] }
+					'true': trueSteps || [],
+					'false': falseSteps || []
 				},
 				properties: {
 					var: varName,
@@ -94,9 +94,7 @@
 				componentType: 'container',
 				type: 'loop',
 				name,
-				sequence: {
-					steps: steps || []
-				},
+				sequence: steps || [],
 				properties: {
 					var: varName,
 					val
@@ -158,7 +156,7 @@
 				: 'false';
 
 			state.callstack.push({
-				steps: step.branches[branchName].steps,
+				sequence: step.branches[branchName],
 				index: 0,
 				unwind: unwindStack
 			});
@@ -169,7 +167,7 @@
 			state.vars[varName] = step.properties['val'];
 
 			const program = {
-				steps: step.sequence.steps,
+				sequence: step.sequence,
 				index: 0,
 				unwind: () => {
 					if (state.vars[varName] > 0) {
@@ -194,7 +192,7 @@
 			document.getElementById('console').innerText = '';
 		}
 
-		function printConsole(message) {
+		function printText(message) {
 			const time = (new Date()).toLocaleTimeString();
 			document.getElementById('console').innerText += `<${time}> ${message}\r\n`;
 		}
@@ -212,7 +210,7 @@
 			const state = {
 				callstack: [
 					{
-						steps: definition.sequence.steps,
+						sequence: definition.sequence,
 						index: 0,
 						unwind: null
 					}
@@ -224,7 +222,7 @@
 				const depth = state.callstack.length - 1;
 				const program = state.callstack[depth];
 
-				if (program.steps.length === program.index) {
+				if (program.sequence.length === program.index) {
 					if (depth > 0) {
 						program.unwind(state);
 						tick();
@@ -235,7 +233,7 @@
 					return;
 				}
 
-				const step = program.steps[program.index];
+				const step = program.sequence[program.index];
 				program.index++;
 
 				switch (step.type) {
@@ -246,7 +244,7 @@
 						executeMathStep(step, state);
 						break;
 					case 'text':
-						printConsole(step.properties['val']);
+						printText(step.properties['text']);
 						break;
 					case 'if':
 						executeIfStep(step, state);
@@ -332,6 +330,13 @@
 								designer.revalidate();
 							});
 					}
+					if (step.properties['text']) {
+						appendTextField(container, 'Text', step.properties['text'],
+							v => {
+								step.properties['text'] = v;
+								designer.revalidate();
+							});
+					}
 					return container;
 				}
 			}
@@ -341,19 +346,17 @@
 			properties: {
 				speed: 300
 			},
-			sequence: {
-				steps: [
-					createTextStep('start!'),
-					createLoopStep('index', 4, 'Loop', [
-						createMathStep('add', 'x += 3', 'x', 3),
-						createMathStep('mul', 'x *= 2', 'x', 2),
-						createIfStep('x', 50, 'If x > 50',
-							[ createTextStep('yes!') ],
-							[ createTextStep('no...')]),
-					]),
-					createTextStep('the end')
-				]
-			}
+			sequence: [
+				createTextStep('start!'),
+				createLoopStep('index', 4, 'Loop', [
+					createMathStep('add', 'x += 3', 'x', 3),
+					createMathStep('mul', 'x *= 2', 'x', 2),
+					createIfStep('x', 50, 'If x > 50',
+						[ createTextStep('yes!') ],
+						[ createTextStep('no...')]),
+				]),
+				createTextStep('the end')
+			]
 		};
 		const placeholder = document.getElementById('designer');
 		designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);

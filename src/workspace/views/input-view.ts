@@ -7,7 +7,7 @@ const ROUND_INPUT_SIZE = 7;
 
 export class InputView {
 
-	public static addRectInput(parent: SVGElement, x: number, y: number, iconUrl: string | null): InputView {
+	public static createRectInput(parent: SVGElement, x: number, y: number, iconUrl: string | null): InputView {
 		const g = Dom.svg('g');
 		parent.appendChild(g);
 
@@ -36,7 +36,7 @@ export class InputView {
 		return new InputView(g);
 	}
 
-	public static addRoundInput(parent: SVGElement, x: number, y: number) {
+	public static createRoundInput(parent: SVGElement, x: number, y: number) {
 		const circle = Dom.svg('circle', {
 			class: 'sqd-input',
 			cx: x,
