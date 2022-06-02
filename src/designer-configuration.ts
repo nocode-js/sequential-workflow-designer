@@ -26,6 +26,10 @@ export interface StepsConfiguration {
 
 export interface EditorsConfiguration {
 	isHidden?: boolean;
-	stepEditorProvider: (step: Step) => HTMLElement;
-	globalEditorProvider: (definition: Definition) => HTMLElement;
+	stepEditorProvider: StepEditorProvider;
+	globalEditorProvider: GlobalEditorProvider;
 }
+
+export type StepEditorProvider = (step: Step) => HTMLElement;
+
+export type GlobalEditorProvider = (definition: Definition) => HTMLElement;

@@ -1,8 +1,7 @@
-import { Dom } from '../core/dom';
 import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { EditorView } from './editor';
 import { GlobalEditor } from './global-editor';
+import { SmartEditorView } from './smart-editor-view';
 import { StepEditor } from './step-editor';
 
 export class SmartEditor {
@@ -34,35 +33,10 @@ export class SmartEditor {
 	private tryRender(step: Step | null) {
 		if (this.currentStep !== step) {
 			const editor = step
-				? StepEditor.create(step, this.context.configuration.editors)
-				: GlobalEditor.create(this.context.definition, this.context.configuration.editors);
+				? StepEditor.create(step, this.context.configuration.editors.stepEditorProvider)
+				: GlobalEditor.create(this.context.definition, this.context.configuration.editors.globalEditorProvider);
 			this.currentStep = step;
 			this.view.setView(editor.view);
 		}
-	}
-}
-
-class SmartEditorView {
-
-	public static create(parent: HTMLElement): SmartEditorView {
-		const root = Dom.element('div', {
-			class: 'sqd-smart-editor'
-		});
-		parent.appendChild(root);
-		return new SmartEditorView(root);
-	}
-
-	private view?: EditorView;
-
-	private constructor(
-		private readonly editor: HTMLElement) {
-	}
-
-	public setView(view: EditorView) {
-		if (this.view) {
-			this.editor.removeChild(this.view.root);
-		}
-		this.editor.appendChild(view.root);
-		this.view = view;
 	}
 }

@@ -4,7 +4,7 @@ import { TaskStepComponent } from './task-step-component';
 
 describe('TaskStepComponent', () => {
 
-	it('creates component', () => {
+	it('create() creates component', () => {
 		const step: TaskStep = {
 			id: '0x0',
 			componentType: ComponentType.task,
