@@ -15,8 +15,9 @@ describe('ContainerStepComponentView', () => {
 		};
 
 		const parent = Dom.svg('svg');
-		const component = ContainerStepComponentView.create(parent, step, {});
+		const view = ContainerStepComponentView.create(parent, step, {});
 
-		expect(component).toBeDefined();
+		expect(view).toBeDefined();
+		expect(parent.children.length).not.toEqual(0);
 	});
 });

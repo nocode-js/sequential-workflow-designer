@@ -1,16 +1,16 @@
 import { Dom } from '../core/dom';
 import { createDesignerContextFake } from '../designer-context-faker';
-import { SmartEditor } from './smart-editor';
+import { Workspace } from './workspace';
 
-describe('SmartEditor', () => {
+describe('Workspace', () => {
 
-	it('create() creates editor', () => {
+	it('create() creates bar', () => {
 		const parent = Dom.element('div');
 		const context = createDesignerContextFake();
 
-		const editor = SmartEditor.create(parent, context);
+		const bar = Workspace.create(parent, context);
 
-		expect(editor).toBeDefined();
+		expect(bar).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);
 	});
 });

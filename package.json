@@ -5,7 +5,7 @@
 	"types": "designer.d.ts",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/b4rtaz/svg-workflow-designer.git"
+		"url": "https://github.com/b4rtaz/sequential-workflow-designer.git"
 	},
 	"files": [
 		"designer.js",

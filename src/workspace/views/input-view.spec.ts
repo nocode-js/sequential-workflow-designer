@@ -10,12 +10,14 @@ describe('InputView', () => {
 	});
 
 	it('createRectInput() creates view', () => {
-		const component = InputView.createRectInput(parent, 10, 10, null);
-		expect(component).toBeDefined();
+		const view = InputView.createRectInput(parent, 10, 10, null);
+		expect(view).toBeDefined();
+		expect(parent.children.length).not.toEqual(0);
 	});
 
 	it('createRoundInput() creates view', () => {
-		const component = InputView.createRoundInput(parent, 10, 10);
-		expect(component).toBeDefined();
+		const view = InputView.createRoundInput(parent, 10, 10);
+		expect(view).toBeDefined();
+		expect(parent.children.length).not.toEqual(0);
 	});
 });

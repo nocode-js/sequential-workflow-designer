@@ -1,16 +1,16 @@
 import { Dom } from '../core/dom';
 import { createDesignerContextFake } from '../designer-context-faker';
-import { SmartEditor } from './smart-editor';
+import { ToolboxView } from './toolbox-view';
 
-describe('SmartEditor', () => {
+describe('ToolboxView', () => {
 
-	it('create() creates editor', () => {
+	it('create() creates view', () => {
 		const parent = Dom.element('div');
 		const context = createDesignerContextFake();
 
-		const editor = SmartEditor.create(parent, context);
+		const view = ToolboxView.create(parent, context);
 
-		expect(editor).toBeDefined();
+		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);
 	});
 });

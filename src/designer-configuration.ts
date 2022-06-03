@@ -20,9 +20,13 @@ export interface ToolboxGroupConfiguration {
 }
 
 export interface StepsConfiguration {
-	iconUrlProvider?: (componentType: ComponentType, type: string) => string | null;
-	validator?: (step: Step) => boolean;
+	iconUrlProvider?: StepIconUrlProvider;
+	validator?: StepValidator;
 }
+
+export type StepIconUrlProvider = (componentType: ComponentType, type: string) => string | null;
+
+export type StepValidator = (step: Step) => boolean;
 
 export interface EditorsConfiguration {
 	isHidden?: boolean;

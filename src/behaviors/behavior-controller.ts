@@ -53,24 +53,33 @@ export class BehaviorController {
 	}
 
 	private move(position: Vector) {
-		if (this.state) {
-			const delta = this.state.startPosition.subtract(position);
+		if (!this.state) {
+			throw new Error('State is empty');
+		}
 
-			const newBehavior = this.state.behavior.onMove(delta);
-			if (newBehavior) {
-				this.state.behavior.onEnd();
+		const delta = this.state.startPosition.subtract(position);
 
-				this.state.behavior = newBehavior;
-				this.state.startPosition = position;
-				this.state.behavior.onStart(this.state.startPosition);
-			}
+		const newBehavior = this.state.behavior.onMove(delta);
+		if (newBehavior) {
+			this.state.behavior.onEnd();
+
+			this.state.behavior = newBehavior;
+			this.state.startPosition = position;
+			this.state.behavior.onStart(this.state.startPosition);
 		}
 	}
 
 	private stop() {
-		if (this.state) {
-			this.state.behavior.onEnd();
-			this.state = undefined;
+		if (!this.state) {
+			throw new Error('State is empty');
 		}
+
+		window.removeEventListener('mousemove', this.onMouseMoveHandler);
+		window.removeEventListener('touchmove', this.onTouchMoveHandler);
+		window.removeEventListener('mouseup', this.onMouseUpHandler);
+		window.removeEventListener('touchend', this.onTouchEndHandler);
+
+		this.state.behavior.onEnd();
+		this.state = undefined;
 	}
 }
