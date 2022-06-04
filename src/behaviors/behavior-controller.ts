@@ -3,7 +3,6 @@ import { Behavior } from './behavior';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 
 export class BehaviorController {
-
 	private readonly onMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
 	private readonly onTouchMoveHandler = (e: TouchEvent) => this.onTouchMove(e);
 	private readonly onMouseUpHandler = (e: MouseEvent) => this.onMouseUp(e);

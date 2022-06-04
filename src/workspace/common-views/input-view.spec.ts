@@ -2,7 +2,6 @@ import { Dom } from '../../core/dom';
 import { InputView } from './input-view';
 
 describe('InputView', () => {
-
 	let parent: SVGElement;
 
 	beforeEach(() => {

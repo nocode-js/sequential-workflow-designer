@@ -3,7 +3,6 @@ import { ComponentType, ContainerStep, Sequence } from '../../definition';
 import { ContainerStepComponent } from './container-step-component';
 
 describe('ContainerStepComponent', () => {
-
 	it('create() creates component', () => {
 		const step: ContainerStep = {
 			id: '0x0',

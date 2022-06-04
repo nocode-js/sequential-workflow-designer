@@ -1,7 +1,6 @@
 import { Dom } from './dom';
 
 describe('Dom', () => {
-
 	it('svg() creates SVG element', () => {
 		const s = Dom.svg('svg', {
 			class: 'foo bar'

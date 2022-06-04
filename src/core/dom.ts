@@ -1,12 +1,10 @@
-
 export interface Attributes {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[name: string]: any;
 }
 
 export class Dom {
-
-	public static svg<K extends keyof SVGElementTagNameMap>(name: K, attributes?: Attributes)
-			: SVGElementTagNameMap[K] {
+	public static svg<K extends keyof SVGElementTagNameMap>(name: K, attributes?: Attributes): SVGElementTagNameMap[K] {
 		const element = document.createElementNS('http://www.w3.org/2000/svg', name);
 		if (attributes) {
 			Dom.attrs(element, attributes);
@@ -25,8 +23,7 @@ export class Dom {
 		});
 	}
 
-	public static element<T extends keyof HTMLElementTagNameMap>(name: T, attributes?: Attributes)
-		: HTMLElementTagNameMap[T] {
+	public static element<T extends keyof HTMLElementTagNameMap>(name: T, attributes?: Attributes): HTMLElementTagNameMap[T] {
 		const element = document.createElement(name);
 		if (attributes) {
 			Dom.attrs(element, attributes);

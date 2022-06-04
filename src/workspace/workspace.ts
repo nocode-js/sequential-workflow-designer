@@ -9,7 +9,6 @@ import { StartStopComponent } from './start-stop/start-stop-component';
 import { WorkspaceView } from './workspace-view';
 
 export class Workspace implements DesignerComponentProvider {
-
 	public static create(parent: HTMLElement, context: DesignerContext): Workspace {
 		const view = WorkspaceView.create(parent, context.configuration.steps);
 
@@ -37,10 +36,7 @@ export class Workspace implements DesignerComponentProvider {
 
 	private selectedStepComponent: StepComponent | null = null;
 
-	private constructor(
-		private readonly view: WorkspaceView,
-		private readonly context: DesignerContext) {
-	}
+	private constructor(private readonly view: WorkspaceView, private readonly context: DesignerContext) {}
 
 	public revalidate() {
 		this.isValid = this.getRootComponent().validate();
@@ -91,7 +87,7 @@ export class Workspace implements DesignerComponentProvider {
 
 	private onMouseDown(e: MouseEvent) {
 		e.preventDefault();
-		const isMiddleButton = (e.button === 1);
+		const isMiddleButton = e.button === 1;
 		this.startBehavior(e.target as Element, readMousePosition(e), isMiddleButton);
 	}
 
@@ -105,9 +101,8 @@ export class Workspace implements DesignerComponentProvider {
 	}
 
 	private startBehavior(target: Element, position: Vector, forceMoveMode: boolean) {
-		const clickedStep = !forceMoveMode && !this.context.isMoveModeEnabled
-			? this.getRootComponent().findByElement(target as Element)
-			: null;
+		const clickedStep =
+			!forceMoveMode && !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(target as Element) : null;
 
 		if (clickedStep) {
 			this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
@@ -122,7 +117,7 @@ export class Workspace implements DesignerComponentProvider {
 		// The real point is point on canvas with no scale.
 		const mouseRealPoint = mousePoint.divideByScalar(viewPort.scale).subtract(viewPort.position.divideByScalar(viewPort.scale));
 
-		const wheelDelta = (e.deltaY > 0 ? -0.1 : 0.1);
+		const wheelDelta = e.deltaY > 0 ? -0.1 : 0.1;
 		const newScale = Math.min(Math.max(viewPort.scale + wheelDelta, 0.1), 3);
 
 		const position = mouseRealPoint.multiplyByScalar(-newScale).add(mousePoint);

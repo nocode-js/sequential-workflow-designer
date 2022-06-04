@@ -5,7 +5,6 @@ interface Foo {
 }
 
 describe('ObjectCloner', () => {
-
 	let i: Foo;
 
 	beforeEach(() => {
@@ -26,6 +25,7 @@ describe('ObjectCloner', () => {
 
 	it('deepClone() clones the instance of an object even if structuredClone() is not supported', () => {
 		const orig = window.structuredClone;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		window.structuredClone = undefined as any;
 
 		const parseSpy = spyOn(JSON, 'parse').and.callThrough();

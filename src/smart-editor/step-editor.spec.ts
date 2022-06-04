@@ -2,7 +2,6 @@ import { ComponentType, Step } from '../definition';
 import { StepEditor } from './step-editor';
 
 describe('StepEditor', () => {
-
 	it('create() creates editor', () => {
 		const step: Step = {
 			componentType: ComponentType.container,

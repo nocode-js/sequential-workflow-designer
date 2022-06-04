@@ -4,8 +4,12 @@ import { Placeholder, StepComponent, StepComponentState } from '../component';
 import { ContainerStepComponentView } from './container-step-component-view';
 
 export class ContainerStepComponent implements StepComponent {
-
-	public static create(parent: SVGElement, step: ContainerStep, parentSequence: Sequence, configuration: StepsConfiguration): ContainerStepComponent {
+	public static create(
+		parent: SVGElement,
+		step: ContainerStep,
+		parentSequence: Sequence,
+		configuration: StepsConfiguration
+	): ContainerStepComponent {
 		const view = ContainerStepComponentView.create(parent, step, configuration);
 		return new ContainerStepComponent(view, step, parentSequence, configuration);
 	}
@@ -16,8 +20,8 @@ export class ContainerStepComponent implements StepComponent {
 		public readonly view: ContainerStepComponentView,
 		public readonly step: Step,
 		public readonly parentSequence: Sequence,
-		private readonly configuration: StepsConfiguration) {
-	}
+		private readonly configuration: StepsConfiguration
+	) {}
 
 	public findByElement(element: Element): StepComponent | null {
 		const sc = this.view.sequenceComponent.findByElement(element);
@@ -70,9 +74,7 @@ export class ContainerStepComponent implements StepComponent {
 	}
 
 	public validate(): boolean {
-		const isValid = this.configuration.validator
-			? this.configuration.validator(this.step)
-			: true;
+		const isValid = this.configuration.validator ? this.configuration.validator(this.step) : true;
 		this.view.setIsValid(isValid);
 		return isValid && this.view.sequenceComponent.validate();
 	}

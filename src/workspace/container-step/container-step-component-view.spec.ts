@@ -3,7 +3,6 @@ import { ComponentType, ContainerStep } from '../../definition';
 import { ContainerStepComponentView } from './container-step-component-view';
 
 describe('ContainerStepComponentView', () => {
-
 	it('creates view', () => {
 		const step: ContainerStep = {
 			id: '0x0',

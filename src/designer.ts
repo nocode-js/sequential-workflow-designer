@@ -11,7 +11,6 @@ import { Toolbox } from './toolbox/toolbox';
 import { Workspace } from './workspace/workspace';
 
 export default class Designer {
-
 	public static create(container: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
 		const theme = configuration.theme || 'light';
 		const definition = ObjectCloner.deepClone(startDefinition);
@@ -39,10 +38,7 @@ export default class Designer {
 		return designer;
 	}
 
-	private constructor(
-		private readonly context: DesignerContext,
-		private readonly workspace: Workspace) {
-	}
+	private constructor(private readonly context: DesignerContext, private readonly workspace: Workspace) {}
 
 	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
 

@@ -4,7 +4,6 @@ import { createStepStub } from '../../test-tools/stubs';
 import { SwitchStepComponent } from './switch-step-component';
 
 describe('SwitchStepComponent', () => {
-
 	it('creates component', () => {
 		const step: SwitchStep = {
 			id: '0x0',
@@ -12,8 +11,8 @@ describe('SwitchStepComponent', () => {
 			name: 'Foo',
 			properties: {},
 			branches: {
-				'true': [ createStepStub() ],
-				'false': [ createStepStub() ]
+				true: [createStepStub()],
+				false: [createStepStub()]
 			},
 			type: 'foo'
 		};

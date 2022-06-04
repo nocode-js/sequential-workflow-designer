@@ -1,10 +1,9 @@
 import { animate } from './animation';
 
 describe('animate()', () => {
-
-	it('animate() animates correctly', (done) => {
+	it('animate() animates correctly', done => {
 		const interval = 200;
-		let startTime = Date.now();
+		const startTime = Date.now();
 		let count = 0;
 		let lastProgress = 0;
 
@@ -26,4 +25,3 @@ describe('animate()', () => {
 		});
 	});
 });
-

@@ -5,7 +5,6 @@ import { SmartEditorView } from './smart-editor-view';
 import { StepEditor } from './step-editor';
 
 export class SmartEditor {
-
 	public static create(parent: HTMLElement, context: DesignerContext): SmartEditor {
 		const view = SmartEditorView.create(parent);
 		const editor = new SmartEditor(view, context);
@@ -17,10 +16,7 @@ export class SmartEditor {
 
 	private currentStep?: Step | null = undefined;
 
-	private constructor(
-		private readonly view: SmartEditorView,
-		private readonly context: DesignerContext) {
-	}
+	private constructor(private readonly view: SmartEditorView, private readonly context: DesignerContext) {}
 
 	private onSelectedStepChanged(step: Step | null) {
 		this.tryRender(step);

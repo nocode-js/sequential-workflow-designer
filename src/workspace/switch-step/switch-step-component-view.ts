@@ -17,7 +17,6 @@ const LABEL_HEIGHT = 22;
 const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponentView implements ComponentView {
-
 	public static create(parent: SVGElement, step: SwitchStep, configuration: StepsConfiguration): SwitchStepComponentView {
 		const g = Dom.svg('g', {
 			class: 'sqd-switch-group'
@@ -45,7 +44,7 @@ export class SwitchStepComponentView implements ComponentView {
 			const sequence = sequenceComponents[i];
 			const offsetX = containerOffsets[i];
 
-			LabelView.create(g, offsetX + joinXs[i]+ PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT, branchName, 'secondary');
+			LabelView.create(g, offsetX + joinXs[i] + PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT, branchName, 'secondary');
 
 			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
 
@@ -63,24 +62,37 @@ export class SwitchStepComponentView implements ComponentView {
 
 		JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP);
 
-		const iconUrl = configuration.iconUrlProvider
-			? configuration.iconUrlProvider(step.componentType, step.type)
-			: null;
+		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 		const inputView = InputView.createRectInput(g, containerWidths[0], 0, iconUrl);
 
-		JoinView.createJoins(g,
+		JoinView.createJoins(
+			g,
 			new Vector(containerWidths[0], PADDING_TOP + LABEL_HEIGHT),
-			containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT)));
+			containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT))
+		);
 
-		JoinView.createJoins(g,
+		JoinView.createJoins(
+			g,
 			new Vector(containerWidths[0], containerHeight),
-			containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
+			containerOffsets.map(
+				(o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)
+			)
+		);
 
 		const regionView = RegionView.create(g, containerWidths, containerHeight);
 
 		const validationErrorView = ValidationErrorView.create(g, containersWidth, 0);
 
-		return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], sequenceComponents, regionView, inputView, validationErrorView);
+		return new SwitchStepComponentView(
+			g,
+			containersWidth,
+			containerHeight,
+			containerWidths[0],
+			sequenceComponents,
+			regionView,
+			inputView,
+			validationErrorView
+		);
 	}
 
 	private constructor(
@@ -91,8 +103,8 @@ export class SwitchStepComponentView implements ComponentView {
 		public readonly sequenceComponents: SequenceComponent[],
 		private readonly regionView: RegionView,
 		private readonly inputView: InputView,
-		private readonly validationErrorView: ValidationErrorView) {
-	}
+		private readonly validationErrorView: ValidationErrorView
+	) {}
 
 	public getClientPosition(): Vector {
 		return this.regionView.getClientPosition();

@@ -15,7 +15,6 @@ const PADDING_X = 20;
 const LABEL_HEIGHT = 22;
 
 export class ContainerStepComponentView implements ComponentView {
-
 	public static create(parent: SVGElement, step: ContainerStep, configuration: StepsConfiguration): ContainerStepComponentView {
 		const g = Dom.svg('g');
 		parent.appendChild(g);
@@ -29,9 +28,7 @@ export class ContainerStepComponentView implements ComponentView {
 
 		LabelView.create(g, width / 2, PADDING_TOP, step.name);
 
-		const iconUrl = configuration.iconUrlProvider
-			? configuration.iconUrlProvider(step.componentType, step.type)
-			: null;
+		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 		const inputView = InputView.createRectInput(g, width / 2, 0, iconUrl);
 
 		JoinView.createStraightJoin(g, new Vector(width / 2, 0), PADDING_TOP);
@@ -51,8 +48,8 @@ export class ContainerStepComponentView implements ComponentView {
 		public readonly sequenceComponent: SequenceComponent,
 		private readonly inputView: InputView,
 		private readonly regionView: RegionView,
-		private readonly validationErrorView: ValidationErrorView) {
-	}
+		private readonly validationErrorView: ValidationErrorView
+	) {}
 
 	public getClientPosition(): Vector {
 		return this.regionView.getClientPosition();

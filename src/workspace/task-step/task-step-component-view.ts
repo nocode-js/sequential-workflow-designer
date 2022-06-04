@@ -14,7 +14,6 @@ const ICON_SIZE = 22;
 const RECT_RADIUS = 5;
 
 export class TaskStepComponentView implements ComponentView {
-
 	public static create(parent: SVGElement, step: TaskStep, configuration: StepsConfiguration): TaskStepComponentView {
 		const g = Dom.svg('g', {
 			class: 'sqd-task-group'
@@ -24,7 +23,7 @@ export class TaskStepComponentView implements ComponentView {
 		const boxHeight = ICON_SIZE + PADDING_Y * 2;
 
 		const text = Dom.svg('text', {
-			x: (ICON_SIZE + PADDING_X * 2),
+			x: ICON_SIZE + PADDING_X * 2,
 			y: boxHeight / 2,
 			class: 'sqd-task-text'
 		});
@@ -45,31 +44,27 @@ export class TaskStepComponentView implements ComponentView {
 		});
 		g.insertBefore(rect, text);
 
-		const iconUrl = configuration.iconUrlProvider
-			? configuration.iconUrlProvider(step.componentType, step.type)
-			: null;
+		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 		const icon = iconUrl
 			? Dom.svg('image', {
-				href: iconUrl
-			})
+					href: iconUrl
+			  })
 			: Dom.svg('rect', {
-				class: 'sqd-task-empty-icon',
-				rx: 4,
-				ry: 4
-			});
+					class: 'sqd-task-empty-icon',
+					rx: 4,
+					ry: 4
+			  });
 		Dom.attrs(icon, {
 			x: PADDING_X,
 			y: PADDING_Y,
 			width: ICON_SIZE,
-			height: ICON_SIZE,
+			height: ICON_SIZE
 		});
 		g.appendChild(icon);
 
-		const inputView = InputView.createRoundInput(g, boxWidth / 2, 0)
+		const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 		const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
-
 		const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
-
 		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView, validationErrorView);
 	}
 
@@ -81,8 +76,8 @@ export class TaskStepComponentView implements ComponentView {
 		private readonly rect: SVGRectElement,
 		private readonly inputView: InputView,
 		private readonly outputView: OutputView,
-		private readonly validationErrorView: ValidationErrorView) {
-	}
+		private readonly validationErrorView: ValidationErrorView
+	) {}
 
 	public getClientPosition(): Vector {
 		const rect = this.rect.getBoundingClientRect();

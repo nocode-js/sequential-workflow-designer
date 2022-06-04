@@ -9,8 +9,7 @@ export function createDesignerConfigurationStub(): DesignerConfiguration {
 			globalEditorProvider: () => document.createElement('div'),
 			stepEditorProvider: () => document.createElement('div')
 		},
-		steps: {
-		},
+		steps: {},
 		toolbox: {
 			groups: []
 		}
@@ -35,8 +34,5 @@ export function createDefinitionStub(): Definition {
 }
 
 export function createDesignerContextStub(): DesignerContext {
-	return new DesignerContext(
-		createDefinitionStub(),
-		new BehaviorController(),
-		createDesignerConfigurationStub());
+	return new DesignerContext(createDefinitionStub(), new BehaviorController(), createDesignerConfigurationStub());
 }

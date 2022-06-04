@@ -3,7 +3,6 @@ import { DesignerContext } from '../designer-context';
 import { Placeholder } from '../workspace/component';
 
 export class PlaceholderFinder {
-
 	public static create(placeholders: Placeholder[], context: DesignerContext): PlaceholderFinder {
 		const checker = new PlaceholderFinder(placeholders, context);
 		context.onViewPortChanged.subscribe(checker.clearCacheHandler);
@@ -14,15 +13,12 @@ export class PlaceholderFinder {
 	private readonly clearCacheHandler = () => this.clearCache();
 
 	private cache?: {
-		placeholder: Placeholder,
-		lt: Vector, // left top
-		br: Vector // bottom right
+		placeholder: Placeholder;
+		lt: Vector; // left top
+		br: Vector; // bottom right
 	}[];
 
-	private constructor(
-		private readonly placeholders: Placeholder[],
-		private readonly context: DesignerContext) {
-	}
+	private constructor(private readonly placeholders: Placeholder[], private readonly context: DesignerContext) {}
 
 	public find(vLt: Vector, vWidth: number, vHeight: number): Placeholder | undefined {
 		if (!this.cache) {
@@ -40,9 +36,7 @@ export class PlaceholderFinder {
 		const vR = vLt.x + vWidth;
 		const vB = vLt.y + vHeight;
 		return this.cache.find(p => {
-			return (
-				Math.max(vLt.x, p.lt.x) < Math.min(vR, p.br.x) &&
-				Math.max(vLt.y, p.lt.y) < Math.min(vB, p.br.y));
+			return Math.max(vLt.x, p.lt.x) < Math.min(vR, p.br.x) && Math.max(vLt.y, p.lt.y) < Math.min(vB, p.br.y);
 		})?.placeholder;
 	}
 

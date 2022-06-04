@@ -5,7 +5,6 @@ const LABEL_PADDING_X = 10;
 const MIN_LABEL_WIDTH = 50;
 
 export class LabelView {
-
 	public static create(parent: SVGElement, x: number, y: number, text: string, theme?: string) {
 		const nameText = Dom.svg('text', {
 			class: 'sqd-label-text',

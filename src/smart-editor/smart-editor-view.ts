@@ -2,7 +2,6 @@ import { Dom } from '../core/dom';
 import { EditorView } from './editor';
 
 export class SmartEditorView {
-
 	public static create(parent: HTMLElement): SmartEditorView {
 		const root = Dom.element('div', {
 			class: 'sqd-smart-editor'
@@ -13,9 +12,7 @@ export class SmartEditorView {
 
 	private view?: EditorView;
 
-	private constructor(
-		private readonly editor: HTMLElement) {
-	}
+	private constructor(private readonly editor: HTMLElement) {}
 
 	public setView(view: EditorView) {
 		if (this.view) {

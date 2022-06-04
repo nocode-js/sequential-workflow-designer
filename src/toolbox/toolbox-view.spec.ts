@@ -3,7 +3,6 @@ import { createDesignerContextStub } from '../test-tools/stubs';
 import { ToolboxView } from './toolbox-view';
 
 describe('ToolboxView', () => {
-
 	it('create() creates view', () => {
 		const parent = Dom.element('div');
 		const context = createDesignerContextStub();

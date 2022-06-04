@@ -5,21 +5,16 @@ import { Behavior } from './behavior';
 import { DragStepBehavior } from './drag-step-behavior';
 
 export class SelectStepBehavior implements Behavior {
-
 	public static create(pressedStepComponent: StepComponent, context: DesignerContext): SelectStepBehavior {
-		return new SelectStepBehavior(
-			pressedStepComponent,
-			context);
+		return new SelectStepBehavior(pressedStepComponent, context);
 	}
 
 	private isCanceled = false;
 
-	private constructor(
-		private readonly pressedStepComponent: StepComponent,
-		private readonly context: DesignerContext) {
-	}
+	private constructor(private readonly pressedStepComponent: StepComponent, private readonly context: DesignerContext) {}
 
 	public onStart() {
+		// Nothing to do.
 	}
 
 	public onMove(delta: Vector): Behavior | void {

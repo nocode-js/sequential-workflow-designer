@@ -5,19 +5,15 @@ import { SequencePlaceholder } from './sequence-placeholder';
 import { SequenceComponentView } from './sequence-component-view';
 
 export class SequenceComponent implements Component {
-
 	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): SequenceComponent {
 		const view = SequenceComponentView.create(parent, sequence, configuration);
 		return new SequenceComponent(view, sequence);
 	}
 
-	private constructor(
-		public readonly view: SequenceComponentView,
-		private readonly sequence: Sequence) {
-	}
+	private constructor(public readonly view: SequenceComponentView, private readonly sequence: Sequence) {}
 
 	public findByElement(element: Element): StepComponent | null {
-		for (let component of this.view.components) {
+		for (const component of this.view.components) {
 			const sc = component.findByElement(element);
 			if (sc) {
 				return sc;
@@ -27,7 +23,7 @@ export class SequenceComponent implements Component {
 	}
 
 	public findById(stepId: string): StepComponent | null {
-		for (let component of this.view.components) {
+		for (const component of this.view.components) {
 			const sc = component.findById(stepId);
 			if (sc) {
 				return sc;

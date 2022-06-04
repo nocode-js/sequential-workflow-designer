@@ -4,7 +4,6 @@ import { createDesignerContextStub } from '../test-tools/stubs';
 import { ToolboxItem } from './toolbox-item';
 
 describe('ToolboxItem', () => {
-
 	it('create() creates item', () => {
 		const parent = Dom.element('div');
 		const context = createDesignerContextStub();

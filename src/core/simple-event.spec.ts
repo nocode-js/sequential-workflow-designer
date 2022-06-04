@@ -1,7 +1,6 @@
 import { SimpleEvent } from './simple-event';
 
 describe('SimpleEvent', () => {
-
 	it('forward() works as expected', () => {
 		const e = new SimpleEvent<void>();
 

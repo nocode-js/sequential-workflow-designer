@@ -3,7 +3,6 @@ import { DesignerContext } from '../designer-context';
 import { ControlBarView } from './control-bar-view';
 
 export class ControlBar {
-
 	public static create(parent: HTMLElement, context: DesignerContext): ControlBar {
 		const view = ControlBarView.create(parent);
 		const bar = new ControlBar(view, context);
@@ -16,10 +15,7 @@ export class ControlBar {
 		return bar;
 	}
 
-	private constructor(
-		private readonly view: ControlBarView,
-		private readonly context: DesignerContext) {
-	}
+	private constructor(private readonly view: ControlBarView, private readonly context: DesignerContext) {}
 
 	private onIsReadonlyChanged() {
 		this.refreshDeleteButtonVisibility();
@@ -37,9 +33,7 @@ export class ControlBar {
 		e.preventDefault();
 		if (this.context.selectedStep) {
 			const parentSequence = this.context.getSelectedStepParentSequence();
-			SequenceModifier.deleteStep(
-				this.context.selectedStep,
-				parentSequence);
+			SequenceModifier.deleteStep(this.context.selectedStep, parentSequence);
 
 			this.context.setSelectedStep(null);
 			this.context.notifiyDefinitionChanged();

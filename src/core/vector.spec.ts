@@ -1,7 +1,6 @@
 import { Vector } from './vector';
 
 describe('Vector', () => {
-
 	const P = new Vector(2, 10);
 
 	it('add() returns proper value', () => {

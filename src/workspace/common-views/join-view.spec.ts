@@ -3,7 +3,6 @@ import { Vector } from '../../core/vector';
 import { JoinView } from './join-view';
 
 describe('JoinView', () => {
-
 	let parent: SVGElement;
 
 	beforeEach(() => {
@@ -11,8 +10,7 @@ describe('JoinView', () => {
 	});
 
 	it('createJoins() creates view', () => {
-		JoinView.createJoins(parent, new Vector(0, 0),
-			[ new Vector(10, 10) ]);
+		JoinView.createJoins(parent, new Vector(0, 0), [new Vector(10, 10)]);
 		expect(parent.children.length).not.toEqual(0);
 	});
 

@@ -6,7 +6,6 @@ const RECT_INPUT_ICON_SIZE = 14;
 const ROUND_INPUT_SIZE = 7;
 
 export class InputView {
-
 	public static createRectInput(parent: SVGElement, x: number, y: number, iconUrl: string | null): InputView {
 		const g = Dom.svg('g');
 		parent.appendChild(g);
@@ -16,7 +15,7 @@ export class InputView {
 			width: RECT_INPUT_SIZE,
 			height: RECT_INPUT_SIZE,
 			x: x - RECT_INPUT_SIZE / 2,
-			y: y + RECT_INPUT_SIZE / -2 + .5,
+			y: y + RECT_INPUT_SIZE / -2 + 0.5,
 			rx: 4,
 			ry: 4
 		});
@@ -47,9 +46,7 @@ export class InputView {
 		return new InputView(circle);
 	}
 
-	private constructor(
-		private readonly root: SVGElement) {
-	}
+	private constructor(private readonly root: SVGElement) {}
 
 	public setIsHidden(isHidden: boolean) {
 		Dom.attrs(this.root, {

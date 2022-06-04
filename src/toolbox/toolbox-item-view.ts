@@ -3,15 +3,12 @@ import { Step } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
 
 export class ToolboxItemView {
-
 	public static create(parent: HTMLElement, step: Step, configuration: StepsConfiguration): ToolboxItemView {
 		const root = Dom.element('div', {
 			class: 'sqd-toolbox-item'
 		});
 
-		const iconUrl = configuration.iconUrlProvider
-			? configuration.iconUrlProvider(step.componentType, step.type)
-			: null;
+		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 
 		const icon = Dom.element('div', {
 			class: 'sqd-toolbox-item-icon'
@@ -38,9 +35,7 @@ export class ToolboxItemView {
 		return new ToolboxItemView(root);
 	}
 
-	private constructor(
-		private readonly root: HTMLElement) {
-	}
+	private constructor(private readonly root: HTMLElement) {}
 
 	public bindMousedown(handler: (e: MouseEvent) => void) {
 		this.root.addEventListener('mousedown', handler);

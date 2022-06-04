@@ -7,7 +7,6 @@ import { Toolbox } from './toolbox/toolbox';
 import { Workspace } from './workspace/workspace';
 
 describe('Designer', () => {
-
 	it('create() creates designer', () => {
 		const workspaceSpy = spyOn(Workspace, 'create');
 		const tollboxSpy = spyOn(Toolbox, 'create');

@@ -2,7 +2,6 @@ import { createDesignerConfigurationStub, createStepStub } from '../test-tools/s
 import { DragStepView } from './drag-step-behavior-view';
 
 describe('DragStepView', () => {
-
 	it('creates view', () => {
 		const appendChildSpy = spyOn(document.body, 'appendChild').and.stub();
 

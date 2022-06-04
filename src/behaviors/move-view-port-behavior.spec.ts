@@ -4,7 +4,6 @@ import { createDesignerContextStub } from '../test-tools/stubs';
 import { MoveViewPortBehavior } from './move-view-port-behavior';
 
 describe('MoveViewPortBehavior', () => {
-
 	it('when a user moves a mouse then the behavior updates the view port', () => {
 		let lastViewPort: ViewPort = {
 			position: new Vector(-1, -1),
@@ -12,7 +11,7 @@ describe('MoveViewPortBehavior', () => {
 		};
 
 		const context = createDesignerContextStub();
-		context.onViewPortChanged.subscribe(vp => lastViewPort = vp);
+		context.onViewPortChanged.subscribe(vp => (lastViewPort = vp));
 		context.setViewPort(new Vector(0, 0), 1);
 
 		const behavior = MoveViewPortBehavior.create(context);

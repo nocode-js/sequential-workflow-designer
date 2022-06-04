@@ -1,7 +1,6 @@
 import { Uid } from './uid';
 
 describe('Uid', () => {
-
 	it('next() returns unique ids', () => {
 		const ids: string[] = [];
 

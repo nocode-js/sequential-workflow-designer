@@ -1,6 +1,4 @@
-
 export class Uid {
-
 	public static next(): string {
 		const bytes = new Uint8Array(16);
 		window.crypto.getRandomValues(bytes);

@@ -3,17 +3,11 @@ import { DesignerContext } from '../designer-context';
 import { Behavior } from './behavior';
 
 export class MoveViewPortBehavior implements Behavior {
-
 	public static create(context: DesignerContext): MoveViewPortBehavior {
-		return new MoveViewPortBehavior(
-			context.viewPort.position,
-			context);
+		return new MoveViewPortBehavior(context.viewPort.position, context);
 	}
 
-	private constructor(
-		private readonly startPosition: Vector,
-		private readonly context: DesignerContext) {
-	}
+	private constructor(private readonly startPosition: Vector, private readonly context: DesignerContext) {}
 
 	public onStart() {
 		this.context.setSelectedStep(null);
@@ -25,5 +19,6 @@ export class MoveViewPortBehavior implements Behavior {
 	}
 
 	public onEnd() {
+		// Nothing to do.
 	}
 }

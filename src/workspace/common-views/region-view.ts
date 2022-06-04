@@ -2,7 +2,6 @@ import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 
 export class RegionView {
-
 	public static create(parent: SVGElement, widths: number[], height: number): RegionView {
 		let offsetX = 0;
 		const regions = widths.map(width => {
@@ -20,9 +19,7 @@ export class RegionView {
 		return new RegionView(regions);
 	}
 
-	public constructor(
-		private readonly regions: SVGElement[]) {
-	}
+	public constructor(private readonly regions: SVGElement[]) {}
 
 	public getClientPosition(): Vector {
 		const rect = this.regions[0].getBoundingClientRect();

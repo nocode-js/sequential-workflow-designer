@@ -1,15 +1,38 @@
-import { Sequence, ComponentType, TaskStep } from "../definition";
-import { SequenceModifier } from "./sequence-modifier";
+import { Sequence, ComponentType, TaskStep } from '../definition';
+import { SequenceModifier } from './sequence-modifier';
 
 describe('SequenceModifier', () => {
-
-	const A: TaskStep = { id: '0x1', name: 'A', componentType: ComponentType.task, type: 'a', properties: {} };
-	const B: TaskStep = { id: '0x2', name: 'B', componentType: ComponentType.task, type: 'b', properties: {} };
-	const C: TaskStep = { id: '0x3', name: 'C', componentType: ComponentType.task, type: 'c', properties: {} };
-	const D: TaskStep = { id: '0x4', name: 'D', componentType: ComponentType.task, type: 'd', properties: {} };
+	const A: TaskStep = {
+		id: '0x1',
+		name: 'A',
+		componentType: ComponentType.task,
+		type: 'a',
+		properties: {}
+	};
+	const B: TaskStep = {
+		id: '0x2',
+		name: 'B',
+		componentType: ComponentType.task,
+		type: 'b',
+		properties: {}
+	};
+	const C: TaskStep = {
+		id: '0x3',
+		name: 'C',
+		componentType: ComponentType.task,
+		type: 'c',
+		properties: {}
+	};
+	const D: TaskStep = {
+		id: '0x4',
+		name: 'D',
+		componentType: ComponentType.task,
+		type: 'd',
+		properties: {}
+	};
 
 	function flatABC(): Sequence {
-		return [ A, B, C ];
+		return [A, B, C];
 	}
 
 	it('moveStep() does nothing when the change is for the same index', () => {

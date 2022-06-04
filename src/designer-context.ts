@@ -7,7 +7,6 @@ import { DesignerConfiguration } from './designer-configuration';
 import { Placeholder, StepComponent } from './workspace/component';
 
 export class DesignerContext {
-
 	public readonly onViewPortChanged = new SimpleEvent<ViewPort>();
 	public readonly onSelectedStepChanged = new SimpleEvent<Step | null>();
 	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
@@ -30,7 +29,8 @@ export class DesignerContext {
 	public constructor(
 		public readonly definition: Definition,
 		public readonly behaviorController: BehaviorController,
-		public readonly configuration: DesignerConfiguration) {
+		public readonly configuration: DesignerConfiguration
+	) {
 		this.isReadonly = !!configuration.isReadonly;
 	}
 
@@ -50,14 +50,13 @@ export class DesignerContext {
 		const deltaScale = startScale - scale;
 
 		this.viewPortAnimation = animate(150, progress => {
-			this.setViewPort(
-				startPosition.subtract(deltaPosition.multiplyByScalar(progress)),
-				startScale - deltaScale * progress);
+			const newScale = startScale - deltaScale * progress;
+			this.setViewPort(startPosition.subtract(deltaPosition.multiplyByScalar(progress)), newScale);
 		});
 	}
 
 	public setSelectedStep(step: Step | null) {
-		const isChanged = (this.selectedStep !== step);
+		const isChanged = this.selectedStep !== step;
 		this.selectedStep = step;
 		if (isChanged) {
 			this.onSelectedStepChanged.forward(step);

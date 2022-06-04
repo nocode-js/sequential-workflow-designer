@@ -3,7 +3,6 @@ import { createDesignerContextStub } from '../test-tools/stubs';
 import { Workspace } from './workspace';
 
 describe('Workspace', () => {
-
 	it('create() creates bar', () => {
 		const parent = Dom.element('div');
 		const context = createDesignerContextStub();

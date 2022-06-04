@@ -1,6 +1,4 @@
-
 export class SimpleEvent<T> {
-
 	private readonly listeners: SimpleEventListener<T>[] = [];
 
 	public subscribe(listener: SimpleEventListener<T>) {

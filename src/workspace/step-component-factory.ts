@@ -6,7 +6,6 @@ import { SwitchStepComponent } from './switch-step/switch-step-component';
 import { TaskStepComponent } from './task-step/task-step-component';
 
 export class StepComponentFactory {
-
 	public static create(parent: SVGElement, step: Step, parentSequence: Sequence, configuration: StepsConfiguration): StepComponent {
 		switch (step.componentType) {
 			case ComponentType.task:

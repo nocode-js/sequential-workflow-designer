@@ -4,11 +4,9 @@ import { Sequence } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
 import { StartStopComponent } from './start-stop/start-stop-component';
 
-
 const GRID_SIZE = 48;
 
 export class WorkspaceView {
-
 	public static create(parent: HTMLElement, configuration: StepsConfiguration): WorkspaceView {
 		const defs = Dom.svg('defs');
 		const gridPattern = Dom.svg('pattern', {
@@ -32,11 +30,13 @@ export class WorkspaceView {
 			class: 'sqd-workspace-canvas'
 		});
 		canvas.appendChild(defs);
-		canvas.appendChild(Dom.svg('rect', {
-			width: '100%',
-			height: '100%',
-			fill: 'url(#sqd-grid)'
-		}));
+		canvas.appendChild(
+			Dom.svg('rect', {
+				width: '100%',
+				height: '100%',
+				fill: 'url(#sqd-grid)'
+			})
+		);
 		canvas.appendChild(foreground);
 		workspace.appendChild(canvas);
 		parent.appendChild(workspace);
@@ -51,8 +51,8 @@ export class WorkspaceView {
 		private readonly gridPattern: SVGPatternElement,
 		private readonly gridPatternPath: SVGPathElement,
 		private readonly foreground: SVGGElement,
-		private readonly configuration: StepsConfiguration) {
-	}
+		private readonly configuration: StepsConfiguration
+	) {}
 
 	public render(sequence: Sequence) {
 		if (this.rootComponent) {

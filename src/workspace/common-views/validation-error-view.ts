@@ -3,7 +3,6 @@ import { Dom } from '../../core/dom';
 const SIZE = 20;
 
 export class ValidationErrorView {
-
 	public static create(parent: SVGElement, x: number, y: number): ValidationErrorView {
 		const g = Dom.svg('g', {
 			class: 'sqd-hidden'
@@ -20,9 +19,7 @@ export class ValidationErrorView {
 		return new ValidationErrorView(g);
 	}
 
-	public constructor(
-		private readonly g: SVGElement) {
-	}
+	public constructor(private readonly g: SVGElement) {}
 
 	public setIsHidden(isHidden: boolean) {
 		Dom.toggleClass(this.g, isHidden, 'sqd-hidden');

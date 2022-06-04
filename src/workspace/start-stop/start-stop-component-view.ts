@@ -8,7 +8,6 @@ import { SequenceComponent } from '../sequence/sequence-component';
 const SIZE = 30;
 
 export class StartStopComponentView implements ComponentView {
-
 	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): StartStopComponentView {
 		const g = Dom.svg('g');
 		parent.appendChild(g);
@@ -34,8 +33,8 @@ export class StartStopComponentView implements ComponentView {
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		public readonly component: SequenceComponent) {
-	}
+		public readonly component: SequenceComponent
+	) {}
 
 	public getClientPosition(): Vector {
 		throw new Error('Not supported');

@@ -1,25 +1,24 @@
-
 export interface Animation {
 	isAlive: boolean;
 	stop(): void;
 }
 
-export function animate(interval: number, tick: (progress: number) => void): Animation {
-	let iv: ReturnType<typeof setInterval>;
+export function animate(interval: number, handler: (progress: number) => void): Animation {
+	const iv = setInterval(tick, 15);
 	const startTime = Date.now();
-	const a: Animation = {
+	const anim: Animation = {
 		isAlive: true,
 		stop: () => {
-			a.isAlive = false;
+			anim.isAlive = false;
 			clearInterval(iv);
 		}
 	};
-	iv = setInterval(() => {
+	function tick() {
 		const progress = Math.min((Date.now() - startTime) / interval, 1);
-		tick(progress);
+		handler(progress);
 		if (progress === 1) {
-			a.stop();
+			anim.stop();
 		}
-	}, 15);
-	return a;
+	}
+	return anim;
 }

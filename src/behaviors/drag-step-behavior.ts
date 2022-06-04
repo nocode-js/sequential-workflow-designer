@@ -8,14 +8,9 @@ import { DragStepView } from './drag-step-behavior-view';
 import { PlaceholderFinder } from './placeholder-finder';
 
 export class DragStepBehavior implements Behavior {
-
 	public static create(context: DesignerContext, step: Step, pressedStepComponent?: StepComponent): DragStepBehavior {
 		const view = DragStepView.create(step, context.configuration);
-		return new DragStepBehavior(
-			view,
-			context,
-			step,
-			pressedStepComponent);
+		return new DragStepBehavior(view, context, step, pressedStepComponent);
 	}
 
 	private state?: {
@@ -29,8 +24,8 @@ export class DragStepBehavior implements Behavior {
 		private readonly view: DragStepView,
 		private readonly context: DesignerContext,
 		private readonly step: Step,
-		private readonly pressedStepComponent?: StepComponent) {
-	}
+		private readonly pressedStepComponent?: StepComponent
+	) {}
 
 	public onStart(position: Vector) {
 		let offset: Vector;
@@ -55,9 +50,7 @@ export class DragStepBehavior implements Behavior {
 
 	public onMove(delta: Vector) {
 		if (this.state) {
-			const newPosition = this.state.startPosition
-				.subtract(delta)
-				.subtract(this.state.offset);
+			const newPosition = this.state.startPosition.subtract(delta).subtract(this.state.offset);
 			this.view.setPosition(newPosition);
 
 			const placeholder = this.state.finder.find(newPosition, this.view.width, this.view.height);
@@ -84,12 +77,10 @@ export class DragStepBehavior implements Behavior {
 					this.pressedStepComponent.parentSequence,
 					this.pressedStepComponent.step,
 					this.currentPlaceholder.parentSequence,
-					this.currentPlaceholder.index);
+					this.currentPlaceholder.index
+				);
 			} else {
-				SequenceModifier.insertStep(
-					this.step,
-					this.currentPlaceholder.parentSequence,
-					this.currentPlaceholder.index);
+				SequenceModifier.insertStep(this.step, this.currentPlaceholder.parentSequence, this.currentPlaceholder.index);
 			}
 			this.context.notifiyDefinitionChanged();
 		} else {

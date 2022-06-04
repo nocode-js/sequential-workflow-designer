@@ -4,7 +4,6 @@ import { DesignerContext } from '../designer-context';
 import { ToolboxItem } from './toolbox-item';
 
 export class ToolboxView {
-
 	public static create(parent: HTMLElement, context: DesignerContext): ToolboxView {
 		const root = Dom.element('div', {
 			class: 'sqd-toolbox'
@@ -37,8 +36,8 @@ export class ToolboxView {
 	private constructor(
 		private readonly filterInput: HTMLInputElement,
 		private readonly container: HTMLElement,
-		private readonly context: DesignerContext){
-	}
+		private readonly context: DesignerContext
+	) {}
 
 	public bindFilterInputChange(handler: (e: Event) => void) {
 		this.filterInput.addEventListener('keyup', handler);

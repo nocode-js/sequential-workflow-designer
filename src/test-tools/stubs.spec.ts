@@ -1,7 +1,6 @@
 import { createDefinitionStub, createDesignerConfigurationStub, createDesignerContextStub, createStepStub } from './stubs';
 
 describe('stubs', () => {
-
 	it('createDesignerConfigurationStub() returns an instance', () => {
 		const context = createDesignerConfigurationStub();
 		expect(context).toBeDefined();

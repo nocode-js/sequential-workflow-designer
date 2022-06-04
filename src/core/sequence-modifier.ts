@@ -1,7 +1,6 @@
 import { Sequence, Step } from '../definition';
 
 export class SequenceModifier {
-
 	public static moveStep(sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) {
 		const sourceIndex = sourceSequence.indexOf(step);
 		if (sourceIndex < 0) {

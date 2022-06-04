@@ -4,8 +4,12 @@ import { Placeholder, StepComponent, StepComponentState } from '../component';
 import { SwitchStepComponentView } from './switch-step-component-view';
 
 export class SwitchStepComponent implements StepComponent {
-
-	public static create(parent: SVGElement, step: SwitchStep, parentSequence: Sequence, configuration: StepsConfiguration): SwitchStepComponent {
+	public static create(
+		parent: SVGElement,
+		step: SwitchStep,
+		parentSequence: Sequence,
+		configuration: StepsConfiguration
+	): SwitchStepComponent {
 		const view = SwitchStepComponentView.create(parent, step, configuration);
 		return new SwitchStepComponent(view, step, parentSequence, configuration);
 	}
@@ -16,8 +20,8 @@ export class SwitchStepComponent implements StepComponent {
 		public readonly view: SwitchStepComponentView,
 		public readonly step: Step,
 		public readonly parentSequence: Sequence,
-		private readonly configuration: StepsConfiguration) {
-	}
+		private readonly configuration: StepsConfiguration
+	) {}
 
 	public findByElement(element: Element): StepComponent | null {
 		for (const sequence of this.view.sequenceComponents) {
@@ -77,9 +81,7 @@ export class SwitchStepComponent implements StepComponent {
 	}
 
 	public validate(): boolean {
-		const isValid = this.configuration.validator
-			? this.configuration.validator(this.step)
-			: true;
+		const isValid = this.configuration.validator ? this.configuration.validator(this.step) : true;
 		this.view.setIsValid(isValid);
 		const isChildrenValid = this.view.sequenceComponents.every(c => c.validate());
 		return isValid && isChildrenValid;

@@ -2,7 +2,6 @@ import { Dom } from '../core/dom';
 import { GlobalEditorView } from './global-editor-view';
 
 describe('GlobalEditorView', () => {
-
 	it('create() creates view', () => {
 		const p = Dom.element('p');
 

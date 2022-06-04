@@ -6,7 +6,6 @@ import { DesignerContext } from '../designer-context';
 import { ControlBar } from './control-bar';
 
 describe('ControlBar', () => {
-
 	it('create() creates bar', () => {
 		const parent = Dom.element('div');
 		const definition: Definition = {

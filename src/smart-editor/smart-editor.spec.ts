@@ -3,7 +3,6 @@ import { createDesignerContextStub } from '../test-tools/stubs';
 import { SmartEditor } from './smart-editor';
 
 describe('SmartEditor', () => {
-
 	it('create() creates editor', () => {
 		const parent = Dom.element('div');
 		const context = createDesignerContextStub();

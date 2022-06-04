@@ -3,7 +3,6 @@ import { ComponentType, Sequence, TaskStep } from '../../definition';
 import { TaskStepComponent } from './task-step-component';
 
 describe('TaskStepComponent', () => {
-
 	it('create() creates component', () => {
 		const step: TaskStep = {
 			id: '0x0',

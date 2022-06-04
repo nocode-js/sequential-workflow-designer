@@ -19,12 +19,18 @@
 	"scripts": {
 		"start": "rollup -c --watch",
 		"build": "rollup -c",
-		"test": "karma start"
+		"test": "karma start",
+		"eslint": "eslint ./src --ext .ts",
+		"prettier": "prettier --check ./src",
+		"prettier:fix": "prettier --write ./src"
 	},
 	"author": "b4rtaz",
 	"license": "MIT",
 	"devDependencies": {
 		"@types/jasmine": "^4.0.3",
+		"@typescript-eslint/eslint-plugin": "^5.27.0",
+		"@typescript-eslint/parser": "^5.27.0",
+		"eslint": "^8.17.0",
 		"karma": "^6.3.20",
 		"karma-chrome-launcher": "^3.1.1",
 		"karma-jasmine": "^5.0.1",
@@ -34,7 +40,8 @@
 		"rollup-plugin-dts": "^4.2.2",
 		"rollup-plugin-typescript2": "^0.31.2",
 		"ts-loader": "^9.3.0",
-		"typescript": "^4.6.4"
+		"typescript": "^4.6.4",
+		"prettier": "^2.6.2"
 	},
 	"keywords": [
 		"workflow",

@@ -2,7 +2,6 @@ import { Dom } from '../core/dom';
 import { SmartEditorView } from './smart-editor-view';
 
 describe('SmartEditorView', () => {
-
 	it('create() creates view', () => {
 		const parent = Dom.element('div');
 
