@@ -1,4 +1,4 @@
-import { Dom } from '../core/dom';
+import { Dom } from '../../core/dom';
 import { StartStopComponent } from './start-stop-component';
 
 describe('StartStopComponent', () => {

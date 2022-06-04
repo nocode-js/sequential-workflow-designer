@@ -1,7 +1,7 @@
-import { Sequence, Step } from '../definition';
-import { StepsConfiguration } from '../designer-configuration';
-import { Component, Placeholder, StepComponent } from './component';
-import { StartStopComponentView } from './views/start-stop-component-view';
+import { Sequence, Step } from '../../definition';
+import { StepsConfiguration } from '../../designer-configuration';
+import { Component, Placeholder, StepComponent } from '../component';
+import { StartStopComponentView } from './start-stop-component-view';
 
 export class StartStopComponent implements Component {
 

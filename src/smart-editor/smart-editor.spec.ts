@@ -1,12 +1,12 @@
 import { Dom } from '../core/dom';
-import { createDesignerContextFake } from '../designer-context-faker';
+import { createDesignerContextStub } from '../test-tools/stubs';
 import { SmartEditor } from './smart-editor';
 
 describe('SmartEditor', () => {
 
 	it('create() creates editor', () => {
 		const parent = Dom.element('div');
-		const context = createDesignerContextFake();
+		const context = createDesignerContextStub();
 
 		const editor = SmartEditor.create(parent, context);
 

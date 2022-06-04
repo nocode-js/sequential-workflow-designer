@@ -1,5 +1,5 @@
-import { Dom } from '../core/dom';
-import { ComponentType, ContainerStep, Sequence } from '../definition';
+import { Dom } from '../../core/dom';
+import { ComponentType, ContainerStep, Sequence } from '../../definition';
 import { ContainerStepComponent } from './container-step-component';
 
 describe('ContainerStepComponent', () => {

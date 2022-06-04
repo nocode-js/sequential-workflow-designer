@@ -1,8 +1,8 @@
-import { Sequence } from '../definition';
-import { StepsConfiguration } from '../designer-configuration';
-import { Component, Placeholder, StepComponent } from './component';
+import { Sequence } from '../../definition';
+import { StepsConfiguration } from '../../designer-configuration';
+import { Component, Placeholder, StepComponent } from '../component';
 import { SequencePlaceholder } from './sequence-placeholder';
-import { SequenceComponentView } from './views/sequence-component-view';
+import { SequenceComponentView } from './sequence-component-view';
 
 export class SequenceComponent implements Component {
 

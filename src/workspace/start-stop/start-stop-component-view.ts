@@ -3,7 +3,7 @@ import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { ComponentView } from '../component';
-import { SequenceComponent } from '../sequence-component';
+import { SequenceComponent } from '../sequence/sequence-component';
 
 const SIZE = 30;
 

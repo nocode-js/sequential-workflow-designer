@@ -5,8 +5,8 @@ import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerComponentProvider, DesignerContext, ViewPort } from '../designer-context';
 import { Placeholder, StepComponent, StepComponentState } from './component';
-import { StartStopComponent } from './start-stop-component';
-import { WorkspaceView } from './views/workspace-view';
+import { StartStopComponent } from './start-stop/start-stop-component';
+import { WorkspaceView } from './workspace-view';
 
 export class Workspace implements DesignerComponentProvider {
 

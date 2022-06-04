@@ -1,8 +1,8 @@
-import { Dom } from '../../core/dom';
-import { Vector } from '../../core/vector';
-import { Sequence } from '../../definition';
-import { StepsConfiguration } from '../../designer-configuration';
-import { StartStopComponent } from '../start-stop-component';
+import { Dom } from '../core/dom';
+import { Vector } from '../core/vector';
+import { Sequence } from '../definition';
+import { StepsConfiguration } from '../designer-configuration';
+import { StartStopComponent } from './start-stop/start-stop-component';
 
 
 const GRID_SIZE = 48;

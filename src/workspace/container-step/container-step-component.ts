@@ -1,7 +1,7 @@
-import { ContainerStep, Sequence, Step } from '../definition';
-import { StepsConfiguration } from '../designer-configuration';
-import { Placeholder, StepComponent, StepComponentState } from './component';
-import { ContainerStepComponentView } from './views/container-step-component-view';
+import { ContainerStep, Sequence, Step } from '../../definition';
+import { StepsConfiguration } from '../../designer-configuration';
+import { Placeholder, StepComponent, StepComponentState } from '../component';
+import { ContainerStepComponentView } from './container-step-component-view';
 
 export class ContainerStepComponent implements StepComponent {
 

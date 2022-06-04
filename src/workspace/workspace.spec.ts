@@ -1,12 +1,12 @@
 import { Dom } from '../core/dom';
-import { createDesignerContextFake } from '../designer-context-faker';
+import { createDesignerContextStub } from '../test-tools/stubs';
 import { Workspace } from './workspace';
 
 describe('Workspace', () => {
 
 	it('create() creates bar', () => {
 		const parent = Dom.element('div');
-		const context = createDesignerContextFake();
+		const context = createDesignerContextStub();
 
 		const bar = Workspace.create(parent, context);
 

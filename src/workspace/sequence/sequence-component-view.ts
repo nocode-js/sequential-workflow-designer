@@ -2,9 +2,9 @@ import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
+import { JoinView } from '../common-views/join-view';
 import { Component, ComponentView } from '../component';
 import { StepComponentFactory } from '../step-component-factory';
-import { JoinView } from './join-view';
 
 const PH_WIDTH = 100;
 const PH_HEIGHT = 24;

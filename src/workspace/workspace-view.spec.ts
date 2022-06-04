@@ -1,4 +1,4 @@
-import { Dom } from '../../core/dom';
+import { Dom } from '../core/dom';
 import { WorkspaceView } from './workspace-view';
 
 describe('WorkspaceView', () => {

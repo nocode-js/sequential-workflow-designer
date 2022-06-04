@@ -1,13 +1,13 @@
 import { Dom } from '../core/dom';
 import { ComponentType, Step } from '../definition';
-import { createDesignerContextFake } from '../designer-context-faker';
+import { createDesignerContextStub } from '../test-tools/stubs';
 import { ToolboxItem } from './toolbox-item';
 
 describe('ToolboxItem', () => {
 
 	it('create() creates item', () => {
 		const parent = Dom.element('div');
-		const context = createDesignerContextFake();
+		const context = createDesignerContextStub();
 		const step: Step = {
 			id: '0x0',
 			componentType: ComponentType.task,

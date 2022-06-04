@@ -1,7 +1,7 @@
-import { Sequence, Step, SwitchStep } from '../definition';
-import { StepsConfiguration } from '../designer-configuration';
-import { Placeholder, StepComponent, StepComponentState } from './component';
-import { SwitchStepComponentView } from './views/switch-step-component-view';
+import { Sequence, Step, SwitchStep } from '../../definition';
+import { StepsConfiguration } from '../../designer-configuration';
+import { Placeholder, StepComponent, StepComponentState } from '../component';
+import { SwitchStepComponentView } from './switch-step-component-view';
 
 export class SwitchStepComponent implements StepComponent {
 

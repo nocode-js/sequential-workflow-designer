@@ -1,6 +1,6 @@
-import { Dom } from '../core/dom';
-import { Sequence } from '../definition';
-import { Placeholder } from './component';
+import { Dom } from '../../core/dom';
+import { Sequence } from '../../definition';
+import { Placeholder } from '../component';
 
 export class SequencePlaceholder implements Placeholder {
 

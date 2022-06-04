@@ -1,9 +1,9 @@
 import { ComponentType, ContainerStep, Sequence, Step, SwitchStep, TaskStep } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
 import { StepComponent } from './component';
-import { ContainerStepComponent } from './container-step-component';
-import { SwitchStepComponent } from './switch-step-component';
-import { TaskStepComponent } from './task-step-component';
+import { ContainerStepComponent } from './container-step/container-step-component';
+import { SwitchStepComponent } from './switch-step/switch-step-component';
+import { TaskStepComponent } from './task-step/task-step-component';
 
 export class StepComponentFactory {
 

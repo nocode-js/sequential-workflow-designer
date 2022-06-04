@@ -2,10 +2,10 @@ import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { TaskStep } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
+import { InputView } from '../common-views/input-view';
+import { OutputView } from '../common-views/output-view';
+import { ValidationErrorView } from '../common-views/validation-error-view';
 import { ComponentView } from '../component';
-import { InputView } from './input-view';
-import { OutputView } from './output-view';
-import { ValidationErrorView } from './validation-error-view';
 
 const PADDING_X = 12;
 const PADDING_Y = 10;

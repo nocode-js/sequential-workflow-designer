@@ -1,9 +1,8 @@
 import { ControlBar } from './control-bar/control-bar';
 import { Dom } from './core/dom';
-import { Definition } from './definition';
 import Designer from './designer';
-import { DesignerConfiguration } from './designer-configuration';
 import { SmartEditor } from './smart-editor/smart-editor';
+import { createDefinitionStub, createDesignerConfigurationStub } from './test-tools/stubs';
 import { Toolbox } from './toolbox/toolbox';
 import { Workspace } from './workspace/workspace';
 
@@ -16,20 +15,8 @@ describe('Designer', () => {
 		const smartEditorSpy = spyOn(SmartEditor, 'create');
 
 		const parent = Dom.element('div');
-		const definition: Definition = {
-			properties: {},
-			sequence: []
-		};
-		const configuration: DesignerConfiguration = {
-			editors: {
-				globalEditorProvider: () => document.createElement('div'),
-				stepEditorProvider: () => document.createElement('div')
-			},
-			steps: {},
-			toolbox: {
-				groups: []
-			}
-		};
+		const definition = createDefinitionStub();
+		const configuration = createDesignerConfigurationStub();
 
 		const bar = Designer.create(parent, definition, configuration);
 

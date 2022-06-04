@@ -1,5 +1,6 @@
-import { Dom } from '../core/dom';
-import { ComponentType, Sequence, SwitchStep } from '../definition';
+import { Dom } from '../../core/dom';
+import { ComponentType, Sequence, SwitchStep } from '../../definition';
+import { createStepStub } from '../../test-tools/stubs';
 import { SwitchStepComponent } from './switch-step-component';
 
 describe('SwitchStepComponent', () => {
@@ -11,8 +12,8 @@ describe('SwitchStepComponent', () => {
 			name: 'Foo',
 			properties: {},
 			branches: {
-				'true': [],
-				'false': []
+				'true': [ createStepStub() ],
+				'false': [ createStepStub() ]
 			},
 			type: 'foo'
 		};

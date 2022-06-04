@@ -1,7 +1,7 @@
-import { Sequence, Step, TaskStep } from '../definition';
-import { StepsConfiguration } from '../designer-configuration';
-import { Placeholder, StepComponent, StepComponentState } from './component';
-import { TaskStepComponentView } from './views/task-step-component-view';
+import { Sequence, Step, TaskStep } from '../../definition';
+import { StepsConfiguration } from '../../designer-configuration';
+import { Placeholder, StepComponent, StepComponentState } from '../component';
+import { TaskStepComponentView } from './task-step-component-view';
 
 export class TaskStepComponent implements StepComponent {
 

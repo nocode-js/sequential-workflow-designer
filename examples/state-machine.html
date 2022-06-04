@@ -6,7 +6,12 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-	<script src="../designer.js"></script>
+	<script>
+		const libUrl = (location.host.toLowerCase() === 'localhost')
+			? '../designer.js'
+			: 'https://www.jsdelivr.com/todo';
+		document.write(`<script src="${libUrl}"><\/script>`);
+	</script>
 	<link href="../designer.css" rel="stylesheet">
 
 	<style>

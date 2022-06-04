@@ -1,5 +1,5 @@
-import { Dom } from '../core/dom';
-import { ComponentType, Sequence, TaskStep } from '../definition';
+import { Dom } from '../../core/dom';
+import { ComponentType, Sequence, TaskStep } from '../../definition';
 import { TaskStepComponent } from './task-step-component';
 
 describe('TaskStepComponent', () => {

@@ -1,6 +1,6 @@
 import { Vector } from '../core/vector';
 import { ViewPort } from '../designer-context';
-import { createDesignerContextFake } from '../designer-context-faker';
+import { createDesignerContextStub } from '../test-tools/stubs';
 import { MoveViewPortBehavior } from './move-view-port-behavior';
 
 describe('MoveViewPortBehavior', () => {
@@ -11,7 +11,7 @@ describe('MoveViewPortBehavior', () => {
 			scale: -1
 		};
 
-		const context = createDesignerContextFake();
+		const context = createDesignerContextStub();
 		context.onViewPortChanged.subscribe(vp => lastViewPort = vp);
 		context.setViewPort(new Vector(0, 0), 1);
 

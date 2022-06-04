@@ -3,12 +3,12 @@ import { Vector } from '../../core/vector';
 import { ContainerStep } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { ComponentView } from '../component';
-import { SequenceComponent } from '../sequence-component';
-import { InputView } from './input-view';
-import { JoinView } from './join-view';
-import { LabelView } from './label-view';
-import { RegionView } from './region-view';
-import { ValidationErrorView } from './validation-error-view';
+import { SequenceComponent } from '../sequence/sequence-component';
+import { InputView } from '../common-views/input-view';
+import { JoinView } from '../common-views/join-view';
+import { LabelView } from '../common-views/label-view';
+import { RegionView } from '../common-views/region-view';
+import { ValidationErrorView } from '../common-views/validation-error-view';
 
 const PADDING_TOP = 20;
 const PADDING_X = 20;
