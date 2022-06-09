@@ -11,7 +11,7 @@ import { Toolbox } from './toolbox/toolbox';
 import { Workspace } from './workspace/workspace';
 
 export default class Designer {
-	public static create(container: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
+	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
 		const theme = configuration.theme || 'light';
 		const definition = ObjectCloner.deepClone(startDefinition);
 
@@ -19,7 +19,7 @@ export default class Designer {
 			class: `sqd-designer sqd-theme-${theme}`
 		});
 
-		container.appendChild(root);
+		parent.appendChild(root);
 
 		const behaviorController = new BehaviorController();
 		const context = new DesignerContext(definition, behaviorController, configuration);
@@ -33,12 +33,12 @@ export default class Designer {
 			SmartEditor.create(root, context);
 		}
 
-		const designer = new Designer(context, workspace);
+		const designer = new Designer(root, context, workspace);
 		context.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.definition));
 		return designer;
 	}
 
-	private constructor(private readonly context: DesignerContext, private readonly workspace: Workspace) {}
+	private constructor(private readonly root: HTMLElement, private readonly context: DesignerContext, private readonly workspace: Workspace) {}
 
 	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
 
@@ -80,5 +80,9 @@ export default class Designer {
 
 	public moveViewPortToStep(stepId: string) {
 		this.context.moveViewPortToStep(stepId);
+	}
+
+	public destroy() {
+		this.root.parentElement?.removeChild(this.root);
 	}
 }
