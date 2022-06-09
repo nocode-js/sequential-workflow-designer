@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>🔴 Particles - Sequential Workflow Designer</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+	<link href="../designer.css" rel="stylesheet">
+
+	<style>
+		body {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif; background: #EDEDED;}
+		html, body {min-width: 100vw; min-height: 100vh; margin: 0; padding: 0; overflow: hidden;}
+		body {display: flex; align-items: center;}
+
+		.box {padding: 15px 0; margin: 0 auto;}
+		button {margin: 0 5px; border: 1px solid #BCBCBC; background: #FFF; padding: 10px; cursor: pointer; box-shadow: 0 2px 2px rgba(0, 0, 0, 0.11);}
+		button:hover {border-color: #7E7E7E;}
+		#canvas {border: 1px solid silver; background: #FFF;}
+		#control-panel {text-align: center;}
+
+		#popup {position: fixed; z-index: 10; top: 50px; left: 50px; right: 50px; bottom: 50px; display: flex; flex-direction: column; background: #FFF; border: 1px solid silver; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);}
+		#popup.hidden {display: none;}
+		#popup-placeholder {flex: 1;}
+		#popup-footer {text-align: center; padding: 10px;}
+
+		.sqd-smart-editor h3 {margin: 0; padding: 10px;}
+		.sqd-smart-editor p {margin: 0; padding: 10px;}
+		.sqd-smart-editor p label {display: block; padding: 0 0 5px;}
+		.sqd-smart-editor input[type=number] {width: 100%; box-sizing: border-box; border: 1px solid silver; padding: 6px; border-radius: 5px;}
+	</style>
+</head>
+<body>
+	<div id="popup" class="hidden">
+		<div id="popup-placeholder"></div>
+		<div id="popup-footer">
+			<button id="popup-close"></button>
+		</div>
+	</div>
+
+	<div class="box">
+		<canvas id="canvas"></canvas>
+
+		<div id="control-panel"></div>
+	</div>
+
+	<script>
+		const libUrl = (location.host.toLowerCase() === 'localhost')
+			? '../designer.js'
+			: 'https://www.jsdelivr.com/todo';
+		document.write(`<script src="${libUrl}"><\/script>`);
+	</script>
+	<script src="./assets/state-machine.js"></script>
+	<script src="./assets/particles.js"></script>
+</body>
+</html>
