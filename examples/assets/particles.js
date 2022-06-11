@@ -129,7 +129,7 @@ class Particle {
 			},
 
 			onInterrupted: () => {
-				console.log('interrupted');
+				console.log('interrupted ' + this.colorA);
 			}
 		});
 		this.sm.start();
@@ -213,7 +213,7 @@ class Popup {
 					return createEditor('Edit start state', definition.properties);
 				},
 				stepEditorProvider: (step) => {
-					return createEditor('Edit ' + step.name, step.properties);
+					return createEditor('Edit step ' + step.name, step.properties);
 				}
 			}
 		});
@@ -259,9 +259,7 @@ window.addEventListener('load', () => {
 			Steps.createWait()
 		],
 		properties: {
-			interval: 400,
-			velocityX: 0,
-			velocityY: 0
+			interval: 400
 		}
 	};
 
@@ -270,9 +268,7 @@ window.addEventListener('load', () => {
 			Steps.createWait()
 		],
 		properties: {
-			interval: 400,
-			velocityX: 0,
-			velocityY: 0
+			interval: 400
 		}
 	};
 
@@ -281,9 +277,7 @@ window.addEventListener('load', () => {
 			Steps.createWait()
 		],
 		properties: {
-			interval: 400,
-			velocityX: 0,
-			velocityY: 0
+			interval: 400
 		}
 	};
 

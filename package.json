@@ -11,7 +11,9 @@
 		"designer.js",
 		"designer.d.ts",
 		"designer.js.map",
-		"designer.css"
+		"designer.css",
+		"designer-light.css",
+		"designer-dark.css"
 	],
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/"

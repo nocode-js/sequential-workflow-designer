@@ -1,0 +1,132 @@
+
+/********* dark *********/
+
+.sqd-theme-dark.sqd-designer {
+	background: #1F1F1F;
+}
+
+/* light > .sqd-toolbox */
+
+.sqd-theme-dark .sqd-toolbox {
+	background: #3F3F3F;
+}
+.sqd-theme-dark .sqd-toolbox-title {
+	color: #FFF;
+}
+.sqd-theme-dark .sqd-toolbox-filter {
+	border: 0;
+	background: #242424;
+	color: #FFF;
+}
+.sqd-theme-dark .sqd-toolbox-filter:focus {
+}
+.sqd-theme-dark .sqd-toolbox-group-title {
+	background: #242424;
+	color: #FFF;
+}
+.sqd-theme-dark .sqd-toolbox-item {
+	border: none;
+	background: #C6C6C6;
+}
+.sqd-theme-dark .sqd-toolbox-item:hover {
+	border: none;
+}
+.sqd-theme-dark .sqd-toolbox-item-icon.sqd-no-icon {
+	background: #C6C6C6;
+}
+
+/* light > .sqd-control-bar */
+
+.sqd-theme-dark .sqd-control-bar {
+	background: #3F3F3F;
+}
+.sqd-theme-dark .sqd-control-bar-button {
+	background: #B2B2B2;
+}
+.sqd-theme-dark .sqd-control-bar-button:hover {
+	border-color: #939393;
+}
+
+/* light > .sqd-workspace */
+
+.sqd-theme-dark .sqd-grid-path {
+	stroke: #2A2A2A;
+}
+.sqd-theme-dark .sqd-join {
+	stroke: #707070;
+}
+
+/* light > .sqd-smart-editor */
+
+.sqd-theme-dark .sqd-smart-editor {
+	background: #484848;
+}
+
+/* light > .sqd-task */
+
+.sqd-theme-dark .sqd-task-rect {
+	fill: #C6C6C6;
+	stroke: none;
+	filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, .15));
+}
+.sqd-theme-dark .sqd-task-rect.sqd-selected {
+	stroke: #FFF;
+}
+.sqd-theme-dark .sqd-task-text {
+	fill: #000;
+}
+.sqd-theme-dark .sqd-task-empty-icon {
+	fill: #C6C6C6;
+}
+
+/* light > .sqd-input + .sqd-output */
+
+.sqd-theme-dark .sqd-input {
+	fill: #C6C6C6;
+	stroke: #707070;
+}
+
+.sqd-theme-dark .sqd-output {
+	fill: #707070;
+}
+
+/* light > .sqd-region */
+
+.sqd-theme-dark .sqd-region {
+	stroke: #434343;
+}
+.sqd-theme-dark .sqd-region.sqd-selected {
+	stroke: #FFF;
+}
+.sqd-theme-dark .sqd-label-rect {
+	fill: #2411DB;
+}
+.sqd-theme-dark .sqd-label-rect.sqd-label-secondary {
+	fill: #0E0E0E;
+}
+.sqd-theme-dark .sqd-label-text {
+	fill: #FFF;
+}
+
+/* light > .sqd-start-stop */
+
+.sqd-theme-dark .sqd-start-stop {
+	fill: #2C18DF;
+}
+.sqd-theme-dark .sqd-start-stop-icon {
+	fill: #FFF;
+}
+
+/* light > .sqd-placeholder */
+
+.sqd-theme-dark .sqd-placeholder {
+	fill: none;
+	stroke: #6A6A6A;
+}
+.sqd-theme-dark .sqd-placeholder.sqd-hover {
+	fill: #0E0E0E;
+}
+
+.sqd-theme-dark .sqd-validation-error {
+	fill: #FFA200;
+}

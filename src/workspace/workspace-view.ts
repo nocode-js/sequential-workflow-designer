@@ -6,11 +6,14 @@ import { StartStopComponent } from './start-stop/start-stop-component';
 
 const GRID_SIZE = 48;
 
+let lastGridPathId = 0;
+
 export class WorkspaceView {
 	public static create(parent: HTMLElement, configuration: StepsConfiguration): WorkspaceView {
 		const defs = Dom.svg('defs');
+		const gridPatternId = 'sqd-grid-pattern-' + lastGridPathId++;
 		const gridPattern = Dom.svg('pattern', {
-			id: 'sqd-grid',
+			id: gridPatternId,
 			patternUnits: 'userSpaceOnUse'
 		});
 		const gridPatternPath = Dom.svg('path', {
@@ -34,7 +37,7 @@ export class WorkspaceView {
 			Dom.svg('rect', {
 				width: '100%',
 				height: '100%',
-				fill: 'url(#sqd-grid)'
+				fill: `url(#${gridPatternId})`
 			})
 		);
 		canvas.appendChild(foreground);

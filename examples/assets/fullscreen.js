@@ -53,7 +53,6 @@ function toolboxGroup(name) {
 
 let designer;
 const configuration = {
-
 	toolbox: {
 		isHidden: false,
 		groups: [
