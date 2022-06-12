@@ -90,6 +90,8 @@ function createTaskStep(type, name) {
 }
 
 const configuration = {
+	theme: 'dark',
+
 	toolbox: {
 		isHidden: false,
 		groups: [

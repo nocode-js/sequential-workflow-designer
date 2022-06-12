@@ -45,6 +45,7 @@ function toolboxGroup(name) {
 		steps: [
 			createTaskStep('save', 'Save file'),
 			createTaskStep('text', 'Send email'),
+			createTaskStep('task', 'Create task'),
 			createIfStep([], []),
 			createContainerStep([])
 		]
@@ -106,7 +107,7 @@ const startDefinition = {
 			[ createTaskStep('text', 'Send email') ]
 		),
 		createContainerStep([
-			createTaskStep('save', 'Save file')
+			createTaskStep('task', 'Create task')
 		])
 	]
 };
