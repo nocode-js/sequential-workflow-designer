@@ -11,10 +11,9 @@ export default [
 		],
 		output: [
 			{
-				file: './designer.js',
+				file: './lib/designer.js',
 				format: 'umd',
-				name: 'sequentialWorkflowDesigner',
-				sourcemap: true
+				name: 'sequentialWorkflowDesigner'
 			}
 		]
 	},
@@ -22,7 +21,7 @@ export default [
 		input: './build/designer.d.ts',
 		output: [
 			{
-				file: './designer.d.ts',
+				file: './lib/designer.d.ts',
 				format: 'es'
 			}
 		],

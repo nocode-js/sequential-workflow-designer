@@ -5,8 +5,8 @@
 	<title>❎ Fullscreen - Sequential Workflow Designer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-	<link href="../designer.css" rel="stylesheet">
-	<link href="../designer-light.css" rel="stylesheet">
+	<link href="../css/designer.css" rel="stylesheet">
+	<link href="../css/designer-light.css" rel="stylesheet">
 
 	<style>
 		body {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
@@ -19,8 +19,8 @@
 
 	<script>
 		const libUrl = (location.host.toLowerCase() === 'localhost')
-			? '../designer.js'
-			: '//cdn.jsdelivr.net/npm/sequential-workflow-designer/designer.js';
+			? '../lib/designer.js'
+			: '//cdn.jsdelivr.net/npm/sequential-workflow-designer/lib/designer.js';
 		document.write(`<script src="${libUrl}"><\/script>`);
 	</script>
 	<script src="./assets/fullscreen.js"></script>

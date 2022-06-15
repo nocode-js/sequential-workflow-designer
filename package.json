@@ -1,19 +1,15 @@
 {
 	"name": "sequential-workflow-designer",
-	"version": "0.1.0",
-	"main": "designer.js",
-	"types": "designer.d.ts",
+	"version": "0.1.1",
+	"main": "./lib/designer.js",
+	"types": "./lib/designer.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/b4rtaz/sequential-workflow-designer.git"
 	},
 	"files": [
-		"designer.js",
-		"designer.d.ts",
-		"designer.js.map",
-		"designer.css",
-		"designer-light.css",
-		"designer-dark.css"
+		"lib/",
+		"css/"
 	],
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/"
@@ -41,7 +37,6 @@
 		"rollup": "^2.75.3",
 		"rollup-plugin-dts": "^4.2.2",
 		"rollup-plugin-typescript2": "^0.31.2",
-		"ts-loader": "^9.3.0",
 		"typescript": "^4.6.4",
 		"prettier": "^2.6.2"
 	},
