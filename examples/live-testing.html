@@ -39,7 +39,7 @@
 	</div>
 
 	<script>
-		const libUrl = (location.host.toLowerCase() === 'localhost')
+		const libUrl = (location.hostname.toLowerCase() === 'localhost')
 			? '../lib/designer.js'
 			: '//cdn.jsdelivr.net/npm/sequential-workflow-designer/lib/designer.js';
 		document.write(`<script src="${libUrl}"><\/script>`);
