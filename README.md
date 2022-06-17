@@ -2,6 +2,8 @@
 
 # Sequential Workflow Designer
 
+[![Build Status](https://app.travis-ci.com/b4rtaz/sequential-workflow-designer.svg?branch=main)](https://app.travis-ci.com/b4rtaz/sequential-workflow-designer) [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](/LICENSE) [![Twitter: b4rtaz](https://img.shields.io/twitter/follow/b4rtaz.svg?style=social)](https://twitter.com/b4rtaz)
+
 Sequential workflow designer with no dependencies for web. It's written in pure TypeScript and uses SVG for rendering. This designer is not associated with any workflow engine. It's full generic. You may create any kind application by this, from graphical programming languages to workflow designers.
 
 Features:

@@ -18,6 +18,7 @@
 		"start": "rollup -c --watch",
 		"build": "rollup -c",
 		"test": "karma start",
+		"test:single": "karma start --single-run",
 		"eslint": "eslint ./src --ext .ts",
 		"prettier": "prettier --check ./src",
 		"prettier:fix": "prettier --write ./src"
