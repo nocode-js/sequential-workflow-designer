@@ -11,8 +11,8 @@ Features:
 * no dependencies,
 * full generic & configurable,
 * light/dark themes,
-* modern browsers support,
-* ~~mobile support~~ (TODO).
+* works on modern browsers,
+* ~~works on mobile~~ (TODO).
 
 ## 👀 Examples
 
@@ -24,7 +24,7 @@ Features:
 
 ## 🚀 Installation
 
-To use the designer you should add JS/TS files and CSS-files to your project.
+To use the designer you should add JS/TS files and CSS files to your project.
 
 ### NPM
 
