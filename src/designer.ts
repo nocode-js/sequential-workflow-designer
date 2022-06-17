@@ -38,7 +38,11 @@ export default class Designer {
 		return designer;
 	}
 
-	private constructor(private readonly root: HTMLElement, private readonly context: DesignerContext, private readonly workspace: Workspace) {}
+	private constructor(
+		private readonly root: HTMLElement,
+		private readonly context: DesignerContext,
+		private readonly workspace: Workspace
+	) {}
 
 	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
 
