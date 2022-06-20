@@ -136,7 +136,10 @@ const configuration = {
   }
 };
 
-Designer.create(placeholder, definition, configuration);
+const designer = Designer.create(placeholder, definition, configuration);
+designer.onDefinitionChanged.subscribe((newDefinition) => {
+  // ...
+});
 ```
 
 ## 💡 License

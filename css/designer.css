@@ -87,6 +87,7 @@
 	position: relative;
 	display: block;
 	padding: 10px 10px 10px 30px;
+	white-space: nowrap;
 }
 
 .sqd-drag {
