@@ -5,7 +5,8 @@ import { StepsConfiguration } from '../designer-configuration';
 export class ToolboxItemView {
 	public static create(parent: HTMLElement, step: Step, configuration: StepsConfiguration): ToolboxItemView {
 		const root = Dom.element('div', {
-			class: 'sqd-toolbox-item'
+			class: 'sqd-toolbox-item',
+			title: step.name
 		});
 
 		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;

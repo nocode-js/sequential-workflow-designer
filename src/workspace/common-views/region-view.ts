@@ -3,19 +3,31 @@ import { Vector } from '../../core/vector';
 
 export class RegionView {
 	public static create(parent: SVGElement, widths: number[], height: number): RegionView {
-		let offsetX = 0;
-		const regions = widths.map(width => {
-			const region = Dom.svg('rect', {
-				class: 'sqd-region ',
-				width,
-				height,
-				x: offsetX,
-				fill: 'transparent'
-			});
-			parent.insertBefore(region, parent.firstChild);
-			offsetX += width;
-			return region;
+		const totalWidth = widths.reduce((c, v) => c + v, 0);
+
+		const mainRegion = Dom.svg('rect', {
+			class: 'sqd-region',
+			width: totalWidth,
+			height,
+			fill: 'transparent'
 		});
+		const regions: SVGElement[] = [mainRegion];
+		parent.insertBefore(mainRegion, parent.firstChild);
+
+		let offsetX = widths[0];
+		for (let i = 1; i < widths.length; i++) {
+			const line = Dom.svg('line', {
+				class: 'sqd-region',
+				x1: offsetX,
+				y1: 0,
+				x2: offsetX,
+				y2: height
+			});
+			regions.push(line);
+			parent.insertBefore(line, parent.firstChild);
+			offsetX += widths[i];
+		}
+
 		return new RegionView(regions);
 	}
 
