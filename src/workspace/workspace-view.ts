@@ -43,9 +43,13 @@ export class WorkspaceView {
 		canvas.appendChild(foreground);
 		workspace.appendChild(canvas);
 		parent.appendChild(workspace);
-		return new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, configuration);
+
+		const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, configuration);
+		window.addEventListener('resize', view.onResizeHandler);
+		return view;
 	}
 
+	private onResizeHandler = () => this.onResize();
 	public rootComponent?: StartStopComponent;
 
 	private constructor(
@@ -62,6 +66,7 @@ export class WorkspaceView {
 			this.rootComponent.view.destroy();
 		}
 		this.rootComponent = StartStopComponent.create(this.foreground, sequence, this.configuration);
+		this.refreshSize();
 	}
 
 	public setPositionAndScale(position: Vector, scale: number) {
@@ -80,13 +85,6 @@ export class WorkspaceView {
 		});
 	}
 
-	public refreshSize() {
-		Dom.attrs(this.canvas, {
-			width: this.workspace.offsetWidth,
-			height: this.workspace.offsetHeight
-		});
-	}
-
 	public getClientPosition(): Vector {
 		const rect = this.canvas.getBoundingClientRect();
 		return new Vector(rect.x, rect.y);
@@ -94,10 +92,6 @@ export class WorkspaceView {
 
 	public getClientSize(): Vector {
 		return new Vector(this.canvas.clientWidth, this.canvas.clientHeight);
-	}
-
-	public bindResize(handler: () => void) {
-		window.addEventListener('resize', handler);
 	}
 
 	public bindMouseDown(handler: (e: MouseEvent) => void) {
@@ -110,5 +104,20 @@ export class WorkspaceView {
 
 	public bindWheel(handler: (e: WheelEvent) => void) {
 		this.canvas.addEventListener('wheel', handler);
+	}
+
+	public destroy() {
+		window.removeEventListener('resize', this.onResizeHandler);
+	}
+
+	private refreshSize() {
+		Dom.attrs(this.canvas, {
+			width: this.workspace.offsetWidth,
+			height: this.workspace.offsetHeight
+		});
+	}
+
+	private onResize() {
+		this.refreshSize();
 	}
 }

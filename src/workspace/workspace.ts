@@ -15,7 +15,6 @@ export class Workspace implements DesignerComponentProvider {
 		const workspace = new Workspace(view, context);
 		setTimeout(() => {
 			workspace.render();
-			workspace.view.refreshSize();
 			workspace.resetViewPort();
 		});
 
@@ -25,7 +24,6 @@ export class Workspace implements DesignerComponentProvider {
 		context.onSelectedStepChanged.subscribe(s => workspace.onSelectedStepChanged(s));
 		context.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
 
-		workspace.view.bindResize(() => workspace.view.refreshSize());
 		workspace.view.bindMouseDown(e => workspace.onMouseDown(e));
 		workspace.view.bindTouchStart(e => workspace.onTouchStart(e));
 		workspace.view.bindWheel(e => workspace.onWheel(e));
@@ -83,6 +81,10 @@ export class Workspace implements DesignerComponentProvider {
 		const componentOffset = new Vector(stepComponent.view.width, stepComponent.view.height).divideByScalar(2);
 
 		this.context.animateViewPort(realPos.add(clientSize.divideByScalar(2)).subtract(componentOffset), 1);
+	}
+
+	public destroy() {
+		this.view.destroy();
 	}
 
 	private onMouseDown(e: MouseEvent) {

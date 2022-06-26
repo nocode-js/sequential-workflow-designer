@@ -9,7 +9,9 @@ export class RegionView {
 			class: 'sqd-region',
 			width: totalWidth,
 			height,
-			fill: 'transparent'
+			fill: 'transparent',
+			rx: 5,
+			ry: 5
 		});
 		const regions: SVGElement[] = [mainRegion];
 		parent.insertBefore(mainRegion, parent.firstChild);
