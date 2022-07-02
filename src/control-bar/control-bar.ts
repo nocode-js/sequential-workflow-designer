@@ -6,9 +6,9 @@ export class ControlBar {
 	public static create(parent: HTMLElement, context: DesignerContext): ControlBar {
 		const view = ControlBarView.create(parent);
 		const bar = new ControlBar(view, context);
-		view.bindDeleteButtonClick(e => bar.onDeleteButtonClicked(e));
-		view.bindMoveButtonClick(e => bar.onMoveButtonClicked(e));
-		view.bindResetButtonClick(e => bar.onResetButtonClicked(e));
+		view.bindDeleteButtonClick(() => bar.onDeleteButtonClicked());
+		view.bindMoveButtonClick(() => bar.onMoveButtonClicked());
+		view.bindResetButtonClick(() => bar.onResetButtonClicked());
 		context.onIsReadonlyChanged.subscribe(() => bar.onIsReadonlyChanged());
 		context.onSelectedStepChanged.subscribe(() => bar.onSelectedStepChanged());
 		context.onIsMoveModeEnabledChanged.subscribe(i => bar.onIsMoveModeEnabledChanged(i));
@@ -29,8 +29,7 @@ export class ControlBar {
 		this.view.setIsMoveButtonDisabled(!isEnabled);
 	}
 
-	private onDeleteButtonClicked(e: Event) {
-		e.preventDefault();
+	private onDeleteButtonClicked() {
 		if (this.context.selectedStep) {
 			const parentSequence = this.context.getSelectedStepParentSequence();
 			SequenceModifier.deleteStep(this.context.selectedStep, parentSequence);
@@ -40,13 +39,11 @@ export class ControlBar {
 		}
 	}
 
-	private onResetButtonClicked(e: Event) {
-		e.preventDefault();
+	private onResetButtonClicked() {
 		this.context.resetViewPort();
 	}
 
-	private onMoveButtonClicked(e: Event) {
-		e.preventDefault();
+	private onMoveButtonClicked() {
 		this.context.toggleIsMoveModeEnabled();
 	}
 

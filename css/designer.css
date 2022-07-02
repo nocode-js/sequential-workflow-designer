@@ -4,7 +4,6 @@
 	display: flex;
 	width: 100%;
 	height: 100%;
-	overflow: none;
 }
 .sqd-designer, .sqd-drag {
 	font-size: 13px;
@@ -25,47 +24,62 @@
 }
 .sqd-toolbox {
 	position: absolute;
-	display: flex;
-	flex-direction: column;
 	top: 10px;
 	left: 10px;
 	z-index: 20;
 	box-sizing: border-box;
 	border-radius: 10px;
-	max-height: 70%;
+	width: 125px;
 }
 .sqd-toolbox-header {
+	position: relative;
 	padding: 10px;
+	cursor: pointer;
 }
-.sqd-toolbox-title {
+.sqd-toolbox-header-title {
 	display: block;
-	text-align: center;
-	margin-bottom: 10px;
+}
+.sqd-toolbox-toggle-icon {
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	width: 16px;
+	height: 16px;
+	margin: -8px 0 0;
+}
+.sqd-toolbox-header:hover .sqd-toolbox-toggle-icon {
+	opacity: .6;
+}
+.sqd-scrollbox {
+	position: relative;
+	overflow: hidden;
+}
+.sqd-scrollbox-body {
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 .sqd-toolbox-filter {
 	display: block;
+	box-sizing: border-box;
 	padding: 6px 8px;
 	outline: none;
-	width: 100px;
-	margin: 0 auto;
+	width: 105px;
+	margin: 0 10px 10px;
 	box-sizing: border-box;
 	border-radius: 10px;
-}
-.sqd-toolbox-container {
-	flex: 1;
-	padding: 0 10px;
-	overflow: auto;
 }
 .sqd-toolbox-group-title {
 	text-align: center;
 	padding: 5px 0;
-	margin: 0 0 10px;
+	margin: 0 10px 10px;
 	border-radius: 10px;
 }
 .sqd-toolbox-item {
 	position: relative;
 	border-radius: 5px;
-	margin: 0 0 10px;
+	margin: 0 10px 10px;
+	width: 105px;
 	cursor: move;
 }
 .sqd-toolbox-item-icon {
@@ -126,10 +140,9 @@
 /* .sqd-workspace */
 
 .sqd-workspace {
-	display: block;
 	flex: 1;
 	position: relative;
-	height: 100%;
+	display: block;
 }
 .sqd-workspace-canvas {
 	position: absolute;
@@ -146,9 +159,52 @@
 
 /* .sqd-smart-editor */
 
+.sqd-smart-editor-toggle {
+	position: absolute;
+	top: 0;
+	z-index: 29;
+	width: 36px;
+	height: 64px;
+	border-bottom-left-radius: 10px;
+	cursor: pointer;
+}
+.sqd-smart-editor-toggle-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 24px;
+	height: 24px;
+	margin: -12px 0 0 -12px;
+}
+.sqd-smart-editor-toggle:hover .sqd-smart-editor-toggle-icon {
+	opacity: .6;
+}
 .sqd-smart-editor {
+	z-index: 30;
+}
+.sqd-layout-desktop .sqd-smart-editor {
+	position: relative;
 	width: 300px;
-	height: 100%;
+}
+.sqd-layout-desktop .sqd-smart-editor-toggle {
+	right: 300px;
+}
+.sqd-layout-desktop .sqd-smart-editor-toggle.sqd-collapsed {
+	right: 0;
+}
+.sqd-layout-mobile .sqd-smart-editor {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 41px;
+}
+.sqd-layout-mobile .sqd-smart-editor-toggle {
+	left: 5px;
+}
+.sqd-layout-mobile .sqd-smart-editor-toggle.sqd-collapsed {
+	left: auto;
+	right: 0;
 }
 
 /* .sqd-task */

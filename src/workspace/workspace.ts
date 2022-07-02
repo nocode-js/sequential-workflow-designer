@@ -23,10 +23,11 @@ export class Workspace implements DesignerComponentProvider {
 		context.onViewPortChanged.subscribe(vp => workspace.onViewPortChanged(vp));
 		context.onSelectedStepChanged.subscribe(s => workspace.onSelectedStepChanged(s));
 		context.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
+		context.onIsSmartEditorCollapsedChanged.subscribe(() => workspace.onIsSmartEditorCollapsedChanged());
 
-		workspace.view.bindMouseDown(e => workspace.onMouseDown(e));
-		workspace.view.bindTouchStart(e => workspace.onTouchStart(e));
-		workspace.view.bindWheel(e => workspace.onWheel(e));
+		view.bindMouseDown(e => workspace.onMouseDown(e));
+		view.bindTouchStart(e => workspace.onTouchStart(e));
+		view.bindWheel(e => workspace.onWheel(e));
 		return workspace;
 	}
 
@@ -130,6 +131,10 @@ export class Workspace implements DesignerComponentProvider {
 
 	private onIsDraggingChanged(isDragging: boolean) {
 		this.getRootComponent().setIsDragging(isDragging);
+	}
+
+	private onIsSmartEditorCollapsedChanged() {
+		setTimeout(() => this.view.refreshSize());
 	}
 
 	private onViewPortChanged(viewPort: ViewPort) {

@@ -4,6 +4,7 @@ import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
 import { Definition, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
+import { LayoutController } from './layout-controller';
 import { Placeholder, StepComponent } from './workspace/component';
 
 export class DesignerContext {
@@ -12,6 +13,8 @@ export class DesignerContext {
 	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
 	public readonly onIsDraggingChanged = new SimpleEvent<boolean>();
 	public readonly onIsMoveModeEnabledChanged = new SimpleEvent<boolean>();
+	public readonly onIsToolboxCollapsedChanged = new SimpleEvent<boolean>();
+	public readonly onIsSmartEditorCollapsedChanged = new SimpleEvent<boolean>();
 	public readonly onDefinitionChanged = new SimpleEvent<void>();
 
 	public viewPort: ViewPort = {
@@ -29,7 +32,10 @@ export class DesignerContext {
 	public constructor(
 		public readonly definition: Definition,
 		public readonly behaviorController: BehaviorController,
-		public readonly configuration: DesignerConfiguration
+		public readonly layoutController: LayoutController,
+		public readonly configuration: DesignerConfiguration,
+		public isToolboxCollapsed: boolean,
+		public isSmartEditorCollapsed: boolean
 	) {
 		this.isReadonly = !!configuration.isReadonly;
 	}
@@ -94,6 +100,16 @@ export class DesignerContext {
 	public toggleIsMoveModeEnabled() {
 		this.isMoveModeEnabled = !this.isMoveModeEnabled;
 		this.onIsMoveModeEnabledChanged.forward(this.isMoveModeEnabled);
+	}
+
+	public toggleIsToolboxCollapsed() {
+		this.isToolboxCollapsed = !this.isToolboxCollapsed;
+		this.onIsToolboxCollapsedChanged.forward(this.isToolboxCollapsed);
+	}
+
+	public toggleIsSmartEditorCollapsed() {
+		this.isSmartEditorCollapsed = !this.isSmartEditorCollapsed;
+		this.onIsSmartEditorCollapsedChanged.forward(this.isSmartEditorCollapsed);
 	}
 
 	public resetViewPort() {

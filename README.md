@@ -12,7 +12,7 @@ Features:
 * full generic & configurable,
 * light/dark themes,
 * works on modern browsers,
-* ~~works on mobile~~ (TODO).
+* works on mobile.
 
 ## 👀 Examples
 

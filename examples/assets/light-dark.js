@@ -41,7 +41,6 @@ function install(placeholder, theme) {
 		},
 
 		editors: {
-			isHidden: true,
 			globalEditorProvider: () => {
 				return document.createElement('div');
 			},

@@ -5,13 +5,16 @@ import { Definition } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
+import { LayoutController } from './layout-controller';
 
 export default class Designer {
 	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
 		const behaviorController = new BehaviorController();
-		const context = new DesignerContext(definition, behaviorController, configuration);
+		const layoutController = new LayoutController(parent);
+		const isMobile = layoutController.isMobile();
+		const context = new DesignerContext(definition, behaviorController, layoutController, configuration, isMobile, isMobile);
 
 		const view = DesignerView.create(parent, context, configuration);
 		const designer = new Designer(view, context);

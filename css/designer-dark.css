@@ -10,8 +10,9 @@
 .sqd-theme-dark .sqd-toolbox {
 	background: #3F3F3F;
 }
-.sqd-theme-dark .sqd-toolbox-title {
+.sqd-theme-dark .sqd-toolbox-header-title {
 	color: #FFF;
+
 }
 .sqd-theme-dark .sqd-toolbox-filter {
 	border: 0;
@@ -57,7 +58,10 @@
 /* dark > .sqd-smart-editor */
 
 .sqd-theme-dark .sqd-smart-editor {
-	background: #484848;
+	background: #3F3F3F;
+}
+.sqd-theme-dark .sqd-smart-editor-toggle {
+	background: #6F6F6F;
 }
 
 /* dark > .sqd-task */

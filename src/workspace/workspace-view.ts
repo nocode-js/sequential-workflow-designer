@@ -110,7 +110,7 @@ export class WorkspaceView {
 		window.removeEventListener('resize', this.onResizeHandler);
 	}
 
-	private refreshSize() {
+	public refreshSize() {
 		Dom.attrs(this.canvas, {
 			width: this.workspace.offsetWidth,
 			height: this.workspace.offsetHeight

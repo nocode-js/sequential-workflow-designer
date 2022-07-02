@@ -59,6 +59,10 @@
 	background: #FFF;
 	box-shadow: 0 0 8px rgba(0, 0, 0, .15);
 }
+.sqd-theme-light .sqd-smart-editor-toggle {
+	background: #FFF;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .15);
+}
 
 /* light > .sqd-task */
 

@@ -1,6 +1,8 @@
 import { Dom } from '../core/dom';
+import { Icons } from '../core/icons';
 import { ToolboxGroupConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
+import { ScrollBoxView } from './scrollbox-view';
 import { ToolboxItem } from './toolbox-item';
 
 export class ToolboxView {
@@ -12,48 +14,82 @@ export class ToolboxView {
 		const header = Dom.element('div', {
 			class: 'sqd-toolbox-header'
 		});
-		const title = Dom.element('div', {
-			class: 'sqd-toolbox-title'
+		const headerTitle = Dom.element('div', {
+			class: 'sqd-toolbox-header-title'
 		});
-		title.innerText = 'Steps';
+		headerTitle.innerText = 'Toolbox';
+
+		const headerToggleIcon = Icons.create('sqd-toolbox-toggle-icon');
+
+		const body = Dom.element('div', {
+			class: 'sqd-toolbox-body'
+		});
+
 		const filterInput = Dom.element('input', {
 			class: 'sqd-toolbox-filter',
 			type: 'text',
 			placeholder: 'Search...'
 		});
-		const container = Dom.element('div', {
-			class: 'sqd-toolbox-container'
-		});
 
-		header.appendChild(title);
-		header.appendChild(filterInput);
 		root.appendChild(header);
-		root.appendChild(container);
+		root.appendChild(body);
+		header.appendChild(headerTitle);
+		header.appendChild(headerToggleIcon);
+		body.appendChild(filterInput);
 		parent.appendChild(root);
-		return new ToolboxView(filterInput, container, context);
+
+		const scrollboxView = ScrollBoxView.create(body, parent);
+		return new ToolboxView(header, headerToggleIcon, body, filterInput, scrollboxView, context);
 	}
 
 	private constructor(
+		private readonly header: HTMLElement,
+		private readonly headerToggleIcon: SVGElement,
+		private readonly body: HTMLElement,
 		private readonly filterInput: HTMLInputElement,
-		private readonly container: HTMLElement,
+		private readonly scrollboxView: ScrollBoxView,
 		private readonly context: DesignerContext
 	) {}
 
-	public bindFilterInputChange(handler: (e: Event) => void) {
-		this.filterInput.addEventListener('keyup', handler);
-		this.filterInput.addEventListener('blur', handler);
+	public bindToggleIsCollapsedClick(handler: () => void) {
+		this.header.addEventListener('click', e => {
+			e.preventDefault();
+			handler();
+		});
+	}
+
+	public bindFilterInputChange(handler: (value: string) => void) {
+		function forward(e: Event) {
+			handler((e.target as HTMLInputElement).value);
+		}
+		this.filterInput.addEventListener('keyup', forward);
+		this.filterInput.addEventListener('blur', forward);
+	}
+
+	public setIsCollapsed(isCollapsed: boolean) {
+		Dom.toggleClass(this.body, isCollapsed, 'sqd-hidden');
+		this.headerToggleIcon.innerHTML = isCollapsed ? Icons.arrowDown : Icons.close;
+		if (!isCollapsed) {
+			this.scrollboxView.refresh();
+		}
 	}
 
 	public setGroups(groups: ToolboxGroupConfiguration[]) {
-		this.container.innerHTML = '';
+		const list = Dom.element('div');
+
 		groups.forEach(group => {
 			const groupTitle = Dom.element('div', {
 				class: 'sqd-toolbox-group-title'
 			});
 			groupTitle.innerText = group.name;
-			this.container.appendChild(groupTitle);
+			list.appendChild(groupTitle);
 
-			group.steps.forEach(s => ToolboxItem.create(this.container, s, this.context));
+			group.steps.forEach(s => ToolboxItem.create(list, s, this.context));
 		});
+		this.scrollboxView.setContent(list);
+	}
+
+	public destroy() {
+		this.scrollboxView.destroy();
 	}
 }
