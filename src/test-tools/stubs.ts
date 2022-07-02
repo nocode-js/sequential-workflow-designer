@@ -1,7 +1,9 @@
 import { BehaviorController } from '../behaviors/behavior-controller';
+import { Dom } from '../core/dom';
 import { ComponentType, Definition, Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
+import { LayoutController } from '../layout-controller';
 
 export function createDesignerConfigurationStub(): DesignerConfiguration {
 	return {
@@ -34,5 +36,8 @@ export function createDefinitionStub(): Definition {
 }
 
 export function createDesignerContextStub(): DesignerContext {
-	return new DesignerContext(createDefinitionStub(), new BehaviorController(), createDesignerConfigurationStub());
+	const parent = Dom.element('div');
+	const bc = new BehaviorController();
+	const lc = new LayoutController(parent);
+	return new DesignerContext(createDefinitionStub(), bc, lc, createDesignerConfigurationStub(), false, false);
 }
