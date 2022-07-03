@@ -76,6 +76,7 @@ export class ContainerStepComponent implements StepComponent {
 	public validate(): boolean {
 		const isValid = this.configuration.validator ? this.configuration.validator(this.step) : true;
 		this.view.setIsValid(isValid);
-		return isValid && this.view.sequenceComponent.validate();
+		const isSequenceValid = this.view.sequenceComponent.validate();
+		return isValid && isSequenceValid;
 	}
 }
