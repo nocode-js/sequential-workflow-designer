@@ -14,7 +14,7 @@ function embedStylesheet(url) {
 
 const baseUrl = isLocalhost()
 	? '..'
-	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.1.3';
+	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.1.4';
 
 embedScript(`${baseUrl}/lib/designer.js`);
 embedStylesheet(`${baseUrl}/css/designer.css`);
