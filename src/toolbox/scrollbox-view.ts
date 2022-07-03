@@ -62,6 +62,7 @@ export class ScrollBoxView {
 
 	private onWheel(e: WheelEvent) {
 		e.preventDefault();
+		e.stopPropagation();
 
 		if (this.current) {
 			const delta = e.deltaY > 0 ? -25 : 25;

@@ -7,6 +7,9 @@ import { DesignerConfiguration } from './designer-configuration';
 import { LayoutController } from './layout-controller';
 import { Placeholder, StepComponent } from './workspace/component';
 
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 3;
+
 export class DesignerContext {
 	public readonly onViewPortChanged = new SimpleEvent<ViewPort>();
 	public readonly onSelectedStepChanged = new SimpleEvent<Step | null>();
@@ -45,6 +48,10 @@ export class DesignerContext {
 		this.onViewPortChanged.forward(this.viewPort);
 	}
 
+	public resetViewPort() {
+		this.getProvider().resetViewPort();
+	}
+
 	public animateViewPort(position: Vector, scale: number) {
 		if (this.viewPortAnimation && this.viewPortAnimation.isAlive) {
 			this.viewPortAnimation.stop();
@@ -59,6 +66,21 @@ export class DesignerContext {
 			const newScale = startScale - deltaScale * progress;
 			this.setViewPort(startPosition.subtract(deltaPosition.multiplyByScalar(progress)), newScale);
 		});
+	}
+
+	public moveViewPortToStep(stepId: string) {
+		const sc = this.getProvider().findStepComponentById(stepId);
+		if (sc) {
+			this.getProvider().moveViewPortToStep(sc);
+		}
+	}
+
+	public limitScale(scale: number): number {
+		return Math.min(Math.max(scale, MIN_SCALE), MAX_SCALE);
+	}
+
+	public zoom(direction: boolean) {
+		this.getProvider().zoom(direction);
 	}
 
 	public setSelectedStep(step: Step | null) {
@@ -112,17 +134,6 @@ export class DesignerContext {
 		this.onIsSmartEditorCollapsedChanged.forward(this.isSmartEditorCollapsed);
 	}
 
-	public resetViewPort() {
-		this.getProvider().resetViewPort();
-	}
-
-	public moveViewPortToStep(stepId: string) {
-		const sc = this.getProvider().findStepComponentById(stepId);
-		if (sc) {
-			this.getProvider().moveViewPortToStep(sc);
-		}
-	}
-
 	public notifiyDefinitionChanged() {
 		this.onDefinitionChanged.forward();
 	}
@@ -152,5 +163,6 @@ export interface DesignerComponentProvider {
 	getPlaceholders(): Placeholder[];
 	findStepComponentById(stepId: string): StepComponent | null;
 	resetViewPort(): void;
+	zoom(direction: boolean): void;
 	moveViewPortToStep(stepComponent: StepComponent): void;
 }

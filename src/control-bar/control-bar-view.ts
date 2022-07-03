@@ -11,43 +11,48 @@ export class ControlBarView {
 		deleteButton.classList.add('sqd-hidden');
 
 		const resetButton = createButton(Icons.center, 'Reset');
+		const zoomInButton = createButton(Icons.zoomIn, 'Zoom in');
+		const zoomOutButton = createButton(Icons.zoomOut, 'Zoom out');
 
 		const moveButton = createButton(Icons.move, 'Turn on/off drag and drop');
 		moveButton.classList.add('sqd-disabled');
 
 		root.appendChild(resetButton);
+		root.appendChild(zoomInButton);
+		root.appendChild(zoomOutButton);
 		root.appendChild(moveButton);
 		root.appendChild(deleteButton);
 
 		parent.appendChild(root);
-		return new ControlBarView(deleteButton, moveButton, resetButton);
+		return new ControlBarView(resetButton, zoomInButton, zoomOutButton, moveButton, deleteButton);
 	}
 
 	private constructor(
-		private readonly deleteButton: Element,
-		private readonly moveButton: Element,
-		private readonly resetButton: Element
+		private readonly resetButton: HTMLElement,
+		private readonly zoomInButton: HTMLElement,
+		private readonly zoomOutButton: HTMLElement,
+		private readonly moveButton: HTMLElement,
+		private readonly deleteButton: HTMLElement
 	) {}
 
-	public bindDeleteButtonClick(handler: () => void) {
-		this.deleteButton.addEventListener('click', e => {
-			e.preventDefault();
-			handler();
-		});
+	public bindResetButtonClick(handler: () => void) {
+		bindClick(this.resetButton, handler);
+	}
+
+	public bindZoomInButtonClick(handler: () => void) {
+		bindClick(this.zoomInButton, handler);
+	}
+
+	public bindZoomOutButtonClick(handler: () => void) {
+		bindClick(this.zoomOutButton, handler);
 	}
 
 	public bindMoveButtonClick(handler: () => void) {
-		this.moveButton.addEventListener('click', e => {
-			e.preventDefault();
-			handler();
-		});
+		bindClick(this.moveButton, handler);
 	}
 
-	public bindResetButtonClick(handler: () => void) {
-		this.resetButton.addEventListener('click', e => {
-			e.preventDefault();
-			handler();
-		});
+	public bindDeleteButtonClick(handler: () => void) {
+		bindClick(this.deleteButton, handler);
 	}
 
 	public setIsDeleteButtonHidden(isHidden: boolean) {
@@ -57,6 +62,13 @@ export class ControlBarView {
 	public setIsMoveButtonDisabled(isDisabled: boolean) {
 		Dom.toggleClass(this.moveButton, isDisabled, 'sqd-disabled');
 	}
+}
+
+function bindClick(element: HTMLElement, handler: () => void) {
+	element.addEventListener('click', e => {
+		e.preventDefault();
+		handler();
+	});
 }
 
 function createButton(iconContent: string, title: string): HTMLElement {

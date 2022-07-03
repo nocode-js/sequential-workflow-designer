@@ -8,6 +8,9 @@ import { Placeholder, StepComponent, StepComponentState } from './component';
 import { StartStopComponent } from './start-stop/start-stop-component';
 import { WorkspaceView } from './workspace-view';
 
+const WHEEL_DELTA = 0.1;
+const ZOOM_DELTA = 0.2;
+
 export class Workspace implements DesignerComponentProvider {
 	public static create(parent: HTMLElement, context: DesignerContext): Workspace {
 		const view = WorkspaceView.create(parent, context.configuration.steps);
@@ -73,6 +76,12 @@ export class Workspace implements DesignerComponentProvider {
 		this.context.setViewPort(new Vector(x, y), 1);
 	}
 
+	public zoom(direction: boolean): void {
+		const delta = direction ? ZOOM_DELTA : -ZOOM_DELTA;
+		const scale = this.context.limitScale(this.context.viewPort.scale + delta);
+		this.context.setViewPort(this.context.viewPort.position, scale);
+	}
+
 	public moveViewPortToStep(stepComponent: StepComponent) {
 		const vp = this.context.viewPort;
 		const componentPosition = stepComponent.view.getClientPosition();
@@ -120,8 +129,8 @@ export class Workspace implements DesignerComponentProvider {
 		// The real point is point on canvas with no scale.
 		const mouseRealPoint = mousePoint.divideByScalar(viewPort.scale).subtract(viewPort.position.divideByScalar(viewPort.scale));
 
-		const wheelDelta = e.deltaY > 0 ? -0.1 : 0.1;
-		const newScale = Math.min(Math.max(viewPort.scale + wheelDelta, 0.1), 3);
+		const wheelDelta = e.deltaY > 0 ? -WHEEL_DELTA : WHEEL_DELTA;
+		const newScale = this.context.limitScale(viewPort.scale + wheelDelta);
 
 		const position = mouseRealPoint.multiplyByScalar(-newScale).add(mousePoint);
 		const scale = newScale;

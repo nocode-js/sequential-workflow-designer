@@ -5,7 +5,7 @@ function createStep() {
 		id: '0x0',
 		componentType: 'task',
 		type: 'task',
-		name: 'Nop',
+		name: 'Open TCP port',
 		properties: {}
 	};
 }

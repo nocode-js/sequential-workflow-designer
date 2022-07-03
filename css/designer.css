@@ -29,15 +29,18 @@
 	z-index: 20;
 	box-sizing: border-box;
 	border-radius: 10px;
-	width: 125px;
+	width: 130px;
 }
 .sqd-toolbox-header {
 	position: relative;
-	padding: 10px;
+	padding: 15px 10px;
 	cursor: pointer;
 }
 .sqd-toolbox-header-title {
 	display: block;
+	font-size: 1.2em;
+	line-height: 1em;
+	font-weight: bold;
 }
 .sqd-toolbox-toggle-icon {
 	position: absolute;
@@ -64,7 +67,7 @@
 	box-sizing: border-box;
 	padding: 6px 8px;
 	outline: none;
-	width: 105px;
+	width: 110px;
 	margin: 0 10px 10px;
 	box-sizing: border-box;
 	border-radius: 10px;
@@ -78,8 +81,9 @@
 .sqd-toolbox-item {
 	position: relative;
 	border-radius: 5px;
+	box-sizing: border-box;
 	margin: 0 10px 10px;
-	width: 105px;
+	width: 110px;
 	cursor: move;
 }
 .sqd-toolbox-item-icon {
@@ -102,6 +106,8 @@
 	display: block;
 	padding: 10px 10px 10px 30px;
 	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .sqd-drag {

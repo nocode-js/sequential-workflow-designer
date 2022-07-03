@@ -6,9 +6,11 @@ export class ControlBar {
 	public static create(parent: HTMLElement, context: DesignerContext): ControlBar {
 		const view = ControlBarView.create(parent);
 		const bar = new ControlBar(view, context);
-		view.bindDeleteButtonClick(() => bar.onDeleteButtonClicked());
-		view.bindMoveButtonClick(() => bar.onMoveButtonClicked());
 		view.bindResetButtonClick(() => bar.onResetButtonClicked());
+		view.bindZoomInButtonClick(() => bar.onZoomInButtonClicked());
+		view.bindZoomOutButtonClick(() => bar.onZoomOutButtonClicked());
+		view.bindMoveButtonClick(() => bar.onMoveButtonClicked());
+		view.bindDeleteButtonClick(() => bar.onDeleteButtonClicked());
 		context.onIsReadonlyChanged.subscribe(() => bar.onIsReadonlyChanged());
 		context.onSelectedStepChanged.subscribe(() => bar.onSelectedStepChanged());
 		context.onIsMoveModeEnabledChanged.subscribe(i => bar.onIsMoveModeEnabledChanged(i));
@@ -17,16 +19,23 @@ export class ControlBar {
 
 	private constructor(private readonly view: ControlBarView, private readonly context: DesignerContext) {}
 
-	private onIsReadonlyChanged() {
-		this.refreshDeleteButtonVisibility();
+	private onResetButtonClicked() {
+		this.context.resetViewPort();
 	}
 
-	private onSelectedStepChanged() {
-		this.refreshDeleteButtonVisibility();
+	private onZoomInButtonClicked() {
+		this.context.zoom(true);
 	}
 
-	private onIsMoveModeEnabledChanged(isEnabled: boolean) {
-		this.view.setIsMoveButtonDisabled(!isEnabled);
+	private onZoomOutButtonClicked() {
+		this.context.zoom(false);
+	}
+
+	private onMoveButtonClicked() {
+		this.context.toggleIsMoveModeEnabled();
+		if (this.context.selectedStep) {
+			this.context.setSelectedStep(null);
+		}
 	}
 
 	private onDeleteButtonClicked() {
@@ -39,12 +48,16 @@ export class ControlBar {
 		}
 	}
 
-	private onResetButtonClicked() {
-		this.context.resetViewPort();
+	private onIsReadonlyChanged() {
+		this.refreshDeleteButtonVisibility();
 	}
 
-	private onMoveButtonClicked() {
-		this.context.toggleIsMoveModeEnabled();
+	private onSelectedStepChanged() {
+		this.refreshDeleteButtonVisibility();
+	}
+
+	private onIsMoveModeEnabledChanged(isEnabled: boolean) {
+		this.view.setIsMoveButtonDisabled(!isEnabled);
 	}
 
 	private refreshDeleteButtonVisibility() {

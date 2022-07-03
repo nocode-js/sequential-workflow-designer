@@ -1,6 +1,5 @@
 export interface Attributes {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	[name: string]: any;
+	[name: string]: string | number;
 }
 
 export class Dom {
@@ -19,7 +18,7 @@ export class Dom {
 	public static attrs(element: Element, attributes: Attributes) {
 		Object.keys(attributes).forEach(name => {
 			const value = attributes[name];
-			element.setAttribute(name, value.toString());
+			element.setAttribute(name, typeof value === 'string' ? value : value.toString());
 		});
 	}
 
