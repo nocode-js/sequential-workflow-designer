@@ -26,12 +26,12 @@ export class ContainerStepComponentView implements ComponentView {
 		const height = sequenceComponent.view.height + PADDING_TOP + LABEL_HEIGHT;
 		const joinX = sequenceComponent.view.joinX + PADDING_X;
 
-		LabelView.create(g, width / 2, PADDING_TOP, step.name);
+		LabelView.create(g, joinX, PADDING_TOP, step.name);
 
 		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
-		const inputView = InputView.createRectInput(g, width / 2, 0, iconUrl);
+		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
 
-		JoinView.createStraightJoin(g, new Vector(width / 2, 0), PADDING_TOP);
+		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);
 
 		const regionView = RegionView.create(g, [width], height);
 
