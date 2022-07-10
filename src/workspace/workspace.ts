@@ -1,6 +1,5 @@
 import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
 import { SelectStepBehavior } from '../behaviors/select-step-behavior';
-import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerComponentProvider, DesignerContext, ViewPort } from '../designer-context';
@@ -28,7 +27,7 @@ export class Workspace implements DesignerComponentProvider {
 		context.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
 		context.onIsSmartEditorCollapsedChanged.subscribe(() => workspace.onIsSmartEditorCollapsedChanged());
 
-		view.bindMouseDown(e => workspace.onMouseDown(e));
+		view.bindMouseDown((p, t, b) => workspace.onMouseDown(p, t, b));
 		view.bindTouchStart(e => workspace.onTouchStart(e));
 		view.bindWheel(e => workspace.onWheel(e));
 		return workspace;
@@ -97,15 +96,12 @@ export class Workspace implements DesignerComponentProvider {
 		this.view.destroy();
 	}
 
-	private onMouseDown(e: MouseEvent) {
-		e.preventDefault();
-		const isMiddleButton = e.button === 1;
-		this.startBehavior(e.target as Element, readMousePosition(e), isMiddleButton);
+	private onMouseDown(position: Vector, target: Element, button: number) {
+		const isMiddleButton = button === 1;
+		this.startBehavior(target, position, isMiddleButton);
 	}
 
-	private onTouchStart(e: TouchEvent) {
-		e.preventDefault();
-		const position = readTouchPosition(e);
+	private onTouchStart(position: Vector) {
 		const element = document.elementFromPoint(position.x, position.y);
 		if (element) {
 			this.startBehavior(element, position, false);

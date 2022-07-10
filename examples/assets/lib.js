@@ -1,7 +1,8 @@
 /* global location, document */
 
-function isLocalhost() {
-	return location.hostname.toLowerCase() === 'localhost';
+function isTestEnv() {
+	return location.hostname.toLowerCase() === 'localhost' ||
+		location.hostname.startsWith('192.168.');
 }
 
 function embedScript(url) {
@@ -12,7 +13,7 @@ function embedStylesheet(url) {
 	document.write(`<link href="${url}" rel="stylesheet">`);
 }
 
-const baseUrl = isLocalhost()
+const baseUrl = isTestEnv()
 	? '..'
 	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.1.5';
 

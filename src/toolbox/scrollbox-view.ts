@@ -10,10 +10,10 @@ export class ScrollBoxView {
 		parent.appendChild(root);
 
 		const view = new ScrollBoxView(root, viewport);
-		window.addEventListener('resize', view.onResizeHandler);
-		root.addEventListener('wheel', e => view.onWheel(e));
-		root.addEventListener('touchstart', e => view.onTouchStart(e));
-		root.addEventListener('mousedown', e => view.onMouseDown(e));
+		window.addEventListener('resize', view.onResizeHandler, false);
+		root.addEventListener('wheel', e => view.onWheel(e), false);
+		root.addEventListener('touchstart', e => view.onTouchStart(e), false);
+		root.addEventListener('mousedown', e => view.onMouseDown(e), false);
 		return view;
 	}
 
@@ -50,7 +50,7 @@ export class ScrollBoxView {
 	}
 
 	public destroy() {
-		window.removeEventListener('resize', this.onResizeHandler);
+		window.removeEventListener('resize', this.onResizeHandler, false);
 	}
 
 	private reload(element: HTMLElement) {
@@ -115,15 +115,13 @@ export class ScrollBoxView {
 	}
 
 	private startScroll(startPosition: Vector) {
-		if (this.scroll) {
-			this.stopScroll();
-			return;
+		if (!this.scroll) {
+			window.addEventListener('touchmove', this.onTouchMoveHandler, false);
+			window.addEventListener('mousemove', this.onMouseMoveHandler, false);
+			window.addEventListener('touchend', this.onTouchEndHandler, false);
+			window.addEventListener('mouseup', this.onMouseUpHandler, false);
 		}
 
-		window.addEventListener('touchmove', this.onTouchMoveHandler);
-		window.addEventListener('mousemove', this.onMouseMoveHandler);
-		window.addEventListener('touchend', this.onTouchEndHandler);
-		window.addEventListener('mouseup', this.onMouseUpHandler);
 		this.scroll = {
 			startPositionY: startPosition.y,
 			startScrollTop: this.getScrollTop()
@@ -139,10 +137,10 @@ export class ScrollBoxView {
 
 	private stopScroll() {
 		if (this.scroll) {
-			window.removeEventListener('touchmove', this.onTouchMoveHandler);
-			window.removeEventListener('mousemove', this.onMouseMoveHandler);
-			window.removeEventListener('touchend', this.onTouchEndHandler);
-			window.removeEventListener('mouseup', this.onMouseUpHandler);
+			window.removeEventListener('touchmove', this.onTouchMoveHandler, false);
+			window.removeEventListener('mousemove', this.onMouseMoveHandler, false);
+			window.removeEventListener('touchend', this.onTouchEndHandler, false);
+			window.removeEventListener('mouseup', this.onMouseUpHandler, false);
 			this.scroll = undefined;
 		}
 	}

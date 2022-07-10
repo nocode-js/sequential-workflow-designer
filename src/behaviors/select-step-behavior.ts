@@ -9,8 +9,6 @@ export class SelectStepBehavior implements Behavior {
 		return new SelectStepBehavior(pressedStepComponent, context);
 	}
 
-	private isCanceled = false;
-
 	private constructor(private readonly pressedStepComponent: StepComponent, private readonly context: DesignerContext) {}
 
 	public onStart() {
@@ -19,14 +17,13 @@ export class SelectStepBehavior implements Behavior {
 
 	public onMove(delta: Vector): Behavior | void {
 		if (!this.context.isReadonly && delta.distance() > 2) {
-			this.isCanceled = true;
 			this.context.setSelectedStep(null);
 			return DragStepBehavior.create(this.context, this.pressedStepComponent.step, this.pressedStepComponent);
 		}
 	}
 
-	public onEnd() {
-		if (!this.isCanceled) {
+	public onEnd(interrupt: boolean) {
+		if (!interrupt) {
 			this.context.setSelectedStep(this.pressedStepComponent.step);
 		}
 	}

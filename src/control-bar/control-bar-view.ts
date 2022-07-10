@@ -65,10 +65,14 @@ export class ControlBarView {
 }
 
 function bindClick(element: HTMLElement, handler: () => void) {
-	element.addEventListener('click', e => {
-		e.preventDefault();
-		handler();
-	});
+	element.addEventListener(
+		'click',
+		e => {
+			e.preventDefault();
+			handler();
+		},
+		false
+	);
 }
 
 function createButton(iconContent: string, title: string): HTMLElement {

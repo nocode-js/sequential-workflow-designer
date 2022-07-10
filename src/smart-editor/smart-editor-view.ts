@@ -30,10 +30,14 @@ export class SmartEditorView {
 	) {}
 
 	public bindToggleIsCollapsedClick(handler: () => void) {
-		this.toggle.addEventListener('click', e => {
-			e.preventDefault();
-			handler();
-		});
+		this.toggle.addEventListener(
+			'click',
+			e => {
+				e.preventDefault();
+				handler();
+			},
+			false
+		);
 	}
 
 	public setIsCollapsed(isCollapsed: boolean) {

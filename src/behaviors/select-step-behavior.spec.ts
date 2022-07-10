@@ -17,7 +17,7 @@ describe('SelectStepBehavior', () => {
 		const behavior = SelectStepBehavior.create(stepComponent, context);
 
 		behavior.onStart();
-		behavior.onEnd();
+		behavior.onEnd(false);
 
 		expect<Step | null>(selectedStep).toEqual(step);
 	});

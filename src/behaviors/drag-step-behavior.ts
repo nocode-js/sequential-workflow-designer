@@ -67,11 +67,11 @@ export class DragStepBehavior implements Behavior {
 		}
 	}
 
-	public onEnd() {
+	public onEnd(interrupt: boolean) {
 		this.view.remove();
 		this.context.setIsDragging(false);
 
-		if (this.currentPlaceholder) {
+		if (!interrupt && this.currentPlaceholder) {
 			if (this.pressedStepComponent) {
 				SequenceModifier.moveStep(
 					this.pressedStepComponent.parentSequence,
@@ -86,6 +86,9 @@ export class DragStepBehavior implements Behavior {
 		} else {
 			if (this.pressedStepComponent) {
 				this.pressedStepComponent.setState(StepComponentState.default);
+			}
+			if (this.currentPlaceholder) {
+				this.currentPlaceholder.setIsHover(false);
 			}
 		}
 		this.currentPlaceholder = undefined;

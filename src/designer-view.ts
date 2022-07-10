@@ -28,7 +28,7 @@ export class DesignerView {
 		}
 		const view = new DesignerView(root, context.layoutController, workspace, toolbox);
 		view.reloadLayout();
-		window.addEventListener('resize', view.onResizeHandler);
+		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;
 	}
 

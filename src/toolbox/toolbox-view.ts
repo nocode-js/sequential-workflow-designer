@@ -52,18 +52,19 @@ export class ToolboxView {
 	) {}
 
 	public bindToggleIsCollapsedClick(handler: () => void) {
-		this.header.addEventListener('click', e => {
+		function forward(e: Event) {
 			e.preventDefault();
 			handler();
-		});
+		}
+		this.header.addEventListener('click', forward, false);
 	}
 
 	public bindFilterInputChange(handler: (value: string) => void) {
 		function forward(e: Event) {
 			handler((e.target as HTMLInputElement).value);
 		}
-		this.filterInput.addEventListener('keyup', forward);
-		this.filterInput.addEventListener('blur', forward);
+		this.filterInput.addEventListener('keyup', forward, false);
+		this.filterInput.addEventListener('blur', forward, false);
 	}
 
 	public setIsCollapsed(isCollapsed: boolean) {

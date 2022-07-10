@@ -6,7 +6,7 @@ export class PlaceholderFinder {
 	public static create(placeholders: Placeholder[], context: DesignerContext): PlaceholderFinder {
 		const checker = new PlaceholderFinder(placeholders, context);
 		context.onViewPortChanged.subscribe(checker.clearCacheHandler);
-		window.addEventListener('scroll', checker.clearCacheHandler);
+		window.addEventListener('scroll', checker.clearCacheHandler, false);
 		return checker;
 	}
 
@@ -42,7 +42,7 @@ export class PlaceholderFinder {
 
 	public destroy() {
 		this.context.onViewPortChanged.unsubscribe(this.clearCacheHandler);
-		window.removeEventListener('scroll', this.clearCacheHandler);
+		window.removeEventListener('scroll', this.clearCacheHandler, false);
 	}
 
 	private clearCache() {

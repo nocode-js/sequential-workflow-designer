@@ -1,4 +1,5 @@
 import { Dom } from '../core/dom';
+import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
@@ -45,7 +46,7 @@ export class WorkspaceView {
 		parent.appendChild(workspace);
 
 		const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, configuration);
-		window.addEventListener('resize', view.onResizeHandler);
+		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;
 	}
 
@@ -94,20 +95,34 @@ export class WorkspaceView {
 		return new Vector(this.canvas.clientWidth, this.canvas.clientHeight);
 	}
 
-	public bindMouseDown(handler: (e: MouseEvent) => void) {
-		this.canvas.addEventListener('mousedown', handler);
+	public bindMouseDown(handler: (position: Vector, target: Element, button: number) => void) {
+		this.canvas.addEventListener(
+			'mousedown',
+			e => {
+				e.preventDefault();
+				handler(readMousePosition(e), e.target as Element, e.button);
+			},
+			false
+		);
 	}
 
-	public bindTouchStart(handler: (e: TouchEvent) => void) {
-		this.canvas.addEventListener('touchstart', handler);
+	public bindTouchStart(handler: (position: Vector) => void) {
+		this.canvas.addEventListener(
+			'touchstart',
+			e => {
+				e.preventDefault();
+				handler(readTouchPosition(e));
+			},
+			false
+		);
 	}
 
 	public bindWheel(handler: (e: WheelEvent) => void) {
-		this.canvas.addEventListener('wheel', handler);
+		this.canvas.addEventListener('wheel', handler, false);
 	}
 
 	public destroy() {
-		window.removeEventListener('resize', this.onResizeHandler);
+		window.removeEventListener('resize', this.onResizeHandler, false);
 	}
 
 	public refreshSize() {

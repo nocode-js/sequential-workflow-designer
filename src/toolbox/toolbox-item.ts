@@ -1,5 +1,5 @@
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
-import { readMousePosition, readTouchPosition } from '../core/event-readers';
+import { readTouchPosition } from '../core/event-readers';
 import { ObjectCloner } from '../core/object-cloner';
 import { Uid } from '../core/uid';
 import { Vector } from '../core/vector';
@@ -19,15 +19,15 @@ export class ToolboxItem {
 	private constructor(private readonly step: Step, private readonly context: DesignerContext) {}
 
 	private onTouchstart(e: TouchEvent) {
-		e.preventDefault();
-		e.stopPropagation();
-		this.startDrag(readTouchPosition(e));
+		if (e.touches.length === 1) {
+			e.preventDefault();
+			e.stopPropagation();
+			this.startDrag(readTouchPosition(e));
+		}
 	}
 
-	private onMousedown(e: MouseEvent) {
-		e.preventDefault();
-		e.stopPropagation();
-		this.startDrag(readMousePosition(e));
+	private onMousedown(position: Vector) {
+		this.startDrag(position);
 	}
 
 	private startDrag(position: Vector) {
