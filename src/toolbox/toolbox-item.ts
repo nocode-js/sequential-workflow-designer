@@ -20,11 +20,13 @@ export class ToolboxItem {
 
 	private onTouchstart(e: TouchEvent) {
 		e.preventDefault();
+		e.stopPropagation();
 		this.startDrag(readTouchPosition(e));
 	}
 
 	private onMousedown(e: MouseEvent) {
 		e.preventDefault();
+		e.stopPropagation();
 		this.startDrag(readMousePosition(e));
 	}
 
