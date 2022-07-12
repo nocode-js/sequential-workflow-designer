@@ -1,6 +1,7 @@
 build/
 node_modules/
 coverage/
+.vscode/
 designer.js
 designer.d.ts
 designer.js.map
