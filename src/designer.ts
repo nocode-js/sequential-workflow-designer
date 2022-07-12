@@ -18,7 +18,7 @@ export default class Designer {
 
 		const view = DesignerView.create(parent, context, configuration);
 		const designer = new Designer(view, context);
-		context.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.definition));
+		context.onDefinitionChanged.subscribe(d => designer.onDefinitionChanged.forward(d));
 		return designer;
 	}
 

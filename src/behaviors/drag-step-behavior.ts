@@ -81,6 +81,7 @@ export class DragStepBehavior implements Behavior {
 				);
 			} else {
 				SequenceModifier.insertStep(this.step, this.currentPlaceholder.parentSequence, this.currentPlaceholder.index);
+				this.context.setSelectedStep(this.step);
 			}
 			this.context.notifiyDefinitionChanged();
 		} else {

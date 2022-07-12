@@ -18,7 +18,7 @@ export class DesignerContext {
 	public readonly onIsMoveModeEnabledChanged = new SimpleEvent<boolean>();
 	public readonly onIsToolboxCollapsedChanged = new SimpleEvent<boolean>();
 	public readonly onIsSmartEditorCollapsedChanged = new SimpleEvent<boolean>();
-	public readonly onDefinitionChanged = new SimpleEvent<void>();
+	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
 
 	public viewPort: ViewPort = {
 		position: new Vector(0, 0),
@@ -135,7 +135,7 @@ export class DesignerContext {
 	}
 
 	public notifiyDefinitionChanged() {
-		this.onDefinitionChanged.forward();
+		this.onDefinitionChanged.forward(this.definition);
 	}
 
 	public getPlacehodlers(): Placeholder[] {

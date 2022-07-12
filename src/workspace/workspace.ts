@@ -1,5 +1,6 @@
 import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
 import { SelectStepBehavior } from '../behaviors/select-step-behavior';
+import { race } from '../core/simple-event-race';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerComponentProvider, DesignerContext, ViewPort } from '../designer-context';
@@ -21,11 +22,18 @@ export class Workspace implements DesignerComponentProvider {
 		});
 
 		context.setProvider(workspace);
-		context.onDefinitionChanged.subscribe(() => workspace.render());
 		context.onViewPortChanged.subscribe(vp => workspace.onViewPortChanged(vp));
-		context.onSelectedStepChanged.subscribe(s => workspace.onSelectedStepChanged(s));
 		context.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
 		context.onIsSmartEditorCollapsedChanged.subscribe(() => workspace.onIsSmartEditorCollapsedChanged());
+
+		race(0, context.onDefinitionChanged, context.onSelectedStepChanged).subscribe(v => {
+			const [definiton, selectedStep] = v;
+			if (definiton) {
+				workspace.render();
+			} else if (selectedStep !== undefined) {
+				workspace.onSelectedStepChanged(selectedStep);
+			}
+		});
 
 		view.bindMouseDown((p, t, b) => workspace.onMouseDown(p, t, b));
 		view.bindTouchStart(e => workspace.onTouchStart(e));
@@ -157,9 +165,10 @@ export class Workspace implements DesignerComponentProvider {
 		}
 		if (step) {
 			this.selectedStepComponent = this.getRootComponent().findById(step.id);
-			if (this.selectedStepComponent) {
-				this.selectedStepComponent.setState(StepComponentState.selected);
+			if (!this.selectedStepComponent) {
+				throw new Error(`Cannot find a step component by id ${step.id}`);
 			}
+			this.selectedStepComponent.setState(StepComponentState.selected);
 		}
 	}
 
