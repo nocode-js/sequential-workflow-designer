@@ -1,8 +1,9 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { animate, Animation } from './core/animation';
+import { SequenceModifier } from './core/sequence-modifier';
 import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
-import { Definition, Sequence, Step } from './definition';
+import { Definition, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { LayoutController } from './layout-controller';
 import { Placeholder, StepComponent } from './workspace/component';
@@ -98,15 +99,18 @@ export class DesignerContext {
 		}
 	}
 
-	public getSelectedStepParentSequence(): Sequence {
-		if (!this.selectedStep) {
-			throw new Error('No selected step');
-		}
-		const component = this.getProvider().findStepComponentById(this.selectedStep.id);
+	public deleteStepById(stepId: string) {
+		const component = this.getProvider().findStepComponentById(stepId);
 		if (!component) {
 			throw new Error('Cannot find component');
 		}
-		return component.parentSequence;
+		if (this.selectedStep?.id === stepId) {
+			this.setSelectedStep(null);
+		}
+
+		SequenceModifier.deleteStep(component.step, component.parentSequence);
+
+		this.notifiyDefinitionChanged();
 	}
 
 	public setIsReadonly(isReadonly: boolean) {

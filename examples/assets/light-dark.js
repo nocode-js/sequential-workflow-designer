@@ -1,8 +1,8 @@
 /* global window, document, sequentialWorkflowDesigner */
 
-function createStep() {
+function createStep(id) {
 	return {
-		id: '0x0',
+		id,
 		componentType: 'task',
 		type: 'task',
 		name: 'Open TCP port',
@@ -13,7 +13,7 @@ function createStep() {
 function install(placeholder, theme) {
 	const definition = {
 		sequence: [
-			createStep()
+			createStep('00000000000000000000000000000000')
 		],
 		properties: {}
 	};
@@ -25,7 +25,7 @@ function install(placeholder, theme) {
 				{
 					name: 'Tasks',
 					steps: [
-						createStep()
+						createStep(null)
 					]
 				}
 			]

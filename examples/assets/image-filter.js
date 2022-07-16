@@ -79,9 +79,9 @@ async function renderImage(definition) {
 	context.putImageData(imageData, 0, 0);
 }
 
-function createTaskStep(type, name) {
+function createTaskStep(id, type, name) {
 	return {
-		id: '0x0',
+		id,
 		componentType: 'task',
 		type,
 		name,
@@ -98,10 +98,10 @@ const configuration = {
 			{
 				name: 'Filters',
 				steps: [
-					createTaskStep('grayscale', 'Grayscale'),
-					createTaskStep('reverse-color', 'Reverse color'),
-					createTaskStep('contrast', 'Contrast'),
-					createTaskStep('shift-color', 'Shift color')
+					createTaskStep(null, 'grayscale', 'Grayscale'),
+					createTaskStep(null, 'reverse-color', 'Reverse color'),
+					createTaskStep(null, 'contrast', 'Contrast'),
+					createTaskStep(null, 'shift-color', 'Shift color')
 				]
 			}
 		]
@@ -129,7 +129,7 @@ const configuration = {
 const startDefinition = {
 	properties: {},
 	sequence: [
-		createTaskStep('contrast', 'Contrast')
+		createTaskStep('00000000000000000000000000000001', 'contrast', 'Contrast')
 	]
 };
 

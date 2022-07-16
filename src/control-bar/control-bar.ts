@@ -1,4 +1,3 @@
-import { SequenceModifier } from '../core/sequence-modifier';
 import { DesignerContext } from '../designer-context';
 import { ControlBarView } from './control-bar-view';
 
@@ -40,11 +39,7 @@ export class ControlBar {
 
 	private onDeleteButtonClicked() {
 		if (this.context.selectedStep) {
-			const parentSequence = this.context.getSelectedStepParentSequence();
-			SequenceModifier.deleteStep(this.context.selectedStep, parentSequence);
-
-			this.context.setSelectedStep(null);
-			this.context.notifiyDefinitionChanged();
+			this.context.deleteStepById(this.context.selectedStep.id);
 		}
 	}
 

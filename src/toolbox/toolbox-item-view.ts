@@ -1,11 +1,10 @@
 import { Dom } from '../core/dom';
 import { readMousePosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
-import { Step } from '../definition';
-import { StepsConfiguration } from '../designer-configuration';
+import { StepDefinition, StepsConfiguration } from '../designer-configuration';
 
 export class ToolboxItemView {
-	public static create(parent: HTMLElement, step: Step, configuration: StepsConfiguration): ToolboxItemView {
+	public static create(parent: HTMLElement, step: StepDefinition, configuration: StepsConfiguration): ToolboxItemView {
 		const root = Dom.element('div', {
 			class: 'sqd-toolbox-item',
 			title: step.name
@@ -44,7 +43,7 @@ export class ToolboxItemView {
 		this.root.addEventListener(
 			'mousedown',
 			e => {
-				e.preventDefault();
+				e.stopPropagation();
 				handler(readMousePosition(e));
 			},
 			false

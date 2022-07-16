@@ -74,7 +74,6 @@ export class ScrollBoxView {
 	}
 
 	private onWheel(e: WheelEvent) {
-		e.preventDefault();
 		e.stopPropagation();
 
 		if (this.content) {
@@ -85,12 +84,10 @@ export class ScrollBoxView {
 	}
 
 	private onTouchStart(e: TouchEvent) {
-		e.preventDefault();
 		this.startScroll(readTouchPosition(e));
 	}
 
 	private onMouseDown(e: MouseEvent) {
-		e.preventDefault();
 		this.startScroll(readMousePosition(e));
 	}
 

@@ -83,10 +83,11 @@ const placeholder = document.getElementById('placeholder');
 
 const definition = {
   properties: {
-    // global properties
+    'myProperty': 'my-value',
+    // global properties...
   },
   sequence: [
-    // root steps
+    // root steps...
   ]
 };
 

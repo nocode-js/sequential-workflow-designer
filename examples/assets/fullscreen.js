@@ -1,12 +1,8 @@
 /* global document, sequentialWorkflowDesigner, console */
 
-function uid() {
-	return Math.ceil(Math.random() * 10**16).toString(16);
-}
-
-function createTaskStep(type, name) {
+function createTaskStep(id, type, name) {
 	return {
-		id: uid(),
+		id,
 		componentType: 'task',
 		type,
 		name,
@@ -14,9 +10,9 @@ function createTaskStep(type, name) {
 	};
 }
 
-function createIfStep(_true, _false) {
+function createIfStep(id, _true, _false) {
 	return {
-		id: uid(),
+		id,
 		componentType: 'switch',
 		type: 'if',
 		name: 'If',
@@ -28,9 +24,9 @@ function createIfStep(_true, _false) {
 	};
 }
 
-function createContainerStep(steps) {
+function createContainerStep(id, steps) {
 	return {
-		id: uid(),
+		id,
 		componentType: 'container',
 		type: 'loop',
 		name: 'Loop',
@@ -43,11 +39,11 @@ function toolboxGroup(name) {
 	return {
 		name,
 		steps: [
-			createTaskStep('save', 'Save file'),
-			createTaskStep('text', 'Send email'),
-			createTaskStep('task', 'Create task'),
-			createIfStep([], []),
-			createContainerStep([])
+			createTaskStep(null, 'save', 'Save file'),
+			createTaskStep(null, 'text', 'Send email'),
+			createTaskStep(null, 'task', 'Create task'),
+			createIfStep(null, [], []),
+			createContainerStep(null, [])
 		]
 	};
 }
@@ -102,18 +98,18 @@ const configuration = {
 const startDefinition = {
 	properties: {},
 	sequence: [
-		createIfStep(
-			[ createTaskStep('save', 'Save file') ],
-			[ createTaskStep('text', 'Send email') ]
+		createIfStep('00000000000000000000000000000001',
+			[ createTaskStep('00000000000000000000000000000002', 'save', 'Save file') ],
+			[ createTaskStep('00000000000000000000000000000003', 'text', 'Send email') ]
 		),
-		createContainerStep([
-			createTaskStep('task', 'Create task')
+		createContainerStep('00000000000000000000000000000004', [
+			createTaskStep('00000000000000000000000000000005', 'task', 'Create task')
 		])
 	]
 };
 
 const placeholder = document.getElementById('designer');
 designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
-designer.onDefinitionChanged.subscribe(() => {
-	console.log('the definition has changed');
+designer.onDefinitionChanged.subscribe((newDefinition) => {
+	console.log('the definition has changed', newDefinition);
 });

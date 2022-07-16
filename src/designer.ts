@@ -18,6 +18,7 @@ export default class Designer {
 
 		const view = DesignerView.create(parent, context, configuration);
 		const designer = new Designer(view, context);
+		view.bindKeyUp(e => designer.onKeyUp(e));
 		context.onDefinitionChanged.subscribe(d => designer.onDefinitionChanged.forward(d));
 		return designer;
 	}
@@ -68,5 +69,23 @@ export default class Designer {
 
 	public destroy() {
 		this.view.destroy();
+	}
+
+	private onKeyUp(e: KeyboardEvent) {
+		const supportedKeys = ['Backspace', 'Delete'];
+		if (!supportedKeys.includes(e.key)) {
+			return;
+		}
+		const ignoreTagNames = ['input', 'textarea'];
+		if (document.activeElement && ignoreTagNames.includes(document.activeElement.tagName.toLowerCase())) {
+			return;
+		}
+		if (!this.context.selectedStep || this.context.isReadonly || this.context.isDragging) {
+			return;
+		}
+
+		e.preventDefault();
+		e.stopPropagation();
+		this.context.deleteStepById(this.context.selectedStep.id);
 	}
 }

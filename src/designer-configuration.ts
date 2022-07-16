@@ -14,9 +14,11 @@ export interface ToolboxConfiguration {
 	groups: ToolboxGroupConfiguration[];
 }
 
+export type StepDefinition = Omit<Step, 'id'>;
+
 export interface ToolboxGroupConfiguration {
 	name: string;
-	steps: Step[];
+	steps: StepDefinition[];
 }
 
 export interface StepsConfiguration {

@@ -33,6 +33,7 @@ export class DesignerView {
 	}
 
 	private readonly onResizeHandler = () => this.onResize();
+	private readonly onKeyUpHandlers: KeyUpHandler[] = [];
 
 	public constructor(
 		private readonly root: HTMLElement,
@@ -41,7 +42,15 @@ export class DesignerView {
 		private readonly toolbox?: Toolbox
 	) {}
 
+	public bindKeyUp(handler: KeyUpHandler) {
+		document.addEventListener('keyup', handler, false);
+		this.onKeyUpHandlers.push(handler);
+	}
+
 	public destroy() {
+		window.removeEventListener('resize', this.onResizeHandler, false);
+		this.onKeyUpHandlers.forEach(h => document.removeEventListener('keyup', h, false));
+
 		this.workspace.destroy();
 		this.toolbox?.destroy();
 
@@ -58,3 +67,5 @@ export class DesignerView {
 		Dom.toggleClass(this.root, isMobile, 'sqd-layout-mobile');
 	}
 }
+
+export type KeyUpHandler = (e: KeyboardEvent) => void;

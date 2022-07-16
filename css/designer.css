@@ -30,6 +30,7 @@
 	box-sizing: border-box;
 	border-radius: 10px;
 	width: 130px;
+	user-select: none;
 }
 .sqd-toolbox-header {
 	position: relative;
@@ -149,6 +150,7 @@
 	flex: 1;
 	position: relative;
 	display: block;
+	user-select: none;
 }
 .sqd-workspace-canvas {
 	position: absolute;

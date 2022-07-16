@@ -96,25 +96,11 @@ export class WorkspaceView {
 	}
 
 	public bindMouseDown(handler: (position: Vector, target: Element, button: number) => void) {
-		this.canvas.addEventListener(
-			'mousedown',
-			e => {
-				e.preventDefault();
-				handler(readMousePosition(e), e.target as Element, e.button);
-			},
-			false
-		);
+		this.canvas.addEventListener('mousedown', e => handler(readMousePosition(e), e.target as Element, e.button), false);
 	}
 
 	public bindTouchStart(handler: (position: Vector) => void) {
-		this.canvas.addEventListener(
-			'touchstart',
-			e => {
-				e.preventDefault();
-				handler(readTouchPosition(e));
-			},
-			false
-		);
+		this.canvas.addEventListener('touchstart', e => handler(readTouchPosition(e)), false);
 	}
 
 	public bindWheel(handler: (e: WheelEvent) => void) {
