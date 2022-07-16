@@ -142,6 +142,74 @@ designer.onDefinitionChanged.subscribe((newDefinition) => {
 });
 ```
 
+## 🚧 Supported Components
+
+### Task
+
+Any atomic task.
+
+```js
+const taskStep = {
+  componentType: 'task',
+  id: 'my-unique-id',
+  type: 'my-type', // e.g. 'save-file', 'send-email', ...
+  name: 'my-name',
+  properties: {
+    'myProperty': 'my-value',
+    // ...
+  }
+};
+```
+
+### Container
+
+This component is mainly designed for `for/while/foreach` loops. It could be used as a context container too.
+
+```ts
+const containerStep = {
+  componentType: 'container',
+  id: 'my-unique-id',
+  type: 'my-type', // e.g. 'for', 'while', 'foreach'...
+  name: 'my-name',
+  properties: {
+    'myProperty': 'my-value',
+    // ...
+  },
+  sequence: [
+    // steps...
+  ]
+};
+```
+
+### Switch
+
+This component is designed for `if/else` expressions, but you may use it for `switch/case` expressions too. This component must have minimum 2 branches.
+
+```js
+const switchStep = {
+  componentType: 'switch',
+  id: 'my-unique-id',
+  type: 'my-type', // e.g. 'if', 'switch'...
+  name: 'my-name',
+  properties: {
+    'myProperty': 'my-value',
+    // ...
+  },
+  branches: {
+    'true': [
+      // steps...
+    ],
+    'false': [
+      // steps...
+    ],
+    // ...
+    'next': [
+      // steps...
+    ]
+  }
+};
+```
+
 ## 💡 License
 
 This project is released under the MIT license.
