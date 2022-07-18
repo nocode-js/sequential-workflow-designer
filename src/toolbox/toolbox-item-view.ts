@@ -1,6 +1,4 @@
 import { Dom } from '../core/dom';
-import { readMousePosition } from '../core/event-readers';
-import { Vector } from '../core/vector';
 import { StepDefinition, StepsConfiguration } from '../designer-configuration';
 
 export class ToolboxItemView {
@@ -39,18 +37,15 @@ export class ToolboxItemView {
 
 	private constructor(private readonly root: HTMLElement) {}
 
-	public bindMousedown(handler: (position: Vector) => void) {
-		this.root.addEventListener(
-			'mousedown',
-			e => {
-				e.stopPropagation();
-				handler(readMousePosition(e));
-			},
-			false
-		);
+	public bindMousedown(handler: (e: MouseEvent) => void) {
+		this.root.addEventListener('mousedown', handler, false);
 	}
 
 	public bindTouchstart(handler: (e: TouchEvent) => void) {
 		this.root.addEventListener('touchstart', handler, false);
+	}
+
+	public bindContextMenu(handler: (e: MouseEvent) => void) {
+		this.root.addEventListener('contextmenu', handler, false);
 	}
 }

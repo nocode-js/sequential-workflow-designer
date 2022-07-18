@@ -1,5 +1,5 @@
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
-import { readTouchPosition } from '../core/event-readers';
+import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { ObjectCloner } from '../core/object-cloner';
 import { Uid } from '../core/uid';
 import { Vector } from '../core/vector';
@@ -14,6 +14,7 @@ export class ToolboxItem {
 		const item = new ToolboxItem(step, context);
 		view.bindMousedown(e => item.onMousedown(e));
 		view.bindTouchstart(e => item.onTouchstart(e));
+		view.bindContextMenu(e => item.onContextMenu(e));
 		return item;
 	}
 
@@ -26,8 +27,16 @@ export class ToolboxItem {
 		}
 	}
 
-	private onMousedown(position: Vector) {
-		this.startDrag(position);
+	private onMousedown(e: MouseEvent) {
+		e.stopPropagation();
+		const isPrimaryButton = e.button === 0;
+		if (isPrimaryButton) {
+			this.startDrag(readMousePosition(e));
+		}
+	}
+
+	private onContextMenu(e: MouseEvent) {
+		e.preventDefault();
 	}
 
 	private startDrag(position: Vector) {

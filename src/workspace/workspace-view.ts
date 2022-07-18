@@ -103,6 +103,10 @@ export class WorkspaceView {
 		this.canvas.addEventListener('touchstart', e => handler(readTouchPosition(e)), false);
 	}
 
+	public bindContextMenu(handler: (e: MouseEvent) => void) {
+		this.canvas.addEventListener('contextmenu', handler, false);
+	}
+
 	public bindWheel(handler: (e: WheelEvent) => void) {
 		this.canvas.addEventListener('wheel', handler, false);
 	}

@@ -37,6 +37,7 @@ export class Workspace implements DesignerComponentProvider {
 
 		view.bindMouseDown((p, t, b) => workspace.onMouseDown(p, t, b));
 		view.bindTouchStart(e => workspace.onTouchStart(e));
+		view.bindContextMenu(e => workspace.onContextMenu(e));
 		view.bindWheel(e => workspace.onWheel(e));
 		return workspace;
 	}
@@ -105,8 +106,11 @@ export class Workspace implements DesignerComponentProvider {
 	}
 
 	private onMouseDown(position: Vector, target: Element, button: number) {
+		const isPrimaryButton = button === 0;
 		const isMiddleButton = button === 1;
-		this.startBehavior(target, position, isMiddleButton);
+		if (isPrimaryButton || isMiddleButton) {
+			this.startBehavior(target, position, isMiddleButton);
+		}
 	}
 
 	private onTouchStart(position: Vector) {
@@ -114,6 +118,10 @@ export class Workspace implements DesignerComponentProvider {
 		if (element) {
 			this.startBehavior(element, position, false);
 		}
+	}
+
+	private onContextMenu(e: MouseEvent) {
+		e.preventDefault();
 	}
 
 	private startBehavior(target: Element, position: Vector, forceMoveMode: boolean) {
