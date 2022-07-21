@@ -1,6 +1,6 @@
 {
 	"name": "sequential-workflow-designer",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"main": "./lib/designer.js",
 	"types": "./lib/designer.d.ts",
 	"repository": {
