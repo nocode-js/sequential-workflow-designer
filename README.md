@@ -21,6 +21,7 @@ Features:
 * [⛅ Light Dark](https://b4rtaz.github.io/sequential-workflow-designer/examples/light-dark.html)
 * [⏩ Live Testing](https://b4rtaz.github.io/sequential-workflow-designer/examples/live-testing.html)
 * [🔴 Particles](https://b4rtaz.github.io/sequential-workflow-designer/examples/particles.html)
+* [🤖 Code Generator](https://b4rtaz.github.io/sequential-workflow-designer/examples/code-generator.html)
 
 ## 🚀 Installation
 

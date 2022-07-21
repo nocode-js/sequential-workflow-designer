@@ -1,6 +1,7 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { ObjectCloner } from './core/object-cloner';
 import { SimpleEvent } from './core/simple-event';
+import { Uid } from './core/uid';
 import { Definition } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
@@ -21,6 +22,10 @@ export default class Designer {
 		view.bindKeyUp(e => designer.onKeyUp(e));
 		context.onDefinitionChanged.subscribe(d => designer.onDefinitionChanged.forward(d));
 		return designer;
+	}
+
+	public static nextId(): string {
+		return Uid.next();
 	}
 
 	private constructor(private readonly view: DesignerView, private readonly context: DesignerContext) {}
