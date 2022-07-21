@@ -84,6 +84,7 @@ export class ScrollBoxView {
 	}
 
 	private onTouchStart(e: TouchEvent) {
+		e.preventDefault();
 		this.startScroll(readTouchPosition(e));
 	}
 

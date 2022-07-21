@@ -21,6 +21,7 @@ export class ToolboxItem {
 	private constructor(private readonly step: StepDefinition, private readonly context: DesignerContext) {}
 
 	private onTouchstart(e: TouchEvent) {
+		e.preventDefault();
 		if (e.touches.length === 1) {
 			e.stopPropagation();
 			this.startDrag(readTouchPosition(e));

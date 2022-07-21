@@ -100,7 +100,14 @@ export class WorkspaceView {
 	}
 
 	public bindTouchStart(handler: (position: Vector) => void) {
-		this.canvas.addEventListener('touchstart', e => handler(readTouchPosition(e)), false);
+		this.canvas.addEventListener(
+			'touchstart',
+			e => {
+				e.preventDefault();
+				handler(readTouchPosition(e));
+			},
+			false
+		);
 	}
 
 	public bindContextMenu(handler: (e: MouseEvent) => void) {

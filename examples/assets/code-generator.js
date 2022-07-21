@@ -125,7 +125,7 @@ class Editors {
 		});
 		root.appendChild(nameItem);
 
-		const numberPropNames = ['value'];
+		const numberPropNames = ['value', 'from', 'to'];
 		for (let propName of Object.keys(step.properties)) {
 			const isNumberProp = numberPropNames.includes(propName);
 			const item = document.createElement('p');
