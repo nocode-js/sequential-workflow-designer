@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>📐 Simple Flow - Sequential Workflow Designer</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+	<style>
+		body {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
+		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden; background: #FFF;}
+		body {display: flex; flex-direction: column;}
+		#result {background: silver; padding: 10px;}
+		#designer {flex: 1;}
+
+		.sqd-step-editor {padding: 10px;}
+		.sqd-smart-editor label {display: block; padding: 10px 0;}
+	</style>
+</head>
+<body>
+	<div id="result">
+		<button id="run">Run</button>
+	</div>
+
+	<div id="designer"></div>
+
+	<script src="./assets/lib.js"></script>
+	<script src="./assets/simple-flow.js"></script>
+</body>
+</html>

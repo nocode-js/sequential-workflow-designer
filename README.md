@@ -16,6 +16,7 @@ Features:
 
 ## 👀 Examples
 
+* [📐 Simple Flow](https://b4rtaz.github.io/sequential-workflow-designer/examples/simple-flow.html)
 * [❎ Fullscreen](https://b4rtaz.github.io/sequential-workflow-designer/examples/fullscreen.html)
 * [🌅 Image Filter](https://b4rtaz.github.io/sequential-workflow-designer/examples/image-filter.html)
 * [⛅ Light Dark](https://b4rtaz.github.io/sequential-workflow-designer/examples/light-dark.html)
