@@ -12,7 +12,7 @@ describe('ToolboxItem', () => {
 			componentType: ComponentType.task,
 			name: 'x',
 			properties: {},
-			type: 'y'
+			type: 'foo'
 		};
 
 		const item = ToolboxItem.create(parent, step, context);

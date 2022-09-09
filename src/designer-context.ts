@@ -3,13 +3,17 @@ import { animate, Animation } from './core/animation';
 import { SequenceModifier } from './core/sequence-modifier';
 import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
-import { Definition, Step } from './definition';
+import { Definition, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { LayoutController } from './layout-controller';
 import { Placeholder, StepComponent } from './workspace/component';
 
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 3;
+
+export interface DefinitionChangedEvent {
+	rerender: boolean;
+}
 
 export class DesignerContext {
 	public readonly onViewPortChanged = new SimpleEvent<ViewPort>();
@@ -19,7 +23,7 @@ export class DesignerContext {
 	public readonly onIsMoveModeEnabledChanged = new SimpleEvent<boolean>();
 	public readonly onIsToolboxCollapsedChanged = new SimpleEvent<boolean>();
 	public readonly onIsSmartEditorCollapsedChanged = new SimpleEvent<boolean>();
-	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
+	public readonly onDefinitionChanged = new SimpleEvent<DefinitionChangedEvent>();
 
 	public viewPort: ViewPort = {
 		position: new Vector(0, 0),
@@ -70,10 +74,8 @@ export class DesignerContext {
 	}
 
 	public moveViewPortToStep(stepId: string) {
-		const sc = this.getProvider().findStepComponentById(stepId);
-		if (sc) {
-			this.getProvider().moveViewPortToStep(sc);
-		}
+		const component = this.getProvider().getComponentByStepId(stepId);
+		this.getProvider().moveViewPortToStep(component);
 	}
 
 	public limitScale(scale: number): number {
@@ -85,32 +87,60 @@ export class DesignerContext {
 	}
 
 	public setSelectedStep(step: Step | null) {
-		const isChanged = this.selectedStep !== step;
-		this.selectedStep = step;
-		if (isChanged) {
+		if (this.selectedStep !== step) {
+			this.selectedStep = step;
 			this.onSelectedStepChanged.forward(step);
 		}
 	}
 
 	public selectStepById(stepId: string) {
-		const sc = this.getProvider().findStepComponentById(stepId);
-		if (sc) {
-			this.setSelectedStep(sc.step);
-		}
+		const component = this.getProvider().getComponentByStepId(stepId);
+		this.setSelectedStep(component.step);
 	}
 
-	public deleteStepById(stepId: string) {
-		const component = this.getProvider().findStepComponentById(stepId);
-		if (!component) {
-			throw new Error('Cannot find component');
+	public tryInsertStep(step: Step, targetSequence: Sequence, targetIndex: number): boolean {
+		const canInsertStep = this.configuration.steps.canInsertStep
+			? this.configuration.steps.canInsertStep(step, targetSequence, targetIndex)
+			: true;
+		if (!canInsertStep) {
+			return false;
 		}
-		if (this.selectedStep?.id === stepId) {
-			this.setSelectedStep(null);
+
+		SequenceModifier.insertStep(step, targetSequence, targetIndex);
+		this.notifiyDefinitionChanged(true);
+		this.setSelectedStep(step);
+		return true;
+	}
+
+	public tryMoveStep(sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number): boolean {
+		const canMoveStep = this.configuration.steps.canMoveStep
+			? this.configuration.steps.canMoveStep(sourceSequence, step, targetSequence, targetIndex)
+			: true;
+		if (!canMoveStep) {
+			return false;
+		}
+
+		SequenceModifier.moveStep(sourceSequence, step, targetSequence, targetIndex);
+		this.notifiyDefinitionChanged(true);
+		this.setSelectedStep(step);
+		return true;
+	}
+
+	public tryDeleteStep(step: Step): boolean {
+		const component = this.getProvider().getComponentByStepId(step.id);
+		const canDeleteStep = this.configuration.steps.canDeleteStep
+			? this.configuration.steps.canDeleteStep(component.step, component.parentSequence)
+			: true;
+		if (!canDeleteStep) {
+			return false;
 		}
 
 		SequenceModifier.deleteStep(component.step, component.parentSequence);
-
-		this.notifiyDefinitionChanged();
+		this.notifiyDefinitionChanged(true);
+		if (this.selectedStep?.id === step.id) {
+			this.setSelectedStep(null);
+		}
+		return true;
 	}
 
 	public setIsReadonly(isReadonly: boolean) {
@@ -138,11 +168,11 @@ export class DesignerContext {
 		this.onIsSmartEditorCollapsedChanged.forward(this.isSmartEditorCollapsed);
 	}
 
-	public notifiyDefinitionChanged() {
-		this.onDefinitionChanged.forward(this.definition);
+	public notifiyDefinitionChanged(rerender: boolean) {
+		this.onDefinitionChanged.forward({ rerender });
 	}
 
-	public getPlacehodlers(): Placeholder[] {
+	public getPlaceholders(): Placeholder[] {
 		return this.getProvider().getPlaceholders();
 	}
 
@@ -165,7 +195,7 @@ export interface ViewPort {
 
 export interface DesignerComponentProvider {
 	getPlaceholders(): Placeholder[];
-	findStepComponentById(stepId: string): StepComponent | null;
+	getComponentByStepId(stepId: string): StepComponent;
 	resetViewPort(): void;
 	zoom(direction: boolean): void;
 	moveViewPortToStep(stepComponent: StepComponent): void;

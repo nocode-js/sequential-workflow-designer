@@ -39,7 +39,7 @@ export class ControlBar {
 
 	private onDeleteButtonClicked() {
 		if (this.context.selectedStep) {
-			this.context.deleteStepById(this.context.selectedStep.id);
+			this.context.tryDeleteStep(this.context.selectedStep);
 		}
 	}
 

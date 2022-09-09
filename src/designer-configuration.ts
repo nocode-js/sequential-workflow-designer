@@ -1,4 +1,4 @@
-import { ComponentType, Definition, Step } from './definition';
+import { ComponentType, Definition, Sequence, Step } from './definition';
 
 export interface DesignerConfiguration {
 	theme?: string;
@@ -22,6 +22,10 @@ export interface ToolboxGroupConfiguration {
 }
 
 export interface StepsConfiguration {
+	canInsertStep?: (step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
+	canMoveStep?: (sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
+	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
+
 	iconUrlProvider?: StepIconUrlProvider;
 	validator?: StepValidator;
 }
@@ -36,6 +40,15 @@ export interface EditorsConfiguration {
 	globalEditorProvider: GlobalEditorProvider;
 }
 
-export type StepEditorProvider = (step: Step) => HTMLElement;
+export interface StepEditorContext {
+	notifyNameChanged(): void;
+	notifyPropertiesChanged(): void;
+}
 
-export type GlobalEditorProvider = (definition: Definition) => HTMLElement;
+export type StepEditorProvider = (step: Step, context: StepEditorContext) => HTMLElement;
+
+export interface GlobalEditorContext {
+	notifyPropertiesChanged(): void;
+}
+
+export type GlobalEditorProvider = (definition: Definition, context: GlobalEditorContext) => HTMLElement;

@@ -1,6 +1,7 @@
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { ObjectCloner } from '../core/object-cloner';
+import { TypeValidator } from '../core/type-validator';
 import { Uid } from '../core/uid';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
@@ -10,6 +11,8 @@ import { ToolboxItemView } from './toolbox-item-view';
 
 export class ToolboxItem {
 	public static create(parent: HTMLElement, step: StepDefinition, context: DesignerContext): ToolboxItem {
+		TypeValidator.validate(step.type);
+
 		const view = ToolboxItemView.create(parent, step, context.configuration.steps);
 		const item = new ToolboxItem(step, context);
 		view.bindMousedown(e => item.onMousedown(e));

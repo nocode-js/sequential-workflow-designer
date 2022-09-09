@@ -1,4 +1,3 @@
-import { SequenceModifier } from '../core/sequence-modifier';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
@@ -8,9 +7,9 @@ import { DragStepView } from './drag-step-behavior-view';
 import { PlaceholderFinder } from './placeholder-finder';
 
 export class DragStepBehavior implements Behavior {
-	public static create(context: DesignerContext, step: Step, pressedStepComponent?: StepComponent): DragStepBehavior {
+	public static create(context: DesignerContext, step: Step, movingStepComponent?: StepComponent): DragStepBehavior {
 		const view = DragStepView.create(step, context.configuration);
-		return new DragStepBehavior(view, context, step, pressedStepComponent);
+		return new DragStepBehavior(view, context, step, movingStepComponent);
 	}
 
 	private state?: {
@@ -24,15 +23,15 @@ export class DragStepBehavior implements Behavior {
 		private readonly view: DragStepView,
 		private readonly context: DesignerContext,
 		private readonly step: Step,
-		private readonly pressedStepComponent?: StepComponent
+		private readonly movingStepComponent?: StepComponent
 	) {}
 
 	public onStart(position: Vector) {
 		let offset: Vector;
-		if (this.pressedStepComponent) {
-			this.pressedStepComponent.setState(StepComponentState.dragging);
+		if (this.movingStepComponent) {
+			this.movingStepComponent.setState(StepComponentState.dragging);
 
-			const clientPosition = this.pressedStepComponent.view.getClientPosition();
+			const clientPosition = this.movingStepComponent.view.getClientPosition();
 			offset = position.subtract(clientPosition);
 		} else {
 			offset = new Vector(this.view.width / 2, this.view.height / 2);
@@ -43,7 +42,7 @@ export class DragStepBehavior implements Behavior {
 
 		this.state = {
 			startPosition: position,
-			finder: PlaceholderFinder.create(this.context.getPlacehodlers(), this.context),
+			finder: PlaceholderFinder.create(this.context.getPlaceholders(), this.context),
 			offset
 		};
 	}
@@ -68,35 +67,38 @@ export class DragStepBehavior implements Behavior {
 	}
 
 	public onEnd(interrupt: boolean) {
+		if (!this.state) {
+			throw new Error('Invalid state');
+		}
+
+		this.state.finder.destroy();
+		this.state = undefined;
+
 		this.view.remove();
 		this.context.setIsDragging(false);
 
+		let modified = false;
+
 		if (!interrupt && this.currentPlaceholder) {
-			if (this.pressedStepComponent) {
-				SequenceModifier.moveStep(
-					this.pressedStepComponent.parentSequence,
-					this.pressedStepComponent.step,
+			if (this.movingStepComponent) {
+				modified = this.context.tryMoveStep(
+					this.movingStepComponent.parentSequence,
+					this.movingStepComponent.step,
 					this.currentPlaceholder.parentSequence,
 					this.currentPlaceholder.index
 				);
 			} else {
-				SequenceModifier.insertStep(this.step, this.currentPlaceholder.parentSequence, this.currentPlaceholder.index);
-				this.context.setSelectedStep(this.step);
+				modified = this.context.tryInsertStep(this.step, this.currentPlaceholder.parentSequence, this.currentPlaceholder.index);
 			}
-			this.context.notifiyDefinitionChanged();
-		} else {
-			if (this.pressedStepComponent) {
-				this.pressedStepComponent.setState(StepComponentState.default);
+		}
+		if (!modified) {
+			if (this.movingStepComponent) {
+				this.movingStepComponent.setState(StepComponentState.default);
 			}
 			if (this.currentPlaceholder) {
 				this.currentPlaceholder.setIsHover(false);
 			}
 		}
 		this.currentPlaceholder = undefined;
-
-		if (this.state) {
-			this.state.finder.destroy();
-			this.state = undefined;
-		}
 	}
 }

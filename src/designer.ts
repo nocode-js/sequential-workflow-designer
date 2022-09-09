@@ -1,14 +1,16 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { ObjectCloner } from './core/object-cloner';
 import { SimpleEvent } from './core/simple-event';
-import { Uid } from './core/uid';
 import { Definition } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
 import { LayoutController } from './layout-controller';
+import { Utils } from './utils';
 
 export default class Designer {
+	public static readonly utils = Utils;
+
 	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
@@ -20,12 +22,8 @@ export default class Designer {
 		const view = DesignerView.create(parent, context, configuration);
 		const designer = new Designer(view, context);
 		view.bindKeyUp(e => designer.onKeyUp(e));
-		context.onDefinitionChanged.subscribe(d => designer.onDefinitionChanged.forward(d));
+		context.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.definition));
 		return designer;
-	}
-
-	public static nextId(): string {
-		return Uid.next();
 	}
 
 	private constructor(private readonly view: DesignerView, private readonly context: DesignerContext) {}
@@ -36,20 +34,12 @@ export default class Designer {
 		return this.context.definition;
 	}
 
-	public revalidate() {
-		this.view.workspace.revalidate();
-	}
-
 	public isValid(): boolean {
 		return this.view.workspace.isValid;
 	}
 
 	public isReadonly(): boolean {
 		return this.context.isReadonly;
-	}
-
-	public notifiyDefinitionChanged() {
-		this.context.notifiyDefinitionChanged();
 	}
 
 	public setIsReadonly(isReadonly: boolean) {
@@ -91,6 +81,6 @@ export default class Designer {
 
 		e.preventDefault();
 		e.stopPropagation();
-		this.context.deleteStepById(this.context.selectedStep.id);
+		this.context.tryDeleteStep(this.context.selectedStep);
 	}
 }

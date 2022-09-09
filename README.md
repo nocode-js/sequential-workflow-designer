@@ -62,10 +62,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.1.9/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.1.9/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.1.9/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.1.9/lib/designer.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.0/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.0/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.0/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.0/lib/designer.js"></script>
 ```
 
 Call the designer by:
@@ -120,7 +120,16 @@ const configuration = {
       return `icon-${componentType}-${type}.svg`;
     },
     validator: (step) => {
-      return step.name.toLowerCase() === step.name;
+      return /^[a-z]+$/.test(step.name);
+    },
+    canInsertStep: (step, targetSequence, targetIndex) => {
+      return targetSequence.length < 5;
+    },
+    canMoveStep: (sourceSequence, step, targetSequence, targetIndex) => {
+      return !step.properties['isLocked'];
+    },
+    canDeleteStep: (step, parentSequence) => {
+      return step.name !== 'x';
     }
   },
 

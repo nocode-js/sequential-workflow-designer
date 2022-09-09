@@ -1,8 +1,8 @@
-/* global window, document, sequentialWorkflowDesigner */
+/* global window, document, sequentialWorkflowDesigner, alert, confirm, console */
 
 let designer;
 
-const nextId = () => sequentialWorkflowDesigner.nextId();
+const nextId = () => sequentialWorkflowDesigner.utils.nextId();
 
 function createTaskStep(type, name, properties) {
 	return {
@@ -102,6 +102,19 @@ class CodeGenerator {
 	}
 }
 
+function canPlaceStep(step, parentSequence) {
+	const definition = designer.getDefinition();
+	const parentSteps = sequentialWorkflowDesigner.utils.getParents(definition, parentSequence);
+
+	console.log('parent steps', parentSteps.map(s => typeof s === 'string' ? s : s.name));
+
+	if (step.type === 'loop' && parentSteps.length >= 2) {
+		alert('Max depth is 2');
+		return false;
+	}
+	return true;
+}
+
 class Editors {
 	static createGlobalEditor() {
 		const root = document.createElement('div');
@@ -109,7 +122,7 @@ class Editors {
 		return root;
 	}
 
-	static createStepEditor(step) {
+	static createStepEditor(step, editorContext) {
 		const root = document.createElement('div');
 		const title = document.createElement('h3');
 		title.innerText = `Edit ${step.type} step`;
@@ -121,7 +134,7 @@ class Editors {
 		nameInput.value = step.name;
 		nameInput.addEventListener('input', () => {
 			step.name = nameInput.value;
-			designer.notifiyDefinitionChanged();
+			editorContext.notifyNameChanged();
 		});
 		root.appendChild(nameItem);
 
@@ -138,7 +151,7 @@ class Editors {
 					? parseInt(input.value)
 					: input.value;
 				step.properties[propName] = value;
-				designer.notifiyDefinitionChanged();
+				editorContext.notifyPropertiesChanged();
 			});
 			root.appendChild(item);
 		}
@@ -176,7 +189,7 @@ const configuration = {
 					Steps.setNumber('set number', 'X', 0),
 					Steps.assignVar('assign var', 'X', 'Y'),
 					Steps.addVar('add var', 'X', 'Y'),
-					Steps.loop('loop', 'i', 0, 5)
+					Steps.loop('loop', 'j', 0, 5)
 				]
 			}
 		]
@@ -190,16 +203,21 @@ const configuration = {
 		},
 		validator: () => {
 			return true;
+		},
+		canInsertStep: (step, targetSequence) => {
+			return canPlaceStep(step, targetSequence);
+		},
+		canMoveStep: (_, step, targetSequence) => {
+			return canPlaceStep(step, targetSequence);
+		},
+		canDeleteStep: (step) => {
+			return confirm(`Are you sure? (${step.name})`);
 		}
 	},
 
 	editors: {
-		globalEditorProvider: () => {
-			return Editors.createGlobalEditor();
-		},
-		stepEditorProvider: (step) => {
-			return Editors.createStepEditor(step);
-		}
+		globalEditorProvider: Editors.createGlobalEditor,
+		stepEditorProvider: Editors.createStepEditor
 	}
 };
 

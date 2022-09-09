@@ -83,7 +83,11 @@ export class SwitchStepComponent implements StepComponent {
 	public validate(): boolean {
 		const isValid = this.configuration.validator ? this.configuration.validator(this.step) : true;
 		this.view.setIsValid(isValid);
-		const isChildrenValid = this.view.sequenceComponents.every(c => c.validate());
-		return isValid && isChildrenValid;
+
+		let areChildrenValid = true;
+		for (const component of this.view.sequenceComponents) {
+			areChildrenValid = component.validate() && areChildrenValid;
+		}
+		return isValid && areChildrenValid;
 	}
 }

@@ -26,10 +26,14 @@ export class Workspace implements DesignerComponentProvider {
 		context.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
 		context.onIsSmartEditorCollapsedChanged.subscribe(() => workspace.onIsSmartEditorCollapsedChanged());
 
-		race(0, context.onDefinitionChanged, context.onSelectedStepChanged).subscribe(v => {
-			const [definiton, selectedStep] = v;
-			if (definiton) {
-				workspace.render();
+		race(0, context.onDefinitionChanged, context.onSelectedStepChanged).subscribe(r => {
+			const [defChangedDetails, selectedStep] = r;
+			if (defChangedDetails) {
+				if (defChangedDetails.rerender) {
+					workspace.render();
+				} else {
+					workspace.revalidate();
+				}
 			} else if (selectedStep !== undefined) {
 				workspace.onSelectedStepChanged(selectedStep);
 			}
@@ -47,10 +51,6 @@ export class Workspace implements DesignerComponentProvider {
 	private selectedStepComponent: StepComponent | null = null;
 
 	private constructor(private readonly view: WorkspaceView, private readonly context: DesignerContext) {}
-
-	public revalidate() {
-		this.isValid = this.getRootComponent().validate();
-	}
 
 	public render() {
 		this.view.render(this.context.definition.sequence);
@@ -71,8 +71,12 @@ export class Workspace implements DesignerComponentProvider {
 		throw new Error('Nothing selected');
 	}
 
-	public findStepComponentById(stepId: string): StepComponent | null {
-		return this.getRootComponent().findById(stepId);
+	public getComponentByStepId(stepId: string): StepComponent {
+		const component = this.getRootComponent().findById(stepId);
+		if (!component) {
+			throw new Error(`Cannot find component for step id: ${stepId}`);
+		}
+		return component;
 	}
 
 	public resetViewPort() {
@@ -103,6 +107,10 @@ export class Workspace implements DesignerComponentProvider {
 
 	public destroy() {
 		this.view.destroy();
+	}
+
+	private revalidate() {
+		this.isValid = this.getRootComponent().validate();
 	}
 
 	private onMouseDown(position: Vector, target: Element, button: number) {

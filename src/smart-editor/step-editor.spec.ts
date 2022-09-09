@@ -1,4 +1,5 @@
 import { ComponentType, Step } from '../definition';
+import { createDesignerContextStub } from '../test-tools/stubs';
 import { StepEditor } from './step-editor';
 
 describe('StepEditor', () => {
@@ -10,8 +11,9 @@ describe('StepEditor', () => {
 			properties: {},
 			type: 'foo'
 		};
+		const context = createDesignerContextStub();
 
-		const component = StepEditor.create(step, () => document.createElement('div'));
+		const component = StepEditor.create(step, context);
 
 		expect(component).toBeDefined();
 	});

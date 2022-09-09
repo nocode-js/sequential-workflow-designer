@@ -1,8 +1,9 @@
 /* global location, document */
 
 function isTestEnv() {
-	return location.hostname.toLowerCase() === 'localhost' ||
-		location.hostname.startsWith('192.168.');
+	const hostname = location.hostname.toLowerCase();
+	return hostname === 'localhost' ||
+		hostname.startsWith('192.168.');
 }
 
 function embedScript(url) {
@@ -15,7 +16,7 @@ function embedStylesheet(url) {
 
 const baseUrl = isTestEnv()
 	? '..'
-	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.1.9';
+	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.0';
 
 embedScript(`${baseUrl}/lib/designer.js`);
 embedStylesheet(`${baseUrl}/css/designer.css`);

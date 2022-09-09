@@ -19,7 +19,7 @@ const CONNECTION_HEIGHT = 16;
 export class SwitchStepComponentView implements ComponentView {
 	public static create(parent: SVGElement, step: SwitchStep, configuration: StepsConfiguration): SwitchStepComponentView {
 		const g = Dom.svg('g', {
-			class: 'sqd-switch-group'
+			class: `sqd-switch-group sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 

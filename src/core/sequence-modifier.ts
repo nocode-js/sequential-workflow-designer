@@ -19,15 +19,15 @@ export class SequenceModifier {
 		targetSequence.splice(targetIndex, 0, step);
 	}
 
-	public static insertStep(step: Step, sequence: Sequence, index: number) {
-		sequence.splice(index, 0, step);
+	public static insertStep(step: Step, targetSequence: Sequence, targetIndex: number) {
+		targetSequence.splice(targetIndex, 0, step);
 	}
 
-	public static deleteStep(step: Step, sequence: Sequence) {
-		const index = sequence.indexOf(step);
+	public static deleteStep(step: Step, parentSequence: Sequence) {
+		const index = parentSequence.indexOf(step);
 		if (index < 0) {
 			throw new Error('Unknown step');
 		}
-		sequence.splice(index, 1);
+		parentSequence.splice(index, 1);
 	}
 }

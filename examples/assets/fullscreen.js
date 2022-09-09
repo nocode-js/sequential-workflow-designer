@@ -66,7 +66,7 @@ const configuration = {
 
 		validator: (step) => {
 			return !step.properties['isInvalid'];
-		}
+		},
 	},
 
 	editors: {
@@ -79,7 +79,7 @@ const configuration = {
 			return root;
 		},
 
-		stepEditorProvider: (step) => {
+		stepEditorProvider: (step, editorContext) => {
 			const root = document.createElement('div');
 			root.innerHTML = '<h5></h5> <p>is invalid: <input type="checkbox" /></p>';
 			const title = root.getElementsByTagName('h5')[0];
@@ -88,7 +88,7 @@ const configuration = {
 			input.checked = !!step.properties['isInvalid'];
 			input.addEventListener('click', () => {
 				step.properties['isInvalid'] = !!input.checked;
-				designer.revalidate();
+				editorContext.notifyPropertiesChanged();
 			});
 			return root;
 		}

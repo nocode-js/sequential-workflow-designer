@@ -127,34 +127,34 @@ function globalEditorProvider(definition) {
 	return container;
 }
 
-function stepEditorProvider(step) {
+function stepEditorProvider(step, editorContext) {
 	const container = document.createElement('div');
 	appendTitle(container, 'Step ' + step.type);
 
 	appendTextField(container, 'Name', step.name,
 		v => {
 			step.name = v;
-			designer.notifiyDefinitionChanged();
+			editorContext.notifyNameChanged();
 		});
 	if (step.properties['var'] !== undefined) {
 		appendTextField(container, 'Variable', step.properties['var'],
 			v => {
 				step.properties['var'] = v;
-				designer.revalidate();
+				editorContext.notifyPropertiesChanged();
 			});
 	}
 	if (step.properties['val']) {
 		appendTextField(container, 'Value', step.properties['val'],
 			v => {
 				step.properties['val'] = parseInt(v, 10);
-				designer.revalidate();
+				editorContext.notifyPropertiesChanged();
 			});
 	}
 	if (step.properties['text']) {
 		appendTextField(container, 'Text', step.properties['text'],
 			v => {
 				step.properties['text'] = v;
-				designer.revalidate();
+				editorContext.notifyPropertiesChanged();
 			});
 	}
 	return container;

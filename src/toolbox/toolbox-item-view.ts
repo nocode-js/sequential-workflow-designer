@@ -4,7 +4,7 @@ import { StepDefinition, StepsConfiguration } from '../designer-configuration';
 export class ToolboxItemView {
 	public static create(parent: HTMLElement, step: StepDefinition, configuration: StepsConfiguration): ToolboxItemView {
 		const root = Dom.element('div', {
-			class: 'sqd-toolbox-item',
+			class: `sqd-toolbox-item sqd-type-${step.type}`,
 			title: step.name
 		});
 

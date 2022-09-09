@@ -16,7 +16,9 @@ const LABEL_HEIGHT = 22;
 
 export class ContainerStepComponentView implements ComponentView {
 	public static create(parent: SVGElement, step: ContainerStep, configuration: StepsConfiguration): ContainerStepComponentView {
-		const g = Dom.svg('g');
+		const g = Dom.svg('g', {
+			class: `sqd-container-group sqd-type-${step.type}`
+		});
 		parent.appendChild(g);
 
 		const sequenceComponent = SequenceComponent.create(g, step.sequence, configuration);

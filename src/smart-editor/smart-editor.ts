@@ -36,9 +36,7 @@ export class SmartEditor {
 
 	private tryRender(step: Step | null) {
 		if (this.currentStep !== step) {
-			const editor = step
-				? StepEditor.create(step, this.context.configuration.editors.stepEditorProvider)
-				: GlobalEditor.create(this.context.definition, this.context.configuration.editors.globalEditorProvider);
+			const editor = step ? StepEditor.create(step, this.context) : GlobalEditor.create(this.context.definition, this.context);
 			this.currentStep = step;
 			this.view.setView(editor.view);
 		}

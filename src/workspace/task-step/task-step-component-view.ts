@@ -16,7 +16,7 @@ const RECT_RADIUS = 5;
 export class TaskStepComponentView implements ComponentView {
 	public static create(parent: SVGElement, step: TaskStep, configuration: StepsConfiguration): TaskStepComponentView {
 		const g = Dom.svg('g', {
-			class: 'sqd-task-group'
+			class: `sqd-task-group sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 

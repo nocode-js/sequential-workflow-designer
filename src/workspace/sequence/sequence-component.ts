@@ -45,6 +45,10 @@ export class SequenceComponent implements Component {
 	}
 
 	public validate(): boolean {
-		return this.view.components.every(c => c.validate());
+		let isValid = true;
+		for (const component of this.view.components) {
+			isValid = component.validate() && isValid;
+		}
+		return isValid;
 	}
 }
