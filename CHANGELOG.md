@@ -1,3 +1,14 @@
+## 0.2.1
+
+Support undo and redo. This feature is disabled by default. To enable it add the below config.
+
+```js
+const config = {
+  undoStackSize: 10,
+  // ...
+};
+```
+
 ## 0.2.0
 
 #### Editor's Context

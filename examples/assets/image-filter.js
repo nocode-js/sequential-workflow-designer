@@ -91,6 +91,7 @@ function createTaskStep(id, type, name) {
 
 const configuration = {
 	theme: 'dark',
+	undoStackSize: 10,
 
 	toolbox: {
 		isHidden: false,

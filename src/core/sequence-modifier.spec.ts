@@ -44,7 +44,7 @@ describe('SequenceModifier', () => {
 		expect(seq[2]).toEqual(C);
 	});
 
-	it('moveStep() moves the first node to the last positon', () => {
+	it('moveStep() moves the first node to the last position', () => {
 		const seq = flatABC();
 		SequenceModifier.moveStep(seq, A, seq, 3);
 

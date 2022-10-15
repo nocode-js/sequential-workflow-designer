@@ -1,27 +1,34 @@
+import { BehaviorController } from '../behaviors/behavior-controller';
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { ObjectCloner } from '../core/object-cloner';
-import { TypeValidator } from '../core/type-validator';
+import { StepTypeValidator } from '../core/step-type-validator';
 import { Uid } from '../core/uid';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { StepDefinition } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
+import { DesignerState } from '../designer-state';
 import { ToolboxItemView } from './toolbox-item-view';
 
 export class ToolboxItem {
 	public static create(parent: HTMLElement, step: StepDefinition, context: DesignerContext): ToolboxItem {
-		TypeValidator.validate(step.type);
+		StepTypeValidator.validate(step.type);
 
 		const view = ToolboxItemView.create(parent, step, context.configuration.steps);
-		const item = new ToolboxItem(step, context);
+		const item = new ToolboxItem(step, context.state, context.behaviorController, context);
 		view.bindMousedown(e => item.onMousedown(e));
 		view.bindTouchstart(e => item.onTouchstart(e));
 		view.bindContextMenu(e => item.onContextMenu(e));
 		return item;
 	}
 
-	private constructor(private readonly step: StepDefinition, private readonly context: DesignerContext) {}
+	private constructor(
+		private readonly step: StepDefinition,
+		private readonly state: DesignerState,
+		private readonly behaviorController: BehaviorController,
+		private readonly context: DesignerContext
+	) {}
 
 	private onTouchstart(e: TouchEvent) {
 		e.preventDefault();
@@ -44,9 +51,9 @@ export class ToolboxItem {
 	}
 
 	private startDrag(position: Vector) {
-		if (!this.context.isReadonly) {
+		if (!this.state.isReadonly) {
 			const newStep = createStep(this.step);
-			this.context.behaviorController.start(position, DragStepBehavior.create(this.context, newStep));
+			this.behaviorController.start(position, DragStepBehavior.create(this.context, newStep));
 		}
 	}
 }

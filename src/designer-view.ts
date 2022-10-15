@@ -8,7 +8,12 @@ import { Toolbox } from './toolbox/toolbox';
 import { Workspace } from './workspace/workspace';
 
 export class DesignerView {
-	public static create(parent: HTMLElement, context: DesignerContext, configuration: DesignerConfiguration): DesignerView {
+	public static create(
+		parent: HTMLElement,
+		context: DesignerContext,
+		layoutController: LayoutController,
+		configuration: DesignerConfiguration
+	): DesignerView {
 		const theme = configuration.theme || 'light';
 
 		const root = Dom.element('div', {
@@ -26,7 +31,7 @@ export class DesignerView {
 		if (!configuration.editors.isHidden) {
 			SmartEditor.create(root, context);
 		}
-		const view = new DesignerView(root, context.layoutController, workspace, toolbox);
+		const view = new DesignerView(root, layoutController, workspace, toolbox);
 		view.reloadLayout();
 		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;

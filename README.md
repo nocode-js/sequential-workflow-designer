@@ -94,11 +94,13 @@ const definition = {
 };
 
 const configuration = {
-  theme: 'light',
-  isReadonly: false,
+  theme: 'light', // optional, default: 'light'
+  isReadonly: false, // optional, default: false
+  undoStackSize: 10, // optional, default: 0 - disabled, 1+ - enabled
 
   toolbox: {
-    isHidden: false,
+    isHidden: false, // optional, default: false
+
     groups: [
       {
         name: 'Files',
@@ -134,7 +136,8 @@ const configuration = {
   },
 
   editors: {
-    isHidden: false,
+    isHidden: false, // optional, default: false
+
     globalEditorProvider: (definition) => {
       const container = document.createElement('div');
       // ...

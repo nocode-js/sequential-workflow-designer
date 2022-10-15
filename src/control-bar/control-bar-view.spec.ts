@@ -5,7 +5,7 @@ describe('ControlBarView', () => {
 	it('creates view', () => {
 		const parent = Dom.element('div');
 
-		const component = ControlBarView.create(parent);
+		const component = ControlBarView.create(parent, true);
 
 		expect(component).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);

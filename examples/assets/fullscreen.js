@@ -50,6 +50,8 @@ function toolboxGroup(name) {
 
 let designer;
 const configuration = {
+	undoStackSize: 20,
+
 	toolbox: {
 		isHidden: false,
 		groups: [

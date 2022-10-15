@@ -2,35 +2,48 @@ import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
 
 export class ControlBarView {
-	public static create(parent: HTMLElement): ControlBarView {
+	public static create(parent: HTMLElement, isUndoRedoSupported: boolean): ControlBarView {
 		const root = Dom.element('div', {
 			class: 'sqd-control-bar'
 		});
 
-		const deleteButton = createButton(Icons.delete, 'Delete selected step');
-		deleteButton.classList.add('sqd-hidden');
-
 		const resetButton = createButton(Icons.center, 'Reset');
+		root.appendChild(resetButton);
+
 		const zoomInButton = createButton(Icons.zoomIn, 'Zoom in');
+		root.appendChild(zoomInButton);
+
 		const zoomOutButton = createButton(Icons.zoomOut, 'Zoom out');
+		root.appendChild(zoomOutButton);
+
+		let undoButton: HTMLElement | null = null;
+		let redoButton: HTMLElement | null = null;
+
+		if (isUndoRedoSupported) {
+			undoButton = createButton(Icons.undo, 'Undo');
+			root.appendChild(undoButton);
+			redoButton = createButton(Icons.redo, 'Redo');
+			root.appendChild(redoButton);
+		}
 
 		const moveButton = createButton(Icons.move, 'Turn on/off drag and drop');
 		moveButton.classList.add('sqd-disabled');
-
-		root.appendChild(resetButton);
-		root.appendChild(zoomInButton);
-		root.appendChild(zoomOutButton);
 		root.appendChild(moveButton);
+
+		const deleteButton = createButton(Icons.delete, 'Delete selected step');
+		deleteButton.classList.add('sqd-hidden');
 		root.appendChild(deleteButton);
 
 		parent.appendChild(root);
-		return new ControlBarView(resetButton, zoomInButton, zoomOutButton, moveButton, deleteButton);
+		return new ControlBarView(resetButton, zoomInButton, zoomOutButton, undoButton, redoButton, moveButton, deleteButton);
 	}
 
 	private constructor(
 		private readonly resetButton: HTMLElement,
 		private readonly zoomInButton: HTMLElement,
 		private readonly zoomOutButton: HTMLElement,
+		private readonly undoButton: HTMLElement | null,
+		private readonly redoButton: HTMLElement | null,
 		private readonly moveButton: HTMLElement,
 		private readonly deleteButton: HTMLElement
 	) {}
@@ -47,6 +60,20 @@ export class ControlBarView {
 		bindClick(this.zoomOutButton, handler);
 	}
 
+	public bindUndoButtonClick(handler: () => void) {
+		if (!this.undoButton) {
+			throw new Error('Undo button is disabled');
+		}
+		bindClick(this.undoButton, handler);
+	}
+
+	public bindRedoButtonClick(handler: () => void) {
+		if (!this.redoButton) {
+			throw new Error('Redo button is disabled');
+		}
+		bindClick(this.redoButton, handler);
+	}
+
 	public bindMoveButtonClick(handler: () => void) {
 		bindClick(this.moveButton, handler);
 	}
@@ -61,6 +88,20 @@ export class ControlBarView {
 
 	public setIsMoveButtonDisabled(isDisabled: boolean) {
 		Dom.toggleClass(this.moveButton, isDisabled, 'sqd-disabled');
+	}
+
+	public setUndoButtonDisabled(isDisabled: boolean) {
+		if (!this.undoButton) {
+			throw new Error('Undo button is disabled');
+		}
+		Dom.toggleClass(this.undoButton, isDisabled, 'sqd-disabled');
+	}
+
+	public setRedoButtonDisabled(isDisabled: boolean) {
+		if (!this.redoButton) {
+			throw new Error('Redo button is disabled');
+		}
+		Dom.toggleClass(this.redoButton, isDisabled, 'sqd-disabled');
 	}
 }
 

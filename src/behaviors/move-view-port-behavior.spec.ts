@@ -1,5 +1,5 @@
 import { Vector } from '../core/vector';
-import { ViewPort } from '../designer-context';
+import { ViewPort } from '../designer-state';
 import { createDesignerContextStub } from '../test-tools/stubs';
 import { MoveViewPortBehavior } from './move-view-port-behavior';
 
@@ -11,10 +11,10 @@ describe('MoveViewPortBehavior', () => {
 		};
 
 		const context = createDesignerContextStub();
-		context.onViewPortChanged.subscribe(vp => (lastViewPort = vp));
-		context.setViewPort(new Vector(0, 0), 1);
+		context.state.onViewPortChanged.subscribe(vp => (lastViewPort = vp));
+		context.state.setViewPort(new Vector(0, 0), 1);
 
-		const behavior = MoveViewPortBehavior.create(context);
+		const behavior = MoveViewPortBehavior.create(context.state);
 		behavior.onStart();
 
 		expect(lastViewPort.position.x).toEqual(0);

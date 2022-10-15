@@ -8,7 +8,7 @@ describe('DesignerView', () => {
 		const configuration = createDesignerConfigurationStub();
 		const context = createDesignerContextStub();
 
-		const view = DesignerView.create(parent, context, configuration);
+		const view = DesignerView.create(parent, context, context.layoutController, configuration);
 
 		expect(view).toBeDefined();
 	});

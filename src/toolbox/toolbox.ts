@@ -1,15 +1,16 @@
-import { ToolboxGroupConfiguration } from '../designer-configuration';
+import { DesignerConfiguration, ToolboxGroupConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
+import { DesignerState } from '../designer-state';
 import { ToolboxView } from './toolbox-view';
 
 export class Toolbox {
 	public static create(parent: HTMLElement, context: DesignerContext): Toolbox {
 		const view = ToolboxView.create(parent, context);
-		view.setIsCollapsed(context.isToolboxCollapsed);
+		view.setIsCollapsed(context.state.isToolboxCollapsed);
 
-		const toolbox = new Toolbox(view, context);
+		const toolbox = new Toolbox(view, context.state, context.configuration);
 		toolbox.render();
-		context.onIsToolboxCollapsedChanged.subscribe(ic => toolbox.onIsToolboxCollapsedChanged(ic));
+		context.state.onIsToolboxCollapsedChanged.subscribe(ic => toolbox.onIsToolboxCollapsedChanged(ic));
 		view.bindToggleIsCollapsedClick(() => toolbox.toggleIsCollapsedClick());
 		view.bindFilterInputChange(v => toolbox.onFilterInputChanged(v));
 		return toolbox;
@@ -17,14 +18,18 @@ export class Toolbox {
 
 	private filter?: string;
 
-	private constructor(private readonly view: ToolboxView, private readonly context: DesignerContext) {}
+	private constructor(
+		private readonly view: ToolboxView,
+		private readonly state: DesignerState,
+		private readonly configuration: DesignerConfiguration
+	) {}
 
 	public destroy() {
 		this.view.destroy();
 	}
 
 	private render() {
-		const groups: ToolboxGroupConfiguration[] = this.context.configuration.toolbox.groups
+		const groups: ToolboxGroupConfiguration[] = this.configuration.toolbox.groups
 			.map(g => {
 				return {
 					name: g.name,
@@ -38,7 +43,7 @@ export class Toolbox {
 	}
 
 	private toggleIsCollapsedClick() {
-		this.context.toggleIsToolboxCollapsed();
+		this.state.toggleIsToolboxCollapsed();
 	}
 
 	private onIsToolboxCollapsedChanged(isCollapsed: boolean) {

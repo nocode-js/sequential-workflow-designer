@@ -1,6 +1,6 @@
 {
 	"name": "sequential-workflow-designer",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"main": "./lib/designer.js",
 	"types": "./lib/designer.d.ts",
 	"repository": {
@@ -16,6 +16,7 @@
 	},
 	"scripts": {
 		"start": "rollup -c --watch",
+		"start:clean": "rm -rf lib && rm -rf build && npm run start",
 		"build": "rollup -c",
 		"test": "karma start",
 		"test:single": "karma start --single-run",
@@ -28,9 +29,9 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/jasmine": "^4.0.3",
-		"@typescript-eslint/eslint-plugin": "^5.27.0",
-		"@typescript-eslint/parser": "^5.27.0",
-		"eslint": "^8.17.0",
+		"@typescript-eslint/eslint-plugin": "^5.40.0",
+		"@typescript-eslint/parser": "^5.40.0",
+		"eslint": "^8.25.0",
 		"http-server": "^14.1.1",
 		"karma": "^6.3.20",
 		"karma-chrome-launcher": "^3.1.1",
@@ -40,8 +41,8 @@
 		"prettier": "^2.6.2",
 		"rollup": "^2.75.3",
 		"rollup-plugin-dts": "^4.2.2",
-		"rollup-plugin-typescript2": "^0.31.2",
-		"typescript": "^4.8.3"
+		"rollup-plugin-typescript2": "^0.34.1",
+		"typescript": "^4.8.4"
 	},
 	"keywords": [
 		"workflow",

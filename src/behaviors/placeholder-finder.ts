@@ -1,11 +1,11 @@
 import { Vector } from '../core/vector';
-import { DesignerContext } from '../designer-context';
+import { DesignerState } from '../designer-state';
 import { Placeholder } from '../workspace/component';
 
 export class PlaceholderFinder {
-	public static create(placeholders: Placeholder[], context: DesignerContext): PlaceholderFinder {
-		const checker = new PlaceholderFinder(placeholders, context);
-		context.onViewPortChanged.subscribe(checker.clearCacheHandler);
+	public static create(placeholders: Placeholder[], state: DesignerState): PlaceholderFinder {
+		const checker = new PlaceholderFinder(placeholders, state);
+		state.onViewPortChanged.subscribe(checker.clearCacheHandler);
 		window.addEventListener('scroll', checker.clearCacheHandler, false);
 		return checker;
 	}
@@ -18,7 +18,7 @@ export class PlaceholderFinder {
 		br: Vector; // bottom right
 	}[];
 
-	private constructor(private readonly placeholders: Placeholder[], private readonly context: DesignerContext) {}
+	private constructor(private readonly placeholders: Placeholder[], private readonly state: DesignerState) {}
 
 	public find(vLt: Vector, vWidth: number, vHeight: number): Placeholder | undefined {
 		if (!this.cache) {
@@ -41,7 +41,7 @@ export class PlaceholderFinder {
 	}
 
 	public destroy() {
-		this.context.onViewPortChanged.unsubscribe(this.clearCacheHandler);
+		this.state.onViewPortChanged.unsubscribe(this.clearCacheHandler);
 		window.removeEventListener('scroll', this.clearCacheHandler, false);
 	}
 

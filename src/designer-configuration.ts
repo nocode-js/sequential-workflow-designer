@@ -3,6 +3,7 @@ import { ComponentType, Definition, Sequence, Step } from './definition';
 export interface DesignerConfiguration {
 	theme?: string;
 	isReadonly?: boolean;
+	undoStackSize?: number;
 
 	toolbox: ToolboxConfiguration;
 	steps: StepsConfiguration;

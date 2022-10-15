@@ -5,11 +5,21 @@ import { Placeholder, StepComponent, StepComponentState } from '../workspace/com
 import { Behavior } from './behavior';
 import { DragStepView } from './drag-step-behavior-view';
 import { PlaceholderFinder } from './placeholder-finder';
+import { DesignerState } from '../designer-state';
+import { DefinitionModifier } from '../definition-modifier';
+import { WorkspaceController } from '../workspace/workspace-controller';
 
 export class DragStepBehavior implements Behavior {
 	public static create(context: DesignerContext, step: Step, movingStepComponent?: StepComponent): DragStepBehavior {
 		const view = DragStepView.create(step, context.configuration);
-		return new DragStepBehavior(view, context, step, movingStepComponent);
+		return new DragStepBehavior(
+			view,
+			context.workspaceController,
+			context.state,
+			step,
+			context.definitionModifier,
+			movingStepComponent
+		);
 	}
 
 	private state?: {
@@ -21,8 +31,10 @@ export class DragStepBehavior implements Behavior {
 
 	private constructor(
 		private readonly view: DragStepView,
-		private readonly context: DesignerContext,
+		private readonly workspaceController: WorkspaceController,
+		private readonly designerState: DesignerState,
 		private readonly step: Step,
+		private readonly definitionModifier: DefinitionModifier,
 		private readonly movingStepComponent?: StepComponent
 	) {}
 
@@ -38,11 +50,11 @@ export class DragStepBehavior implements Behavior {
 		}
 
 		this.view.setPosition(position.subtract(offset));
-		this.context.setIsDragging(true);
+		this.designerState.setIsDragging(true);
 
 		this.state = {
 			startPosition: position,
-			finder: PlaceholderFinder.create(this.context.getPlaceholders(), this.context),
+			finder: PlaceholderFinder.create(this.workspaceController.getPlaceholders(), this.designerState),
 			offset
 		};
 	}
@@ -75,20 +87,24 @@ export class DragStepBehavior implements Behavior {
 		this.state = undefined;
 
 		this.view.remove();
-		this.context.setIsDragging(false);
+		this.designerState.setIsDragging(false);
 
 		let modified = false;
 
 		if (!interrupt && this.currentPlaceholder) {
 			if (this.movingStepComponent) {
-				modified = this.context.tryMoveStep(
+				modified = this.definitionModifier.tryMove(
 					this.movingStepComponent.parentSequence,
 					this.movingStepComponent.step,
 					this.currentPlaceholder.parentSequence,
 					this.currentPlaceholder.index
 				);
 			} else {
-				modified = this.context.tryInsertStep(this.step, this.currentPlaceholder.parentSequence, this.currentPlaceholder.index);
+				modified = this.definitionModifier.tryInsert(
+					this.step,
+					this.currentPlaceholder.parentSequence,
+					this.currentPlaceholder.index
+				);
 			}
 		}
 		if (!modified) {

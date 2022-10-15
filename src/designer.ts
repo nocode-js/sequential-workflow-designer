@@ -1,37 +1,37 @@
-import { BehaviorController } from './behaviors/behavior-controller';
-import { ObjectCloner } from './core/object-cloner';
 import { SimpleEvent } from './core/simple-event';
 import { Definition } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
-import { LayoutController } from './layout-controller';
 import { Utils } from './utils';
+import { DesignerState } from './designer-state';
+import { DefinitionModifier } from './definition-modifier';
+import { WorkspaceController } from './workspace/workspace-controller';
 
 export default class Designer {
 	public static readonly utils = Utils;
 
 	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
-		const definition = ObjectCloner.deepClone(startDefinition);
+		const context = DesignerContext.create(parent, startDefinition, configuration);
 
-		const behaviorController = new BehaviorController();
-		const layoutController = new LayoutController(parent);
-		const isMobile = layoutController.isMobile();
-		const context = new DesignerContext(definition, behaviorController, layoutController, configuration, isMobile, isMobile);
-
-		const view = DesignerView.create(parent, context, configuration);
-		const designer = new Designer(view, context);
+		const view = DesignerView.create(parent, context, context.layoutController, configuration);
+		const designer = new Designer(view, context.state, context.definitionModifier, context.workspaceController);
 		view.bindKeyUp(e => designer.onKeyUp(e));
-		context.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.definition));
+		context.state.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.state.definition));
 		return designer;
 	}
 
-	private constructor(private readonly view: DesignerView, private readonly context: DesignerContext) {}
+	private constructor(
+		private readonly view: DesignerView,
+		private readonly state: DesignerState,
+		private readonly definitionModifier: DefinitionModifier,
+		private readonly workspaceController: WorkspaceController
+	) {}
 
 	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
 
 	public getDefinition(): Definition {
-		return this.context.definition;
+		return this.state.definition;
 	}
 
 	public isValid(): boolean {
@@ -39,27 +39,29 @@ export default class Designer {
 	}
 
 	public isReadonly(): boolean {
-		return this.context.isReadonly;
+		return this.state.isReadonly;
 	}
 
 	public setIsReadonly(isReadonly: boolean) {
-		this.context.setIsReadonly(isReadonly);
+		this.state.setIsReadonly(isReadonly);
 	}
 
 	public getSelectedStepId(): string | null {
-		return this.context.selectedStep?.id || null;
+		return this.state.selectedStep?.id || null;
 	}
 
 	public selectStepById(stepId: string) {
-		this.context.selectStepById(stepId);
+		const component = this.workspaceController.getComponentByStepId(stepId);
+		this.state.setSelectedStep(component.step);
 	}
 
 	public clearSelectedStep() {
-		this.context.setSelectedStep(null);
+		this.state.setSelectedStep(null);
 	}
 
 	public moveViewPortToStep(stepId: string) {
-		this.context.moveViewPortToStep(stepId);
+		const component = this.workspaceController.getComponentByStepId(stepId);
+		this.workspaceController.moveViewPortToStep(component);
 	}
 
 	public destroy() {
@@ -75,12 +77,12 @@ export default class Designer {
 		if (document.activeElement && ignoreTagNames.includes(document.activeElement.tagName.toLowerCase())) {
 			return;
 		}
-		if (!this.context.selectedStep || this.context.isReadonly || this.context.isDragging) {
+		if (!this.state.selectedStep || this.state.isReadonly || this.state.isDragging) {
 			return;
 		}
 
 		e.preventDefault();
 		e.stopPropagation();
-		this.context.tryDeleteStep(this.context.selectedStep);
+		this.definitionModifier.tryDelete(this.state.selectedStep);
 	}
 }

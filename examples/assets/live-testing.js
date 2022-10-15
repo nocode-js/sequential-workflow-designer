@@ -119,11 +119,14 @@ function appendTextField(parent, label, startValue, set) {
 	field.addEventListener('input', () => set(input.value));
 }
 
-function globalEditorProvider(definition) {
+function globalEditorProvider(definition, globalContext) {
 	const container = document.createElement('span');
 	appendTitle(container, 'State machine config');
 	appendTextField(container, 'Speed (ms)', definition.properties['speed'],
-		v => definition.properties['speed'] = parseInt(v, 10));
+		v => {
+			definition.properties['speed'] = parseInt(v, 10);
+			globalContext.notifyPropertiesChanged();
+		});
 	return container;
 }
 
@@ -161,6 +164,8 @@ function stepEditorProvider(step, editorContext) {
 }
 
 const configuration = {
+	undoStackSize: 5,
+
 	toolbox: {
 		isHidden: false,
 		groups: [
