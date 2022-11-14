@@ -44,6 +44,7 @@ export interface EditorsConfiguration {
 export interface StepEditorContext {
 	notifyNameChanged(): void;
 	notifyPropertiesChanged(): void;
+	notifyChildrenChanged(): void;
 }
 
 export type StepEditorProvider = (step: Step, context: StepEditorContext) => HTMLElement;

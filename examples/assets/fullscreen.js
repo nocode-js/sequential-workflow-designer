@@ -48,6 +48,19 @@ function toolboxGroup(name) {
 	};
 }
 
+function appendCheckbox(root, label, isChecked, onClick) {
+	const item = document.createElement('div');
+	item.innerHTML = '<div><h5></h5> <input type="checkbox" /></div>';
+	const h5 = item.getElementsByTagName('h5')[0];
+	h5.innerText = label;
+	const input = item.getElementsByTagName('input')[0];
+	input.checked = isChecked;
+	input.addEventListener('click', () => {
+		onClick(input.checked);
+	});
+	root.appendChild(item);
+}
+
 let designer;
 const configuration = {
 	undoStackSize: 20,
@@ -83,15 +96,22 @@ const configuration = {
 
 		stepEditorProvider: (step, editorContext) => {
 			const root = document.createElement('div');
-			root.innerHTML = '<h5></h5> <p>is invalid: <input type="checkbox" /></p>';
-			const title = root.getElementsByTagName('h5')[0];
-			title.innerText = step.name;
-			const input = root.getElementsByTagName('input')[0];
-			input.checked = !!step.properties['isInvalid'];
-			input.addEventListener('click', () => {
-				step.properties['isInvalid'] = !!input.checked;
+
+			appendCheckbox(root, 'Is invalid', !!step.properties['isInvalid'], (checked) => {
+				step.properties['isInvalid'] = checked;
 				editorContext.notifyPropertiesChanged();
 			});
+
+			if (step.type === 'if') {
+				appendCheckbox(root, 'Catch branch', !!step.branches['catch'], (checked) => {
+					if (checked) {
+						step.branches['catch'] = [];
+					} else {
+						delete step.branches['catch'];
+					}
+					editorContext.notifyChildrenChanged();
+				});
+			}
 			return root;
 		}
 	}

@@ -13,6 +13,9 @@ export class StepEditor implements Editor {
 			},
 			notifyNameChanged: () => {
 				context.state.notifyDefinitionChanged(DefinitionChangeType.stepNameChanged, step.id);
+			},
+			notifyChildrenChanged: () => {
+				context.state.notifyDefinitionChanged(DefinitionChangeType.stepChildrenChanged, step.id);
 			}
 		};
 

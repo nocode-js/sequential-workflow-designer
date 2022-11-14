@@ -1,3 +1,7 @@
+## 0.2.2
+
+Added the `notifyChildrenChanged()` method to the `StepEditorContext` interface.
+
 ## 0.2.1
 
 Support undo and redo. This feature is disabled by default. To enable it add the below config.

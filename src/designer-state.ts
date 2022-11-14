@@ -10,6 +10,7 @@ export interface DefinitionChangedEvent {
 export enum DefinitionChangeType {
 	stepNameChanged = 1,
 	stepPropertyChanged,
+	stepChildrenChanged,
 	stepDeleted,
 	stepMoved,
 	stepInserted,
