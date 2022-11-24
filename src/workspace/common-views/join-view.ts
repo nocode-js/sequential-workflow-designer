@@ -14,21 +14,53 @@ export class JoinView {
 	}
 
 	public static createJoins(parent: SVGElement, start: Vector, targets: Vector[]) {
-		for (const target of targets) {
-			const c = Math.abs(start.y - target.y) / 2; // size of a corner
-			const l = Math.abs(start.x - target.x) - c * 2; // size of the line between corners
+		const firstTarget = targets[0];
+		const h = Math.abs(firstTarget.y - start.y) / 2; // half height
+		const y = Math.sign(firstTarget.y - start.y); // y direction
 
-			const x = start.x > target.x ? -1 : 1;
-			const y = start.y > target.y ? -1 : 1;
+		switch (targets.length) {
+			case 1:
+				JoinView.createStraightJoin(parent, start, firstTarget.y * y);
+				break;
 
-			const join = Dom.svg('path', {
-				class: 'sqd-join',
-				fill: 'none',
-				d: `M ${start.x} ${start.y} q ${x * c * 0.3} ${y * c * 0.8} ${x * c} ${y * c} l ${x * l} 0 q ${x * c * 0.7} ${
-					y * c * 0.2
-				} ${x * c} ${y * c}`
-			});
-			parent.insertBefore(join, parent.firstChild);
+			case 2:
+				for (const target of targets) {
+					const l = Math.abs(target.x - start.x) - h * 2; // line size
+					const x = Math.sign(target.x - start.x); // x direction
+
+					appendJoin(
+						parent,
+						`M ${start.x} ${start.y} q ${x * h * 0.3} ${y * h * 0.8} ${x * h} ${y * h} ` +
+							`l ${x * l} 0 q ${x * h * 0.7} ${y * h * 0.2} ${x * h} ${y * h}`
+					);
+				}
+				break;
+
+			default:
+				{
+					const f = targets[0]; // first
+					const l = targets[targets.length - 1]; // last
+					appendJoin(
+						parent,
+						`M ${f.x} ${f.y} q ${h * 0.3} ${h * -y * 0.8} ${h} ${h * -y} ` +
+							`l ${l.x - f.x - h * 2} 0 q ${h * 0.8} ${-h * -y * 0.3} ${h} ${-h * -y}`
+					);
+
+					for (let i = 1; i < targets.length - 1; i++) {
+						JoinView.createStraightJoin(parent, targets[i], h * -y);
+					}
+					JoinView.createStraightJoin(parent, start, h * y);
+				}
+				break;
 		}
 	}
+}
+
+function appendJoin(parent: SVGElement, d: string) {
+	const join = Dom.svg('path', {
+		class: 'sqd-join',
+		fill: 'none',
+		d
+	});
+	parent.insertBefore(join, parent.firstChild);
 }

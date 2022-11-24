@@ -40,6 +40,12 @@ export class SwitchStepComponentView implements ComponentView {
 			totalX += containerWidths[i];
 		}
 
+		const centerBranchIndex = Math.floor(branchNames.length / 2);
+		let joinX = containerOffsets[centerBranchIndex];
+		if (branchNames.length % 2 !== 0) {
+			joinX += joinXs[centerBranchIndex] + PADDING_X;
+		}
+
 		branchNames.forEach((branchName, i) => {
 			const sequence = sequenceComponents[i];
 			const offsetX = containerOffsets[i];
@@ -58,22 +64,22 @@ export class SwitchStepComponentView implements ComponentView {
 			Dom.translate(sequence.view.g, sequenceX, sequenceY);
 		});
 
-		LabelView.create(g, containerWidths[0], PADDING_TOP, step.name);
+		LabelView.create(g, joinX, PADDING_TOP, step.name);
 
-		JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP);
+		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);
 
 		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
-		const inputView = InputView.createRectInput(g, containerWidths[0], 0, iconUrl);
+		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
 
 		JoinView.createJoins(
 			g,
-			new Vector(containerWidths[0], PADDING_TOP + LABEL_HEIGHT),
+			new Vector(joinX, PADDING_TOP + LABEL_HEIGHT),
 			containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT))
 		);
 
 		JoinView.createJoins(
 			g,
-			new Vector(containerWidths[0], containerHeight),
+			new Vector(joinX, containerHeight),
 			containerOffsets.map(
 				(o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)
 			)
@@ -87,7 +93,7 @@ export class SwitchStepComponentView implements ComponentView {
 			g,
 			containersWidth,
 			containerHeight,
-			containerWidths[0],
+			joinX,
 			sequenceComponents,
 			regionView,
 			inputView,

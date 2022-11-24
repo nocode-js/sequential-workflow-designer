@@ -1,3 +1,7 @@
+## 0.2.3
+
+Improved rendering of the switch step for 3 and more branches.
+
 ## 0.2.2
 
 Added the `notifyChildrenChanged()` method to the `StepEditorContext` interface.
