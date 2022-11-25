@@ -172,21 +172,25 @@ You need to notify the designer when your editor changes the definition. To do i
 const editorsConfiguration = {
   globalEditorProvider: (definition, globalContext) => {
     // ...
-    definition.properties['a'] = newA;
-    definition.notifyPropertiesChanged();
+    input.addEventListener('changed', () => {
+      definition.properties['a'] = newA;
+      globalContext.notifyPropertiesChanged();
+    });
     // ...
   },
 
   stepEditorProvider: (step, stepContext) => {
     // ...
-    step.name = newName;
-    stepContext.notifyNameChanged();
+    input.addEventListener('changed', () => {
+      step.name = newName;
+      stepContext.notifyNameChanged();
 
-    step.properties['x'] = newX;
-    stepContext.notifyPropertiesChanged();
+      step.properties['x'] = newX;
+      stepContext.notifyPropertiesChanged();
 
-    step.branches['newBranch'] = [];
-    stepContext.notifyChildrenChanged();
+      step.branches['newBranch'] = [];
+      stepContext.notifyChildrenChanged();
+    });
     // ...
   }
 }
