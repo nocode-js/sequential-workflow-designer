@@ -138,15 +138,15 @@ const configuration = {
   editors: {
     isHidden: false, // optional, default: false
 
-    globalEditorProvider: (definition) => {
-      const container = document.createElement('div');
+    globalEditorProvider: (definition, globalContext) => {
+      const editor = document.createElement('div');
       // ...
-      return container;
+      return editor;
     },
-    stepEditorProvider: (step) => {
-      const container = document.createElement('div');
+    stepEditorProvider: (step, stepContext) => {
+      const editor = document.createElement('div');
       // ...
-      return container;
+      return editor;
     }
   }
 };
@@ -155,6 +155,41 @@ const designer = Designer.create(placeholder, definition, configuration);
 designer.onDefinitionChanged.subscribe((newDefinition) => {
   // ...
 });
+```
+
+### 📝 Editors
+
+The designer doesn't provide editors for steps. Why? Because this part usually is strongly dependent on a project type. So you must create editors by your own and set them in the start configuration.
+
+The designer supports two types of editors.
+
+* Global editor - it appears when no step is selected. This editor should configure a global settings of your definition. You should set your configuration to the `definition.properties` object.
+* Step editor - it appears when some step is selected. This editor can change the step's name (`step.name`) and step's property values (`step.properties`). Also, it can change children, but you must be careful and don't mix responsibilities.
+
+You need to notify the designer when your editor changes the definition. To do it you need to call one of the editor context methods.
+
+```js
+const editorsConfiguration = {
+  globalEditorProvider: (definition, globalContext) => {
+    // ...
+    definition.properties['a'] = newA;
+    definition.notifyPropertiesChanged();
+    // ...
+  },
+
+  stepEditorProvider: (step, stepContext) => {
+    // ...
+    step.name = newName;
+    stepContext.notifyNameChanged();
+
+    step.properties['x'] = newX;
+    stepContext.notifyPropertiesChanged();
+
+    step.branches['newBranch'] = [];
+    stepContext.notifyChildrenChanged();
+    // ...
+  }
+}
 ```
 
 ## 🚧 Supported Components
