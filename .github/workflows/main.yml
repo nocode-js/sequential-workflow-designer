@@ -1,0 +1,30 @@
+name: main
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [16]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Setup Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Test
+        run: yarn test:single
+      - name: Eslint
+        run: yarn eslint
+      - name: Prettier
+        run: yarn prettier

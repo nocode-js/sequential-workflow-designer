@@ -1,0 +1,54 @@
+{
+	"name": "sequential-workflow-designer",
+	"version": "0.2.3",
+	"main": "./lib/designer.js",
+	"types": "./lib/designer.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/b4rtaz/sequential-workflow-designer.git"
+	},
+	"files": [
+		"lib/",
+		"css/"
+	],
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org/"
+	},
+	"scripts": {
+		"start": "rollup -c --watch",
+		"start:clean": "rm -rf lib && rm -rf build && npm run start",
+		"build": "rollup -c",
+		"test": "karma start",
+		"test:single": "karma start --single-run",
+		"eslint": "eslint ./src --ext .ts",
+		"prettier": "prettier --check ./src",
+		"prettier:fix": "prettier --write ./src",
+		"serve": "http-server ./"
+	},
+	"author": "b4rtaz",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/jasmine": "^4.0.3",
+		"@typescript-eslint/eslint-plugin": "^5.40.0",
+		"@typescript-eslint/parser": "^5.40.0",
+		"eslint": "^8.25.0",
+		"http-server": "^14.1.1",
+		"karma": "^6.3.20",
+		"karma-chrome-launcher": "^3.1.1",
+		"karma-jasmine": "^5.0.1",
+		"karma-spec-reporter": "^0.0.34",
+		"karma-typescript": "^5.5.3",
+		"prettier": "^2.6.2",
+		"rollup": "^2.75.3",
+		"rollup-plugin-dts": "^4.2.2",
+		"rollup-plugin-typescript2": "^0.34.1",
+		"typescript": "^4.8.4"
+	},
+	"keywords": [
+		"workflow",
+		"designer",
+		"builder",
+		"nocode",
+		"lowcode"
+	]
+}
