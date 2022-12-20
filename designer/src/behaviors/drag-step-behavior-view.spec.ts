@@ -1,4 +1,4 @@
-import { createDesignerConfigurationStub, createStepStub } from '../test-tools/stubs';
+import { createComponentContextStub, createDesignerConfigurationStub, createStepStub } from '../test-tools/stubs';
 import { DragStepView } from './drag-step-behavior-view';
 
 describe('DragStepView', () => {
@@ -7,8 +7,9 @@ describe('DragStepView', () => {
 
 		const step = createStepStub();
 		const configuration = createDesignerConfigurationStub();
+		const context = createComponentContextStub();
 
-		const component = DragStepView.create(step, configuration);
+		const component = DragStepView.create(step, configuration, context);
 
 		expect(component).toBeDefined();
 		expect(appendChildSpy).toHaveBeenCalled();

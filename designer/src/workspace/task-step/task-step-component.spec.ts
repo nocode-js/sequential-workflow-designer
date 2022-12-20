@@ -1,12 +1,13 @@
 import { Dom } from '../../core/dom';
-import { ComponentType, Sequence, TaskStep } from '../../definition';
+import { Sequence, TaskStep } from '../../definition';
+import { createComponentContextStub } from '../../test-tools/stubs';
 import { TaskStepComponent } from './task-step-component';
 
 describe('TaskStepComponent', () => {
 	it('create() creates component', () => {
 		const step: TaskStep = {
 			id: '0x0',
-			componentType: ComponentType.task,
+			componentType: 'task',
 			name: 'Foo',
 			properties: {},
 			type: 'foo'
@@ -14,7 +15,8 @@ describe('TaskStepComponent', () => {
 		const parentSequence: Sequence = [step];
 
 		const parent = Dom.svg('svg');
-		const component = TaskStepComponent.create(parent, step, parentSequence, {});
+		const context = createComponentContextStub();
+		const component = TaskStepComponent.create(parent, step, parentSequence, context);
 
 		expect(component).toBeDefined();
 	});

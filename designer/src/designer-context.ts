@@ -1,15 +1,22 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { ObjectCloner } from './core/object-cloner';
+import { StepsTraverser } from './core/steps-traverser';
 import { Definition } from './definition';
 import { DefinitionModifier } from './definition-modifier';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerState } from './designer-state';
 import { HistoryController } from './history-controller';
 import { LayoutController } from './layout-controller';
+import { StepExtensionDictionary } from './workspace/component-context';
 import { WorkspaceController, WorkspaceControllerWrapper } from './workspace/workspace-controller';
 
 export class DesignerContext {
-	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): DesignerContext {
+	public static create(
+		parent: HTMLElement,
+		startDefinition: Definition,
+		configuration: DesignerConfiguration,
+		stepExtensions: StepExtensionDictionary
+	): DesignerContext {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
 		const layoutController = new LayoutController(parent);
@@ -18,7 +25,8 @@ export class DesignerContext {
 
 		const state = new DesignerState(definition, isReadonly, isMobile, isMobile);
 		const workspaceController = new WorkspaceControllerWrapper();
-		const definitionModifier = new DefinitionModifier(workspaceController, state, configuration);
+		const stepsTraverser = new StepsTraverser(stepExtensions);
+		const definitionModifier = new DefinitionModifier(workspaceController, stepsTraverser, state, configuration);
 
 		let historyController: HistoryController | undefined = undefined;
 		if (configuration.undoStackSize) {
@@ -27,6 +35,7 @@ export class DesignerContext {
 
 		return new DesignerContext(
 			state,
+			stepsTraverser,
 			configuration,
 			layoutController,
 			workspaceController,
@@ -38,6 +47,7 @@ export class DesignerContext {
 
 	public constructor(
 		public readonly state: DesignerState,
+		public readonly stepsTraverser: StepsTraverser,
 		public readonly configuration: DesignerConfiguration,
 		public readonly layoutController: LayoutController,
 		public readonly workspaceController: WorkspaceControllerWrapper,

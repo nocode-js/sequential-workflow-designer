@@ -1,12 +1,13 @@
 import { Dom } from '../../core/dom';
-import { ComponentType, ContainerStep, Sequence } from '../../definition';
+import { ContainerStep, Sequence } from '../../definition';
+import { createComponentContextStub } from '../../test-tools/stubs';
 import { ContainerStepComponent } from './container-step-component';
 
 describe('ContainerStepComponent', () => {
 	it('create() creates component', () => {
 		const step: ContainerStep = {
 			id: '0x0',
-			componentType: ComponentType.container,
+			componentType: 'container',
 			name: 'Foo',
 			properties: {},
 			type: 'foo',
@@ -15,7 +16,8 @@ describe('ContainerStepComponent', () => {
 		const parentSequence: Sequence = [step];
 
 		const parent = Dom.svg('svg');
-		const component = ContainerStepComponent.create(parent, step, parentSequence, {});
+		const context = createComponentContextStub();
+		const component = ContainerStepComponent.create(parent, step, parentSequence, context);
 
 		expect(component).toBeDefined();
 	});

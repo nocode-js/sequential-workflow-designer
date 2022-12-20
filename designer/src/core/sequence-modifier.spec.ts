@@ -1,32 +1,32 @@
-import { Sequence, ComponentType, TaskStep } from '../definition';
+import { Sequence, TaskStep } from '../definition';
 import { SequenceModifier } from './sequence-modifier';
 
 describe('SequenceModifier', () => {
 	const A: TaskStep = {
 		id: '0x1',
 		name: 'A',
-		componentType: ComponentType.task,
+		componentType: 'task',
 		type: 'a',
 		properties: {}
 	};
 	const B: TaskStep = {
 		id: '0x2',
 		name: 'B',
-		componentType: ComponentType.task,
+		componentType: 'task',
 		type: 'b',
 		properties: {}
 	};
 	const C: TaskStep = {
 		id: '0x3',
 		name: 'C',
-		componentType: ComponentType.task,
+		componentType: 'task',
 		type: 'c',
 		properties: {}
 	};
 	const D: TaskStep = {
 		id: '0x4',
 		name: 'D',
-		componentType: ComponentType.task,
+		componentType: 'task',
 		type: 'd',
 		properties: {}
 	};

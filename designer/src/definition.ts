@@ -13,23 +13,19 @@ export interface Step {
 	properties: Properties;
 }
 
-export enum ComponentType {
-	task = 'task',
-	switch = 'switch',
-	container = 'container'
-}
+export type ComponentType = 'task' | 'switch' | 'container' | string;
 
 export interface TaskStep extends Step {
-	componentType: ComponentType.task;
+	componentType: 'task';
 }
 
 export interface SwitchStep extends Step {
-	componentType: ComponentType.switch;
+	componentType: 'switch';
 	branches: Branches;
 }
 
 export interface ContainerStep extends Step {
-	componentType: ComponentType.container;
+	componentType: 'container';
 	sequence: Sequence;
 }
 

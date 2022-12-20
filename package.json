@@ -4,9 +4,13 @@
 		"build": "yarn workspaces run build",
 		"test:single": "yarn workspaces run test:single",
 		"eslint": "yarn workspaces run eslint",
-		"prettier": "yarn workspaces run prettier"
+		"prettier": "yarn workspaces run prettier",
+		"serve": "http-server ./"
 	},
 	"workspaces": [
 		"designer"
-	]
+	],
+	"devDependencies": {
+		"http-server": "^14.1.1"
+	}
 }

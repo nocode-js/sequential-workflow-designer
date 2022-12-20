@@ -1,5 +1,5 @@
 import { Dom } from '../core/dom';
-import { ComponentType, Step } from '../definition';
+import { Step } from '../definition';
 import { ToolboxItemView } from './toolbox-item-view';
 
 describe('ToolboxItemView', () => {
@@ -7,7 +7,7 @@ describe('ToolboxItemView', () => {
 		const parent = Dom.element('div');
 		const step: Step = {
 			id: '0x0',
-			componentType: ComponentType.task,
+			componentType: 'task',
 			name: 'x',
 			properties: {},
 			type: 'y'

@@ -1,13 +1,13 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { SwitchStep } from '../../definition';
-import { StepsConfiguration } from '../../designer-configuration';
 import { JoinView } from '../common-views//join-view';
 import { LabelView } from '../common-views//label-view';
 import { RegionView } from '../common-views//region-view';
 import { ValidationErrorView } from '../common-views//validation-error-view';
 import { InputView } from '../common-views/input-view';
 import { ComponentView } from '../component';
+import { ComponentContext } from '../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
 
 const MIN_CHILDREN_WIDTH = 50;
@@ -17,14 +17,14 @@ const LABEL_HEIGHT = 22;
 const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponentView implements ComponentView {
-	public static create(parent: SVGElement, step: SwitchStep, configuration: StepsConfiguration): SwitchStepComponentView {
+	public static create(parent: SVGElement, step: SwitchStep, context: ComponentContext): SwitchStepComponentView {
 		const g = Dom.svg('g', {
 			class: `sqd-switch-group sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 
 		const branchNames = Object.keys(step.branches);
-		const sequenceComponents = branchNames.map(bn => SequenceComponent.create(g, step.branches[bn], configuration));
+		const sequenceComponents = branchNames.map(bn => SequenceComponent.create(g, step.branches[bn], context));
 
 		const maxChildHeight = Math.max(...sequenceComponents.map(s => s.view.height));
 		const containerWidths = sequenceComponents.map(s => Math.max(s.view.width, MIN_CHILDREN_WIDTH) + PADDING_X * 2);
@@ -68,7 +68,7 @@ export class SwitchStepComponentView implements ComponentView {
 
 		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);
 
-		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+		const iconUrl = context.configuration.iconUrlProvider ? context.configuration.iconUrlProvider(step.componentType, step.type) : null;
 		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
 
 		JoinView.createJoins(

@@ -5,12 +5,14 @@ import { DesignerContext } from './designer-context';
 import { LayoutController } from './layout-controller';
 import { SmartEditor } from './smart-editor/smart-editor';
 import { Toolbox } from './toolbox/toolbox';
+import { ComponentContext } from './workspace/component-context';
 import { Workspace } from './workspace/workspace';
 
 export class DesignerView {
 	public static create(
 		parent: HTMLElement,
-		context: DesignerContext,
+		designerContext: DesignerContext,
+		componentContext: ComponentContext,
 		layoutController: LayoutController,
 		configuration: DesignerConfiguration
 	): DesignerView {
@@ -21,15 +23,15 @@ export class DesignerView {
 		});
 		parent.appendChild(root);
 
-		const workspace = Workspace.create(root, context);
+		const workspace = Workspace.create(root, designerContext, componentContext);
 		let toolbox: Toolbox | undefined = undefined;
 
 		if (!configuration.toolbox.isHidden) {
-			toolbox = Toolbox.create(root, context);
+			toolbox = Toolbox.create(root, designerContext, componentContext);
 		}
-		ControlBar.create(root, context);
+		ControlBar.create(root, designerContext);
 		if (!configuration.editors.isHidden) {
-			SmartEditor.create(root, context);
+			SmartEditor.create(root, designerContext);
 		}
 		const view = new DesignerView(root, layoutController, workspace, toolbox);
 		view.reloadLayout();

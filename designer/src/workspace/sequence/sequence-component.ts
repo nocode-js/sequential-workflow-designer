@@ -1,12 +1,12 @@
 import { Sequence } from '../../definition';
-import { StepsConfiguration } from '../../designer-configuration';
 import { Component, Placeholder, StepComponent } from '../component';
 import { SequencePlaceholder } from './sequence-placeholder';
 import { SequenceComponentView } from './sequence-component-view';
+import { ComponentContext } from '../component-context';
 
 export class SequenceComponent implements Component {
-	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): SequenceComponent {
-		const view = SequenceComponentView.create(parent, sequence, configuration);
+	public static create(parent: SVGElement, sequence: Sequence, context: ComponentContext): SequenceComponent {
+		const view = SequenceComponentView.create(parent, sequence, context);
 		return new SequenceComponent(view, sequence);
 	}
 

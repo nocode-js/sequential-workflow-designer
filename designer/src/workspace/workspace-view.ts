@@ -2,7 +2,7 @@ import { Dom } from '../core/dom';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
-import { StepsConfiguration } from '../designer-configuration';
+import { ComponentContext } from './component-context';
 import { StartStopComponent } from './start-stop/start-stop-component';
 
 const GRID_SIZE = 48;
@@ -10,7 +10,7 @@ const GRID_SIZE = 48;
 let lastGridPatternId = 0;
 
 export class WorkspaceView {
-	public static create(parent: HTMLElement, configuration: StepsConfiguration): WorkspaceView {
+	public static create(parent: HTMLElement, context: ComponentContext): WorkspaceView {
 		const defs = Dom.svg('defs');
 		const gridPatternId = 'sqd-grid-pattern-' + lastGridPatternId++;
 		const gridPattern = Dom.svg('pattern', {
@@ -45,7 +45,7 @@ export class WorkspaceView {
 		workspace.appendChild(canvas);
 		parent.appendChild(workspace);
 
-		const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, configuration);
+		const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, context);
 		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;
 	}
@@ -59,14 +59,14 @@ export class WorkspaceView {
 		private readonly gridPattern: SVGPatternElement,
 		private readonly gridPatternPath: SVGPathElement,
 		private readonly foreground: SVGGElement,
-		private readonly configuration: StepsConfiguration
+		private readonly context: ComponentContext
 	) {}
 
 	public render(sequence: Sequence) {
 		if (this.rootComponent) {
 			this.rootComponent.view.destroy();
 		}
-		this.rootComponent = StartStopComponent.create(this.foreground, sequence, this.configuration);
+		this.rootComponent = StartStopComponent.create(this.foreground, sequence, this.context);
 		this.refreshSize();
 	}
 

@@ -1,7 +1,6 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { ContainerStep } from '../../definition';
-import { StepsConfiguration } from '../../designer-configuration';
 import { ComponentView } from '../component';
 import { SequenceComponent } from '../sequence/sequence-component';
 import { InputView } from '../common-views/input-view';
@@ -9,19 +8,20 @@ import { JoinView } from '../common-views/join-view';
 import { LabelView } from '../common-views/label-view';
 import { RegionView } from '../common-views/region-view';
 import { ValidationErrorView } from '../common-views/validation-error-view';
+import { ComponentContext } from '../component-context';
 
 const PADDING_TOP = 20;
 const PADDING_X = 20;
 const LABEL_HEIGHT = 22;
 
 export class ContainerStepComponentView implements ComponentView {
-	public static create(parent: SVGElement, step: ContainerStep, configuration: StepsConfiguration): ContainerStepComponentView {
+	public static create(parent: SVGElement, step: ContainerStep, context: ComponentContext): ContainerStepComponentView {
 		const g = Dom.svg('g', {
 			class: `sqd-container-group sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 
-		const sequenceComponent = SequenceComponent.create(g, step.sequence, configuration);
+		const sequenceComponent = SequenceComponent.create(g, step.sequence, context);
 		Dom.translate(sequenceComponent.view.g, PADDING_X, PADDING_TOP + LABEL_HEIGHT);
 
 		const width = sequenceComponent.view.width + PADDING_X * 2;
@@ -30,7 +30,7 @@ export class ContainerStepComponentView implements ComponentView {
 
 		LabelView.create(g, joinX, PADDING_TOP, step.name);
 
-		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+		const iconUrl = context.configuration.iconUrlProvider ? context.configuration.iconUrlProvider(step.componentType, step.type) : null;
 		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
 
 		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);

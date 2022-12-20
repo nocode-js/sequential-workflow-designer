@@ -1,5 +1,5 @@
 import { SimpleEvent } from './core/simple-event';
-import { Definition } from './definition';
+import { Definition, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
@@ -7,17 +7,29 @@ import { Utils } from './utils';
 import { DesignerState } from './designer-state';
 import { DefinitionModifier } from './definition-modifier';
 import { WorkspaceController } from './workspace/workspace-controller';
+import { ComponentContext } from './workspace/component-context';
+import { StepExtensionsResolver } from './workspace/step-extensions-resolver';
+import { StepsTraverser } from './core/steps-traverser';
 
 export default class Designer {
 	public static readonly utils = Utils;
 
 	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
-		const context = DesignerContext.create(parent, startDefinition, configuration);
+		const stepExtensions = StepExtensionsResolver.resolve(configuration.steps);
 
-		const view = DesignerView.create(parent, context, context.layoutController, configuration);
-		const designer = new Designer(view, context.state, context.definitionModifier, context.workspaceController);
+		const designerContext = DesignerContext.create(parent, startDefinition, configuration, stepExtensions);
+		const componentContext = ComponentContext.create(configuration.steps, stepExtensions);
+
+		const view = DesignerView.create(parent, designerContext, componentContext, designerContext.layoutController, configuration);
+		const designer = new Designer(
+			view,
+			designerContext.state,
+			designerContext.definitionModifier,
+			designerContext.workspaceController,
+			designerContext.stepsTraverser
+		);
 		view.bindKeyUp(e => designer.onKeyUp(e));
-		context.state.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(context.state.definition));
+		designerContext.state.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(designerContext.state.definition));
 		return designer;
 	}
 
@@ -25,7 +37,8 @@ export default class Designer {
 		private readonly view: DesignerView,
 		private readonly state: DesignerState,
 		private readonly definitionModifier: DefinitionModifier,
-		private readonly workspaceController: WorkspaceController
+		private readonly workspaceController: WorkspaceController,
+		private readonly stepsTraverser: StepsTraverser
 	) {}
 
 	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
@@ -62,6 +75,10 @@ export default class Designer {
 	public moveViewPortToStep(stepId: string) {
 		const component = this.workspaceController.getComponentByStepId(stepId);
 		this.workspaceController.moveViewPortToStep(component);
+	}
+
+	public getStepParents(needle: Sequence | Step) {
+		return this.stepsTraverser.getParents(this.state.definition, needle);
 	}
 
 	public destroy() {

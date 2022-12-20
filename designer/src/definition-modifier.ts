@@ -8,6 +8,7 @@ import { WorkspaceController } from './workspace/workspace-controller';
 export class DefinitionModifier {
 	public constructor(
 		private readonly workspaceController: WorkspaceController,
+		private readonly stepsTraverser: StepsTraverser,
 		private readonly state: DesignerState,
 		private readonly configuration: DesignerConfiguration
 	) {}
@@ -66,7 +67,7 @@ export class DefinitionModifier {
 
 		if (this.state.selectedStep) {
 			// We need to update a reference of the selected step.
-			const step = StepsTraverser.findById(definition, this.state.selectedStep.id);
+			const step = this.stepsTraverser.findById(definition, this.state.selectedStep.id);
 			this.state.setSelectedStep(step);
 		}
 	}

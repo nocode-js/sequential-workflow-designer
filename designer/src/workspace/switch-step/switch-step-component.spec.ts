@@ -1,13 +1,13 @@
 import { Dom } from '../../core/dom';
-import { ComponentType, Sequence, SwitchStep } from '../../definition';
-import { createStepStub } from '../../test-tools/stubs';
+import { Sequence, SwitchStep } from '../../definition';
+import { createComponentContextStub, createStepStub } from '../../test-tools/stubs';
 import { SwitchStepComponent } from './switch-step-component';
 
 describe('SwitchStepComponent', () => {
 	it('creates component', () => {
 		const step: SwitchStep = {
 			id: '0x0',
-			componentType: ComponentType.switch,
+			componentType: 'switch',
 			name: 'Foo',
 			properties: {},
 			branches: {
@@ -19,7 +19,8 @@ describe('SwitchStepComponent', () => {
 		const parentSequence: Sequence = [step];
 
 		const parent = Dom.svg('svg');
-		const component = SwitchStepComponent.create(parent, step, parentSequence, {});
+		const context = createComponentContextStub();
+		const component = SwitchStepComponent.create(parent, step, parentSequence, context);
 
 		expect(component).toBeDefined();
 	});

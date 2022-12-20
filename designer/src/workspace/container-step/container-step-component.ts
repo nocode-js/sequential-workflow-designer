@@ -1,6 +1,7 @@
 import { ContainerStep, Sequence, Step } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { Placeholder, StepComponent, StepComponentState } from '../component';
+import { ComponentContext } from '../component-context';
 import { ContainerStepComponentView } from './container-step-component-view';
 
 export class ContainerStepComponent implements StepComponent {
@@ -8,10 +9,10 @@ export class ContainerStepComponent implements StepComponent {
 		parent: SVGElement,
 		step: ContainerStep,
 		parentSequence: Sequence,
-		configuration: StepsConfiguration
+		context: ComponentContext
 	): ContainerStepComponent {
-		const view = ContainerStepComponentView.create(parent, step, configuration);
-		return new ContainerStepComponent(view, step, parentSequence, configuration);
+		const view = ContainerStepComponentView.create(parent, step, context);
+		return new ContainerStepComponent(view, step, parentSequence, context.configuration);
 	}
 
 	private currentState = StepComponentState.default;

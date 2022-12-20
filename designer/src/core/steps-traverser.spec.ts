@@ -1,10 +1,11 @@
-import { ComponentType, ContainerStep, Step, SwitchStep, TaskStep } from '../definition';
+import { ContainerStep, Step, SwitchStep, TaskStep } from '../definition';
+import { StepExtensionsResolver } from '../workspace/step-extensions-resolver';
 import { StepsTraverser } from './steps-traverser';
 
 describe('StepsTraverser', () => {
 	function createIf(name: string, falseStep: Step): SwitchStep {
 		return {
-			componentType: ComponentType.switch,
+			componentType: 'switch',
 			id: 'if' + name,
 			type: 'if' + name,
 			name,
@@ -18,7 +19,7 @@ describe('StepsTraverser', () => {
 
 	function createTask(name: string): TaskStep {
 		return {
-			componentType: ComponentType.task,
+			componentType: 'task',
 			id: 'task' + name,
 			type: 'task' + name,
 			name,
@@ -30,7 +31,7 @@ describe('StepsTraverser', () => {
 	const ifAlfa = createIf('beta', taskFoo);
 	const ifBeta = createIf('alfa', ifAlfa);
 	const loop = {
-		componentType: ComponentType.container,
+		componentType: 'container',
 		id: 'loop',
 		name: 'loop',
 		type: 'loop',
@@ -45,9 +46,16 @@ describe('StepsTraverser', () => {
 		properties: {}
 	};
 
+	let traverser: StepsTraverser;
+
+	beforeAll(() => {
+		const extensions = StepExtensionsResolver.resolve({});
+		traverser = new StepsTraverser(extensions);
+	});
+
 	describe('getParents', () => {
 		it('returns task parents', () => {
-			const parents = StepsTraverser.getParents(definition, taskFoo);
+			const parents = traverser.getParents(definition, taskFoo);
 			expect(parents.length).toEqual(6);
 			expect(parents[0]).toEqual(loop);
 			expect(parents[1]).toEqual(ifBeta);
@@ -58,14 +66,14 @@ describe('StepsTraverser', () => {
 		});
 
 		it('returns alfa parents', () => {
-			const parents = StepsTraverser.getParents(definition, ifBeta);
+			const parents = traverser.getParents(definition, ifBeta);
 			expect(parents.length).toEqual(2);
 			expect(parents[0]).toEqual(loop);
 			expect(parents[1]).toEqual(ifBeta);
 		});
 
 		it('returns loop parents', () => {
-			const parents = StepsTraverser.getParents(definition, loop);
+			const parents = traverser.getParents(definition, loop);
 			expect(parents.length).toEqual(1);
 			expect(parents[0]).toEqual(loop);
 		});
@@ -73,22 +81,22 @@ describe('StepsTraverser', () => {
 
 	describe('findById', () => {
 		it('returns null when stepId not exists', () => {
-			const found = StepsTraverser.findById(definition, 'undefined');
+			const found = traverser.findById(definition, 'undefined');
 			expect(found).toBeNull();
 		});
 
 		it('returns task step', () => {
-			const found = StepsTraverser.findById(definition, taskFoo.id);
+			const found = traverser.findById(definition, taskFoo.id);
 			expect(found).toEqual(taskFoo);
 		});
 
 		it('returns container step', () => {
-			const found = StepsTraverser.findById(definition, loop.id);
+			const found = traverser.findById(definition, loop.id);
 			expect(found).toEqual(loop);
 		});
 
 		it('returns switch step', () => {
-			const found = StepsTraverser.findById(definition, ifBeta.id);
+			const found = traverser.findById(definition, ifBeta.id);
 			expect(found).toEqual(ifBeta);
 		});
 	});

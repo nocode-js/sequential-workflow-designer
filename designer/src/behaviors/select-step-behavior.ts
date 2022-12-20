@@ -2,17 +2,23 @@ import { Vector } from '../core/vector';
 import { DesignerContext } from '../designer-context';
 import { DesignerState } from '../designer-state';
 import { StepComponent } from '../workspace/component';
+import { ComponentContext } from '../workspace/component-context';
 import { Behavior } from './behavior';
 import { DragStepBehavior } from './drag-step-behavior';
 
 export class SelectStepBehavior implements Behavior {
-	public static create(pressedStepComponent: StepComponent, context: DesignerContext): SelectStepBehavior {
-		return new SelectStepBehavior(pressedStepComponent, context, context.state);
+	public static create(
+		pressedStepComponent: StepComponent,
+		designerContext: DesignerContext,
+		componentContext: ComponentContext
+	): SelectStepBehavior {
+		return new SelectStepBehavior(pressedStepComponent, designerContext, componentContext, designerContext.state);
 	}
 
 	private constructor(
 		private readonly pressedStepComponent: StepComponent,
-		private readonly context: DesignerContext,
+		private readonly designerContext: DesignerContext,
+		private readonly componentContext: ComponentContext,
 		private readonly state: DesignerState
 	) {}
 
@@ -23,7 +29,12 @@ export class SelectStepBehavior implements Behavior {
 	public onMove(delta: Vector): Behavior | void {
 		if (!this.state.isReadonly && delta.distance() > 2) {
 			this.state.setSelectedStep(null);
-			return DragStepBehavior.create(this.context, this.pressedStepComponent.step, this.pressedStepComponent);
+			return DragStepBehavior.create(
+				this.designerContext,
+				this.componentContext,
+				this.pressedStepComponent.step,
+				this.pressedStepComponent
+			);
 		}
 	}
 

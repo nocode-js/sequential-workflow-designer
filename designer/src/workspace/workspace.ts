@@ -11,6 +11,7 @@ import { BehaviorController } from '../behaviors/behavior-controller';
 import { DefinitionChangeType, DesignerState, ViewPort } from '../designer-state';
 import { ViewPortAnimator } from './view-port-animator';
 import { WorkspaceController } from './workspace-controller';
+import { ComponentContext } from './component-context';
 
 const WHEEL_DELTA = 0.1;
 const ZOOM_DELTA = 0.2;
@@ -19,22 +20,29 @@ const MIN_SCALE = 0.1;
 const MAX_SCALE = 3;
 
 export class Workspace implements WorkspaceController {
-	public static create(parent: HTMLElement, context: DesignerContext): Workspace {
-		const view = WorkspaceView.create(parent, context.configuration.steps);
+	public static create(parent: HTMLElement, designerContext: DesignerContext, componentContext: ComponentContext): Workspace {
+		const view = WorkspaceView.create(parent, componentContext);
 
-		const viewPortAnimator = new ViewPortAnimator(context.state);
-		const workspace = new Workspace(view, context, context.state, context.behaviorController, viewPortAnimator);
+		const viewPortAnimator = new ViewPortAnimator(designerContext.state);
+		const workspace = new Workspace(
+			view,
+			designerContext,
+			componentContext,
+			designerContext.state,
+			designerContext.behaviorController,
+			viewPortAnimator
+		);
 		setTimeout(() => {
 			workspace.render();
 			workspace.resetViewPort();
 		});
 
-		context.setWorkspaceController(workspace);
-		context.state.onViewPortChanged.subscribe(vp => workspace.onViewPortChanged(vp));
-		context.state.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
-		context.state.onIsSmartEditorCollapsedChanged.subscribe(() => workspace.onIsSmartEditorCollapsedChanged());
+		designerContext.setWorkspaceController(workspace);
+		designerContext.state.onViewPortChanged.subscribe(vp => workspace.onViewPortChanged(vp));
+		designerContext.state.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
+		designerContext.state.onIsSmartEditorCollapsedChanged.subscribe(() => workspace.onIsSmartEditorCollapsedChanged());
 
-		race(0, context.state.onDefinitionChanged, context.state.onSelectedStepChanged).subscribe(r => {
+		race(0, designerContext.state.onDefinitionChanged, designerContext.state.onSelectedStepChanged).subscribe(r => {
 			const [definitionChanged, selectedStep] = r;
 			if (definitionChanged) {
 				if (definitionChanged.changeType === DefinitionChangeType.stepPropertyChanged) {
@@ -60,7 +68,8 @@ export class Workspace implements WorkspaceController {
 
 	private constructor(
 		private readonly view: WorkspaceView,
-		private readonly context: DesignerContext,
+		private readonly designerContext: DesignerContext,
+		private readonly componentContext: ComponentContext,
 		private readonly state: DesignerState,
 		private readonly behaviorController: BehaviorController,
 		private readonly viewPortAnimator: ViewPortAnimator
@@ -148,7 +157,7 @@ export class Workspace implements WorkspaceController {
 			!forceMoveMode && !this.state.isMoveModeEnabled ? this.getRootComponent().findByElement(target as Element) : null;
 
 		if (clickedStep) {
-			this.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
+			this.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.designerContext, this.componentContext));
 		} else {
 			this.behaviorController.start(position, MoveViewPortBehavior.create(this.state));
 		}

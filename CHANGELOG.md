@@ -1,3 +1,10 @@
+## 0.3.0
+
+This version introduces component extensions. By this it's possible to create own components. Breaking changes:
+
+* Static method `Designer.utils.getParents()` is deleted. You should use the `getStepParents()` method from the `Designer` class. Example: `designer.getStepParents(needleStep)`
+* The `ComponentType` is not an enum anymore. It's type (`string`). This change doesn't affect serialized JSONs.
+
 ## 0.2.3
 
 Improved rendering of the switch step for 3 and more branches.

@@ -1,17 +1,13 @@
 import { Sequence, Step, SwitchStep } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { Placeholder, StepComponent, StepComponentState } from '../component';
+import { ComponentContext } from '../component-context';
 import { SwitchStepComponentView } from './switch-step-component-view';
 
 export class SwitchStepComponent implements StepComponent {
-	public static create(
-		parent: SVGElement,
-		step: SwitchStep,
-		parentSequence: Sequence,
-		configuration: StepsConfiguration
-	): SwitchStepComponent {
-		const view = SwitchStepComponentView.create(parent, step, configuration);
-		return new SwitchStepComponent(view, step, parentSequence, configuration);
+	public static create(parent: SVGElement, step: SwitchStep, parentSequence: Sequence, context: ComponentContext): SwitchStepComponent {
+		const view = SwitchStepComponentView.create(parent, step, context);
+		return new SwitchStepComponent(view, step, parentSequence, context.configuration);
 	}
 
 	private currentState = StepComponentState.default;

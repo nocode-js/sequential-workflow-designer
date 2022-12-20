@@ -1,13 +1,14 @@
 import { Dom } from '../core/dom';
-import { createDesignerContextStub } from '../test-tools/stubs';
+import { createComponentContextStub, createDesignerContextStub } from '../test-tools/stubs';
 import { Workspace } from './workspace';
 
 describe('Workspace', () => {
 	it('create() creates bar', () => {
 		const parent = Dom.element('div');
-		const context = createDesignerContextStub();
+		const designerContext = createDesignerContextStub();
+		const componentContext = createComponentContextStub();
 
-		const bar = Workspace.create(parent, context);
+		const bar = Workspace.create(parent, designerContext, componentContext);
 
 		expect(bar).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);

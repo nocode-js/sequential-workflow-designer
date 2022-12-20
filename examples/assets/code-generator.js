@@ -103,8 +103,7 @@ class CodeGenerator {
 }
 
 function canPlaceStep(step, parentSequence) {
-	const definition = designer.getDefinition();
-	const parentSteps = sequentialWorkflowDesigner.utils.getParents(definition, parentSequence);
+	const parentSteps = designer.getStepParents(parentSequence);
 
 	console.log('parent steps', parentSteps.map(s => typeof s === 'string' ? s : s.name));
 

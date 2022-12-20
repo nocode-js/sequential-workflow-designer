@@ -1,20 +1,19 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
-import { StepsConfiguration } from '../../designer-configuration';
 import { JoinView } from '../common-views/join-view';
 import { Component, ComponentView } from '../component';
-import { StepComponentFactory } from '../step-component-factory';
+import { ComponentContext } from '../component-context';
 
 const PH_WIDTH = 100;
 const PH_HEIGHT = 24;
 
 export class SequenceComponentView implements ComponentView {
-	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): SequenceComponentView {
+	public static create(parent: SVGElement, sequence: Sequence, context: ComponentContext): SequenceComponentView {
 		const g = Dom.svg('g');
 		parent.appendChild(g);
 
-		const components = sequence.map(s => StepComponentFactory.create(g, s, sequence, configuration));
+		const components = sequence.map(s => context.stepComponentFactory.create(g, s, sequence, context));
 
 		const maxJoinX = components.length > 0 ? Math.max(...components.map(c => c.view.joinX)) : PH_WIDTH / 2;
 		const maxWidth = components.length > 0 ? Math.max(...components.map(c => c.view.width)) : PH_WIDTH;

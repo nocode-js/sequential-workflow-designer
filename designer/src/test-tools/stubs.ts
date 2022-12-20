@@ -1,6 +1,8 @@
-import { ComponentType, Definition, Step } from '../definition';
+import { Definition, Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
+import { ComponentContext } from '../workspace/component-context';
+import { StepExtensionsResolver } from '../workspace/step-extensions-resolver';
 
 export function createDesignerConfigurationStub(): DesignerConfiguration {
 	return {
@@ -18,7 +20,7 @@ export function createDesignerConfigurationStub(): DesignerConfiguration {
 export function createStepStub(): Step {
 	return {
 		id: '0x0',
-		componentType: ComponentType.task,
+		componentType: 'task',
 		name: 'stub',
 		properties: {},
 		type: 'stub'
@@ -34,5 +36,11 @@ export function createDefinitionStub(): Definition {
 
 export function createDesignerContextStub(): DesignerContext {
 	const parent = document.createElement('div');
-	return DesignerContext.create(parent, createDefinitionStub(), createDesignerConfigurationStub());
+	const extensions = StepExtensionsResolver.resolve({});
+	return DesignerContext.create(parent, createDefinitionStub(), createDesignerConfigurationStub(), extensions);
+}
+
+export function createComponentContextStub(): ComponentContext {
+	const extensions = StepExtensionsResolver.resolve({});
+	return ComponentContext.create(createDesignerConfigurationStub().steps, extensions);
 }

@@ -1,5 +1,5 @@
 import { Step } from '../definition';
-import { createDesignerContextStub, createStepStub } from '../test-tools/stubs';
+import { createComponentContextStub, createDesignerContextStub, createStepStub } from '../test-tools/stubs';
 import { StepComponent } from '../workspace/component';
 import { SelectStepBehavior } from './select-step-behavior';
 
@@ -11,10 +11,11 @@ describe('SelectStepBehavior', () => {
 		const stepComponent = jasmine.createSpyObj<StepComponent>('StepComponent', ['setState'], {
 			step
 		});
-		const context = createDesignerContextStub();
-		context.state.onSelectedStepChanged.subscribe(s => (selectedStep = s));
+		const designerContext = createDesignerContextStub();
+		const componentContext = createComponentContextStub();
+		designerContext.state.onSelectedStepChanged.subscribe(s => (selectedStep = s));
 
-		const behavior = SelectStepBehavior.create(stepComponent, context);
+		const behavior = SelectStepBehavior.create(stepComponent, designerContext, componentContext);
 
 		behavior.onStart();
 		behavior.onEnd(false);

@@ -22,8 +22,7 @@
 		"test:single": "karma start --single-run",
 		"eslint": "eslint ./src --ext .ts",
 		"prettier": "prettier --check ./src",
-		"prettier:fix": "prettier --write ./src",
-		"serve": "http-server ./"
+		"prettier:fix": "prettier --write ./src"
 	},
 	"author": "b4rtaz",
 	"license": "MIT",
@@ -32,7 +31,6 @@
 		"@typescript-eslint/eslint-plugin": "^5.40.0",
 		"@typescript-eslint/parser": "^5.40.0",
 		"eslint": "^8.25.0",
-		"http-server": "^14.1.1",
 		"karma": "^6.3.20",
 		"karma-chrome-launcher": "^3.1.1",
 		"karma-jasmine": "^5.0.1",

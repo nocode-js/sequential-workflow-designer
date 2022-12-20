@@ -1,17 +1,13 @@
 import { Sequence, Step, TaskStep } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { StepComponent, StepComponentState } from '../component';
+import { ComponentContext } from '../component-context';
 import { TaskStepComponentView } from './task-step-component-view';
 
 export class TaskStepComponent implements StepComponent {
-	public static create(
-		parent: SVGElement,
-		step: TaskStep,
-		parentSequence: Sequence,
-		configuration: StepsConfiguration
-	): TaskStepComponent {
-		const view = TaskStepComponentView.create(parent, step, configuration);
-		return new TaskStepComponent(view, step, parentSequence, configuration);
+	public static create(parent: SVGElement, step: TaskStep, parentSequence: Sequence, context: ComponentContext): TaskStepComponent {
+		const view = TaskStepComponentView.create(parent, step, context.configuration);
+		return new TaskStepComponent(view, step, parentSequence, context.configuration);
 	}
 
 	private constructor(

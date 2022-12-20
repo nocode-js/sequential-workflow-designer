@@ -1,5 +1,4 @@
 import { Dom } from '../../core/dom';
-import { ComponentType } from '../../definition';
 import { TaskStepComponentView } from './task-step-component-view';
 
 describe('TaskStepComponentView', () => {
@@ -9,7 +8,7 @@ describe('TaskStepComponentView', () => {
 			parent,
 			{
 				id: '0x',
-				componentType: ComponentType.task,
+				componentType: 'task',
 				name: 'x',
 				properties: {},
 				type: 'test'

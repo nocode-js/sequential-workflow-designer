@@ -1,4 +1,6 @@
 import { ComponentType, Definition, Sequence, Step } from './definition';
+import { StepComponent } from './workspace/component';
+import { ComponentContext } from './workspace/component-context';
 
 export interface DesignerConfiguration {
 	theme?: string;
@@ -23,12 +25,30 @@ export interface ToolboxGroupConfiguration {
 }
 
 export interface StepsConfiguration {
+	extensions?: StepExtension[];
+
 	canInsertStep?: (step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
 	canMoveStep?: (sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
 	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
 
 	iconUrlProvider?: StepIconUrlProvider;
 	validator?: StepValidator;
+}
+
+export interface StepExtension<S extends Step = Step> {
+	componentType: ComponentType;
+	createComponent(parentElement: SVGElement, step: S, parentSequence: Sequence, componentContext: ComponentContext): StepComponent;
+	getChildren(step: S): StepChildren | null;
+}
+
+export interface StepChildren {
+	type: StepChildrenType;
+	sequences: Sequence | Record<string, Sequence>;
+}
+
+export enum StepChildrenType {
+	sequence = 1,
+	branches = 2
 }
 
 export type StepIconUrlProvider = (componentType: ComponentType, type: string) => string | null;

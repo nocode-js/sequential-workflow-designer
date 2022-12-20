@@ -1,10 +1,11 @@
 import { Dom } from '../../core/dom';
-import { ComponentType } from '../../definition';
+import { createComponentContextStub } from '../../test-tools/stubs';
 import { SwitchStepComponentView } from './switch-step-component-view';
 
 describe('SwitchStepComponentView', () => {
 	it('create() creates view', () => {
 		const parent = Dom.svg('svg');
+		const context = createComponentContextStub();
 		SwitchStepComponentView.create(
 			parent,
 			{
@@ -13,12 +14,12 @@ describe('SwitchStepComponentView', () => {
 					x: [],
 					y: []
 				},
-				componentType: ComponentType.switch,
+				componentType: 'switch',
 				name: 'x',
 				properties: {},
 				type: 'test'
 			},
-			{}
+			context
 		);
 		expect(parent.children.length).not.toEqual(0);
 	});

@@ -1,18 +1,18 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
-import { StepsConfiguration } from '../../designer-configuration';
 import { ComponentView } from '../component';
+import { ComponentContext } from '../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
 
 const SIZE = 30;
 
 export class StartStopComponentView implements ComponentView {
-	public static create(parent: SVGElement, sequence: Sequence, configuration: StepsConfiguration): StartStopComponentView {
+	public static create(parent: SVGElement, sequence: Sequence, context: ComponentContext): StartStopComponentView {
 		const g = Dom.svg('g');
 		parent.appendChild(g);
 
-		const sequenceComponent = SequenceComponent.create(g, sequence, configuration);
+		const sequenceComponent = SequenceComponent.create(g, sequence, context);
 		const view = sequenceComponent.view;
 
 		const startCircle = createCircle(true);

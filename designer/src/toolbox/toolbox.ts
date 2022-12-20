@@ -1,16 +1,17 @@
 import { DesignerConfiguration, ToolboxGroupConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
 import { DesignerState } from '../designer-state';
+import { ComponentContext } from '../workspace/component-context';
 import { ToolboxView } from './toolbox-view';
 
 export class Toolbox {
-	public static create(parent: HTMLElement, context: DesignerContext): Toolbox {
-		const view = ToolboxView.create(parent, context);
-		view.setIsCollapsed(context.state.isToolboxCollapsed);
+	public static create(parent: HTMLElement, designerContext: DesignerContext, componentContext: ComponentContext): Toolbox {
+		const view = ToolboxView.create(parent, designerContext, componentContext);
+		view.setIsCollapsed(designerContext.state.isToolboxCollapsed);
 
-		const toolbox = new Toolbox(view, context.state, context.configuration);
+		const toolbox = new Toolbox(view, designerContext.state, designerContext.configuration);
 		toolbox.render();
-		context.state.onIsToolboxCollapsedChanged.subscribe(ic => toolbox.onIsToolboxCollapsedChanged(ic));
+		designerContext.state.onIsToolboxCollapsedChanged.subscribe(ic => toolbox.onIsToolboxCollapsedChanged(ic));
 		view.bindToggleIsCollapsedClick(() => toolbox.toggleIsCollapsedClick());
 		view.bindFilterInputChange(v => toolbox.onFilterInputChanged(v));
 		return toolbox;
