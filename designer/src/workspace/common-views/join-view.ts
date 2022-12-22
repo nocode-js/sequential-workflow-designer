@@ -20,20 +20,15 @@ export class JoinView {
 
 		switch (targets.length) {
 			case 1:
-				JoinView.createStraightJoin(parent, start, firstTarget.y * y);
+				if (start.x === targets[0].x) {
+					JoinView.createStraightJoin(parent, start, firstTarget.y * y);
+				} else {
+					appendCurvedJoins(parent, start, targets, h, y);
+				}
 				break;
 
 			case 2:
-				for (const target of targets) {
-					const l = Math.abs(target.x - start.x) - h * 2; // line size
-					const x = Math.sign(target.x - start.x); // x direction
-
-					appendJoin(
-						parent,
-						`M ${start.x} ${start.y} q ${x * h * 0.3} ${y * h * 0.8} ${x * h} ${y * h} ` +
-							`l ${x * l} 0 q ${x * h * 0.7} ${y * h * 0.2} ${x * h} ${y * h}`
-					);
-				}
+				appendCurvedJoins(parent, start, targets, h, y);
 				break;
 
 			default:
@@ -53,6 +48,19 @@ export class JoinView {
 				}
 				break;
 		}
+	}
+}
+
+function appendCurvedJoins(parent: SVGElement, start: Vector, targets: Vector[], h: number, y: number) {
+	for (const target of targets) {
+		const l = Math.abs(target.x - start.x) - h * 2; // line size
+		const x = Math.sign(target.x - start.x); // x direction
+
+		appendJoin(
+			parent,
+			`M ${start.x} ${start.y} q ${x * h * 0.3} ${y * h * 0.8} ${x * h} ${y * h} ` +
+				`l ${x * l} 0 q ${x * h * 0.7} ${y * h * 0.2} ${x * h} ${y * h}`
+		);
 	}
 }
 

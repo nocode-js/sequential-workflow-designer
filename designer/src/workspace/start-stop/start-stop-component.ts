@@ -4,10 +4,12 @@ import { ComponentContext } from '../component-context';
 import { StartStopComponentView } from './start-stop-component-view';
 
 export class StartStopComponent implements Component {
-	public static create(parent: SVGElement, sequence: Sequence, context: ComponentContext): StartStopComponent {
-		const view = StartStopComponentView.create(parent, sequence, context);
+	public static create(parentElement: SVGElement, sequence: Sequence, context: ComponentContext): StartStopComponent {
+		const view = StartStopComponentView.create(parentElement, sequence, context);
 		return new StartStopComponent(view);
 	}
+
+	public readonly isStop = false;
 
 	private constructor(public readonly view: StartStopComponentView) {}
 

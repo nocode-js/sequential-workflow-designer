@@ -1,11 +1,11 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
-import { TaskStep } from '../../definition';
+import { Step } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
+import { ChildlessComponentView } from '../childless-step-component';
 import { InputView } from '../common-views/input-view';
 import { OutputView } from '../common-views/output-view';
 import { ValidationErrorView } from '../common-views/validation-error-view';
-import { ComponentView } from '../component';
 
 const PADDING_X = 12;
 const PADDING_Y = 10;
@@ -13,8 +13,8 @@ const MIN_TEXT_WIDTH = 70;
 const ICON_SIZE = 22;
 const RECT_RADIUS = 5;
 
-export class TaskStepComponentView implements ComponentView {
-	public static create(parent: SVGElement, step: TaskStep, configuration: StepsConfiguration): TaskStepComponentView {
+export class TaskStepComponentView implements ChildlessComponentView {
+	public static create(parent: SVGElement, isStop: boolean, step: Step, configuration: StepsConfiguration): TaskStepComponentView {
 		const g = Dom.svg('g', {
 			class: `sqd-task-group sqd-type-${step.type}`
 		});
@@ -63,7 +63,7 @@ export class TaskStepComponentView implements ComponentView {
 		g.appendChild(icon);
 
 		const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
-		const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
+		const outputView = isStop ? null : OutputView.create(g, boxWidth / 2, boxHeight);
 		const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
 		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView, validationErrorView);
 	}
@@ -75,7 +75,7 @@ export class TaskStepComponentView implements ComponentView {
 		public readonly joinX: number,
 		private readonly rect: SVGRectElement,
 		private readonly inputView: InputView,
-		private readonly outputView: OutputView,
+		private readonly outputView: OutputView | null,
 		private readonly validationErrorView: ValidationErrorView
 	) {}
 
@@ -90,7 +90,7 @@ export class TaskStepComponentView implements ComponentView {
 
 	public setIsDragging(isDragging: boolean) {
 		this.inputView.setIsHidden(isDragging);
-		this.outputView.setIsHidden(isDragging);
+		this.outputView?.setIsHidden(isDragging);
 	}
 
 	public setIsDisabled(isDisabled: boolean) {

@@ -5,10 +5,17 @@ import { ComponentContext } from '../component-context';
 import { SwitchStepComponentView } from './switch-step-component-view';
 
 export class SwitchStepComponent implements StepComponent {
-	public static create(parent: SVGElement, step: SwitchStep, parentSequence: Sequence, context: ComponentContext): SwitchStepComponent {
-		const view = SwitchStepComponentView.create(parent, step, context);
+	public static create(
+		parentElement: SVGElement,
+		step: SwitchStep,
+		parentSequence: Sequence,
+		context: ComponentContext
+	): SwitchStepComponent {
+		const view = SwitchStepComponentView.create(parentElement, step, context);
 		return new SwitchStepComponent(view, step, parentSequence, context.configuration);
 	}
+
+	public readonly isStop = false;
 
 	private currentState = StepComponentState.default;
 

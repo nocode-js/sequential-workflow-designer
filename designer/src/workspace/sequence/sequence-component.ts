@@ -5,9 +5,13 @@ import { SequenceComponentView } from './sequence-component-view';
 import { ComponentContext } from '../component-context';
 
 export class SequenceComponent implements Component {
-	public static create(parent: SVGElement, sequence: Sequence, context: ComponentContext): SequenceComponent {
-		const view = SequenceComponentView.create(parent, sequence, context);
+	public static create(parentElement: SVGElement, sequence: Sequence, context: ComponentContext): SequenceComponent {
+		const view = SequenceComponentView.create(parentElement, sequence, context);
 		return new SequenceComponent(view, sequence);
+	}
+
+	public get isStop() {
+		return this.view.components.length > 0 ? this.view.components[this.view.components.length - 1].isStop : false;
 	}
 
 	private constructor(public readonly view: SequenceComponentView, private readonly sequence: Sequence) {}

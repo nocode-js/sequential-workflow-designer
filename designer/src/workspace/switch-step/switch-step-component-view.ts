@@ -54,9 +54,11 @@ export class SwitchStepComponentView implements ComponentView {
 
 			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
 
-			const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
-			if (fillingHeight > 0) {
-				JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X, childEndY), fillingHeight);
+			if (!sequence.isStop) {
+				const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
+				if (fillingHeight > 0) {
+					JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X, childEndY), fillingHeight);
+				}
 			}
 
 			const sequenceX = offsetX + PADDING_X + Math.max((MIN_CHILDREN_WIDTH - sequence.view.width) / 2, 0);
@@ -77,13 +79,16 @@ export class SwitchStepComponentView implements ComponentView {
 			containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT))
 		);
 
-		JoinView.createJoins(
-			g,
-			new Vector(joinX, containerHeight),
-			containerOffsets.map(
-				(o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)
-			)
+		const ongoingSequenceIndexes = sequenceComponents
+			.map((component, index) => (component.isStop ? null : index))
+			.filter(index => index !== null) as number[];
+		const ongoingJoinTargets = ongoingSequenceIndexes.map(
+			(i: number) =>
+				new Vector(containerOffsets[i] + joinXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)
 		);
+		if (ongoingJoinTargets.length > 0) {
+			JoinView.createJoins(g, new Vector(joinX, containerHeight), ongoingJoinTargets);
+		}
 
 		const regionView = RegionView.create(g, containerWidths, containerHeight);
 

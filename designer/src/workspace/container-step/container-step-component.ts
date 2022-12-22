@@ -6,16 +6,18 @@ import { ContainerStepComponentView } from './container-step-component-view';
 
 export class ContainerStepComponent implements StepComponent {
 	public static create(
-		parent: SVGElement,
+		parentElement: SVGElement,
 		step: ContainerStep,
 		parentSequence: Sequence,
 		context: ComponentContext
 	): ContainerStepComponent {
-		const view = ContainerStepComponentView.create(parent, step, context);
+		const view = ContainerStepComponentView.create(parentElement, step, context);
 		return new ContainerStepComponent(view, step, parentSequence, context.configuration);
 	}
 
 	private currentState = StepComponentState.default;
+
+	public readonly isStop = false;
 
 	private constructor(
 		public readonly view: ContainerStepComponentView,
