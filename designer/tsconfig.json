@@ -9,6 +9,7 @@
 		"allowJs": false,
 		"declaration": true,
 		"declarationDir": "./build/",
+		"moduleResolution": "node",
 		"lib": [
 			"es2015",
 			"dom"

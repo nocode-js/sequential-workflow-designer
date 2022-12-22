@@ -1,10 +1,6 @@
 {
 	"private": true,
 	"scripts": {
-		"build": "yarn workspaces run build",
-		"test:single": "yarn workspaces run test:single",
-		"eslint": "yarn workspaces run eslint",
-		"prettier": "yarn workspaces run prettier",
 		"serve": "http-server ./"
 	},
 	"workspaces": [
@@ -12,5 +8,6 @@
 	],
 	"devDependencies": {
 		"http-server": "^14.1.1"
-	}
+	},
+	"packageManager": "yarn@3.3.0"
 }

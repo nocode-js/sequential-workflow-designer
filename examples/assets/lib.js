@@ -18,7 +18,7 @@ const baseUrl = isTestEnv()
 	? '../designer'
 	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.3';
 
-embedScript(`${baseUrl}/lib/designer.js`);
+embedScript(`${baseUrl}/dist/browser.umd.js`);
 embedStylesheet(`${baseUrl}/css/designer.css`);
 embedStylesheet(`${baseUrl}/css/designer-light.css`);
 embedStylesheet(`${baseUrl}/css/designer-dark.css`);

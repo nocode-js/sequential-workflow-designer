@@ -11,7 +11,7 @@ import { ComponentContext } from './workspace/component-context';
 import { StepExtensionsResolver } from './workspace/step-extensions-resolver';
 import { StepsTraverser } from './core/steps-traverser';
 
-export default class Designer {
+export class Designer {
 	public static readonly utils = Utils;
 
 	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
