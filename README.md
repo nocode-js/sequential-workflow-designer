@@ -37,7 +37,7 @@ Install this package by [NPM](https://www.npmjs.com/) command:
 To import the package:
 
 ```ts
-import Designer from 'sequential-workflow-designer';
+import { Designer } from 'sequential-workflow-designer';
 ```
 
 If you use [css-loader](https://webpack.js.org/loaders/css-loader/) or similar, you can add CSS files to your boundle:
@@ -71,7 +71,7 @@ Add the below code to your head section in HTML document.
 Call the designer by:
 
 ```js
-sequentialWorkflowDesigner.create(placeholder, definition, configuration);
+sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
 ```
 
 ## 🎬 Usage

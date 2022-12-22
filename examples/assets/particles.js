@@ -187,7 +187,7 @@ class Popup {
 		const popupCloseButton = document.getElementById('popup-close');
 		popupCloseButton.innerText = 'Save ' + particle.colorA;
 
-		const designer = sequentialWorkflowDesigner.create(popupPlaceholder, particle.definition, {
+		const designer = sequentialWorkflowDesigner.Designer.create(popupPlaceholder, particle.definition, {
 			toolbox: {
 				groups: [
 					{

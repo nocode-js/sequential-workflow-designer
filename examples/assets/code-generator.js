@@ -2,7 +2,7 @@
 
 let designer;
 
-const nextId = () => sequentialWorkflowDesigner.utils.nextId();
+const nextId = () => sequentialWorkflowDesigner.Designer.utils.nextId();
 
 function createTaskStep(type, name, properties) {
 	return {
@@ -237,7 +237,7 @@ const startDefinition = {
 
 window.addEventListener('load', () => {
 	const placeholder = document.getElementById('designer');
-	designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
+	designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
 	designer.onDefinitionChanged.subscribe(reload);
 	reload(startDefinition);
 });

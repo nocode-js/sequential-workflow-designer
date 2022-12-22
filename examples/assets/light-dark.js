@@ -49,7 +49,7 @@ function install(placeholder, theme) {
 			}
 		}
 	};
-	sequentialWorkflowDesigner.create(placeholder, definition, configuration);
+	sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
 }
 
 window.addEventListener('load', () => {
