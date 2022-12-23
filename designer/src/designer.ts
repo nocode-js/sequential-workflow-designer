@@ -3,7 +3,6 @@ import { Definition, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
-import { Utils } from './utils';
 import { DesignerState } from './designer-state';
 import { DefinitionModifier } from './definition-modifier';
 import { WorkspaceController } from './workspace/workspace-controller';
@@ -12,8 +11,6 @@ import { StepExtensionsResolver } from './workspace/step-extensions-resolver';
 import { StepsTraverser } from './core/steps-traverser';
 
 export class Designer {
-	public static readonly utils = Utils;
-
 	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
 		const stepExtensions = StepExtensionsResolver.resolve(configuration.steps);
 

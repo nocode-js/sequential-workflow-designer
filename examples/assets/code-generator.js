@@ -2,7 +2,7 @@
 
 let designer;
 
-const nextId = () => sequentialWorkflowDesigner.Designer.utils.nextId();
+const nextId = () => sequentialWorkflowDesigner.Uid.next();
 
 function createTaskStep(type, name, properties) {
 	return {

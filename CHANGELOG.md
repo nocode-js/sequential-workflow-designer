@@ -1,9 +1,41 @@
 ## 0.3.0
 
-This version introduces component extensions. By this it's possible to create own components. Breaking changes:
+This version introduces new build formats (ESM, UMD) of the package.
 
-* Static method `Designer.utils.getParents()` is deleted. You should use the `getStepParents()` method from the `Designer` class. Example: `designer.getStepParents(needleStep)`
-* The `ComponentType` is not an enum anymore. It's type (`string`). This change doesn't affect serialized JSONs.
+#### Breaking Changes
+
+* Default export of the `Designer` class is removed. Now you should import directly the `Designer` class.
+  ```ts
+  import { Designer } from 'sequential-workflow-designer';
+  Designer.create(/* ... */);
+  ```
+
+  This affects CDN usage too.
+
+  ```html
+  <script src="https://cdn.jsdelivr.net/..."></script>
+  <script>
+  sequentialWorkflowDesigner.Designer.create(/* ... */);
+  </script>
+  ```
+* The package now contains two type of build: ESM and UMD. ESM build is located in the `lib` folder. UMD build is located in the `dist` folder. That means the URL to the CDN is also changed.
+  
+  ```html
+  <script src="https://cdn.jsdelivr.net/.../dist/index.umd.js"></script>
+  ```
+* Static method `Designer.utils.nextId()` is deleted. You should use the `next()` from the `Uid` class. Example: 
+
+  ```ts
+  import { Uid } from 'sequential-workflow-designer';
+  Uid.next();
+  ```
+
+* Static method `Designer.utils.getParents()` is deleted. You should use the `getStepParents()` method from the `Designer` class. Example: 
+
+  ```ts
+  designer.getStepParents(needleStep);
+  ```
+* The `ComponentType` is not an enum anymore. It's a type (`string`). This change doesn't affect serialized JSONs.
 
 ## 0.2.3
 
