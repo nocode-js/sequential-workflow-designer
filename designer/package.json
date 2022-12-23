@@ -1,7 +1,6 @@
 {
 	"name": "sequential-workflow-designer",
 	"version": "0.3.0",
-	"type": "module",
 	"main": "./lib/index.mjs",
 	"types": "./lib/index.d.ts",
 	"repository": {
