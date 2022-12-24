@@ -3,7 +3,7 @@ import { Sequence, Step } from '../definition';
 
 export interface Component {
 	view: ComponentView;
-	isStop: boolean;
+	isInterrupted: boolean;
 
 	findById(stepId: string): StepComponent | null;
 	findByElement(element: Element): StepComponent | null;

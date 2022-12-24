@@ -22,7 +22,7 @@ export class StepsTraverser {
 			const children = extension.getChildren(step);
 			if (children) {
 				switch (children.type) {
-					case StepChildrenType.sequence:
+					case StepChildrenType.singleSequence:
 						{
 							const sequence = children.sequences as Sequence;
 							if (

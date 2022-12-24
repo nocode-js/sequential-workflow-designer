@@ -11,6 +11,6 @@ export class TaskStepComponent {
 		context: ComponentContext
 	): ChildlessStepComponent<TaskStep> {
 		const view = TaskStepComponentView.create(parent, false, step, context.configuration);
-		return new ChildlessStepComponent(view, false, step, parentSequence, context.configuration);
+		return new ChildlessStepComponent(view, step, parentSequence, false, context.configuration);
 	}
 }

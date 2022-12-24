@@ -13,9 +13,9 @@ export interface ChildlessComponentView extends ComponentView {
 export class ChildlessStepComponent<S extends Step> implements StepComponent {
 	public constructor(
 		public readonly view: ChildlessComponentView,
-		public readonly isStop: boolean,
 		public readonly step: S,
 		public readonly parentSequence: Sequence,
+		public readonly isInterrupted: boolean,
 		private readonly configuration: StepsConfiguration
 	) {}
 

@@ -7,14 +7,14 @@ import { ComponentContext } from '../component-context';
 export class SequenceComponent implements Component {
 	public static create(parentElement: SVGElement, sequence: Sequence, context: ComponentContext): SequenceComponent {
 		const view = SequenceComponentView.create(parentElement, sequence, context);
-		return new SequenceComponent(view, sequence);
+		return new SequenceComponent(view, view.isInterrupted(), sequence);
 	}
 
-	public get isStop() {
-		return this.view.components.length > 0 ? this.view.components[this.view.components.length - 1].isStop : false;
-	}
-
-	private constructor(public readonly view: SequenceComponentView, private readonly sequence: Sequence) {}
+	private constructor(
+		public readonly view: SequenceComponentView,
+		public readonly isInterrupted: boolean,
+		private readonly sequence: Sequence
+	) {}
 
 	public findByElement(element: Element): StepComponent | null {
 		for (const component of this.view.components) {

@@ -12,10 +12,8 @@ export class SwitchStepComponent implements StepComponent {
 		context: ComponentContext
 	): SwitchStepComponent {
 		const view = SwitchStepComponentView.create(parentElement, step, context);
-		return new SwitchStepComponent(view, step, parentSequence, context.configuration);
+		return new SwitchStepComponent(view, step, parentSequence, view.isInterrupted(), context.configuration);
 	}
-
-	public readonly isStop = false;
 
 	private currentState = StepComponentState.default;
 
@@ -23,6 +21,7 @@ export class SwitchStepComponent implements StepComponent {
 		public readonly view: SwitchStepComponentView,
 		public readonly step: Step,
 		public readonly parentSequence: Sequence,
+		public readonly isInterrupted: boolean,
 		private readonly configuration: StepsConfiguration
 	) {}
 

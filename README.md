@@ -79,7 +79,7 @@ sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuratio
 Check [examples](/examples) directory.
 
 ```ts
-import Designer from 'sequential-workflow-designer';
+import { Designer } from 'sequential-workflow-designer';
 
 const placeholder = document.getElementById('placeholder');
 

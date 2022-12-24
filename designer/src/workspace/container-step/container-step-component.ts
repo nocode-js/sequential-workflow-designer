@@ -12,17 +12,16 @@ export class ContainerStepComponent implements StepComponent {
 		context: ComponentContext
 	): ContainerStepComponent {
 		const view = ContainerStepComponentView.create(parentElement, step, context);
-		return new ContainerStepComponent(view, step, parentSequence, context.configuration);
+		return new ContainerStepComponent(view, step, parentSequence, view.isInterrupted(), context.configuration);
 	}
 
 	private currentState = StepComponentState.default;
-
-	public readonly isStop = false;
 
 	private constructor(
 		public readonly view: ContainerStepComponentView,
 		public readonly step: Step,
 		public readonly parentSequence: Sequence,
+		public readonly isInterrupted: boolean,
 		private readonly configuration: StepsConfiguration
 	) {}
 

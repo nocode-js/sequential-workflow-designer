@@ -54,7 +54,7 @@ export class SwitchStepComponentView implements ComponentView {
 
 			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
 
-			if (!sequence.isStop) {
+			if (!sequence.isInterrupted) {
 				const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
 				if (fillingHeight > 0) {
 					JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X, childEndY), fillingHeight);
@@ -80,7 +80,7 @@ export class SwitchStepComponentView implements ComponentView {
 		);
 
 		const ongoingSequenceIndexes = sequenceComponents
-			.map((component, index) => (component.isStop ? null : index))
+			.map((component, index) => (component.isInterrupted ? null : index))
 			.filter(index => index !== null) as number[];
 		const ongoingJoinTargets = ongoingSequenceIndexes.map(
 			(i: number) =>
@@ -139,5 +139,9 @@ export class SwitchStepComponentView implements ComponentView {
 
 	public setIsValid(isValid: boolean) {
 		this.validationErrorView.setIsHidden(isValid);
+	}
+
+	public isInterrupted(): boolean {
+		return this.sequenceComponents.every(c => c.isInterrupted);
 	}
 }

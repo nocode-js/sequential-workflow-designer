@@ -9,7 +9,7 @@ export class StartStopComponent implements Component {
 		return new StartStopComponent(view);
 	}
 
-	public readonly isStop = false;
+	public readonly isInterrupted = false;
 
 	private constructor(public readonly view: StartStopComponentView) {}
 

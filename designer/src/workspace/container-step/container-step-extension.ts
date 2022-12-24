@@ -9,7 +9,7 @@ export class ContainerStepExtension implements StepExtension<ContainerStep> {
 
 	public getChildren(step: ContainerStep): StepChildren {
 		return {
-			type: StepChildrenType.sequence,
+			type: StepChildrenType.singleSequence,
 			sequences: step.sequence
 		};
 	}
