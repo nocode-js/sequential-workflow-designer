@@ -36,11 +36,11 @@ export function createDefinitionStub(): Definition {
 
 export function createDesignerContextStub(): DesignerContext {
 	const parent = document.createElement('div');
-	const extensions = StepExtensionsResolver.resolve({});
+	const extensions = StepExtensionsResolver.resolve([]);
 	return DesignerContext.create(parent, createDefinitionStub(), createDesignerConfigurationStub(), extensions);
 }
 
 export function createComponentContextStub(): ComponentContext {
-	const extensions = StepExtensionsResolver.resolve({});
+	const extensions = StepExtensionsResolver.resolve([]);
 	return ComponentContext.create(createDesignerConfigurationStub().steps, extensions);
 }

@@ -3,7 +3,6 @@ import { Definition, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
-import { Utils } from './utils';
 import { DesignerState } from './designer-state';
 import { DefinitionModifier } from './definition-modifier';
 import { WorkspaceController } from './workspace/workspace-controller';
@@ -11,16 +10,21 @@ import { ComponentContext } from './workspace/component-context';
 import { StepExtensionsResolver } from './workspace/step-extensions-resolver';
 import { StepsTraverser } from './core/steps-traverser';
 
-export default class Designer {
-	public static readonly utils = Utils;
+export class Designer {
+	/**
+	 * Creates a designer.
+	 * @param placeholder Placeholder where a designer will be attached.
+	 * @param startDefinition Start definition of a flow.
+	 * @param configuration Designer's configuration.
+	 * @returns An instance of a designer.
+	 */
+	public static create(placeholder: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
+		const stepExtensions = StepExtensionsResolver.resolve(configuration.extensions);
 
-	public static create(parent: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
-		const stepExtensions = StepExtensionsResolver.resolve(configuration.steps);
-
-		const designerContext = DesignerContext.create(parent, startDefinition, configuration, stepExtensions);
+		const designerContext = DesignerContext.create(placeholder, startDefinition, configuration, stepExtensions);
 		const componentContext = ComponentContext.create(configuration.steps, stepExtensions);
 
-		const view = DesignerView.create(parent, designerContext, componentContext, designerContext.layoutController, configuration);
+		const view = DesignerView.create(placeholder, designerContext, componentContext, designerContext.layoutController, configuration);
 		const designer = new Designer(
 			view,
 			designerContext.state,

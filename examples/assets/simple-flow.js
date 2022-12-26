@@ -87,7 +87,7 @@ const startDefinition = {
 };
 
 const placeholder = document.getElementById('designer');
-const designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
+const designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
 
 function runWorkflow() {
 	const definition = designer.getDefinition();

@@ -25,7 +25,9 @@ export class SequenceComponentView implements ComponentView {
 			const component = components[i];
 			const offsetX = maxJoinX - component.view.joinX;
 
-			JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+			if (i === 0 || !components[i - 1].isInterrupted) {
+				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+			}
 
 			placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
 
@@ -33,7 +35,9 @@ export class SequenceComponentView implements ComponentView {
 			offsetY += component.view.height + PH_HEIGHT;
 		}
 
-		JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+		if (components.length === 0 || !components[components.length - 1].isInterrupted) {
+			JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+		}
 		placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
 
 		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
@@ -58,6 +62,13 @@ export class SequenceComponentView implements ComponentView {
 				visibility: isDragging ? 'visible' : 'hidden'
 			});
 		});
+	}
+
+	public isInterrupted(): boolean {
+		if (this.components.length > 0) {
+			return this.components[this.components.length - 1].isInterrupted;
+		}
+		return false;
 	}
 }
 

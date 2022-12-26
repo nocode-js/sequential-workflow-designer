@@ -6,6 +6,7 @@ describe('TaskStepComponentView', () => {
 		const parent = Dom.svg('svg');
 		TaskStepComponentView.create(
 			parent,
+			false,
 			{
 				id: '0x',
 				componentType: 'task',

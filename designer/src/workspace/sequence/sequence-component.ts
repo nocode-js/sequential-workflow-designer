@@ -5,12 +5,16 @@ import { SequenceComponentView } from './sequence-component-view';
 import { ComponentContext } from '../component-context';
 
 export class SequenceComponent implements Component {
-	public static create(parent: SVGElement, sequence: Sequence, context: ComponentContext): SequenceComponent {
-		const view = SequenceComponentView.create(parent, sequence, context);
-		return new SequenceComponent(view, sequence);
+	public static create(parentElement: SVGElement, sequence: Sequence, context: ComponentContext): SequenceComponent {
+		const view = SequenceComponentView.create(parentElement, sequence, context);
+		return new SequenceComponent(view, view.isInterrupted(), sequence);
 	}
 
-	private constructor(public readonly view: SequenceComponentView, private readonly sequence: Sequence) {}
+	private constructor(
+		public readonly view: SequenceComponentView,
+		public readonly isInterrupted: boolean,
+		private readonly sequence: Sequence
+	) {}
 
 	public findByElement(element: Element): StepComponent | null {
 		for (const component of this.view.components) {

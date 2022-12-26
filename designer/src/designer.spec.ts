@@ -1,6 +1,6 @@
 import { ControlBar } from './control-bar/control-bar';
 import { Dom } from './core/dom';
-import Designer from './designer';
+import { Designer } from './designer';
 import { SmartEditor } from './smart-editor/smart-editor';
 import { createDefinitionStub, createDesignerConfigurationStub } from './test-tools/stubs';
 import { Toolbox } from './toolbox/toolbox';

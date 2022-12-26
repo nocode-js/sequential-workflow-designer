@@ -2,7 +2,7 @@
 
 # Sequential Workflow Designer
 
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fb4rtaz%2Fsequential-workflow-designer%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/b4rtaz/sequential-workflow-designer/goto?ref=main) [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](/LICENSE) [![View this project on NPM](https://img.shields.io/npm/v/sequential-workflow-designer.svg)](https://npmjs.org/package/sequential-workflow-designer) [![Twitter: b4rtaz](https://img.shields.io/twitter/follow/b4rtaz.svg?style=social)](https://twitter.com/b4rtaz)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fb4rtaz%2Fsequential-workflow-designer%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/b4rtaz/sequential-workflow-designer/goto?ref=main) [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](/LICENSE) [![View this project on NPM](https://img.shields.io/npm/v/sequential-workflow-designer.svg)](https://npmjs.org/package/sequential-workflow-designer)
 
 Sequential workflow designer with no dependencies for web. It's written in pure TypeScript and uses SVG for rendering. This designer is not associated with any workflow engine. It's full generic. You may create any kind application by this, from graphical programming languages to workflow designers.
 
@@ -37,7 +37,7 @@ Install this package by [NPM](https://www.npmjs.com/) command:
 To import the package:
 
 ```ts
-import Designer from 'sequential-workflow-designer';
+import { Designer } from 'sequential-workflow-designer';
 ```
 
 If you use [css-loader](https://webpack.js.org/loaders/css-loader/) or similar, you can add CSS files to your boundle:
@@ -62,16 +62,16 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.3/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.3/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.3/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.3/lib/designer.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.3.0/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.3.0/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.3.0/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.3.0/dist/index.umd.js"></script>
 ```
 
 Call the designer by:
 
 ```js
-sequentialWorkflowDesigner.create(placeholder, definition, configuration);
+sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
 ```
 
 ## 🎬 Usage
@@ -79,7 +79,7 @@ sequentialWorkflowDesigner.create(placeholder, definition, configuration);
 Check [examples](/examples) directory.
 
 ```ts
-import Designer from 'sequential-workflow-designer';
+import { Designer } from 'sequential-workflow-designer';
 
 const placeholder = document.getElementById('placeholder');
 

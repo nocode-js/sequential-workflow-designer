@@ -49,7 +49,7 @@ describe('StepsTraverser', () => {
 	let traverser: StepsTraverser;
 
 	beforeAll(() => {
-		const extensions = StepExtensionsResolver.resolve({});
+		const extensions = StepExtensionsResolver.resolve([]);
 		traverser = new StepsTraverser(extensions);
 	});
 

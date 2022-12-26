@@ -10,6 +10,8 @@ export interface DesignerConfiguration {
 	toolbox: ToolboxConfiguration;
 	steps: StepsConfiguration;
 	editors: EditorsConfiguration;
+
+	extensions?: DesignerExtension[];
 }
 
 export interface ToolboxConfiguration {
@@ -25,14 +27,17 @@ export interface ToolboxGroupConfiguration {
 }
 
 export interface StepsConfiguration {
-	extensions?: StepExtension[];
-
 	canInsertStep?: (step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
 	canMoveStep?: (sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
 	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
 
 	iconUrlProvider?: StepIconUrlProvider;
 	validator?: StepValidator;
+}
+
+export interface DesignerExtension {
+	name: string;
+	steps: StepExtension[];
 }
 
 export interface StepExtension<S extends Step = Step> {
@@ -47,7 +52,7 @@ export interface StepChildren {
 }
 
 export enum StepChildrenType {
-	sequence = 1,
+	singleSequence = 1,
 	branches = 2
 }
 

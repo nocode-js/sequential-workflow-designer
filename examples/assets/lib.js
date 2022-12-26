@@ -2,8 +2,10 @@
 
 function isTestEnv() {
 	const hostname = location.hostname.toLowerCase();
-	return hostname === 'localhost' ||
-		hostname.startsWith('192.168.');
+	return (
+		hostname === 'localhost' ||
+		hostname.startsWith('192.168.')
+	);
 }
 
 function embedScript(url) {
@@ -16,9 +18,9 @@ function embedStylesheet(url) {
 
 const baseUrl = isTestEnv()
 	? '../designer'
-	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.2.3';
+	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.3.0';
 
-embedScript(`${baseUrl}/lib/designer.js`);
+embedScript(`${baseUrl}/dist/index.umd.js`);
 embedStylesheet(`${baseUrl}/css/designer.css`);
 embedStylesheet(`${baseUrl}/css/designer-light.css`);
 embedStylesheet(`${baseUrl}/css/designer-dark.css`);

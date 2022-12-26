@@ -225,6 +225,6 @@ const startDefinition = {
 
 window.addEventListener('load', () => {
 	const placeholder = document.getElementById('designer');
-	designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
+	designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
 	document.getElementById('run').addEventListener('click', onRunClicked);
 });

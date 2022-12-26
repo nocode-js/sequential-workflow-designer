@@ -77,4 +77,8 @@ export class ContainerStepComponentView implements ComponentView {
 	public setIsValid(isHidden: boolean) {
 		this.validationErrorView.setIsHidden(isHidden);
 	}
+
+	public isInterrupted(): boolean {
+		return this.sequenceComponent.isInterrupted;
+	}
 }

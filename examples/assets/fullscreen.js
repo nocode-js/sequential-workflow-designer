@@ -131,7 +131,7 @@ const startDefinition = {
 };
 
 const placeholder = document.getElementById('designer');
-designer = sequentialWorkflowDesigner.create(placeholder, startDefinition, configuration);
+designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
 designer.onDefinitionChanged.subscribe((newDefinition) => {
 	console.log('the definition has changed', newDefinition);
 });
