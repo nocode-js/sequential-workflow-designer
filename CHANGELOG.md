@@ -2,6 +2,8 @@
 
 This version introduces new build formats (ESM, UMD) of the package.
 
+🤩 For more advanced use cases we prepared **the paid pro package**. The package is in the early stage. Currently it contains advanced components for steps. [Here](https://github.com/nocode-js/sequential-workflow-designer-pro-demo) you can find more information and examples.
+
 #### Breaking Changes
 
 * Default export of the `Designer` class is removed. Now you should import directly the `Designer` class.
