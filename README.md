@@ -14,6 +14,8 @@ Features:
 * works on modern browsers,
 * works on mobile.
 
+🤩 Don't miss [the pro version](https://github.com/nocode-js/sequential-workflow-designer-pro-demo).
+
 ## 👀 Examples
 
 * [📐 Simple Flow](https://nocode-js.github.io/sequential-workflow-designer/examples/simple-flow.html)
@@ -23,6 +25,10 @@ Features:
 * [⏩ Live Testing](https://nocode-js.github.io/sequential-workflow-designer/examples/live-testing.html)
 * [🔴 Particles](https://nocode-js.github.io/sequential-workflow-designer/examples/particles.html)
 * [🤖 Code Generator](https://nocode-js.github.io/sequential-workflow-designer/examples/code-generator.html)
+
+Pro:
+
+* [🤩 Pro Components](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/examples/pro-steps/public/)
 
 ## 🚀 Installation
 
