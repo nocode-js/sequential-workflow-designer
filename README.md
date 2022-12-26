@@ -2,7 +2,7 @@
 
 # Sequential Workflow Designer
 
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fb4rtaz%2Fsequential-workflow-designer%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/b4rtaz/sequential-workflow-designer/goto?ref=main) [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](/LICENSE) [![View this project on NPM](https://img.shields.io/npm/v/sequential-workflow-designer.svg)](https://npmjs.org/package/sequential-workflow-designer) [![Twitter: b4rtaz](https://img.shields.io/twitter/follow/b4rtaz.svg?style=social)](https://twitter.com/b4rtaz)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fb4rtaz%2Fsequential-workflow-designer%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/b4rtaz/sequential-workflow-designer/goto?ref=main) [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](/LICENSE) [![View this project on NPM](https://img.shields.io/npm/v/sequential-workflow-designer.svg)](https://npmjs.org/package/sequential-workflow-designer)
 
 Sequential workflow designer with no dependencies for web. It's written in pure TypeScript and uses SVG for rendering. This designer is not associated with any workflow engine. It's full generic. You may create any kind application by this, from graphical programming languages to workflow designers.
 
@@ -16,13 +16,13 @@ Features:
 
 ## 👀 Examples
 
-* [📐 Simple Flow](https://b4rtaz.github.io/sequential-workflow-designer/examples/simple-flow.html)
-* [❎ Fullscreen](https://b4rtaz.github.io/sequential-workflow-designer/examples/fullscreen.html)
-* [🌅 Image Filter](https://b4rtaz.github.io/sequential-workflow-designer/examples/image-filter.html)
-* [⛅ Light Dark](https://b4rtaz.github.io/sequential-workflow-designer/examples/light-dark.html)
-* [⏩ Live Testing](https://b4rtaz.github.io/sequential-workflow-designer/examples/live-testing.html)
-* [🔴 Particles](https://b4rtaz.github.io/sequential-workflow-designer/examples/particles.html)
-* [🤖 Code Generator](https://b4rtaz.github.io/sequential-workflow-designer/examples/code-generator.html)
+* [📐 Simple Flow](https://nocode-js.github.io/sequential-workflow-designer/examples/simple-flow.html)
+* [❎ Fullscreen](https://nocode-js.github.io/sequential-workflow-designer/examples/fullscreen.html)
+* [🌅 Image Filter](https://nocode-js.github.io/sequential-workflow-designer/examples/image-filter.html)
+* [⛅ Light Dark](https://nocode-js.github.io/sequential-workflow-designer/examples/light-dark.html)
+* [⏩ Live Testing](https://nocode-js.github.io/sequential-workflow-designer/examples/live-testing.html)
+* [🔴 Particles](https://nocode-js.github.io/sequential-workflow-designer/examples/particles.html)
+* [🤖 Code Generator](https://nocode-js.github.io/sequential-workflow-designer/examples/code-generator.html)
 
 ## 🚀 Installation
 
