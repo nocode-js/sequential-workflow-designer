@@ -28,7 +28,8 @@ Features:
 
 Pro:
 
-* [🤩 Pro Components](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/examples/pro-steps/public/)
+* 🤩 [Pro Components](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/examples/webpack/public/pro-components.html)
+* 👈 [Goto](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/examples/webpack/public/goto.html)
 
 ## 🚀 Installation
 
