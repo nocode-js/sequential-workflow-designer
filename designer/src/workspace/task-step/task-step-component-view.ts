@@ -6,6 +6,7 @@ import { ChildlessComponentView } from '../childless-step-component';
 import { InputView } from '../common-views/input-view';
 import { OutputView } from '../common-views/output-view';
 import { ValidationErrorView } from '../common-views/validation-error-view';
+import { ClickDetails, ClickBehavior, ClickBehaviorType } from '../component';
 
 const PADDING_X = 12;
 const PADDING_Y = 10;
@@ -16,7 +17,7 @@ const RECT_RADIUS = 5;
 export class TaskStepComponentView implements ChildlessComponentView {
 	public static create(parent: SVGElement, isStop: boolean, step: Step, configuration: StepsConfiguration): TaskStepComponentView {
 		const g = Dom.svg('g', {
-			class: `sqd-task-group sqd-type-${step.type}`
+			class: `sqd-step-task sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 
@@ -25,7 +26,7 @@ export class TaskStepComponentView implements ChildlessComponentView {
 		const text = Dom.svg('text', {
 			x: ICON_SIZE + PADDING_X * 2,
 			y: boxHeight / 2,
-			class: 'sqd-task-text'
+			class: 'sqd-step-task-text'
 		});
 		text.textContent = step.name;
 		g.appendChild(text);
@@ -36,7 +37,7 @@ export class TaskStepComponentView implements ChildlessComponentView {
 		const rect = Dom.svg('rect', {
 			x: 0.5,
 			y: 0.5,
-			class: 'sqd-task-rect',
+			class: 'sqd-step-task-rect',
 			width: boxWidth,
 			height: boxHeight,
 			rx: RECT_RADIUS,
@@ -50,7 +51,7 @@ export class TaskStepComponentView implements ChildlessComponentView {
 					href: iconUrl
 			  })
 			: Dom.svg('rect', {
-					class: 'sqd-task-empty-icon',
+					class: 'sqd-step-task-empty-icon',
 					rx: 4,
 					ry: 4
 			  });
@@ -84,8 +85,13 @@ export class TaskStepComponentView implements ChildlessComponentView {
 		return new Vector(rect.x, rect.y);
 	}
 
-	public containsElement(element: Element): boolean {
-		return this.g.contains(element);
+	public resolveClick(click: ClickDetails): ClickBehavior | null {
+		if (this.g.contains(click.element)) {
+			return {
+				type: ClickBehaviorType.selectStep
+			};
+		}
+		return null;
 	}
 
 	public setIsDragging(isDragging: boolean) {

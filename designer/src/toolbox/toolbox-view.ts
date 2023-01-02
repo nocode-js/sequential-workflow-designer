@@ -20,8 +20,6 @@ export class ToolboxView {
 		});
 		headerTitle.innerText = 'Toolbox';
 
-		const headerToggleIcon = Icons.create('sqd-toolbox-toggle-icon');
-
 		const body = Dom.element('div', {
 			class: 'sqd-toolbox-body'
 		});
@@ -35,20 +33,20 @@ export class ToolboxView {
 		root.appendChild(header);
 		root.appendChild(body);
 		header.appendChild(headerTitle);
-		header.appendChild(headerToggleIcon);
 		body.appendChild(filterInput);
 		parent.appendChild(root);
 
-		const scrollboxView = ScrollBoxView.create(body, parent);
-		return new ToolboxView(header, headerToggleIcon, body, filterInput, scrollboxView, designerContext, componentContext);
+		const scrollBoxView = ScrollBoxView.create(body, parent);
+		return new ToolboxView(header, body, filterInput, scrollBoxView, designerContext, componentContext);
 	}
+
+	private headerToggleIcon?: SVGElement;
 
 	private constructor(
 		private readonly header: HTMLElement,
-		private readonly headerToggleIcon: SVGElement,
 		private readonly body: HTMLElement,
 		private readonly filterInput: HTMLInputElement,
-		private readonly scrollboxView: ScrollBoxView,
+		private readonly scrollBoxView: ScrollBoxView,
 		private readonly designerContext: DesignerContext,
 		private readonly componentContext: ComponentContext
 	) {}
@@ -71,9 +69,15 @@ export class ToolboxView {
 
 	public setIsCollapsed(isCollapsed: boolean) {
 		Dom.toggleClass(this.body, isCollapsed, 'sqd-hidden');
-		this.headerToggleIcon.innerHTML = isCollapsed ? Icons.arrowDown : Icons.close;
+
+		if (this.headerToggleIcon) {
+			this.header.removeChild(this.headerToggleIcon);
+		}
+		this.headerToggleIcon = Icons.createSvg('sqd-toolbox-toggle-icon', isCollapsed ? Icons.expand : Icons.close);
+		this.header.appendChild(this.headerToggleIcon);
+
 		if (!isCollapsed) {
-			this.scrollboxView.refresh();
+			this.scrollBoxView.refresh();
 		}
 	}
 
@@ -89,10 +93,10 @@ export class ToolboxView {
 
 			group.steps.forEach(s => ToolboxItem.create(list, s, this.designerContext, this.componentContext));
 		});
-		this.scrollboxView.setContent(list);
+		this.scrollBoxView.setContent(list);
 	}
 
 	public destroy() {
-		this.scrollboxView.destroy();
+		this.scrollBoxView.destroy();
 	}
 }

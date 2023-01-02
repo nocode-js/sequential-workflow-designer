@@ -1,6 +1,6 @@
 {
 	"name": "sequential-workflow-designer",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"main": "./lib/index.mjs",
 	"types": "./lib/index.d.ts",
 	"repository": {
@@ -49,6 +49,7 @@
 		"designer",
 		"builder",
 		"nocode",
-		"lowcode"
+		"lowcode",
+		"flow"
 	]
 }

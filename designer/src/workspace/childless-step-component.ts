@@ -1,9 +1,9 @@
 import { Sequence, Step } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
-import { ComponentView, StepComponent, StepComponentState } from './component';
+import { ClickBehavior, ClickDetails, ClickResult, ComponentView, StepComponent, StepComponentState } from './component';
 
 export interface ChildlessComponentView extends ComponentView {
-	containsElement(element: Element): boolean;
+	resolveClick(click: ClickDetails): ClickBehavior | null;
 	setIsDragging(isDragging: boolean): void;
 	setIsSelected(isSelected: boolean): void;
 	setIsDisabled(isDisabled: boolean): void;
@@ -19,8 +19,15 @@ export class ChildlessStepComponent<S extends Step> implements StepComponent {
 		private readonly configuration: StepsConfiguration
 	) {}
 
-	public findByElement(element: Element): StepComponent | null {
-		return this.view.containsElement(element) ? this : null;
+	public findByClick(click: ClickDetails): ClickResult | null {
+		const action = this.view.resolveClick(click);
+		if (action) {
+			return {
+				component: this,
+				action
+			};
+		}
+		return null;
 	}
 
 	public findById(stepId: string): StepComponent | null {

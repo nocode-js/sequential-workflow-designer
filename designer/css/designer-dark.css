@@ -33,6 +33,9 @@
 .sqd-theme-dark .sqd-toolbox-item-icon.sqd-no-icon {
 	background: #C6C6C6;
 }
+.sqd-theme-dark .sqd-control-bar-button.sqd-delete .sqd-icon-path {
+	fill: #E01A24;
+}
 
 /* dark > .sqd-control-bar */
 
@@ -44,6 +47,25 @@
 }
 .sqd-theme-dark .sqd-control-bar-button:hover {
 	background: #D3D3D3;
+}
+
+/* dark > .sqd-path-bar */
+
+.sqd-theme-dark .sqd-path-bar {
+	background: #3F3F3F;
+	color: #FFF;
+}
+.sqd-theme-dark .sqd-path-bar-item:hover {
+	border-color: #D3D3D3;
+}
+.sqd-theme-dark .sqd-path-bar-reset-button {
+	border: 1px solid transparent;
+}
+.sqd-theme-dark .sqd-path-bar-reset-button .sqd-icon-path {
+	fill: #FFF;
+}
+.sqd-theme-dark .sqd-path-bar-reset-button:hover {
+	border-color: #D3D3D3;
 }
 
 /* dark > .sqd-workspace */
@@ -64,20 +86,20 @@
 	background: #6F6F6F;
 }
 
-/* dark > .sqd-task */
+/* dark > .sqd-step-task */
 
-.sqd-theme-dark .sqd-task-rect {
+.sqd-theme-dark .sqd-step-task-rect {
 	fill: #C6C6C6;
 	stroke: none;
 	filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, .15));
 }
-.sqd-theme-dark .sqd-task-rect.sqd-selected {
+.sqd-theme-dark .sqd-step-task-rect.sqd-selected {
 	stroke: #FFF;
 }
-.sqd-theme-dark .sqd-task-text {
+.sqd-theme-dark .sqd-step-task-text {
 	fill: #000;
 }
-.sqd-theme-dark .sqd-task-empty-icon {
+.sqd-theme-dark .sqd-step-task-empty-icon {
 	fill: #C6C6C6;
 }
 
@@ -110,24 +132,32 @@
 	fill: #FFF;
 }
 
-/* dark > .sqd-start-stop */
+/* dark > .sqd-step-start-stop */
 
-.sqd-theme-dark .sqd-start-stop {
+.sqd-theme-dark .sqd-step-start-stop-circle {
 	fill: #2C18DF;
 }
-.sqd-theme-dark .sqd-start-stop-icon {
+.sqd-theme-dark .sqd-step-start-stop-icon {
 	fill: #FFF;
 }
 
 /* dark > .sqd-placeholder */
 
-.sqd-theme-dark .sqd-placeholder {
-	fill: none;
+.sqd-theme-dark .sqd-placeholder .sqd-placeholder-rect {
+	fill: #0E0E0E;
 	stroke: #6A6A6A;
 }
-.sqd-theme-dark .sqd-placeholder.sqd-hover {
-	fill: #0E0E0E;
+.sqd-theme-dark .sqd-placeholder-icon-path {
+	fill: #FFF;
 }
+.sqd-theme-dark .sqd-placeholder.sqd-hover .sqd-placeholder-rect {
+	fill: #ED4800;
+}
+.sqd-theme-dark .sqd-placeholder.sqd-hover .sqd-placeholder-icon-path {
+	fill: #FFF;
+}
+
+/* dark > .sqd-validation-error */
 
 .sqd-theme-dark .sqd-validation-error {
 	fill: #FFA200;

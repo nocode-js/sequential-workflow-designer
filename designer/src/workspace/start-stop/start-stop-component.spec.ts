@@ -6,7 +6,7 @@ describe('StartStopComponent', () => {
 	it('create() creates component', () => {
 		const parent = Dom.svg('svg');
 		const context = createComponentContextStub();
-		const component = StartStopComponent.create(parent, [], context);
+		const component = StartStopComponent.create(parent, [], null, context);
 
 		expect(component).toBeDefined();
 	});

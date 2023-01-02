@@ -1,6 +1,7 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
+import { RectPlaceholderDirection, RectPlaceholderView } from '../common-views/rect-placeholder-view';
 import { ComponentView } from '../component';
 import { ComponentContext } from '../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
@@ -8,24 +9,44 @@ import { SequenceComponent } from '../sequence/sequence-component';
 const SIZE = 30;
 
 export class StartStopComponentView implements ComponentView {
-	public static create(parent: SVGElement, sequence: Sequence, context: ComponentContext): StartStopComponentView {
-		const g = Dom.svg('g');
+	public static create(parent: SVGElement, sequence: Sequence, placeholders: boolean, context: ComponentContext): StartStopComponentView {
+		const g = Dom.svg('g', {
+			class: 'sqd-step-start-stop'
+		});
 		parent.appendChild(g);
 
 		const sequenceComponent = SequenceComponent.create(g, sequence, context);
 		const view = sequenceComponent.view;
 
+		const x = view.joinX - SIZE / 2;
+		const endY = SIZE + view.height;
+
 		const startCircle = createCircle(true);
-		Dom.translate(startCircle, view.joinX - SIZE / 2, 0);
+		Dom.translate(startCircle, x, 0);
 		g.appendChild(startCircle);
 
 		Dom.translate(view.g, 0, SIZE);
 
 		const endCircle = createCircle(false);
-		Dom.translate(endCircle, view.joinX - SIZE / 2, SIZE + view.height);
+		Dom.translate(endCircle, x, endY);
 		g.appendChild(endCircle);
 
-		return new StartStopComponentView(g, view.width, view.height + SIZE * 2, view.joinX, sequenceComponent);
+		let startPlaceholderView: RectPlaceholderView | null = null;
+		let endPlaceholderView: RectPlaceholderView | null = null;
+		if (placeholders) {
+			startPlaceholderView = RectPlaceholderView.create(g, x, 0, SIZE, SIZE, RectPlaceholderDirection.out);
+			endPlaceholderView = RectPlaceholderView.create(g, x, endY, SIZE, SIZE, RectPlaceholderDirection.out);
+		}
+
+		return new StartStopComponentView(
+			g,
+			view.width,
+			view.height + SIZE * 2,
+			view.joinX,
+			sequenceComponent,
+			startPlaceholderView,
+			endPlaceholderView
+		);
 	}
 
 	private constructor(
@@ -33,7 +54,9 @@ export class StartStopComponentView implements ComponentView {
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		public readonly component: SequenceComponent
+		public readonly component: SequenceComponent,
+		public readonly startPlaceholderView: RectPlaceholderView | null,
+		public readonly endPlaceholderView: RectPlaceholderView | null
 	) {}
 
 	public getClientPosition(): Vector {
@@ -47,7 +70,7 @@ export class StartStopComponentView implements ComponentView {
 
 function createCircle(isStart: boolean): SVGGElement {
 	const circle = Dom.svg('circle', {
-		class: 'sqd-start-stop',
+		class: 'sqd-step-start-stop-circle',
 		cx: SIZE / 2,
 		cy: SIZE / 2,
 		r: SIZE / 2
@@ -61,14 +84,14 @@ function createCircle(isStart: boolean): SVGGElement {
 
 	if (isStart) {
 		const start = Dom.svg('path', {
-			class: 'sqd-start-stop-icon',
+			class: 'sqd-step-start-stop-icon',
 			transform: `translate(${m}, ${m})`,
 			d: `M ${s * 0.2} 0 L ${s} ${s / 2} L ${s * 0.2} ${s} Z`
 		});
 		g.appendChild(start);
 	} else {
 		const stop = Dom.svg('rect', {
-			class: 'sqd-start-stop-icon',
+			class: 'sqd-step-start-stop-icon',
 			x: m,
 			y: m,
 			width: s,

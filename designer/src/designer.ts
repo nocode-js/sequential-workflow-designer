@@ -8,7 +8,7 @@ import { DefinitionModifier } from './definition-modifier';
 import { WorkspaceController } from './workspace/workspace-controller';
 import { ComponentContext } from './workspace/component-context';
 import { StepExtensionsResolver } from './workspace/step-extensions-resolver';
-import { StepsTraverser } from './core/steps-traverser';
+import { StepOrName, StepsTraverser } from './core/steps-traverser';
 
 export class Designer {
 	/**
@@ -64,16 +64,15 @@ export class Designer {
 	}
 
 	public getSelectedStepId(): string | null {
-		return this.state.selectedStep?.id || null;
+		return this.state.selectedStepId;
 	}
 
 	public selectStepById(stepId: string) {
-		const component = this.workspaceController.getComponentByStepId(stepId);
-		this.state.setSelectedStep(component.step);
+		this.state.setSelectedStepId(stepId);
 	}
 
 	public clearSelectedStep() {
-		this.state.setSelectedStep(null);
+		this.state.setSelectedStepId(null);
 	}
 
 	public moveViewPortToStep(stepId: string) {
@@ -81,7 +80,7 @@ export class Designer {
 		this.workspaceController.moveViewPortToStep(component);
 	}
 
-	public getStepParents(needle: Sequence | Step) {
+	public getStepParents(needle: Sequence | Step): StepOrName[] {
 		return this.stepsTraverser.getParents(this.state.definition, needle);
 	}
 
@@ -98,12 +97,12 @@ export class Designer {
 		if (document.activeElement && ignoreTagNames.includes(document.activeElement.tagName.toLowerCase())) {
 			return;
 		}
-		if (!this.state.selectedStep || this.state.isReadonly || this.state.isDragging) {
+		if (!this.state.selectedStepId || this.state.isReadonly || this.state.isDragging) {
 			return;
 		}
 
 		e.preventDefault();
 		e.stopPropagation();
-		this.definitionModifier.tryDelete(this.state.selectedStep);
+		this.definitionModifier.tryDelete(this.state.selectedStepId);
 	}
 }

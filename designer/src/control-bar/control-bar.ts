@@ -16,7 +16,7 @@ export class ControlBar {
 		view.bindMoveButtonClick(() => bar.onMoveButtonClicked());
 		view.bindDeleteButtonClick(() => bar.onDeleteButtonClicked());
 		context.state.onIsReadonlyChanged.subscribe(() => bar.onIsReadonlyChanged());
-		context.state.onSelectedStepChanged.subscribe(() => bar.onSelectedStepChanged());
+		context.state.onSelectedStepIdChanged.subscribe(() => bar.onSelectedStepIdChanged());
 		context.state.onIsMoveModeEnabledChanged.subscribe(i => bar.onIsMoveModeEnabledChanged(i));
 
 		if (context.historyController) {
@@ -51,8 +51,8 @@ export class ControlBar {
 
 	private onMoveButtonClicked() {
 		this.state.toggleIsMoveModeEnabled();
-		if (this.state.selectedStep) {
-			this.state.setSelectedStep(null);
+		if (this.state.selectedStepId) {
+			this.state.setSelectedStepId(null);
 		}
 	}
 
@@ -69,8 +69,8 @@ export class ControlBar {
 	}
 
 	private onDeleteButtonClicked() {
-		if (!this.state.isReadonly && this.state.selectedStep) {
-			this.definitionModifier.tryDelete(this.state.selectedStep);
+		if (!this.state.isReadonly && this.state.selectedStepId) {
+			this.definitionModifier.tryDelete(this.state.selectedStepId);
 		}
 	}
 
@@ -78,7 +78,7 @@ export class ControlBar {
 		this.refreshDeleteButtonVisibility();
 	}
 
-	private onSelectedStepChanged() {
+	private onSelectedStepIdChanged() {
 		this.refreshDeleteButtonVisibility();
 	}
 
@@ -102,7 +102,7 @@ export class ControlBar {
 	}
 
 	private refreshDeleteButtonVisibility() {
-		const isHidden = !this.state.selectedStep || this.state.isReadonly;
+		const isHidden = !this.state.selectedStepId || this.state.isReadonly;
 		this.view.setIsDeleteButtonHidden(isHidden);
 	}
 }

@@ -6,7 +6,7 @@ describe('StartStopComponentView', () => {
 	it('create() creates view', () => {
 		const parent = Dom.svg('svg');
 		const context = createComponentContextStub();
-		StartStopComponentView.create(parent, [], context);
+		StartStopComponentView.create(parent, [], true, context);
 		expect(parent.children.length).not.toEqual(0);
 	});
 });

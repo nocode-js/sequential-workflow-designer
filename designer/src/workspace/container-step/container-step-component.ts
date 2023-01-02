@@ -1,6 +1,6 @@
 import { ContainerStep, Sequence, Step } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
-import { Placeholder, StepComponent, StepComponentState } from '../component';
+import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent, StepComponentState } from '../component';
 import { ComponentContext } from '../component-context';
 import { ContainerStepComponentView } from './container-step-component-view';
 
@@ -25,13 +25,18 @@ export class ContainerStepComponent implements StepComponent {
 		private readonly configuration: StepsConfiguration
 	) {}
 
-	public findByElement(element: Element): StepComponent | null {
-		const sc = this.view.sequenceComponent.findByElement(element);
-		if (sc) {
-			return sc;
+	public findByClick(click: ClickDetails): ClickResult | null {
+		const result = this.view.sequenceComponent.findByClick(click);
+		if (result) {
+			return result;
 		}
-		if (this.view.containsElement(element)) {
-			return this;
+		if (this.view.resolveClick(click)) {
+			return {
+				component: this,
+				action: {
+					type: ClickBehaviorType.selectStep
+				}
+			};
 		}
 		return null;
 	}

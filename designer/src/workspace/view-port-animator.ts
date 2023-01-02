@@ -19,7 +19,10 @@ export class ViewPortAnimator {
 
 		this.animation = animate(150, progress => {
 			const newScale = startScale - deltaScale * progress;
-			this.state.setViewPort(startPosition.subtract(deltaPosition.multiplyByScalar(progress)), newScale);
+			this.state.setViewPort({
+				position: startPosition.subtract(deltaPosition.multiplyByScalar(progress)),
+				scale: newScale
+			});
 		});
 	}
 }

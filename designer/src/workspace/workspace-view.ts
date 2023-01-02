@@ -3,7 +3,7 @@ import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { ComponentContext } from './component-context';
-import { StartStopComponent } from './start-stop/start-stop-component';
+import { SequencePlaceIndicator, StartStopComponent } from './start-stop/start-stop-component';
 
 const GRID_SIZE = 48;
 
@@ -62,11 +62,11 @@ export class WorkspaceView {
 		private readonly context: ComponentContext
 	) {}
 
-	public render(sequence: Sequence) {
+	public render(sequence: Sequence, parentSequencePlaceIndicator: SequencePlaceIndicator | null) {
 		if (this.rootComponent) {
-			this.rootComponent.view.destroy();
+			this.rootComponent.destroy();
 		}
-		this.rootComponent = StartStopComponent.create(this.foreground, sequence, this.context);
+		this.rootComponent = StartStopComponent.create(this.foreground, sequence, parentSequencePlaceIndicator, this.context);
 		this.refreshSize();
 	}
 
@@ -91,20 +91,28 @@ export class WorkspaceView {
 		return new Vector(rect.x, rect.y);
 	}
 
-	public getClientSize(): Vector {
+	public getClientCanvasSize(): Vector {
 		return new Vector(this.canvas.clientWidth, this.canvas.clientHeight);
 	}
 
-	public bindMouseDown(handler: (position: Vector, target: Element, button: number) => void) {
-		this.canvas.addEventListener('mousedown', e => handler(readMousePosition(e), e.target as Element, e.button), false);
-	}
+	public bindClick(handler: (position: Vector, target: Element, buttonIndex: number) => void) {
+		this.canvas.addEventListener(
+			'mousedown',
+			e => {
+				handler(readMousePosition(e), e.target as Element, e.button);
+			},
+			false
+		);
 
-	public bindTouchStart(handler: (position: Vector) => void) {
 		this.canvas.addEventListener(
 			'touchstart',
 			e => {
 				e.preventDefault();
-				handler(readTouchPosition(e));
+				const position = readTouchPosition(e);
+				const element = document.elementFromPoint(position.x, position.y);
+				if (element) {
+					handler(position, element, 0);
+				}
 			},
 			false
 		);

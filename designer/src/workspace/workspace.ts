@@ -1,35 +1,31 @@
-import { MoveViewPortBehavior } from '../behaviors/move-view-port-behavior';
-import { SelectStepBehavior } from '../behaviors/select-step-behavior';
 import { race } from '../core/simple-event-race';
 import { Vector } from '../core/vector';
-import { Step } from '../definition';
+import { Sequence } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { Placeholder, StepComponent, StepComponentState } from './component';
-import { StartStopComponent } from './start-stop/start-stop-component';
+import { Component, Placeholder, StepComponent, StepComponentState } from './component';
+import { SequencePlaceIndicator } from './start-stop/start-stop-component';
 import { WorkspaceView } from './workspace-view';
-import { BehaviorController } from '../behaviors/behavior-controller';
-import { DefinitionChangeType, DesignerState, ViewPort } from '../designer-state';
+import { DefinitionChangedEvent, DefinitionChangeType, DesignerState, ViewPort } from '../designer-state';
 import { ViewPortAnimator } from './view-port-animator';
 import { WorkspaceController } from './workspace-controller';
 import { ComponentContext } from './component-context';
-
-const WHEEL_DELTA = 0.1;
-const ZOOM_DELTA = 0.2;
-
-const MIN_SCALE = 0.1;
-const MAX_SCALE = 3;
+import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
+import { BehaviorController } from '../behaviors/behavior-controller';
+import { StepsTraverser } from '../core/steps-traverser';
+import { ViewPortCalculator } from './view-port-calculator';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, componentContext: ComponentContext): Workspace {
 		const view = WorkspaceView.create(parent, componentContext);
 
 		const viewPortAnimator = new ViewPortAnimator(designerContext.state);
+		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext, componentContext, designerContext.state);
 		const workspace = new Workspace(
 			view,
-			designerContext,
-			componentContext,
+			designerContext.stepsTraverser,
 			designerContext.state,
 			designerContext.behaviorController,
+			clickBehaviorResolver,
 			viewPortAnimator
 		);
 		setTimeout(() => {
@@ -42,21 +38,16 @@ export class Workspace implements WorkspaceController {
 		designerContext.state.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
 		designerContext.state.onIsSmartEditorCollapsedChanged.subscribe(() => workspace.onIsSmartEditorCollapsedChanged());
 
-		race(0, designerContext.state.onDefinitionChanged, designerContext.state.onSelectedStepChanged).subscribe(r => {
-			const [definitionChanged, selectedStep] = r;
-			if (definitionChanged) {
-				if (definitionChanged.changeType === DefinitionChangeType.stepPropertyChanged) {
-					workspace.revalidate();
-				} else {
-					workspace.render();
-				}
-			} else if (selectedStep !== undefined) {
-				workspace.onSelectedStepChanged(selectedStep);
-			}
+		race(
+			0,
+			designerContext.state.onDefinitionChanged,
+			designerContext.state.onSelectedStepIdChanged,
+			designerContext.state.onFolderPathChanged
+		).subscribe(r => {
+			workspace.onStateChanged(r[0], r[1], r[2]);
 		});
 
-		view.bindMouseDown((p, t, b) => workspace.onMouseDown(p, t, b));
-		view.bindTouchStart(e => workspace.onTouchStart(e));
+		view.bindClick((p, t, b) => workspace.onClick(p, t, b));
 		view.bindContextMenu(e => workspace.onContextMenu(e));
 		view.bindWheel(e => workspace.onWheel(e));
 		return workspace;
@@ -68,18 +59,34 @@ export class Workspace implements WorkspaceController {
 
 	private constructor(
 		private readonly view: WorkspaceView,
-		private readonly designerContext: DesignerContext,
-		private readonly componentContext: ComponentContext,
+		private readonly stepsTraverser: StepsTraverser,
 		private readonly state: DesignerState,
 		private readonly behaviorController: BehaviorController,
+		private readonly clickBehaviorResolver: ClickBehaviorResolver,
 		private readonly viewPortAnimator: ViewPortAnimator
 	) {}
 
 	public render() {
 		this.selectedStepComponent = null;
 
-		this.view.render(this.state.definition.sequence);
-		this.selectStep(this.state.selectedStep);
+		let parentSequencePlaceIndicator: SequencePlaceIndicator | null;
+		let sequence: Sequence;
+
+		const stepId = this.state.tryGetLastStepIdFromFolderPath();
+		if (stepId) {
+			const result = this.stepsTraverser.getChildAndParentSequences(this.state.definition, stepId);
+			sequence = result.childSequence;
+			parentSequencePlaceIndicator = {
+				sequence: result.parentSequence,
+				index: result.index
+			};
+		} else {
+			sequence = this.state.definition.sequence;
+			parentSequencePlaceIndicator = null;
+		}
+
+		this.view.render(sequence, parentSequencePlaceIndicator);
+		this.trySelectStepComponent(this.state.selectedStepId);
 		this.revalidate();
 	}
 
@@ -99,23 +106,20 @@ export class Workspace implements WorkspaceController {
 
 	public resetViewPort() {
 		const rcv = this.getRootComponent().view;
-		const clientSize = this.view.getClientSize();
-		const x = Math.max(0, (clientSize.x - rcv.width) / 2);
-		const y = Math.max(0, (clientSize.y - rcv.height) / 2);
-
-		this.state.setViewPort(new Vector(x, y), 1);
+		const clientCanvasSize = this.view.getClientCanvasSize();
+		const newViewPort = ViewPortCalculator.center(clientCanvasSize, rcv);
+		this.state.setViewPort(newViewPort);
 	}
 
 	public zoom(direction: boolean): void {
-		const delta = direction ? ZOOM_DELTA : -ZOOM_DELTA;
-		const scale = this.limitScale(this.state.viewPort.scale + delta);
-		this.state.setViewPort(this.state.viewPort.position, scale);
+		const newViewPort = ViewPortCalculator.zoom(this.state.viewPort, direction);
+		this.state.setViewPort(newViewPort);
 	}
 
 	public moveViewPortToStep(stepComponent: StepComponent) {
 		const vp = this.state.viewPort;
 		const componentPosition = stepComponent.view.getClientPosition();
-		const clientSize = this.view.getClientSize();
+		const clientSize = this.view.getClientCanvasSize();
 
 		const realPos = vp.position.divideByScalar(vp.scale).subtract(componentPosition.divideByScalar(vp.scale));
 		const componentOffset = new Vector(stepComponent.view.width, stepComponent.view.height).divideByScalar(2);
@@ -133,18 +137,13 @@ export class Workspace implements WorkspaceController {
 		this.isValid = this.getRootComponent().validate();
 	}
 
-	private onMouseDown(position: Vector, target: Element, button: number) {
-		const isPrimaryButton = button === 0;
-		const isMiddleButton = button === 1;
+	private onClick(position: Vector, target: Element, buttonIndex: number) {
+		const isPrimaryButton = buttonIndex === 0;
+		const isMiddleButton = buttonIndex === 1;
 		if (isPrimaryButton || isMiddleButton) {
-			this.startBehavior(target, position, isMiddleButton);
-		}
-	}
-
-	private onTouchStart(position: Vector) {
-		const element = document.elementFromPoint(position.x, position.y);
-		if (element) {
-			this.startBehavior(element, position, false);
+			const rootComponent = this.getRootComponent();
+			const behavior = this.clickBehaviorResolver.resolve(rootComponent, target, position, isMiddleButton);
+			this.behaviorController.start(position, behavior);
 		}
 	}
 
@@ -152,30 +151,9 @@ export class Workspace implements WorkspaceController {
 		e.preventDefault();
 	}
 
-	private startBehavior(target: Element, position: Vector, forceMoveMode: boolean) {
-		const clickedStep =
-			!forceMoveMode && !this.state.isMoveModeEnabled ? this.getRootComponent().findByElement(target as Element) : null;
-
-		if (clickedStep) {
-			this.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.designerContext, this.componentContext));
-		} else {
-			this.behaviorController.start(position, MoveViewPortBehavior.create(this.state));
-		}
-	}
-
 	private onWheel(e: WheelEvent) {
-		const viewPort = this.state.viewPort;
-		const mousePoint = new Vector(e.pageX, e.pageY).subtract(this.view.getClientPosition());
-		// The real point is point on canvas with no scale.
-		const mouseRealPoint = mousePoint.divideByScalar(viewPort.scale).subtract(viewPort.position.divideByScalar(viewPort.scale));
-
-		const wheelDelta = e.deltaY > 0 ? -WHEEL_DELTA : WHEEL_DELTA;
-		const newScale = this.limitScale(viewPort.scale + wheelDelta);
-
-		const position = mouseRealPoint.multiplyByScalar(-newScale).add(mousePoint);
-		const scale = newScale;
-
-		this.state.setViewPort(position, scale);
+		const newViewPort = ViewPortCalculator.zoomByWheel(this.state.viewPort, e, this.view.getClientPosition());
+		this.state.setViewPort(newViewPort);
 	}
 
 	private onIsDraggingChanged(isDragging: boolean) {
@@ -190,29 +168,39 @@ export class Workspace implements WorkspaceController {
 		this.view.setPositionAndScale(viewPort.position, viewPort.scale);
 	}
 
-	private onSelectedStepChanged(step: Step | null) {
-		this.selectStep(step);
+	private onStateChanged(
+		definitionChanged: DefinitionChangedEvent | undefined,
+		selectedStepIdChanged: string | null | undefined,
+		folderPathChanged: string[] | undefined
+	) {
+		if (folderPathChanged) {
+			this.render();
+			this.resetViewPort();
+		} else if (definitionChanged) {
+			if (definitionChanged.changeType === DefinitionChangeType.stepPropertyChanged) {
+				this.revalidate();
+			} else {
+				this.render();
+			}
+		} else if (selectedStepIdChanged !== undefined) {
+			this.trySelectStepComponent(selectedStepIdChanged);
+		}
 	}
 
-	private selectStep(step: Step | null) {
+	private trySelectStepComponent(stepId: string | null) {
 		if (this.selectedStepComponent) {
 			this.selectedStepComponent.setState(StepComponentState.default);
 			this.selectedStepComponent = null;
 		}
-		if (step) {
-			this.selectedStepComponent = this.getRootComponent().findById(step.id);
-			if (!this.selectedStepComponent) {
-				throw new Error(`Cannot find a step's component by id ${step.id}`);
+		if (stepId) {
+			this.selectedStepComponent = this.getRootComponent().findById(stepId);
+			if (this.selectedStepComponent) {
+				this.selectedStepComponent.setState(StepComponentState.selected);
 			}
-			this.selectedStepComponent.setState(StepComponentState.selected);
 		}
 	}
 
-	private limitScale(scale: number): number {
-		return Math.min(Math.max(scale, MIN_SCALE), MAX_SCALE);
-	}
-
-	private getRootComponent(): StartStopComponent {
+	private getRootComponent(): Component {
 		if (this.view.rootComponent) {
 			return this.view.rootComponent;
 		}

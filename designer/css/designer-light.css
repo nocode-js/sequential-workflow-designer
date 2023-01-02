@@ -43,6 +43,28 @@
 .sqd-theme-light .sqd-control-bar-button:hover {
 	border-color: #939393;
 }
+.sqd-theme-light .sqd-control-bar-button.sqd-delete .sqd-icon-path {
+	fill: #E01A24;
+}
+
+/* light > .sqd-path-bar */
+
+.sqd-theme-light .sqd-path-bar {
+	background: #FFF;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .15), 0 2px 4px rgba(0, 0, 0, .15);
+}
+.sqd-theme-light .sqd-path-bar-item:hover {
+	border-color: #939393;
+}
+.sqd-theme-light .sqd-path-bar-separator {
+	color: #D0D0D0;
+}
+.sqd-theme-light .sqd-path-bar-reset-button {
+	border: 1px solid transparent;
+}
+.sqd-theme-light .sqd-path-bar-reset-button:hover {
+	border-color: #939393;
+}
 
 /* light > .sqd-workspace */
 
@@ -64,20 +86,20 @@
 	box-shadow: 0 0 8px rgba(0, 0, 0, .15);
 }
 
-/* light > .sqd-task */
+/* light > .sqd-step-task */
 
-.sqd-theme-light .sqd-task-rect {
+.sqd-theme-light .sqd-step-task-rect {
 	fill: #FFF;
 	stroke: #C3C3C3;
 	filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, .15));
 }
-.sqd-theme-light .sqd-task-rect.sqd-selected {
+.sqd-theme-light .sqd-step-task-rect.sqd-selected {
 	stroke: #ED4800;
 }
-.sqd-theme-light .sqd-task-text {
+.sqd-theme-light .sqd-step-task-text {
 	fill: #000;
 }
-.sqd-theme-light .sqd-task-empty-icon {
+.sqd-theme-light .sqd-step-task-empty-icon {
 	fill: #C6C6C6;
 }
 
@@ -110,24 +132,32 @@
 	fill: #FFF;
 }
 
-/* light > .sqd-start-stop */
+/* light > .sqd-step-start-stop */
 
-.sqd-theme-light .sqd-start-stop {
+.sqd-theme-light .sqd-step-start-stop-circle {
 	fill: #2C18DF;
 }
-.sqd-theme-light .sqd-start-stop-icon {
+.sqd-theme-light .sqd-step-start-stop-icon {
 	fill: #FFF;
 }
 
 /* light > .sqd-placeholder */
 
-.sqd-theme-light .sqd-placeholder {
+.sqd-theme-light .sqd-placeholder .sqd-placeholder-rect {
 	fill: #D8D8D8;
 	stroke: #6A6A6A;
 }
-.sqd-theme-light .sqd-placeholder.sqd-hover {
+.sqd-theme-light .sqd-placeholder-icon-path {
+	fill: #2B2B2B;
+}
+.sqd-theme-light .sqd-placeholder.sqd-hover .sqd-placeholder-rect {
 	fill: #ED4800;
 }
+.sqd-theme-light .sqd-placeholder.sqd-hover .sqd-placeholder-icon-path {
+	fill: #FFF;
+}
+
+/* light > .sqd-validation-error */
 
 .sqd-theme-light .sqd-validation-error {
 	fill: #FFA200;

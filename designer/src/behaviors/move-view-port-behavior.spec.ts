@@ -12,7 +12,10 @@ describe('MoveViewPortBehavior', () => {
 
 		const context = createDesignerContextStub();
 		context.state.onViewPortChanged.subscribe(vp => (lastViewPort = vp));
-		context.state.setViewPort(new Vector(0, 0), 1);
+		context.state.setViewPort({
+			position: new Vector(0, 0),
+			scale: 1
+		});
 
 		const behavior = MoveViewPortBehavior.create(context.state);
 		behavior.onStart();

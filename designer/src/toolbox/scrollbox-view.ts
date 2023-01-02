@@ -55,7 +55,7 @@ export class ScrollBoxView {
 
 	private reload(element: HTMLElement) {
 		const maxHeightPercent = 0.7;
-		const minDistance = 200;
+		const minDistance = 206;
 
 		let height = Math.min(this.viewport.clientHeight * maxHeightPercent, element.clientHeight);
 		height = Math.min(height, this.viewport.clientHeight - minDistance);

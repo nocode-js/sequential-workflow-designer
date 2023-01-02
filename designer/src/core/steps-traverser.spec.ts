@@ -77,6 +77,11 @@ describe('StepsTraverser', () => {
 			expect(parents.length).toEqual(1);
 			expect(parents[0]).toEqual(loop);
 		});
+
+		it('returns no parents for root sequence', () => {
+			const parents = traverser.getParents(definition, definition.sequence);
+			expect(parents.length).toEqual(0);
+		});
 	});
 
 	describe('findById', () => {
