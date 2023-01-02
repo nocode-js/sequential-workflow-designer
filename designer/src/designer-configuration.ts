@@ -1,4 +1,4 @@
-import { ComponentType, Definition, Sequence, Step } from './definition';
+import { Branches, ComponentType, Definition, Sequence, Step } from './definition';
 import { StepComponent } from './workspace/component';
 import { ComponentContext } from './workspace/component-context';
 
@@ -48,7 +48,7 @@ export interface StepExtension<S extends Step = Step> {
 
 export interface StepChildren {
 	type: StepChildrenType;
-	sequences: Sequence | Record<string, Sequence>;
+	sequences: Sequence | Branches;
 }
 
 export enum StepChildrenType {

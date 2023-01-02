@@ -31,6 +31,7 @@ export class ControlBarView {
 		root.appendChild(moveButton);
 
 		const deleteButton = createButton(Icons.delete, 'Delete selected step');
+		deleteButton.classList.add('sqd-delete');
 		deleteButton.classList.add('sqd-hidden');
 		root.appendChild(deleteButton);
 
@@ -116,12 +117,12 @@ function bindClick(element: HTMLElement, handler: () => void) {
 	);
 }
 
-function createButton(iconContent: string, title: string): HTMLElement {
+function createButton(d: string, title: string): HTMLElement {
 	const button = Dom.element('div', {
 		class: 'sqd-control-bar-button',
 		title
 	});
-	const icon = Icons.create('sqd-control-bar-button-icon', iconContent);
+	const icon = Icons.createSvg('sqd-control-bar-button-icon', d);
 	button.appendChild(icon);
 	return button;
 }

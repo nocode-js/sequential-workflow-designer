@@ -1,6 +1,6 @@
 import { Sequence, Step, SwitchStep } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
-import { Placeholder, StepComponent, StepComponentState } from '../component';
+import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent, StepComponentState } from '../component';
 import { ComponentContext } from '../component-context';
 import { SwitchStepComponentView } from './switch-step-component-view';
 
@@ -25,15 +25,20 @@ export class SwitchStepComponent implements StepComponent {
 		private readonly configuration: StepsConfiguration
 	) {}
 
-	public findByElement(element: Element): StepComponent | null {
+	public findByClick(click: ClickDetails): ClickResult | null {
 		for (const sequence of this.view.sequenceComponents) {
-			const sc = sequence.findByElement(element);
-			if (sc) {
-				return sc;
+			const result = sequence.findByClick(click);
+			if (result) {
+				return result;
 			}
 		}
-		if (this.view.containsElement(element)) {
-			return this;
+		if (this.view.resolveClick(click)) {
+			return {
+				component: this,
+				action: {
+					type: ClickBehaviorType.selectStep
+				}
+			};
 		}
 		return null;
 	}

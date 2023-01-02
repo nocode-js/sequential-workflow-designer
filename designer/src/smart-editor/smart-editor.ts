@@ -1,5 +1,4 @@
 import { race } from '../core/simple-event-race';
-import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
 import { DefinitionChangedEvent, DefinitionChangeType, DesignerState } from '../designer-state';
 import { GlobalEditor } from './global-editor';
@@ -15,12 +14,12 @@ export class SmartEditor {
 		view.bindToggleIsCollapsedClick(() => editor.toggleIsCollapsedClick());
 		editor.tryRender(null);
 
-		race(0, context.state.onDefinitionChanged, context.state.onSelectedStepChanged).subscribe(r => {
-			const [definitionChanged, selectedStep] = r;
+		race(0, context.state.onDefinitionChanged, context.state.onSelectedStepIdChanged).subscribe(r => {
+			const [definitionChanged, selectedStepId] = r;
 			if (definitionChanged) {
 				editor.onDefinitionChanged(definitionChanged);
-			} else if (selectedStep !== undefined) {
-				editor.onSelectedStepChanged(selectedStep);
+			} else if (selectedStepId !== undefined) {
+				editor.onSelectedStepIdChanged(selectedStepId);
 			}
 		});
 
@@ -28,7 +27,7 @@ export class SmartEditor {
 		return editor;
 	}
 
-	private currentStep?: Step | null = undefined;
+	private currentStepId?: string | null = undefined;
 
 	private constructor(
 		private readonly view: SmartEditorView,
@@ -40,27 +39,28 @@ export class SmartEditor {
 		this.state.toggleIsSmartEditorCollapsed();
 	}
 
-	private onSelectedStepChanged(step: Step | null) {
-		this.tryRender(step);
+	private onSelectedStepIdChanged(stepId: string | null) {
+		this.tryRender(stepId);
 	}
 
 	private onDefinitionChanged(event: DefinitionChangedEvent) {
 		if (event.changeType === DefinitionChangeType.rootReplaced) {
-			this.render(this.state.selectedStep);
+			this.render(this.state.selectedStepId);
 		} else {
-			this.tryRender(this.state.selectedStep);
+			this.tryRender(this.state.selectedStepId);
 		}
 	}
 
-	private tryRender(step: Step | null) {
-		if (this.currentStep !== step) {
-			this.render(step);
+	private tryRender(stepId: string | null) {
+		if (this.currentStepId !== stepId) {
+			this.render(stepId);
 		}
 	}
 
-	private render(step: Step | null) {
+	private render(stepId: string | null) {
+		const step = stepId ? this.context.stepsTraverser.getById(this.context.state.definition, stepId) : null;
 		const editor = step ? StepEditor.create(step, this.context) : GlobalEditor.create(this.state.definition, this.context);
-		this.currentStep = step;
+		this.currentStepId = stepId;
 		this.view.setView(editor.view);
 	}
 }

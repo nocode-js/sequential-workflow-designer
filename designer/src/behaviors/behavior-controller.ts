@@ -2,6 +2,8 @@ import { Vector } from '../core/vector';
 import { Behavior } from './behavior';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 
+const notInitializedError = 'State is not initialized';
+
 export class BehaviorController {
 	private readonly onMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
 	private readonly onMouseUpHandler = (e: MouseEvent) => this.onMouseUp(e);
@@ -12,11 +14,12 @@ export class BehaviorController {
 	private state?: {
 		startPosition: Vector;
 		behavior: Behavior;
+		lastPosition?: Vector;
 	};
 
 	public start(startPosition: Vector, behavior: Behavior) {
 		if (this.state) {
-			this.stop(true);
+			this.stop(true, null);
 			return;
 		}
 
@@ -45,31 +48,38 @@ export class BehaviorController {
 
 	private onMouseUp(e: MouseEvent) {
 		e.preventDefault();
-		this.stop(false);
+		this.stop(false, e.target as Element | null);
 	}
 
 	private onTouchEnd(e: TouchEvent) {
 		e.preventDefault();
-		this.stop(false);
+		if (!this.state) {
+			throw new Error(notInitializedError);
+		}
+
+		const position = this.state.lastPosition ?? this.state.startPosition;
+		const element = document.elementFromPoint(position.x, position.y);
+		this.stop(false, element);
 	}
 
 	private onTouchStart(e: TouchEvent) {
 		e.preventDefault();
 		if (e.touches.length !== 1) {
-			this.stop(true);
+			this.stop(true, null);
 		}
 	}
 
 	private move(position: Vector) {
 		if (!this.state) {
-			throw new Error('State is empty');
+			throw new Error(notInitializedError);
 		}
 
-		const delta = this.state.startPosition.subtract(position);
+		this.state.lastPosition = position;
 
+		const delta = this.state.startPosition.subtract(position);
 		const newBehavior = this.state.behavior.onMove(delta);
 		if (newBehavior) {
-			this.state.behavior.onEnd(true);
+			this.state.behavior.onEnd(true, null);
 
 			this.state.behavior = newBehavior;
 			this.state.startPosition = position;
@@ -77,9 +87,9 @@ export class BehaviorController {
 		}
 	}
 
-	private stop(interrupt: boolean) {
+	private stop(interrupt: boolean, element: Element | null) {
 		if (!this.state) {
-			throw new Error('State is empty');
+			throw new Error(notInitializedError);
 		}
 
 		window.removeEventListener('mousemove', this.onMouseMoveHandler, false);
@@ -88,7 +98,7 @@ export class BehaviorController {
 		window.removeEventListener('touchend', this.onTouchEndHandler, false);
 		window.removeEventListener('touchstart', this.onTouchEndHandler, false);
 
-		this.state.behavior.onEnd(interrupt);
+		this.state.behavior.onEnd(interrupt, element);
 		this.state = undefined;
 	}
 }

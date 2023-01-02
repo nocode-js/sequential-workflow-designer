@@ -3,30 +3,28 @@ import { StepsTraverser } from './core/steps-traverser';
 import { Definition, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DefinitionChangeType, DesignerState } from './designer-state';
-import { WorkspaceController } from './workspace/workspace-controller';
 
 export class DefinitionModifier {
 	public constructor(
-		private readonly workspaceController: WorkspaceController,
 		private readonly stepsTraverser: StepsTraverser,
 		private readonly state: DesignerState,
 		private readonly configuration: DesignerConfiguration
 	) {}
 
-	public tryDelete(step: Step): boolean {
-		const component = this.workspaceController.getComponentByStepId(step.id);
+	public tryDelete(stepId: string): boolean {
+		const result = this.stepsTraverser.getParentSequence(this.state.definition, stepId);
+
 		const canDeleteStep = this.configuration.steps.canDeleteStep
-			? this.configuration.steps.canDeleteStep(component.step, component.parentSequence)
+			? this.configuration.steps.canDeleteStep(result.step, result.parentSequence)
 			: true;
 		if (!canDeleteStep) {
 			return false;
 		}
 
-		SequenceModifier.deleteStep(component.step, component.parentSequence);
-		this.state.notifyDefinitionChanged(DefinitionChangeType.stepDeleted, component.step.id);
-		if (this.state.selectedStep?.id === step.id) {
-			this.state.setSelectedStep(null);
-		}
+		SequenceModifier.deleteStep(result.step, result.parentSequence);
+		this.state.notifyDefinitionChanged(DefinitionChangeType.stepDeleted, result.step.id);
+
+		this.updateDependantFields();
 		return true;
 	}
 
@@ -40,7 +38,7 @@ export class DefinitionModifier {
 
 		SequenceModifier.insertStep(step, targetSequence, targetIndex);
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepInserted, step.id);
-		this.state.setSelectedStep(step);
+		this.state.setSelectedStepId(step.id);
 		return true;
 	}
 
@@ -54,7 +52,7 @@ export class DefinitionModifier {
 
 		SequenceModifier.moveStep(sourceSequence, step, targetSequence, targetIndex);
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepMoved, step.id);
-		this.state.setSelectedStep(step);
+		this.state.setSelectedStepId(step.id);
 		return true;
 	}
 
@@ -64,11 +62,27 @@ export class DefinitionModifier {
 		}
 
 		this.state.setDefinition(definition);
+		this.updateDependantFields();
+	}
 
-		if (this.state.selectedStep) {
-			// We need to update a reference of the selected step.
-			const step = this.stepsTraverser.findById(definition, this.state.selectedStep.id);
-			this.state.setSelectedStep(step);
+	public updateDependantFields() {
+		if (this.state.selectedStepId) {
+			const found = this.stepsTraverser.findById(this.state.definition, this.state.selectedStepId);
+			if (!found) {
+				// We need to unselect step when it's deleted.
+				this.state.setSelectedStepId(null);
+			}
+		}
+
+		for (let index = 0; index < this.state.folderPath.length; index++) {
+			const stepId = this.state.folderPath[index];
+			const found = this.stepsTraverser.findById(this.state.definition, stepId);
+			if (!found) {
+				// We need to update path if any folder is deleted.
+				const newPath = this.state.folderPath.slice(0, index);
+				this.state.setFolderPath(newPath);
+				break;
+			}
 		}
 	}
 }

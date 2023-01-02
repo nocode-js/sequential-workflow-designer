@@ -6,10 +6,31 @@ export interface Component {
 	isInterrupted: boolean;
 
 	findById(stepId: string): StepComponent | null;
-	findByElement(element: Element): StepComponent | null;
+	findByClick(click: ClickDetails): ClickResult | null;
 	getPlaceholders(result: Placeholder[]): void;
 	setIsDragging(isDragging: boolean): void;
 	validate(): boolean;
+}
+
+export interface ClickDetails {
+	element: Element;
+	position: Vector;
+	scale: number;
+}
+
+export interface ClickResult {
+	component: StepComponent;
+	action: ClickBehavior;
+}
+
+export interface ClickBehavior {
+	type: ClickBehaviorType;
+	argument?: string;
+}
+
+export enum ClickBehaviorType {
+	selectStep = 1,
+	openFolder = 2
 }
 
 export interface ComponentView {
@@ -22,10 +43,10 @@ export interface ComponentView {
 }
 
 export interface Placeholder {
-	element: Element;
 	parentSequence: Sequence;
 	index: number;
 
+	getRect(): DOMRect;
 	setIsHover(isHover: boolean): void;
 }
 

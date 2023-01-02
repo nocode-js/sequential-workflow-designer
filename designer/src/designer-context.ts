@@ -25,8 +25,9 @@ export class DesignerContext {
 
 		const state = new DesignerState(definition, isReadonly, isMobile, isMobile);
 		const workspaceController = new WorkspaceControllerWrapper();
+		const behaviorController = new BehaviorController();
 		const stepsTraverser = new StepsTraverser(stepExtensions);
-		const definitionModifier = new DefinitionModifier(workspaceController, stepsTraverser, state, configuration);
+		const definitionModifier = new DefinitionModifier(stepsTraverser, state, configuration);
 
 		let historyController: HistoryController | undefined = undefined;
 		if (configuration.undoStackSize) {
@@ -39,7 +40,7 @@ export class DesignerContext {
 			configuration,
 			layoutController,
 			workspaceController,
-			new BehaviorController(),
+			behaviorController,
 			definitionModifier,
 			historyController
 		);

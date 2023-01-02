@@ -6,7 +6,7 @@ import { LabelView } from '../common-views//label-view';
 import { RegionView } from '../common-views//region-view';
 import { ValidationErrorView } from '../common-views//validation-error-view';
 import { InputView } from '../common-views/input-view';
-import { ComponentView } from '../component';
+import { ClickDetails, ComponentView } from '../component';
 import { ComponentContext } from '../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
 
@@ -19,7 +19,7 @@ const CONNECTION_HEIGHT = 16;
 export class SwitchStepComponentView implements ComponentView {
 	public static create(parent: SVGElement, step: SwitchStep, context: ComponentContext): SwitchStepComponentView {
 		const g = Dom.svg('g', {
-			class: `sqd-switch-group sqd-type-${step.type}`
+			class: `sqd-step-switch-group sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 
@@ -121,8 +121,8 @@ export class SwitchStepComponentView implements ComponentView {
 		return this.regionView.getClientPosition();
 	}
 
-	public containsElement(element: Element): boolean {
-		return this.g.contains(element);
+	public resolveClick(click: ClickDetails): boolean {
+		return this.regionView.resolveClick(click) || this.g.contains(click.element);
 	}
 
 	public setIsDragging(isDragging: boolean) {

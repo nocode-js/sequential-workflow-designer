@@ -5,7 +5,7 @@
 		"test:single": "yarn workspaces run test:single",
 		"eslint": "yarn workspaces run eslint",
 		"prettier": "yarn workspaces run prettier",
-		"serve": "http-server ./"
+		"serve": "http-server -c-1 ./"
 	},
 	"workspaces": [
 		"designer"

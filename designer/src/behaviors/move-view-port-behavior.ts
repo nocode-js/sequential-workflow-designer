@@ -10,12 +10,16 @@ export class MoveViewPortBehavior implements Behavior {
 	private constructor(private readonly startPosition: Vector, private readonly state: DesignerState) {}
 
 	public onStart() {
-		this.state.setSelectedStep(null);
+		const stepId = this.state.tryGetLastStepIdFromFolderPath();
+		this.state.setSelectedStepId(stepId);
 	}
 
 	public onMove(delta: Vector) {
 		const newPosition = this.startPosition.subtract(delta);
-		this.state.setViewPort(newPosition, this.state.viewPort.scale);
+		this.state.setViewPort({
+			position: newPosition,
+			scale: this.state.viewPort.scale
+		});
 	}
 
 	public onEnd() {

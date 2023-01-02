@@ -23,7 +23,7 @@ export class PlaceholderFinder {
 	public find(vLt: Vector, vWidth: number, vHeight: number): Placeholder | undefined {
 		if (!this.cache) {
 			this.cache = this.placeholders.map(placeholder => {
-				const rect = placeholder.element.getBoundingClientRect();
+				const rect = placeholder.getRect();
 				return {
 					placeholder,
 					lt: new Vector(rect.x, rect.y),

@@ -3,6 +3,7 @@ import { Dom } from './core/dom';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { LayoutController } from './layout-controller';
+import { PathBar } from './path-bar/path-bar';
 import { SmartEditor } from './smart-editor/smart-editor';
 import { Toolbox } from './toolbox/toolbox';
 import { ComponentContext } from './workspace/component-context';
@@ -30,6 +31,7 @@ export class DesignerView {
 			toolbox = Toolbox.create(root, designerContext, componentContext);
 		}
 		ControlBar.create(root, designerContext);
+		PathBar.create(root, designerContext);
 		if (!configuration.editors.isHidden) {
 			SmartEditor.create(root, designerContext);
 		}

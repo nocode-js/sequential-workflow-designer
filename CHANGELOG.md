@@ -1,3 +1,12 @@
+## 0.4.0
+
+This version brings rendering speed improvements. Check the `stress-test.html` example. This version contains many internal changes to support the `folder` component in the pro version.
+
+#### Breaking Changes
+
+* Replaced all icons to material icons.
+* Normalized step CSS classes. All components have the `sqd-step-<componentType>-` prefix from now.
+
 ## 0.3.0
 
 This version introduces new build formats (ESM, UMD) of the package.

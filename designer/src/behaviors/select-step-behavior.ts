@@ -28,7 +28,7 @@ export class SelectStepBehavior implements Behavior {
 
 	public onMove(delta: Vector): Behavior | void {
 		if (!this.state.isReadonly && delta.distance() > 2) {
-			this.state.setSelectedStep(null);
+			this.state.setSelectedStepId(null);
 			return DragStepBehavior.create(
 				this.designerContext,
 				this.componentContext,
@@ -40,7 +40,7 @@ export class SelectStepBehavior implements Behavior {
 
 	public onEnd(interrupt: boolean) {
 		if (!interrupt) {
-			this.state.setSelectedStep(this.pressedStepComponent.step);
+			this.state.setSelectedStepId(this.pressedStepComponent.step.id);
 		}
 	}
 }

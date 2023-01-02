@@ -1,7 +1,7 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { ContainerStep } from '../../definition';
-import { ComponentView } from '../component';
+import { ClickDetails, ComponentView } from '../component';
 import { SequenceComponent } from '../sequence/sequence-component';
 import { InputView } from '../common-views/input-view';
 import { JoinView } from '../common-views/join-view';
@@ -17,7 +17,7 @@ const LABEL_HEIGHT = 22;
 export class ContainerStepComponentView implements ComponentView {
 	public static create(parent: SVGElement, step: ContainerStep, context: ComponentContext): ContainerStepComponentView {
 		const g = Dom.svg('g', {
-			class: `sqd-container-group sqd-type-${step.type}`
+			class: `sqd-step-container sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 
@@ -57,8 +57,8 @@ export class ContainerStepComponentView implements ComponentView {
 		return this.regionView.getClientPosition();
 	}
 
-	public containsElement(element: Element): boolean {
-		return this.g.contains(element);
+	public resolveClick(click: ClickDetails): boolean {
+		return this.regionView.resolveClick(click) || this.g.contains(click.element);
 	}
 
 	public setIsDragging(isDragging: boolean) {

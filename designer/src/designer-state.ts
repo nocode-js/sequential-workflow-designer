@@ -1,6 +1,6 @@
 import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
-import { Definition, Step } from './definition';
+import { Definition } from './definition';
 
 export interface DefinitionChangedEvent {
 	changeType: DefinitionChangeType;
@@ -25,7 +25,8 @@ export interface ViewPort {
 
 export class DesignerState {
 	public readonly onViewPortChanged = new SimpleEvent<ViewPort>();
-	public readonly onSelectedStepChanged = new SimpleEvent<Step | null>();
+	public readonly onSelectedStepIdChanged = new SimpleEvent<string | null>();
+	public readonly onFolderPathChanged = new SimpleEvent<string[]>();
 	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
 	public readonly onIsDraggingChanged = new SimpleEvent<boolean>();
 	public readonly onIsMoveModeEnabledChanged = new SimpleEvent<boolean>();
@@ -37,7 +38,8 @@ export class DesignerState {
 		position: new Vector(0, 0),
 		scale: 1
 	};
-	public selectedStep: Step | null = null;
+	public selectedStepId: string | null = null;
+	public folderPath: string[] = [];
 	public isDragging = false;
 	public isMoveModeEnabled = false;
 
@@ -48,16 +50,39 @@ export class DesignerState {
 		public isSmartEditorCollapsed: boolean
 	) {}
 
-	public setViewPort(position: Vector, scale: number) {
-		this.viewPort = { position, scale };
-		this.onViewPortChanged.forward(this.viewPort);
+	public setSelectedStepId(stepId: string | null) {
+		if (this.selectedStepId !== stepId) {
+			this.selectedStepId = stepId;
+			this.onSelectedStepIdChanged.forward(stepId);
+		}
 	}
 
-	public setSelectedStep(step: Step | null) {
-		if (this.selectedStep !== step) {
-			this.selectedStep = step;
-			this.onSelectedStepChanged.forward(step);
-		}
+	public pushStepIdToFolderPath(stepId: string) {
+		this.folderPath.push(stepId);
+		this.onFolderPathChanged.forward(this.folderPath);
+	}
+
+	public setFolderPath(path: string[]) {
+		this.folderPath = path;
+		this.onFolderPathChanged.forward(path);
+	}
+
+	public tryGetLastStepIdFromFolderPath(): string | null {
+		return this.folderPath.length > 0 ? this.folderPath[this.folderPath.length - 1] : null;
+	}
+
+	public setDefinition(definition: Definition) {
+		this.definition = definition;
+		this.notifyDefinitionChanged(DefinitionChangeType.rootReplaced, null);
+	}
+
+	public notifyDefinitionChanged(changeType: DefinitionChangeType, stepId: string | null) {
+		this.onDefinitionChanged.forward({ changeType, stepId });
+	}
+
+	public setViewPort(viewPort: ViewPort) {
+		this.viewPort = viewPort;
+		this.onViewPortChanged.forward(viewPort);
 	}
 
 	public setIsReadonly(isReadonly: boolean) {
@@ -87,14 +112,5 @@ export class DesignerState {
 	public toggleIsSmartEditorCollapsed() {
 		this.isSmartEditorCollapsed = !this.isSmartEditorCollapsed;
 		this.onIsSmartEditorCollapsedChanged.forward(this.isSmartEditorCollapsed);
-	}
-
-	public setDefinition(definition: Definition) {
-		this.definition = definition;
-		this.notifyDefinitionChanged(DefinitionChangeType.rootReplaced, null);
-	}
-
-	public notifyDefinitionChanged(changeType: DefinitionChangeType, stepId: string | null) {
-		this.onDefinitionChanged.forward({ changeType, stepId });
 	}
 }

@@ -2,6 +2,7 @@ import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
 import { JoinView } from '../common-views/join-view';
+import { RectPlaceholderView } from '../common-views/rect-placeholder-view';
 import { Component, ComponentView } from '../component';
 import { ComponentContext } from '../component-context';
 
@@ -20,7 +21,7 @@ export class SequenceComponentView implements ComponentView {
 
 		let offsetY = PH_HEIGHT;
 
-		const placeholders: SVGElement[] = [];
+		const placeholderViews: RectPlaceholderView[] = [];
 		for (let i = 0; i < components.length; i++) {
 			const component = components[i];
 			const offsetX = maxJoinX - component.view.joinX;
@@ -29,7 +30,7 @@ export class SequenceComponentView implements ComponentView {
 				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 			}
 
-			placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
+			placeholderViews.push(RectPlaceholderView.create(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT, PH_WIDTH, PH_HEIGHT));
 
 			Dom.translate(component.view.g, offsetX, offsetY);
 			offsetY += component.view.height + PH_HEIGHT;
@@ -38,9 +39,9 @@ export class SequenceComponentView implements ComponentView {
 		if (components.length === 0 || !components[components.length - 1].isInterrupted) {
 			JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 		}
-		placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
+		placeholderViews.push(RectPlaceholderView.create(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT, PH_WIDTH, PH_HEIGHT));
 
-		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
+		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholderViews, components);
 	}
 
 	private constructor(
@@ -48,7 +49,7 @@ export class SequenceComponentView implements ComponentView {
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		public readonly placeholders: SVGElement[],
+		public readonly placeholderViews: RectPlaceholderView[],
 		public readonly components: Component[]
 	) {}
 
@@ -57,10 +58,8 @@ export class SequenceComponentView implements ComponentView {
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		this.placeholders.forEach(p => {
-			Dom.attrs(p, {
-				visibility: isDragging ? 'visible' : 'hidden'
-			});
+		this.placeholderViews.forEach(placeholder => {
+			placeholder.setIsVisible(isDragging);
 		});
 	}
 
@@ -70,19 +69,4 @@ export class SequenceComponentView implements ComponentView {
 		}
 		return false;
 	}
-}
-
-function appendPlaceholder(g: SVGGElement, x: number, y: number): SVGElement {
-	const rect = Dom.svg('rect', {
-		class: 'sqd-placeholder',
-		width: PH_WIDTH,
-		height: PH_HEIGHT,
-		x,
-		y,
-		rx: 6,
-		ry: 6,
-		visibility: 'hidden'
-	});
-	g.appendChild(rect);
-	return rect;
 }
