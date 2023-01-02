@@ -60,7 +60,7 @@ export class PathBarView {
 				const separator = Dom.element('span', {
 					class: 'sqd-path-bar-separator'
 				});
-				separator.innerText = (index === startIndex) ? '...' : '/';
+				separator.innerText = index === startIndex ? '...' : '/';
 				this.items.appendChild(separator);
 			}
 			const item = Dom.element('span', {
