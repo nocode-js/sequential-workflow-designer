@@ -1,6 +1,6 @@
 import { Sequence, Step } from '../definition';
 import { StepsConfiguration } from '../designer-configuration';
-import { ClickBehavior, ClickDetails, ClickResult, ComponentView, StepComponent, StepComponentState } from './component';
+import { ClickBehavior, ClickDetails, ClickResult, ComponentView, StepComponent } from './component';
 
 export interface ChildlessComponentView extends ComponentView {
 	resolveClick(click: ClickDetails): ClickBehavior | null;
@@ -42,21 +42,12 @@ export class ChildlessStepComponent<S extends Step> implements StepComponent {
 		this.view.setIsDragging(isDragging);
 	}
 
-	public setState(state: StepComponentState) {
-		switch (state) {
-			case StepComponentState.default:
-				this.view.setIsDisabled(false);
-				this.view.setIsSelected(false);
-				break;
-			case StepComponentState.selected:
-				this.view.setIsDisabled(false);
-				this.view.setIsSelected(true);
-				break;
-			case StepComponentState.dragging:
-				this.view.setIsDisabled(true);
-				this.view.setIsSelected(false);
-				break;
-		}
+	public setIsDisabled(isDisabled: boolean) {
+		this.view.setIsDisabled(isDisabled);
+	}
+
+	public setIsSelected(isSelected: boolean) {
+		this.view.setIsSelected(isSelected);
 	}
 
 	public validate(): boolean {

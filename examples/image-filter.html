@@ -2,22 +2,35 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>🌅 Image filter - Sequential Workflow Designer</title>
+	<title>🌅 Image Filter - Sequential Workflow Designer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
+	<link rel="stylesheet" href="./assets/common.css">
 	<style>
-		body {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
-		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden; background: #171717;}
+		html, body {width: 100vw; height: 100vh; overflow: hidden; background: #171717;}
+		body {display: flex; flex-direction: column;}
+		.main {flex: 1; position: relative;}
+
 		#designer {position: absolute; left: 0; top: 0; width: 100vw; height: 50vh;}
 		#result {position: absolute; left: 0; bottom: 0; width: 100vw; height: 50vh; display: flex; align-items: center;}
 		#preview {margin: 0 auto;}
 	</style>
 </head>
 <body>
-	<div id="designer"></div>
+	<header class="title-bar">
+		<div class="column">
+			<h1>🌅 Image Filter Example</h1>
+		</div>
+		<div class="column text-end flex-1">
+			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+		</div>
+	</header>
 
-	<div id="result">
-		<canvas id="preview"></canvas>
+	<div class="main">
+		<div id="designer"></div>
+		<div id="result">
+			<canvas id="preview"></canvas>
+		</div>
 	</div>
 
 	<script src="./assets/lib.js"></script>

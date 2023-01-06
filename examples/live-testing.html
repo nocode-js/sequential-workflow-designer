@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>⏩ Live testing - Sequential Workflow Designer</title>
+	<title>⏩ Live Testing - Sequential Workflow Designer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 	<style>
@@ -10,12 +10,14 @@
 		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden;}
 
 		#designer {position: absolute; left: 0; top: 0; width: 70vw; height: 100vh;}
-		.sqd-global-editor, .sqd-step-editor {padding: 10px;}
-		.sqd-smart-editor p {margin: 0; padding: 0 0 10px;}
-		.sqd-smart-editor label {display: block; padding: 0 0 10px;}
-		.sqd-smart-editor input[type=text] {width: 100%; box-sizing: border-box; border: 1px solid silver; padding: 6px; border-radius: 5px;}
+		.sqd-editor {padding: 10px;}
+		.sqd-editor p {margin: 0; padding: 0 0 10px;}
+		.sqd-editor label {display: block; padding: 0 0 10px;}
+		.sqd-editor input[type=text] {width: 100%; box-sizing: border-box; border: 1px solid silver; padding: 6px; border-radius: 5px;}
 
 		#result {position: absolute; right: 0; bottom: 0; width: 30vw; height: 100vh; padding: 10px; box-sizing: border-box; color: #FFF; background: #2C18DF;}
+		#result a {color: #FFF;}
+		#result a:hover {text-decoration: none;}
 		#result button {padding: 10px; color: #000; background: #FFF; border: 0; border-radius: 5px; cursor: pointer;}
 		#result button:hover {opacity: 0.8;}
 	</style>
@@ -24,7 +26,11 @@
 	<div id="designer"></div>
 
 	<div id="result">
-		<button id="run">Run 🚀</button>
+		<p>
+			<button id="run">Run 🚀</button>
+			&nbsp;
+			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+		</p>
 
 		<h5>Variables</h5>
 

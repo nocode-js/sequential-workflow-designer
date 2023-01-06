@@ -2,20 +2,36 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>⛅ Light dark - Sequential Workflow Designer</title>
+	<title>⛅ Light Dark - Sequential Workflow Designer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
+	<link rel="stylesheet" href="./assets/common.css">
 	<style>
-		body {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
-		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden;}
-		.designer {width: 50vw; height: 100vh; position: absolute;}
-		.designer#light {left: 0;}
-		.designer#dark {right: 0;}
+		html, body {width: 100vw; height: 100vh; overflow: hidden;}
+		body {display: flex; flex-direction: column;}
+		.main {flex: 1; position: relative;}
+
+		.designer {position: absolute; width: 100%; height: 50%;}
+		.sqd-editor {padding: 10px;}
+		.designer#light {top: 0;}
+		.designer#dark {bottom: 0;}
+		.designer#dark .sqd-editor {color: #FFF;}
 	</style>
 </head>
 <body>
-	<div id="light" class="designer"></div>
-	<div id="dark" class="designer"></div>
+	<header class="title-bar">
+		<div class="column">
+			<h1>⛅ Light Dark Example</h1>
+		</div>
+		<div class="column text-end flex-1">
+			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+		</div>
+	</header>
+
+	<div class="main">
+		<div id="light" class="designer"></div>
+		<div id="dark" class="designer"></div>
+	</div>
 
 	<script src="./assets/lib.js"></script>
 	<script src="./assets/light-dark.js"></script>

@@ -2,7 +2,7 @@ import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { SwitchStep } from '../../definition';
 import { JoinView } from '../common-views//join-view';
-import { LabelView } from '../common-views//label-view';
+import { LabelView, LABEL_HEIGHT } from '../common-views//label-view';
 import { RegionView } from '../common-views//region-view';
 import { ValidationErrorView } from '../common-views//validation-error-view';
 import { InputView } from '../common-views/input-view';
@@ -10,96 +10,122 @@ import { ClickDetails, ComponentView } from '../component';
 import { ComponentContext } from '../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
 
-const MIN_CHILDREN_WIDTH = 50;
+const MIN_CONTAINER_WIDTH = 40;
 const PADDING_X = 20;
 const PADDING_TOP = 20;
-const LABEL_HEIGHT = 22;
 const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponentView implements ComponentView {
 	public static create(parent: SVGElement, step: SwitchStep, context: ComponentContext): SwitchStepComponentView {
 		const g = Dom.svg('g', {
-			class: `sqd-step-switch-group sqd-type-${step.type}`
+			class: `sqd-step-switch sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 
 		const branchNames = Object.keys(step.branches);
-		const sequenceComponents = branchNames.map(bn => SequenceComponent.create(g, step.branches[bn], context));
+		const branchComponents = branchNames.map(branchName => SequenceComponent.create(g, step.branches[branchName], context));
 
-		const maxChildHeight = Math.max(...sequenceComponents.map(s => s.view.height));
-		const containerWidths = sequenceComponents.map(s => Math.max(s.view.width, MIN_CHILDREN_WIDTH) + PADDING_X * 2);
-		const containersWidth = containerWidths.reduce((p, c) => p + c, 0);
-		const containerHeight = maxChildHeight + PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT * 2;
-		const containerOffsets: number[] = [];
-
-		const joinXs = sequenceComponents.map(s => Math.max(s.view.joinX, MIN_CHILDREN_WIDTH / 2));
-
-		let totalX = 0;
-		for (let i = 0; i < branchNames.length; i++) {
-			containerOffsets.push(totalX);
-			totalX += containerWidths[i];
-		}
-
-		const centerBranchIndex = Math.floor(branchNames.length / 2);
-		let joinX = containerOffsets[centerBranchIndex];
-		if (branchNames.length % 2 !== 0) {
-			joinX += joinXs[centerBranchIndex] + PADDING_X;
-		}
-
-		branchNames.forEach((branchName, i) => {
-			const sequence = sequenceComponents[i];
-			const offsetX = containerOffsets[i];
-
-			LabelView.create(g, offsetX + joinXs[i] + PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT, branchName, 'secondary');
-
-			const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
-
-			if (!sequence.isInterrupted) {
-				const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
-				if (fillingHeight > 0) {
-					JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X, childEndY), fillingHeight);
-				}
-			}
-
-			const sequenceX = offsetX + PADDING_X + Math.max((MIN_CHILDREN_WIDTH - sequence.view.width) / 2, 0);
-			const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
-			Dom.translate(sequence.view.g, sequenceX, sequenceY);
+		const branchLabelViews = branchNames.map(branchName => {
+			return LabelView.create(g, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT, branchName, 'secondary');
 		});
 
-		LabelView.create(g, joinX, PADDING_TOP, step.name);
+		const nameLabelView = LabelView.create(g, PADDING_TOP, step.name, 'primary');
 
-		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);
+		let prevOffsetX = 0;
+		const branchSizes = branchComponents.map((component, i) => {
+			const halfOfWidestBranchElement = Math.max(branchLabelViews[i].width, MIN_CONTAINER_WIDTH) / 2;
+
+			const branchOffsetLeft = Math.max(halfOfWidestBranchElement - component.view.joinX, 0) + PADDING_X;
+			const branchOffsetRight = Math.max(halfOfWidestBranchElement - (component.view.width - component.view.joinX), 0) + PADDING_X;
+
+			const width = component.view.width + branchOffsetLeft + branchOffsetRight;
+			const joinX = component.view.joinX + branchOffsetLeft;
+
+			const offsetX = prevOffsetX;
+			prevOffsetX += width;
+			return { width, branchOffsetLeft, offsetX, joinX };
+		});
+
+		const centerBranchIndex = Math.floor(branchNames.length / 2);
+		const centerBranchSize = branchSizes[centerBranchIndex];
+		let joinX = centerBranchSize.offsetX;
+		if (branchNames.length % 2 !== 0) {
+			joinX += centerBranchSize.joinX;
+		}
+
+		const totalBranchesWidth = branchSizes.reduce((result, s) => result + s.width, 0);
+		const maxBranchesHeight = Math.max(...branchComponents.map(s => s.view.height));
+
+		const halfOfWidestSwitchElement = nameLabelView.width / 2 + PADDING_X * 2;
+		const switchOffsetLeft = Math.max(halfOfWidestSwitchElement - joinX, 0);
+		const switchOffsetRight = Math.max(halfOfWidestSwitchElement - (totalBranchesWidth - joinX), 0);
+
+		const viewWidth = switchOffsetLeft + totalBranchesWidth + switchOffsetRight;
+		const viewHeight = maxBranchesHeight + PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT * 2;
+
+		const shiftedJoinX = switchOffsetLeft + joinX;
+		Dom.translate(nameLabelView.g, shiftedJoinX, 0);
+
+		const branchOffsetTop = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
+
+		branchComponents.forEach((component, i) => {
+			const branchSize = branchSizes[i];
+			const branchOffsetLeft = switchOffsetLeft + branchSize.offsetX + branchSize.branchOffsetLeft;
+
+			Dom.translate(branchLabelViews[i].g, switchOffsetLeft + branchSize.offsetX + branchSize.joinX, 0);
+			Dom.translate(component.view.g, branchOffsetLeft, branchOffsetTop);
+
+			if (!component.isInterrupted) {
+				const endOffsetTopOfComponent = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + component.view.height;
+				const missingHeight = viewHeight - endOffsetTopOfComponent - CONNECTION_HEIGHT;
+				if (missingHeight > 0) {
+					JoinView.createStraightJoin(
+						g,
+						new Vector(switchOffsetLeft + branchSize.offsetX + branchSize.joinX, endOffsetTopOfComponent),
+						missingHeight
+					);
+				}
+			}
+		});
 
 		const iconUrl = context.configuration.iconUrlProvider ? context.configuration.iconUrlProvider(step.componentType, step.type) : null;
-		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
+		const inputView = InputView.createRectInput(g, shiftedJoinX, 0, iconUrl);
+
+		JoinView.createStraightJoin(g, new Vector(shiftedJoinX, 0), PADDING_TOP);
 
 		JoinView.createJoins(
 			g,
-			new Vector(joinX, PADDING_TOP + LABEL_HEIGHT),
-			containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT))
+			new Vector(shiftedJoinX, PADDING_TOP + LABEL_HEIGHT),
+			branchSizes.map(o => new Vector(switchOffsetLeft + o.offsetX + o.joinX, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT))
 		);
 
-		const ongoingSequenceIndexes = sequenceComponents
+		const ongoingSequenceIndexes = branchComponents
 			.map((component, index) => (component.isInterrupted ? null : index))
 			.filter(index => index !== null) as number[];
 		const ongoingJoinTargets = ongoingSequenceIndexes.map(
 			(i: number) =>
-				new Vector(containerOffsets[i] + joinXs[i] + PADDING_X, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)
+				new Vector(
+					switchOffsetLeft + branchSizes[i].offsetX + branchSizes[i].joinX,
+					PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxBranchesHeight
+				)
 		);
 		if (ongoingJoinTargets.length > 0) {
-			JoinView.createJoins(g, new Vector(joinX, containerHeight), ongoingJoinTargets);
+			JoinView.createJoins(g, new Vector(shiftedJoinX, viewHeight), ongoingJoinTargets);
 		}
 
-		const regionView = RegionView.create(g, containerWidths, containerHeight);
+		const regions = branchSizes.map(s => s.width);
+		regions[0] += switchOffsetLeft;
+		regions[regions.length - 1] += switchOffsetRight;
+		const regionView = RegionView.create(g, regions, viewHeight);
 
-		const validationErrorView = ValidationErrorView.create(g, containersWidth, 0);
+		const validationErrorView = ValidationErrorView.create(g, viewWidth, 0);
 
 		return new SwitchStepComponentView(
 			g,
-			containersWidth,
-			containerHeight,
-			joinX,
-			sequenceComponents,
+			viewWidth,
+			viewHeight,
+			shiftedJoinX,
+			branchComponents,
 			regionView,
 			inputView,
 			validationErrorView

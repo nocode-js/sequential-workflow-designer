@@ -5,13 +5,23 @@
 	<title>❎ Fullscreen - Sequential Workflow Designer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
+	<link rel="stylesheet" href="./assets/common.css">
 	<style>
-		body {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
-		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden;}
-		#designer {width: 100vw; height: 100vh;}
+		html, body {width: 100vw; height: 100vh; overflow: hidden;}
+		body {display: flex; flex-direction: column;}
+		#designer {flex: 1;}
 	</style>
 </head>
 <body>
+	<header class="title-bar">
+		<div class="column">
+			<h1>❎ Fullscreen Example</h1>
+		</div>
+		<div class="column text-end flex-1">
+			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+		</div>
+	</header>
+
 	<div id="designer"></div>
 
 	<script src="./assets/lib.js"></script>

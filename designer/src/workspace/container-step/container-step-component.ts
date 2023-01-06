@@ -1,6 +1,6 @@
 import { ContainerStep, Sequence, Step } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
-import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent, StepComponentState } from '../component';
+import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent } from '../component';
 import { ComponentContext } from '../component-context';
 import { ContainerStepComponentView } from './container-step-component-view';
 
@@ -15,7 +15,7 @@ export class ContainerStepComponent implements StepComponent {
 		return new ContainerStepComponent(view, step, parentSequence, view.isInterrupted(), context.configuration);
 	}
 
-	private currentState = StepComponentState.default;
+	private isDisabled = false;
 
 	private constructor(
 		public readonly view: ContainerStepComponentView,
@@ -53,27 +53,18 @@ export class ContainerStepComponent implements StepComponent {
 	}
 
 	public getPlaceholders(result: Placeholder[]) {
-		if (this.currentState !== StepComponentState.dragging) {
+		if (!this.isDisabled) {
 			this.view.sequenceComponent.getPlaceholders(result);
 		}
 	}
 
-	public setState(state: StepComponentState) {
-		this.currentState = state;
-		switch (state) {
-			case StepComponentState.default:
-				this.view.setIsSelected(false);
-				this.view.setIsDisabled(false);
-				break;
-			case StepComponentState.selected:
-				this.view.setIsSelected(true);
-				this.view.setIsDisabled(false);
-				break;
-			case StepComponentState.dragging:
-				this.view.setIsSelected(false);
-				this.view.setIsDisabled(true);
-				break;
-		}
+	public setIsSelected(isSelected: boolean) {
+		this.view.setIsSelected(isSelected);
+	}
+
+	public setIsDisabled(isDisabled: boolean) {
+		this.isDisabled = isDisabled;
+		this.view.setIsDisabled(isDisabled);
 	}
 
 	public setIsDragging(isDragging: boolean) {

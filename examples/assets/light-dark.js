@@ -10,6 +10,12 @@ function createStep(id) {
 	};
 }
 
+function createEditor(text) {
+	const editor = document.createElement('div');
+	editor.innerText = text;
+	return editor;
+}
+
 function install(placeholder, theme) {
 	const definition = {
 		sequence: [
@@ -42,10 +48,10 @@ function install(placeholder, theme) {
 
 		editors: {
 			globalEditorProvider: () => {
-				return document.createElement('div');
+				return createEditor('Please select any step.');
 			},
-			stepEditorProvider: () => {
-				return document.createElement('div');
+			stepEditorProvider: (step) => {
+				return createEditor(`Selected step: ${step.type}`);
 			}
 		}
 	};

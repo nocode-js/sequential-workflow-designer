@@ -2,37 +2,45 @@ import { Vector } from '../core';
 import { ViewPort } from '../designer-state';
 import { ComponentView } from './component';
 
-const MIN_SCALE = 0.05;
-const MAX_SCALE = 3;
-const ZOOM_DELTA = 0.2;
-const WHEEL_DELTA = 0.1;
+const SCALES = [0.06, 0.08, 0.1, 0.12, 0.16, 0.2, 0.26, 0.32, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
 
-function getWheelDelta(e: WheelEvent): number {
-	return e.deltaY > 0 ? -WHEEL_DELTA : WHEEL_DELTA;
+function nextScale(scale: number, direction: boolean): number {
+	const distances = SCALES.map((s, index) => ({
+		distance: Math.abs(s - scale),
+		index
+	}));
+	distances.sort((a, b) => a.distance - b.distance);
+	let index = distances[0].index;
+	if (direction) {
+		index = Math.min(index + 1, SCALES.length - 1);
+	} else {
+		index = Math.max(index - 1, 0);
+	}
+	return SCALES[index];
 }
 
-function getZoomDelta(direction: boolean): number {
-	return direction ? ZOOM_DELTA : -ZOOM_DELTA;
-}
-
-function limitScale(scale: number): number {
-	return Math.min(Math.max(scale, MIN_SCALE), MAX_SCALE);
-}
+const CENTER_MARGIN = 10;
 
 export class ViewPortCalculator {
 	public static center(clientCanvasSize: Vector, view: ComponentView): ViewPort {
-		const x = Math.max(0, (clientCanvasSize.x - view.width) / 2);
-		const y = Math.max(0, (clientCanvasSize.y - view.height) / 2);
+		const canvasSafeWidth = Math.max(clientCanvasSize.x - CENTER_MARGIN * 2, 0);
+		const canvasSafeHeight = Math.max(clientCanvasSize.y - CENTER_MARGIN * 2, 0);
+
+		const scale = Math.min(Math.min(canvasSafeWidth / view.width, canvasSafeHeight / view.height), 1);
+		const width = view.width * scale;
+		const height = view.height * scale;
+
+		const x = Math.max(0, (clientCanvasSize.x - width) / 2);
+		const y = Math.max(0, (clientCanvasSize.y - height) / 2);
 
 		return {
 			position: new Vector(x, y),
-			scale: 1
+			scale
 		};
 	}
 
 	public static zoom(current: ViewPort, direction: boolean): ViewPort {
-		const delta = getZoomDelta(direction);
-		const scale = limitScale(current.scale + delta);
+		const scale = nextScale(current.scale, direction);
 		return {
 			position: current.position,
 			scale
@@ -44,11 +52,9 @@ export class ViewPortCalculator {
 		// The real point is point on canvas with no scale.
 		const mouseRealPoint = mousePoint.divideByScalar(current.scale).subtract(current.position.divideByScalar(current.scale));
 
-		const wheelDelta = getWheelDelta(e);
-		const newScale = limitScale(current.scale + wheelDelta);
+		const scale = nextScale(current.scale, e.deltaY < 0);
 
-		const position = mouseRealPoint.multiplyByScalar(-newScale).add(mousePoint);
-		const scale = newScale;
+		const position = mouseRealPoint.multiplyByScalar(-scale).add(mousePoint);
 		return { position, scale };
 	}
 }

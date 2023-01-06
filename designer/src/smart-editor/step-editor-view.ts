@@ -4,7 +4,7 @@ import { EditorView } from './editor';
 export class StepEditorView implements EditorView {
 	public static create(content: HTMLElement): StepEditorView {
 		const root = Dom.element('div', {
-			class: 'sqd-step-editor'
+			class: 'sqd-editor sqd-step-editor'
 		});
 		root.appendChild(content);
 		return new StepEditorView(root);

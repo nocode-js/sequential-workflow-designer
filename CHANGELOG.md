@@ -1,3 +1,14 @@
+## 0.5.0
+
+* Fixed losing the disabled state during dragging.
+* Fixed steps rendering with long labels.
+* Added to the global editor and the step editor the common class: `sqd-editor`.
+
+#### Breaking Changes
+
+* Changed a behavior of the default zoom. From now the designer shows a whole flow at the start.
+* Zoom is aligned to the predefined constants.
+
 ## 0.4.0
 
 This version brings rendering speed improvements. Check the `stress-test.html` example. This version contains many internal changes to support the `folder` component in the pro version.

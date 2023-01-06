@@ -117,7 +117,7 @@ function canPlaceStep(step, parentSequence) {
 class Editors {
 	static createGlobalEditor() {
 		const root = document.createElement('div');
-		root.innerText = 'Select step.';
+		root.innerText = 'Please select any step.';
 		return root;
 	}
 

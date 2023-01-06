@@ -40,7 +40,7 @@ const configuration = {
 	editors: {
 		globalEditorProvider: () => {
 			const editor = document.createElement('div');
-			editor.innerText = 'Select a step.';
+			editor.innerText = 'Please select any step.';
 			return editor;
 		},
 		stepEditorProvider: (step) => {
@@ -93,6 +93,11 @@ function runWorkflow() {
 	const definition = designer.getDefinition();
 
 	let register = null;
+
+	if (definition.sequence.length < 1) {
+		alert('Please add any step...');
+		return;
+	}
 
 	for (let step of definition.sequence) {
 		if (step.type === 'readUserInput') {

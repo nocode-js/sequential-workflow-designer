@@ -5,14 +5,13 @@ import { ClickDetails, ComponentView } from '../component';
 import { SequenceComponent } from '../sequence/sequence-component';
 import { InputView } from '../common-views/input-view';
 import { JoinView } from '../common-views/join-view';
-import { LabelView } from '../common-views/label-view';
+import { LabelView, LABEL_HEIGHT } from '../common-views/label-view';
 import { RegionView } from '../common-views/region-view';
 import { ValidationErrorView } from '../common-views/validation-error-view';
 import { ComponentContext } from '../component-context';
 
 const PADDING_TOP = 20;
 const PADDING_X = 20;
-const LABEL_HEIGHT = 22;
 
 export class ContainerStepComponentView implements ComponentView {
 	public static create(parent: SVGElement, step: ContainerStep, context: ComponentContext): ContainerStepComponentView {
@@ -21,25 +20,30 @@ export class ContainerStepComponentView implements ComponentView {
 		});
 		parent.appendChild(g);
 
-		const sequenceComponent = SequenceComponent.create(g, step.sequence, context);
-		Dom.translate(sequenceComponent.view.g, PADDING_X, PADDING_TOP + LABEL_HEIGHT);
+		const labelView = LabelView.create(g, PADDING_TOP, step.name, 'primary');
+		const component = SequenceComponent.create(g, step.sequence, context);
 
-		const width = sequenceComponent.view.width + PADDING_X * 2;
-		const height = sequenceComponent.view.height + PADDING_TOP + LABEL_HEIGHT;
-		const joinX = sequenceComponent.view.joinX + PADDING_X;
+		const halfOfWidestElement = labelView.width / 2;
+		const offsetLeft = Math.max(halfOfWidestElement - component.view.joinX, 0) + PADDING_X;
+		const offsetRight = Math.max(halfOfWidestElement - (component.view.width - component.view.joinX), 0) + PADDING_X;
 
-		LabelView.create(g, joinX, PADDING_TOP, step.name);
+		const viewWidth = offsetLeft + component.view.width + offsetRight;
+		const viewHeight = PADDING_TOP + LABEL_HEIGHT + component.view.height;
+		const joinX = component.view.joinX + offsetLeft;
+
+		Dom.translate(labelView.g, joinX, 0);
+		Dom.translate(component.view.g, offsetLeft, PADDING_TOP + LABEL_HEIGHT);
 
 		const iconUrl = context.configuration.iconUrlProvider ? context.configuration.iconUrlProvider(step.componentType, step.type) : null;
 		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
 
 		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);
 
-		const regionView = RegionView.create(g, [width], height);
+		const regionView = RegionView.create(g, [viewWidth], viewHeight);
 
-		const validationErrorView = ValidationErrorView.create(g, width, 0);
+		const validationErrorView = ValidationErrorView.create(g, viewWidth, 0);
 
-		return new ContainerStepComponentView(g, width, height, joinX, sequenceComponent, inputView, regionView, validationErrorView);
+		return new ContainerStepComponentView(g, viewWidth, viewHeight, joinX, component, inputView, regionView, validationErrorView);
 	}
 
 	private constructor(
