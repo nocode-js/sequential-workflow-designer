@@ -256,7 +256,8 @@ window.addEventListener('load', () => {
 
 	const redDefinition = {
 		sequence: [
-			Steps.createWait()
+			Steps.createMove(100, 'move slow'),
+			Steps.createRotate(90, 'turn right')
 		],
 		properties: {
 			interval: 400

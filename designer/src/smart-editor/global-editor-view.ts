@@ -4,7 +4,7 @@ import { EditorView } from './editor';
 export class GlobalEditorView implements EditorView {
 	public static create(content: HTMLElement): GlobalEditorView {
 		const se = Dom.element('div', {
-			class: 'sqd-global-editor'
+			class: 'sqd-editor sqd-global-editor'
 		});
 		se.appendChild(content);
 		return new GlobalEditorView(se);

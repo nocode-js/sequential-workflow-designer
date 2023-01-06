@@ -1,6 +1,6 @@
 import { Sequence, Step, SwitchStep } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
-import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent, StepComponentState } from '../component';
+import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent } from '../component';
 import { ComponentContext } from '../component-context';
 import { SwitchStepComponentView } from './switch-step-component-view';
 
@@ -15,7 +15,7 @@ export class SwitchStepComponent implements StepComponent {
 		return new SwitchStepComponent(view, step, parentSequence, view.isInterrupted(), context.configuration);
 	}
 
-	private currentState = StepComponentState.default;
+	private isDisabled = false;
 
 	private constructor(
 		public readonly view: SwitchStepComponentView,
@@ -57,34 +57,25 @@ export class SwitchStepComponent implements StepComponent {
 	}
 
 	public getPlaceholders(result: Placeholder[]) {
-		if (this.currentState !== StepComponentState.dragging) {
+		if (!this.isDisabled) {
 			this.view.sequenceComponents.forEach(sc => sc.getPlaceholders(result));
 		}
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		if (this.currentState !== StepComponentState.dragging) {
+		if (!this.isDisabled) {
 			this.view.sequenceComponents.forEach(s => s.setIsDragging(isDragging));
 		}
 		this.view.setIsDragging(isDragging);
 	}
 
-	public setState(state: StepComponentState) {
-		this.currentState = state;
-		switch (state) {
-			case StepComponentState.default:
-				this.view.setIsSelected(false);
-				this.view.setIsDisabled(false);
-				break;
-			case StepComponentState.selected:
-				this.view.setIsSelected(true);
-				this.view.setIsDisabled(false);
-				break;
-			case StepComponentState.dragging:
-				this.view.setIsSelected(false);
-				this.view.setIsDisabled(true);
-				break;
-		}
+	public setIsDisabled(isDisabled: boolean): void {
+		this.isDisabled = isDisabled;
+		this.view.setIsDisabled(isDisabled);
+	}
+
+	public setIsSelected(isSelected: boolean): void {
+		this.view.setIsSelected(isSelected);
 	}
 
 	public validate(): boolean {

@@ -4,7 +4,7 @@ import { ClickDetails } from '../component';
 
 export class RegionView {
 	public static create(parent: SVGElement, widths: number[], height: number): RegionView {
-		const totalWidth = widths.reduce((c, v) => c + v, 0);
+		const totalWidth = widths.reduce((result, width) => result + width, 0);
 
 		const lines: SVGLineElement[] = [
 			drawLine(parent, 0, 0, totalWidth, 0),

@@ -1,7 +1,7 @@
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { Placeholder, StepComponent, StepComponentState } from '../workspace/component';
+import { Placeholder, StepComponent } from '../workspace/component';
 import { Behavior } from './behavior';
 import { DragStepView } from './drag-step-behavior-view';
 import { PlaceholderFinder } from './placeholder-finder';
@@ -15,7 +15,7 @@ export class DragStepBehavior implements Behavior {
 		designerContext: DesignerContext,
 		componentContext: ComponentContext,
 		step: Step,
-		movingStepComponent?: StepComponent
+		draggedStepComponent?: StepComponent
 	): DragStepBehavior {
 		const view = DragStepView.create(step, designerContext.configuration, componentContext);
 		return new DragStepBehavior(
@@ -24,7 +24,7 @@ export class DragStepBehavior implements Behavior {
 			designerContext.state,
 			step,
 			designerContext.definitionModifier,
-			movingStepComponent
+			draggedStepComponent
 		);
 	}
 
@@ -41,15 +41,15 @@ export class DragStepBehavior implements Behavior {
 		private readonly designerState: DesignerState,
 		private readonly step: Step,
 		private readonly definitionModifier: DefinitionModifier,
-		private readonly movingStepComponent?: StepComponent
+		private readonly draggedStepComponent?: StepComponent
 	) {}
 
 	public onStart(position: Vector) {
 		let offset: Vector;
-		if (this.movingStepComponent) {
-			this.movingStepComponent.setState(StepComponentState.dragging);
+		if (this.draggedStepComponent) {
+			this.draggedStepComponent.setIsDisabled(true);
 
-			const clientPosition = this.movingStepComponent.view.getClientPosition();
+			const clientPosition = this.draggedStepComponent.view.getClientPosition();
 			offset = position.subtract(clientPosition);
 		} else {
 			offset = new Vector(this.view.width / 2, this.view.height / 2);
@@ -98,10 +98,10 @@ export class DragStepBehavior implements Behavior {
 		let modified = false;
 
 		if (!interrupt && this.currentPlaceholder) {
-			if (this.movingStepComponent) {
+			if (this.draggedStepComponent) {
 				modified = this.definitionModifier.tryMove(
-					this.movingStepComponent.parentSequence,
-					this.movingStepComponent.step,
+					this.draggedStepComponent.parentSequence,
+					this.draggedStepComponent.step,
 					this.currentPlaceholder.parentSequence,
 					this.currentPlaceholder.index
 				);
@@ -114,8 +114,8 @@ export class DragStepBehavior implements Behavior {
 			}
 		}
 		if (!modified) {
-			if (this.movingStepComponent) {
-				this.movingStepComponent.setState(StepComponentState.default);
+			if (this.draggedStepComponent) {
+				this.draggedStepComponent.setIsDisabled(false);
 			}
 			if (this.currentPlaceholder) {
 				this.currentPlaceholder.setIsHover(false);

@@ -2,7 +2,7 @@ import { race } from '../core/simple-event-race';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { Component, Placeholder, StepComponent, StepComponentState } from './component';
+import { Component, Placeholder, StepComponent } from './component';
 import { SequencePlaceIndicator } from './start-stop/start-stop-component';
 import { WorkspaceView } from './workspace-view';
 import { DefinitionChangedEvent, DefinitionChangeType, DesignerState, ViewPort } from '../designer-state';
@@ -189,13 +189,13 @@ export class Workspace implements WorkspaceController {
 
 	private trySelectStepComponent(stepId: string | null) {
 		if (this.selectedStepComponent) {
-			this.selectedStepComponent.setState(StepComponentState.default);
+			this.selectedStepComponent.setIsSelected(false);
 			this.selectedStepComponent = null;
 		}
 		if (stepId) {
 			this.selectedStepComponent = this.getRootComponent().findById(stepId);
 			if (this.selectedStepComponent) {
-				this.selectedStepComponent.setState(StepComponentState.selected);
+				this.selectedStepComponent.setIsSelected(true);
 			}
 		}
 	}

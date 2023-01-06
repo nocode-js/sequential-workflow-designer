@@ -7,7 +7,7 @@ describe('SelectStepBehavior', () => {
 		let selectedStepId: string | null = null;
 
 		const step = createStepStub();
-		const stepComponent = jasmine.createSpyObj<StepComponent>('StepComponent', ['setState'], {
+		const stepComponent = jasmine.createSpyObj<StepComponent>('StepComponent', ['setIsDisabled'], {
 			step
 		});
 		const designerContext = createDesignerContextStub();

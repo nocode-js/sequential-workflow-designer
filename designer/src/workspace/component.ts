@@ -54,11 +54,6 @@ export interface StepComponent extends Component {
 	step: Step;
 	parentSequence: Sequence;
 
-	setState(state: StepComponentState): void;
-}
-
-export enum StepComponentState {
-	default,
-	selected,
-	dragging
+	setIsSelected(isSelected: boolean): void;
+	setIsDisabled(isDisabled: boolean): void;
 }

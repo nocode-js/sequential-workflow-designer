@@ -12,20 +12,22 @@ Features:
 * full generic & configurable,
 * light/dark themes,
 * works on modern browsers,
-* works on mobile.
+* works on mobile,
+* the definition is stored as JSON.
 
 🤩 Don't miss [the pro version](https://github.com/nocode-js/sequential-workflow-designer-pro-demo).
 
 ## 👀 Examples
 
-* [📐 Simple Flow](https://nocode-js.github.io/sequential-workflow-designer/examples/simple-flow.html)
+* [⏩ Live Testing](https://nocode-js.github.io/sequential-workflow-designer/examples/live-testing.html)
 * [❎ Fullscreen](https://nocode-js.github.io/sequential-workflow-designer/examples/fullscreen.html)
 * [🌅 Image Filter](https://nocode-js.github.io/sequential-workflow-designer/examples/image-filter.html)
-* [⛅ Light Dark](https://nocode-js.github.io/sequential-workflow-designer/examples/light-dark.html)
-* [⏩ Live Testing](https://nocode-js.github.io/sequential-workflow-designer/examples/live-testing.html)
 * [🔴 Particles](https://nocode-js.github.io/sequential-workflow-designer/examples/particles.html)
+* [⛅ Light Dark](https://nocode-js.github.io/sequential-workflow-designer/examples/light-dark.html)
 * [🤖 Code Generator](https://nocode-js.github.io/sequential-workflow-designer/examples/code-generator.html)
-* [🔩 Stress Test](https://nocode-js.github.io/sequential-workflow-designer/examples/stress-test.html)
+* [📐 Simple Flow](https://nocode-js.github.io/sequential-workflow-designer/examples/simple-flow.html)
+* [🌻 Rendering Test](https://nocode-js.github.io/sequential-workflow-designer/examples/rendering-test.html)
+* [🚄 Stress Test](https://nocode-js.github.io/sequential-workflow-designer/examples/stress-test.html)
 
 Pro:
 
@@ -71,10 +73,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.4.0/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.4.0/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.4.0/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.4.0/dist/index.umd.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0/dist/index.umd.js"></script>
 ```
 
 Call the designer by:
