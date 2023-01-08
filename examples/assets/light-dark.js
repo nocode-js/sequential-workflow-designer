@@ -42,7 +42,7 @@ function install(placeholder, theme) {
 				return './assets/icon-task.svg';
 			},
 			validator: () => {
-				return true;
+				return Math.random() > 0.5;
 			}
 		},
 

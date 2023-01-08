@@ -56,7 +56,7 @@ export class SwitchStepComponentView implements ComponentView {
 		const totalBranchesWidth = branchSizes.reduce((result, s) => result + s.width, 0);
 		const maxBranchesHeight = Math.max(...branchComponents.map(s => s.view.height));
 
-		const halfOfWidestSwitchElement = nameLabelView.width / 2 + PADDING_X * 2;
+		const halfOfWidestSwitchElement = nameLabelView.width / 2 + PADDING_X;
 		const switchOffsetLeft = Math.max(halfOfWidestSwitchElement - joinX, 0);
 		const switchOffsetRight = Math.max(halfOfWidestSwitchElement - (totalBranchesWidth - joinX), 0);
 

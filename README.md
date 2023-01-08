@@ -51,7 +51,7 @@ To import the package:
 import { Designer } from 'sequential-workflow-designer';
 ```
 
-If you use [css-loader](https://webpack.js.org/loaders/css-loader/) or similar, you can add CSS files to your boundle:
+If you use [css-loader](https://webpack.js.org/loaders/css-loader/) or similar, you can add CSS files to your bundle:
 
 ```ts
 import 'sequential-workflow-designer/css/designer.css';
@@ -73,10 +73,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0/dist/index.umd.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.1/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.1/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.1/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.1/dist/index.umd.js"></script>
 ```
 
 Call the designer by:

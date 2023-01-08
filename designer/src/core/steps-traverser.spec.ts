@@ -1,5 +1,5 @@
 import { ContainerStep, Step, SwitchStep, TaskStep } from '../definition';
-import { StepExtensionsResolver } from '../workspace/step-extensions-resolver';
+import { StepExtensionResolver } from '../workspace/step-extension-resolver';
 import { StepsTraverser } from './steps-traverser';
 
 describe('StepsTraverser', () => {
@@ -49,7 +49,7 @@ describe('StepsTraverser', () => {
 	let traverser: StepsTraverser;
 
 	beforeAll(() => {
-		const extensions = StepExtensionsResolver.resolve([]);
+		const extensions = StepExtensionResolver.create([]);
 		traverser = new StepsTraverser(extensions);
 	});
 

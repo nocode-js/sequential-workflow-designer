@@ -1,3 +1,8 @@
+## 0.5.1
+
+* Fixed calculation of label width in the switch step.
+* Added an exclamation mark to the warning icon.
+
 ## 0.5.0
 
 * Fixed losing the disabled state during dragging.
@@ -82,7 +87,7 @@ const config = {
 
 #### Editor's Context
 
-We've changed an approach how the editors should notify the designer about changes in the definition. We've deleted `revalidate()` and `notifiyDefinitionChanged()` methods from the `Designer` class. Instead of this, now editors receive an editor's context.
+We've changed an approach how the editors should notify the designer about changes in the definition. We've deleted `revalidate()` and `notifyDefinitionChanged()` methods from the `Designer` class. Instead of this, now editors receive an editor's context.
 
 ```ts
 interface StepEditorContext {
@@ -111,7 +116,7 @@ const config = {
 };
 ```
 
-#### Type Requirments
+#### Type Requirements
 
 The `type` of a step cannot contain special characters from now. Check [the type validator](src/core/type-validator.ts).
 
