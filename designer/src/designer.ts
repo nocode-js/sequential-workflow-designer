@@ -7,7 +7,7 @@ import { DesignerState } from './designer-state';
 import { DefinitionModifier } from './definition-modifier';
 import { WorkspaceController } from './workspace/workspace-controller';
 import { ComponentContext } from './workspace/component-context';
-import { StepExtensionsResolver } from './workspace/step-extensions-resolver';
+import { StepExtensionResolver } from './workspace/step-extension-resolver';
 import { StepOrName, StepsTraverser } from './core/steps-traverser';
 
 export class Designer {
@@ -19,10 +19,10 @@ export class Designer {
 	 * @returns An instance of a designer.
 	 */
 	public static create(placeholder: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
-		const stepExtensions = StepExtensionsResolver.resolve(configuration.extensions);
+		const stepExtensionResolver = StepExtensionResolver.create(configuration.extensions);
 
-		const designerContext = DesignerContext.create(placeholder, startDefinition, configuration, stepExtensions);
-		const componentContext = ComponentContext.create(configuration.steps, stepExtensions);
+		const designerContext = DesignerContext.create(placeholder, startDefinition, configuration, stepExtensionResolver);
+		const componentContext = ComponentContext.create(configuration.steps, stepExtensionResolver);
 
 		const view = DesignerView.create(placeholder, designerContext, componentContext, designerContext.layoutController, configuration);
 		const designer = new Designer(

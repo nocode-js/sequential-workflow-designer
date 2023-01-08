@@ -162,3 +162,6 @@
 .sqd-theme-dark .sqd-validation-error {
 	fill: #FFA200;
 }
+.sqd-theme-dark .sqd-validation-error-icon-path {
+	fill: #000;
+}

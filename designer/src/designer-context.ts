@@ -7,7 +7,7 @@ import { DesignerConfiguration } from './designer-configuration';
 import { DesignerState } from './designer-state';
 import { HistoryController } from './history-controller';
 import { LayoutController } from './layout-controller';
-import { StepExtensionDictionary } from './workspace/component-context';
+import { StepExtensionResolver } from './workspace/step-extension-resolver';
 import { WorkspaceController, WorkspaceControllerWrapper } from './workspace/workspace-controller';
 
 export class DesignerContext {
@@ -15,7 +15,7 @@ export class DesignerContext {
 		parent: HTMLElement,
 		startDefinition: Definition,
 		configuration: DesignerConfiguration,
-		stepExtensions: StepExtensionDictionary
+		stepExtensionResolver: StepExtensionResolver
 	): DesignerContext {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
@@ -26,7 +26,7 @@ export class DesignerContext {
 		const state = new DesignerState(definition, isReadonly, isMobile, isMobile);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = new BehaviorController();
-		const stepsTraverser = new StepsTraverser(stepExtensions);
+		const stepsTraverser = new StepsTraverser(stepExtensionResolver);
 		const definitionModifier = new DefinitionModifier(stepsTraverser, state, configuration);
 
 		let historyController: HistoryController | undefined = undefined;

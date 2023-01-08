@@ -18,7 +18,7 @@ function embedStylesheet(url) {
 
 const baseUrl = isTestEnv()
 	? '../designer'
-	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.0';
+	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.1';
 
 embedScript(`${baseUrl}/dist/index.umd.js`);
 embedStylesheet(`${baseUrl}/css/designer.css`);
