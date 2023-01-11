@@ -5,10 +5,13 @@
 		"test:single": "yarn workspaces run test:single",
 		"eslint": "yarn workspaces run eslint",
 		"prettier": "yarn workspaces run prettier",
+		"prettier:fix": "yarn workspaces run prettier:fix",
 		"serve": "http-server -c-1 ./"
 	},
 	"workspaces": [
-		"designer"
+		"designer",
+		"react",
+		"demos/react-app"
 	],
 	"devDependencies": {
 		"http-server": "^14.1.1"
