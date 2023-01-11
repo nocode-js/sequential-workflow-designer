@@ -34,5 +34,7 @@ export interface Branches {
 }
 
 export interface Properties {
-	[name: string]: string | number | boolean | null;
+	[name: string]: PropertyValue;
 }
+
+export type PropertyValue = string | number | boolean | null;

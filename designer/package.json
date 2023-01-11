@@ -1,6 +1,7 @@
 {
 	"name": "sequential-workflow-designer",
-	"version": "0.5.1",
+	"description": "Customizable no-code component for building flow-based programming applications.",
+	"version": "0.5.2",
 	"main": "./lib/index.mjs",
 	"types": "./lib/index.d.ts",
 	"repository": {
@@ -39,7 +40,7 @@
 		"karma-jasmine": "^5.1.0",
 		"karma-spec-reporter": "^0.0.36",
 		"karma-typescript": "^5.5.3",
-		"prettier": "^2.8.1",
+		"prettier": "^2.8.2",
 		"rollup": "^3.7.5",
 		"rollup-plugin-dts": "^5.0.0",
 		"rollup-plugin-typescript2": "^0.34.1",

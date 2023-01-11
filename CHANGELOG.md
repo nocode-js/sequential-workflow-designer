@@ -1,3 +1,7 @@
+## 0.5.2
+
+This version introduces the first release of the [Sequential Workflow Designer for React](./react/) package.
+
 ## 0.5.1
 
 * Fixed calculation of label width in the switch step.

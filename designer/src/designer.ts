@@ -33,7 +33,14 @@ export class Designer {
 			designerContext.stepsTraverser
 		);
 		view.bindKeyUp(e => designer.onKeyUp(e));
-		designerContext.state.onDefinitionChanged.subscribe(() => designer.onDefinitionChanged.forward(designerContext.state.definition));
+		view.workspace.onReady.subscribe(() => designer.onReady.forward());
+
+		designerContext.state.onDefinitionChanged.subscribe(() => {
+			setTimeout(() => designer.onDefinitionChanged.forward(designerContext.state.definition));
+		});
+		designerContext.state.onSelectedStepIdChanged.subscribe(() =>
+			designer.onSelectedStepIdChanged.forward(designerContext.state.selectedStepId)
+		);
 		return designer;
 	}
 
@@ -45,45 +52,88 @@ export class Designer {
 		private readonly stepsTraverser: StepsTraverser
 	) {}
 
+	/**
+	 * @description Fires when the designer is initialized and ready to use.
+	 */
+	public readonly onReady = new SimpleEvent<void>();
+
+	/**
+	 * @description Fires when the definition has changed.
+	 */
 	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
 
+	/**
+	 * @description Fires when the selected step has changed.
+	 */
+	public readonly onSelectedStepIdChanged = new SimpleEvent<string | null>();
+
+	/**
+	 * @returns the current definition of the workflow.
+	 */
 	public getDefinition(): Definition {
 		return this.state.definition;
 	}
 
+	/**
+	 * @returns the validation result of the current definition.
+	 */
 	public isValid(): boolean {
 		return this.view.workspace.isValid;
 	}
 
+	/**
+	 * @returns the readonly flag.
+	 */
 	public isReadonly(): boolean {
 		return this.state.isReadonly;
 	}
 
+	/**
+	 * @description Changes the readonly flag.
+	 */
 	public setIsReadonly(isReadonly: boolean) {
 		this.state.setIsReadonly(isReadonly);
 	}
 
+	/**
+	 * @returns current selected step id or `null` if nothing is selected.
+	 */
 	public getSelectedStepId(): string | null {
 		return this.state.selectedStepId;
 	}
 
+	/**
+	 * @description Selects a step by the id.
+	 */
 	public selectStepById(stepId: string) {
 		this.state.setSelectedStepId(stepId);
 	}
 
+	/**
+	 * @description Unselects the selected step.
+	 */
 	public clearSelectedStep() {
 		this.state.setSelectedStepId(null);
 	}
 
+	/**
+	 * @description Moves the view port to the step with the animation.
+	 */
 	public moveViewPortToStep(stepId: string) {
 		const component = this.workspaceController.getComponentByStepId(stepId);
 		this.workspaceController.moveViewPortToStep(component);
 	}
 
+	/**
+	 * @returns parent steps and branch names of the passed step or the passed sequence.
+	 */
 	public getStepParents(needle: Sequence | Step): StepOrName[] {
 		return this.stepsTraverser.getParents(this.state.definition, needle);
 	}
 
+	/**
+	 * @description Destroys the designer and deletes all nodes from the placeholder.
+	 */
 	public destroy() {
 		this.view.destroy();
 	}
@@ -93,8 +143,8 @@ export class Designer {
 		if (!supportedKeys.includes(e.key)) {
 			return;
 		}
-		const ignoreTagNames = ['input', 'textarea'];
-		if (document.activeElement && ignoreTagNames.includes(document.activeElement.tagName.toLowerCase())) {
+		const ignoreTagNames = ['INPUT', 'TEXTAREA'];
+		if (document.activeElement && ignoreTagNames.includes(document.activeElement.tagName)) {
 			return;
 		}
 		if (!this.state.selectedStepId || this.state.isReadonly || this.state.isDragging) {

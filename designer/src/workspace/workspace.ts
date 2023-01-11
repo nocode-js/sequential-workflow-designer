@@ -13,6 +13,7 @@ import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
 import { StepsTraverser } from '../core/steps-traverser';
 import { ViewPortCalculator } from './view-port-calculator';
+import { SimpleEvent } from '../core/simple-event';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, componentContext: ComponentContext): Workspace {
@@ -31,6 +32,7 @@ export class Workspace implements WorkspaceController {
 		setTimeout(() => {
 			workspace.render();
 			workspace.resetViewPort();
+			workspace.onReady.forward();
 		});
 
 		designerContext.setWorkspaceController(workspace);
@@ -53,6 +55,7 @@ export class Workspace implements WorkspaceController {
 		return workspace;
 	}
 
+	public readonly onReady = new SimpleEvent<void>();
 	public isValid = false;
 
 	private selectedStepComponent: StepComponent | null = null;
