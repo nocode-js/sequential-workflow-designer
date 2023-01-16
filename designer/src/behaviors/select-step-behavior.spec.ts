@@ -14,7 +14,7 @@ describe('SelectStepBehavior', () => {
 		const componentContext = createComponentContextStub();
 		designerContext.state.onSelectedStepIdChanged.subscribe(s => (selectedStepId = s));
 
-		const behavior = SelectStepBehavior.create(stepComponent, designerContext, componentContext);
+		const behavior = SelectStepBehavior.create(stepComponent, false, designerContext, componentContext);
 
 		behavior.onStart();
 		behavior.onEnd(false);

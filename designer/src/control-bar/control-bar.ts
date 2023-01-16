@@ -13,11 +13,11 @@ export class ControlBar {
 		view.bindResetButtonClick(() => bar.onResetButtonClicked());
 		view.bindZoomInButtonClick(() => bar.onZoomInButtonClicked());
 		view.bindZoomOutButtonClick(() => bar.onZoomOutButtonClicked());
-		view.bindMoveButtonClick(() => bar.onMoveButtonClicked());
+		view.bindDisableDragButtonClick(() => bar.onMoveButtonClicked());
 		view.bindDeleteButtonClick(() => bar.onDeleteButtonClicked());
 		context.state.onIsReadonlyChanged.subscribe(() => bar.onIsReadonlyChanged());
 		context.state.onSelectedStepIdChanged.subscribe(() => bar.onSelectedStepIdChanged());
-		context.state.onIsMoveModeEnabledChanged.subscribe(i => bar.onIsMoveModeEnabledChanged(i));
+		context.state.onIsDragDisabledChanged.subscribe(i => bar.onIsDragDisabledChanged(i));
 
 		if (context.historyController) {
 			view.bindUndoButtonClick(() => bar.onUndoButtonClicked());
@@ -50,10 +50,7 @@ export class ControlBar {
 	}
 
 	private onMoveButtonClicked() {
-		this.state.toggleIsMoveModeEnabled();
-		if (this.state.selectedStepId) {
-			this.state.setSelectedStepId(null);
-		}
+		this.state.toggleIsDragDisabled();
 	}
 
 	private onUndoButtonClicked() {
@@ -82,8 +79,8 @@ export class ControlBar {
 		this.refreshDeleteButtonVisibility();
 	}
 
-	private onIsMoveModeEnabledChanged(isEnabled: boolean) {
-		this.view.setIsMoveButtonDisabled(!isEnabled);
+	private onIsDragDisabledChanged(isEnabled: boolean) {
+		this.view.setDisableDragButtonDisabled(!isEnabled);
 	}
 
 	private onDefinitionChanged() {

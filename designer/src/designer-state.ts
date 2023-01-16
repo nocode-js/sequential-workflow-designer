@@ -29,7 +29,7 @@ export class DesignerState {
 	public readonly onFolderPathChanged = new SimpleEvent<string[]>();
 	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
 	public readonly onIsDraggingChanged = new SimpleEvent<boolean>();
-	public readonly onIsMoveModeEnabledChanged = new SimpleEvent<boolean>();
+	public readonly onIsDragDisabledChanged = new SimpleEvent<boolean>();
 	public readonly onIsToolboxCollapsedChanged = new SimpleEvent<boolean>();
 	public readonly onIsSmartEditorCollapsedChanged = new SimpleEvent<boolean>();
 	public readonly onDefinitionChanged = new SimpleEvent<DefinitionChangedEvent>();
@@ -41,7 +41,7 @@ export class DesignerState {
 	public selectedStepId: string | null = null;
 	public folderPath: string[] = [];
 	public isDragging = false;
-	public isMoveModeEnabled = false;
+	public isDragDisabled = false;
 
 	public constructor(
 		public definition: Definition,
@@ -99,9 +99,9 @@ export class DesignerState {
 		}
 	}
 
-	public toggleIsMoveModeEnabled() {
-		this.isMoveModeEnabled = !this.isMoveModeEnabled;
-		this.onIsMoveModeEnabledChanged.forward(this.isMoveModeEnabled);
+	public toggleIsDragDisabled() {
+		this.isDragDisabled = !this.isDragDisabled;
+		this.onIsDragDisabledChanged.forward(this.isDragDisabled);
 	}
 
 	public toggleIsToolboxCollapsed() {

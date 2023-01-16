@@ -7,7 +7,7 @@ export class ControlBarView {
 			class: 'sqd-control-bar'
 		});
 
-		const resetButton = createButton(Icons.center, 'Reset');
+		const resetButton = createButton(Icons.center, 'Reset view');
 		root.appendChild(resetButton);
 
 		const zoomInButton = createButton(Icons.zoomIn, 'Zoom in');
@@ -26,9 +26,9 @@ export class ControlBarView {
 			root.appendChild(redoButton);
 		}
 
-		const moveButton = createButton(Icons.move, 'Turn on/off drag and drop');
-		moveButton.classList.add('sqd-disabled');
-		root.appendChild(moveButton);
+		const disableDragButton = createButton(Icons.move, 'Turn on/off drag and drop');
+		disableDragButton.classList.add('sqd-disabled');
+		root.appendChild(disableDragButton);
 
 		const deleteButton = createButton(Icons.delete, 'Delete selected step');
 		deleteButton.classList.add('sqd-delete');
@@ -36,7 +36,7 @@ export class ControlBarView {
 		root.appendChild(deleteButton);
 
 		parent.appendChild(root);
-		return new ControlBarView(resetButton, zoomInButton, zoomOutButton, undoButton, redoButton, moveButton, deleteButton);
+		return new ControlBarView(resetButton, zoomInButton, zoomOutButton, undoButton, redoButton, disableDragButton, deleteButton);
 	}
 
 	private constructor(
@@ -45,7 +45,7 @@ export class ControlBarView {
 		private readonly zoomOutButton: HTMLElement,
 		private readonly undoButton: HTMLElement | null,
 		private readonly redoButton: HTMLElement | null,
-		private readonly moveButton: HTMLElement,
+		private readonly disableDragButton: HTMLElement,
 		private readonly deleteButton: HTMLElement
 	) {}
 
@@ -75,8 +75,8 @@ export class ControlBarView {
 		bindClick(this.redoButton, handler);
 	}
 
-	public bindMoveButtonClick(handler: () => void) {
-		bindClick(this.moveButton, handler);
+	public bindDisableDragButtonClick(handler: () => void) {
+		bindClick(this.disableDragButton, handler);
 	}
 
 	public bindDeleteButtonClick(handler: () => void) {
@@ -87,8 +87,8 @@ export class ControlBarView {
 		Dom.toggleClass(this.deleteButton, isHidden, 'sqd-hidden');
 	}
 
-	public setIsMoveButtonDisabled(isDisabled: boolean) {
-		Dom.toggleClass(this.moveButton, isDisabled, 'sqd-disabled');
+	public setDisableDragButtonDisabled(isDisabled: boolean) {
+		Dom.toggleClass(this.disableDragButton, isDisabled, 'sqd-disabled');
 	}
 
 	public setUndoButtonDisabled(isDisabled: boolean) {

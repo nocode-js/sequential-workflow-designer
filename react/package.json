@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer-react",
 	"description": "React wrapper for Sequential Workflow Designer component.",
-	"version": "0.5.2",
+	"version": "0.5.3",
 	"main": "./lib/index.js",
 	"types": "./lib/index.d.ts",
 	"repository": {
@@ -30,7 +30,7 @@
 	"dependencies": {
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"sequential-workflow-designer": "^0.5.2"
+		"sequential-workflow-designer": "^0.5.3"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
