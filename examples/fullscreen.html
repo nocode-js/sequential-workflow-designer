@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>❎ Fullscreen - Sequential Workflow Designer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<link rel="icon" href="data:,">
 
 	<link rel="stylesheet" href="./assets/common.css">
 	<style>
@@ -14,8 +15,11 @@
 </head>
 <body>
 	<header class="title-bar">
-		<div class="column">
+		<div class="column flex-1 hidden-mobile">
 			<h1>❎ Fullscreen Example</h1>
+		</div>
+		<div class="column">
+			<button id="changeReadonlyButton"></button>
 		</div>
 		<div class="column text-end flex-1">
 			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>

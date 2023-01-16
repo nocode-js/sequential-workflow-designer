@@ -48,6 +48,10 @@ function toolboxGroup(name) {
 	};
 }
 
+function reloadChangeReadonlyButtonText() {
+	changeReadonlyButton.innerText = 'Readonly: ' + (designer.isReadonly() ? 'ON' : 'OFF');
+}
+
 function appendCheckbox(root, label, isChecked, onClick) {
 	const item = document.createElement('div');
 	item.innerHTML = '<div><h5></h5> <input type="checkbox" /></div>';
@@ -62,6 +66,8 @@ function appendCheckbox(root, label, isChecked, onClick) {
 }
 
 let designer;
+let changeReadonlyButton;
+
 const configuration = {
 	undoStackSize: 20,
 
@@ -135,3 +141,10 @@ designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefiniti
 designer.onDefinitionChanged.subscribe((newDefinition) => {
 	console.log('the definition has changed', newDefinition);
 });
+
+changeReadonlyButton = document.getElementById('changeReadonlyButton');
+changeReadonlyButton.addEventListener('click', () => {
+	designer.setIsReadonly(!designer.isReadonly());
+	reloadChangeReadonlyButtonText();
+});
+reloadChangeReadonlyButtonText();

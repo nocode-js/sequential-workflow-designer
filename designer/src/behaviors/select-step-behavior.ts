@@ -5,18 +5,21 @@ import { StepComponent } from '../workspace/component';
 import { ComponentContext } from '../workspace/component-context';
 import { Behavior } from './behavior';
 import { DragStepBehavior } from './drag-step-behavior';
+import { MoveViewPortBehavior } from './move-view-port-behavior';
 
 export class SelectStepBehavior implements Behavior {
 	public static create(
 		pressedStepComponent: StepComponent,
+		isDragDisabled: boolean,
 		designerContext: DesignerContext,
 		componentContext: ComponentContext
 	): SelectStepBehavior {
-		return new SelectStepBehavior(pressedStepComponent, designerContext, componentContext, designerContext.state);
+		return new SelectStepBehavior(pressedStepComponent, isDragDisabled, designerContext, componentContext, designerContext.state);
 	}
 
 	private constructor(
 		private readonly pressedStepComponent: StepComponent,
+		private readonly isDragDisabled: boolean,
 		private readonly designerContext: DesignerContext,
 		private readonly componentContext: ComponentContext,
 		private readonly state: DesignerState
@@ -27,14 +30,19 @@ export class SelectStepBehavior implements Behavior {
 	}
 
 	public onMove(delta: Vector): Behavior | void {
-		if (!this.state.isReadonly && delta.distance() > 2) {
-			this.state.setSelectedStepId(null);
-			return DragStepBehavior.create(
-				this.designerContext,
-				this.componentContext,
-				this.pressedStepComponent.step,
-				this.pressedStepComponent
-			);
+		if (delta.distance() > 2) {
+			const canDrag = !this.state.isReadonly && !this.isDragDisabled;
+			if (canDrag) {
+				this.state.setSelectedStepId(null);
+				return DragStepBehavior.create(
+					this.designerContext,
+					this.componentContext,
+					this.pressedStepComponent.step,
+					this.pressedStepComponent
+				);
+			} else {
+				return MoveViewPortBehavior.create(this.state, false);
+			}
 		}
 	}
 

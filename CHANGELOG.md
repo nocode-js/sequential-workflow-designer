@@ -1,3 +1,8 @@
+## 0.5.3
+
+* The disabled drag mode doesn't block the step selecting anymore.
+* Replaced custom shapes by icons from the `Icons` class for `StartStopComponentView`.
+
 ## 0.5.2
 
 This version introduces the first release of the [Sequential Workflow Designer for React](./react/) package.

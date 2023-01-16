@@ -34,7 +34,7 @@ export class RectPlaceholderView {
 		g.appendChild(rect);
 
 		if (direction) {
-			const iconD = direction === RectPlaceholderDirection.in ? Icons.dirIn : Icons.dirOut;
+			const iconD = direction === RectPlaceholderDirection.in ? Icons.folderIn : Icons.folderOut;
 			const icon = Icons.appendPath(g, 'sqd-placeholder-icon-path', iconD, ICON_SIZE);
 			Dom.translate(icon, (width - ICON_SIZE) / 2, (height - ICON_SIZE) / 2);
 		}

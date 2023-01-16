@@ -1,4 +1,4 @@
-![Sequential Workflow Designer for React](../.github/cover.png)
+![Sequential Workflow Designer for React](https://raw.githubusercontent.com/nocode-js/sequential-workflow-designer/main/.github/cover.png)
 
 # Sequential Workflow Designer for React
 
@@ -106,7 +106,7 @@ At the end attach the designer.
   />
 ```
 
-Check the [demo project](../demos/react-app/).
+Check the [demo project](https://github.com/nocode-js/sequential-workflow-designer/tree/main/demos/react-app).
 
 ## 💡 License
 

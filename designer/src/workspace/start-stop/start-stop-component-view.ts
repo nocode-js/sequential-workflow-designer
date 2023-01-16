@@ -1,3 +1,4 @@
+import { Icons } from '../../core';
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
@@ -7,9 +8,16 @@ import { ComponentContext } from '../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
 
 const SIZE = 30;
+const DEFAULT_ICON_SIZE = 22;
+const FOLDER_ICON_SIZE = 18;
 
 export class StartStopComponentView implements ComponentView {
-	public static create(parent: SVGElement, sequence: Sequence, placeholders: boolean, context: ComponentContext): StartStopComponentView {
+	public static create(
+		parent: SVGElement,
+		sequence: Sequence,
+		isInsideFolder: boolean,
+		context: ComponentContext
+	): StartStopComponentView {
 		const g = Dom.svg('g', {
 			class: 'sqd-step-start-stop'
 		});
@@ -21,19 +29,20 @@ export class StartStopComponentView implements ComponentView {
 		const x = view.joinX - SIZE / 2;
 		const endY = SIZE + view.height;
 
-		const startCircle = createCircle(true);
+		const iconSize = isInsideFolder ? FOLDER_ICON_SIZE : DEFAULT_ICON_SIZE;
+		const startCircle = createCircle(isInsideFolder ? Icons.folder : Icons.play, iconSize);
 		Dom.translate(startCircle, x, 0);
 		g.appendChild(startCircle);
 
 		Dom.translate(view.g, 0, SIZE);
 
-		const endCircle = createCircle(false);
+		const endCircle = createCircle(isInsideFolder ? Icons.folder : Icons.stop, iconSize);
 		Dom.translate(endCircle, x, endY);
 		g.appendChild(endCircle);
 
 		let startPlaceholderView: RectPlaceholderView | null = null;
 		let endPlaceholderView: RectPlaceholderView | null = null;
-		if (placeholders) {
+		if (isInsideFolder) {
 			startPlaceholderView = RectPlaceholderView.create(g, x, 0, SIZE, SIZE, RectPlaceholderDirection.out);
 			endPlaceholderView = RectPlaceholderView.create(g, x, endY, SIZE, SIZE, RectPlaceholderDirection.out);
 		}
@@ -68,38 +77,20 @@ export class StartStopComponentView implements ComponentView {
 	}
 }
 
-function createCircle(isStart: boolean): SVGGElement {
+function createCircle(d: string, iconSize: number): SVGGElement {
+	const r = SIZE / 2;
 	const circle = Dom.svg('circle', {
 		class: 'sqd-step-start-stop-circle',
-		cx: SIZE / 2,
-		cy: SIZE / 2,
-		r: SIZE / 2
+		cx: r,
+		cy: r,
+		r: r
 	});
 
 	const g = Dom.svg('g');
 	g.appendChild(circle);
 
-	const s = SIZE * 0.5;
-	const m = (SIZE - s) / 2;
-
-	if (isStart) {
-		const start = Dom.svg('path', {
-			class: 'sqd-step-start-stop-icon',
-			transform: `translate(${m}, ${m})`,
-			d: `M ${s * 0.2} 0 L ${s} ${s / 2} L ${s * 0.2} ${s} Z`
-		});
-		g.appendChild(start);
-	} else {
-		const stop = Dom.svg('rect', {
-			class: 'sqd-step-start-stop-icon',
-			x: m,
-			y: m,
-			width: s,
-			height: s,
-			rx: 4,
-			ry: 4
-		});
-		g.appendChild(stop);
-	}
+	const offset = (SIZE - iconSize) / 2;
+	const icon = Icons.appendPath(g, 'sqd-step-start-stop-icon', d, iconSize);
+	Dom.translate(icon, offset, offset);
 	return g;
 }
