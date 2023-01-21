@@ -1,0 +1,30 @@
+{
+	"name": "sequential-workflow-designer-angular",
+	"description": "Angular wrapper for Sequential Workflow Designer component.",
+	"version": "0.5.4",
+	"author": "N4NO.com",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nocode-js/sequential-workflow-designer.git"
+	},
+	"peerDependencies": {
+		"@angular/common": "^15.1.0",
+		"@angular/core": "^15.1.0",
+		"sequential-workflow-designer": "^0.5.4"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"keywords": [
+		"workflow",
+		"designer",
+		"builder",
+		"nocode",
+		"lowcode",
+		"flow",
+		"angular",
+		"angularjs"
+	]
+}

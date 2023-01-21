@@ -19,13 +19,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - name: Install
-        run: yarn install
-      - name: Build
-        run: yarn build
-      - name: Test
-        run: yarn test:single
-      - name: Eslint
-        run: yarn eslint
-      - name: Prettier
-        run: yarn prettier
+      - name: Packages
+        run: bash .github/workflows/packages.sh
+      - name: Demos
+        run: bash .github/workflows/demos.sh

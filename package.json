@@ -11,7 +11,7 @@
 	"workspaces": [
 		"designer",
 		"react",
-		"demos/react-app"
+		"angular"
 	],
 	"devDependencies": {
 		"http-server": "^14.1.1"

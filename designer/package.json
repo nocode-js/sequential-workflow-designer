@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer",
 	"description": "Customizable no-code component for building flow-based programming applications.",
-	"version": "0.5.3",
+	"version": "0.5.4",
 	"main": "./lib/index.mjs",
 	"types": "./lib/index.d.ts",
 	"repository": {

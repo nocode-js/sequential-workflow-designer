@@ -12,13 +12,15 @@ Install the following packages by [NPM](https://www.npmjs.com/) command:
 
 `npm i sequential-workflow-designer sequential-workflow-designer-react`
 
-Import CSS files:
+Add CSS files to your app:
 
 ```tsx
 import 'sequential-workflow-designer/css/designer.css';
 import 'sequential-workflow-designer/css/designer-light.css';
 import 'sequential-workflow-designer/css/designer-dark.css';
 ```
+
+## 🎬 Usage
 
 Import types:
 
