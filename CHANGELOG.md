@@ -1,3 +1,7 @@
+## 0.5.4
+
+This version introduces the first release of the [Sequential Workflow Designer for Angular](./angular/designer/) package.
+
 ## 0.5.3
 
 * The disabled drag mode doesn't block the step selecting anymore.

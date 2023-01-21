@@ -7,20 +7,36 @@ if (!version || !(/^\d+\.\d+\.\d+$/.test(version))) {
 	return;
 }
 
+const dependencies = [
+	'sequential-workflow-designer',
+	'sequential-workflow-designer-react',
+	'sequential-workflow-designer-angular'
+];
+
 function resolvePath(filePath) {
 	return path.join(__dirname, '..', filePath);
 }
 
-function updatePackage(filePath) {
+function updateDependencies(deps) {
+	if (!deps) {
+		return;
+	}
+	for (const name in deps) {
+		if (dependencies.includes(name)) {
+			deps[name] = `^${version}`;
+		}
+	}
+}
+
+function updatePackage(filePath, setVersion) {
 	filePath = resolvePath(filePath);
 	const json = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
-	json['version'] = version;
-	for (const dependency in json['dependencies']) {
-		if (dependency === 'sequential-workflow-designer') {
-			json['dependencies'][dependency] = `^${version}`;
-		}
+	if (setVersion) {
+		json['version'] = version;
 	}
+	updateDependencies(json['dependencies']);
+	updateDependencies(json['peerDependencies']);
 
 	fs.writeFileSync(filePath, JSON.stringify(json, null, '\t'), 'utf-8');
 }
@@ -37,8 +53,10 @@ function updateJsdelivrUrl(filePath) {
 	fs.writeFileSync(filePath, text, 'utf-8');
 }
 
-updatePackage('designer/package.json');
-updatePackage('react/package.json');
-updatePackage('demos/react-app/package.json');
+updatePackage('designer/package.json', true);
+updatePackage('react/package.json', true);
+updatePackage('angular/designer/package.json', true);
+updatePackage('demos/react-app/package.json', false);
+updatePackage('demos/angular-app/package.json', false);
 updateJsdelivrUrl('README.md');
 updateJsdelivrUrl('examples/assets/lib.js');

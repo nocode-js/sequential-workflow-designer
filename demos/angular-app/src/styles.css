@@ -1,0 +1,12 @@
+body {
+	font: 13px/1.3em Arial, Verdana, Serif;
+}
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.sqd-designer-angular {
+	width: 100vw;
+	height: 50vh;
+}

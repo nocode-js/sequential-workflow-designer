@@ -1,0 +1,7 @@
+{
+	"$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+	"dest": "../designer-dist",
+	"lib": {
+		"entryFile": "src/public-api.ts"
+	}
+}
