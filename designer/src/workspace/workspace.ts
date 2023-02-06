@@ -6,26 +6,29 @@ import { Component, Placeholder, StepComponent } from './component';
 import { SequencePlaceIndicator } from './start-stop/start-stop-component';
 import { WorkspaceView } from './workspace-view';
 import { DefinitionChangedEvent, DefinitionChangeType, DesignerState, ViewPort } from '../designer-state';
-import { ViewPortAnimator } from './view-port-animator';
+import { ViewPortAnimator } from './view-port/view-port-animator';
 import { WorkspaceController } from './workspace-controller';
-import { ComponentContext } from './component-context';
 import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
 import { StepsTraverser } from '../core/steps-traverser';
-import { ViewPortCalculator } from './view-port-calculator';
+import { CenteredViewPortCalculator } from './view-port/centered-view-port-calculator';
 import { SimpleEvent } from '../core/simple-event';
+import { QuantifiedScaleViewPortCalculator } from './view-port';
+import { WheelController } from '../designer-extension';
 
 export class Workspace implements WorkspaceController {
-	public static create(parent: HTMLElement, designerContext: DesignerContext, componentContext: ComponentContext): Workspace {
-		const view = WorkspaceView.create(parent, componentContext);
+	public static create(parent: HTMLElement, designerContext: DesignerContext): Workspace {
+		const view = WorkspaceView.create(parent, designerContext.componentContext);
 
 		const viewPortAnimator = new ViewPortAnimator(designerContext.state);
-		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext, componentContext, designerContext.state);
+		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext, designerContext.state);
+		const wheelController = designerContext.services.wheelController.create(designerContext, view);
 		const workspace = new Workspace(
 			view,
 			designerContext.stepsTraverser,
 			designerContext.state,
 			designerContext.behaviorController,
+			wheelController,
 			clickBehaviorResolver,
 			viewPortAnimator
 		);
@@ -50,8 +53,8 @@ export class Workspace implements WorkspaceController {
 		});
 
 		view.bindClick((p, t, b) => workspace.onClick(p, t, b));
-		view.bindContextMenu(e => workspace.onContextMenu(e));
 		view.bindWheel(e => workspace.onWheel(e));
+		view.bindContextMenu(e => workspace.onContextMenu(e));
 		return workspace;
 	}
 
@@ -65,6 +68,7 @@ export class Workspace implements WorkspaceController {
 		private readonly stepsTraverser: StepsTraverser,
 		private readonly state: DesignerState,
 		private readonly behaviorController: BehaviorController,
+		private readonly wheelController: WheelController,
 		private readonly clickBehaviorResolver: ClickBehaviorResolver,
 		private readonly viewPortAnimator: ViewPortAnimator
 	) {}
@@ -110,12 +114,12 @@ export class Workspace implements WorkspaceController {
 	public resetViewPort() {
 		const rcv = this.getRootComponent().view;
 		const clientCanvasSize = this.view.getClientCanvasSize();
-		const newViewPort = ViewPortCalculator.center(clientCanvasSize, rcv);
+		const newViewPort = CenteredViewPortCalculator.calculate(clientCanvasSize, rcv);
 		this.state.setViewPort(newViewPort);
 	}
 
 	public zoom(direction: boolean): void {
-		const newViewPort = ViewPortCalculator.zoom(this.state.viewPort, direction);
+		const newViewPort = QuantifiedScaleViewPortCalculator.zoom(this.state.viewPort, direction);
 		this.state.setViewPort(newViewPort);
 	}
 
@@ -133,6 +137,7 @@ export class Workspace implements WorkspaceController {
 	}
 
 	public destroy() {
+		this.wheelController.destroy();
 		this.view.destroy();
 	}
 
@@ -143,6 +148,7 @@ export class Workspace implements WorkspaceController {
 	private onClick(position: Vector, target: Element, buttonIndex: number) {
 		const isPrimaryButton = buttonIndex === 0;
 		const isMiddleButton = buttonIndex === 1;
+
 		if (isPrimaryButton || isMiddleButton) {
 			const rootComponent = this.getRootComponent();
 			const behavior = this.clickBehaviorResolver.resolve(rootComponent, target, position, isMiddleButton);
@@ -150,13 +156,15 @@ export class Workspace implements WorkspaceController {
 		}
 	}
 
-	private onContextMenu(e: MouseEvent) {
+	private onWheel(e: WheelEvent) {
 		e.preventDefault();
+		e.stopPropagation();
+
+		this.wheelController.onWheel(e);
 	}
 
-	private onWheel(e: WheelEvent) {
-		const newViewPort = ViewPortCalculator.zoomByWheel(this.state.viewPort, e, this.view.getClientPosition());
-		this.state.setViewPort(newViewPort);
+	private onContextMenu(e: MouseEvent) {
+		e.preventDefault();
 	}
 
 	private onIsDraggingChanged(isDragging: boolean) {

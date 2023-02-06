@@ -1,5 +1,5 @@
 import { SwitchStep } from '../../definition';
-import { StepChildren, StepChildrenType, StepExtension } from '../../designer-configuration';
+import { StepChildren, StepChildrenType, StepExtension } from '../../designer-extension';
 import { SwitchStepComponent } from './switch-step-component';
 
 export class SwitchStepExtension implements StepExtension<SwitchStep> {

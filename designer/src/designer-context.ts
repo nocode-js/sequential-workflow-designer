@@ -7,6 +7,8 @@ import { DesignerConfiguration } from './designer-configuration';
 import { DesignerState } from './designer-state';
 import { HistoryController } from './history-controller';
 import { LayoutController } from './layout-controller';
+import { Services } from './services';
+import { ComponentContext } from './workspace';
 import { StepExtensionResolver } from './workspace/step-extension-resolver';
 import { WorkspaceController, WorkspaceControllerWrapper } from './workspace/workspace-controller';
 
@@ -15,7 +17,7 @@ export class DesignerContext {
 		parent: HTMLElement,
 		startDefinition: Definition,
 		configuration: DesignerConfiguration,
-		stepExtensionResolver: StepExtensionResolver
+		services: Services
 	): DesignerContext {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
@@ -26,6 +28,7 @@ export class DesignerContext {
 		const state = new DesignerState(definition, isReadonly, isMobile, isMobile);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = new BehaviorController();
+		const stepExtensionResolver = StepExtensionResolver.create(services);
 		const stepsTraverser = new StepsTraverser(stepExtensionResolver);
 		const definitionModifier = new DefinitionModifier(stepsTraverser, state, configuration);
 
@@ -34,27 +37,33 @@ export class DesignerContext {
 			historyController = HistoryController.create(state, definitionModifier, configuration);
 		}
 
+		const componentContext = ComponentContext.create(configuration.steps, stepExtensionResolver);
+
 		return new DesignerContext(
 			state,
-			stepsTraverser,
 			configuration,
+			services,
+			componentContext,
+			stepsTraverser,
+			definitionModifier,
 			layoutController,
 			workspaceController,
 			behaviorController,
-			definitionModifier,
 			historyController
 		);
 	}
 
 	public constructor(
 		public readonly state: DesignerState,
-		public readonly stepsTraverser: StepsTraverser,
 		public readonly configuration: DesignerConfiguration,
+		public readonly services: Services,
+		public readonly componentContext: ComponentContext,
+		public readonly stepsTraverser: StepsTraverser,
+		public readonly definitionModifier: DefinitionModifier,
 		public readonly layoutController: LayoutController,
 		public readonly workspaceController: WorkspaceControllerWrapper,
 		public readonly behaviorController: BehaviorController,
-		public readonly definitionModifier: DefinitionModifier,
-		public readonly historyController?: HistoryController
+		public readonly historyController: HistoryController | undefined
 	) {}
 
 	public setWorkspaceController(controller: WorkspaceController) {

@@ -2,12 +2,11 @@ import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
 import { ToolboxGroupConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
-import { ComponentContext } from '../workspace/component-context';
 import { ScrollBoxView } from './scrollbox-view';
 import { ToolboxItem } from './toolbox-item';
 
 export class ToolboxView {
-	public static create(parent: HTMLElement, designerContext: DesignerContext, componentContext: ComponentContext): ToolboxView {
+	public static create(parent: HTMLElement, designerContext: DesignerContext): ToolboxView {
 		const root = Dom.element('div', {
 			class: 'sqd-toolbox'
 		});
@@ -37,7 +36,7 @@ export class ToolboxView {
 		parent.appendChild(root);
 
 		const scrollBoxView = ScrollBoxView.create(body, parent);
-		return new ToolboxView(header, body, filterInput, scrollBoxView, designerContext, componentContext);
+		return new ToolboxView(header, body, filterInput, scrollBoxView, designerContext);
 	}
 
 	private headerToggleIcon?: SVGElement;
@@ -47,8 +46,7 @@ export class ToolboxView {
 		private readonly body: HTMLElement,
 		private readonly filterInput: HTMLInputElement,
 		private readonly scrollBoxView: ScrollBoxView,
-		private readonly designerContext: DesignerContext,
-		private readonly componentContext: ComponentContext
+		private readonly designerContext: DesignerContext
 	) {}
 
 	public bindToggleIsCollapsedClick(handler: () => void) {
@@ -91,7 +89,7 @@ export class ToolboxView {
 			groupTitle.innerText = group.name;
 			list.appendChild(groupTitle);
 
-			group.steps.forEach(s => ToolboxItem.create(list, s, this.designerContext, this.componentContext));
+			group.steps.forEach(s => ToolboxItem.create(list, s, this.designerContext));
 		});
 		this.scrollBoxView.setContent(list);
 	}

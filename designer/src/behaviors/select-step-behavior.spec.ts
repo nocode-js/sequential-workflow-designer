@@ -1,4 +1,4 @@
-import { createComponentContextStub, createDesignerContextStub, createStepStub } from '../test-tools/stubs';
+import { createDesignerContextStub, createStepStub } from '../test-tools/stubs';
 import { StepComponent } from '../workspace/component';
 import { SelectStepBehavior } from './select-step-behavior';
 
@@ -11,10 +11,9 @@ describe('SelectStepBehavior', () => {
 			step
 		});
 		const designerContext = createDesignerContextStub();
-		const componentContext = createComponentContextStub();
 		designerContext.state.onSelectedStepIdChanged.subscribe(s => (selectedStepId = s));
 
-		const behavior = SelectStepBehavior.create(stepComponent, false, designerContext, componentContext);
+		const behavior = SelectStepBehavior.create(stepComponent, false, designerContext);
 
 		behavior.onStart();
 		behavior.onEnd(false);

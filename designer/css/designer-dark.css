@@ -49,25 +49,6 @@
 	background: #D3D3D3;
 }
 
-/* dark > .sqd-path-bar */
-
-.sqd-theme-dark .sqd-path-bar {
-	background: #3F3F3F;
-	color: #FFF;
-}
-.sqd-theme-dark .sqd-path-bar-item:hover {
-	border-color: #D3D3D3;
-}
-.sqd-theme-dark .sqd-path-bar-reset-button {
-	border: 1px solid transparent;
-}
-.sqd-theme-dark .sqd-path-bar-reset-button .sqd-icon-path {
-	fill: #FFF;
-}
-.sqd-theme-dark .sqd-path-bar-reset-button:hover {
-	border-color: #D3D3D3;
-}
-
 /* dark > .sqd-workspace */
 
 .sqd-theme-dark .sqd-grid-path {

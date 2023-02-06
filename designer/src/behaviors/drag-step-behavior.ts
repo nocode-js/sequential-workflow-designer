@@ -8,16 +8,10 @@ import { PlaceholderFinder } from './placeholder-finder';
 import { DesignerState } from '../designer-state';
 import { DefinitionModifier } from '../definition-modifier';
 import { WorkspaceController } from '../workspace/workspace-controller';
-import { ComponentContext } from '../workspace/component-context';
 
 export class DragStepBehavior implements Behavior {
-	public static create(
-		designerContext: DesignerContext,
-		componentContext: ComponentContext,
-		step: Step,
-		draggedStepComponent?: StepComponent
-	): DragStepBehavior {
-		const view = DragStepView.create(step, designerContext.configuration, componentContext);
+	public static create(designerContext: DesignerContext, step: Step, draggedStepComponent?: StepComponent): DragStepBehavior {
+		const view = DragStepView.create(step, designerContext.configuration, designerContext.componentContext);
 		return new DragStepBehavior(
 			view,
 			designerContext.workspaceController,

@@ -1,6 +1,6 @@
-import { animate, Animation } from '../core/animation';
-import { Vector } from '../core/vector';
-import { DesignerState } from '../designer-state';
+import { animate, Animation } from '../../core/animation';
+import { Vector } from '../../core/vector';
+import { DesignerState } from '../../designer-state';
 
 export class ViewPortAnimator {
 	private animation?: Animation;

@@ -35,6 +35,7 @@ Pro:
 * [🤩 Pro Components](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/examples/webpack/public/pro-components.html)
 * [👈 Goto](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/examples/webpack/public/goto.html)
 * [📁 Folders](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/examples/webpack/public/folders.html)
+* [⭕ Wheel Mode](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/examples/webpack/public/wheel-mode.html)
 
 ## 🚀 Installation
 
@@ -74,10 +75,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.4/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.4/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.4/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.5.4/dist/index.umd.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/dist/index.umd.js"></script>
 ```
 
 Call the designer by:

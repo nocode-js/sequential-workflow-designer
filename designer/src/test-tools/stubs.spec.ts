@@ -1,4 +1,10 @@
-import { createDefinitionStub, createDesignerConfigurationStub, createDesignerContextStub, createStepStub } from './stubs';
+import {
+	createDefinitionStub,
+	createDesignerConfigurationStub,
+	createDesignerContextStub,
+	createComponentContextStub,
+	createStepStub
+} from './stubs';
 
 describe('stubs', () => {
 	it('createDesignerConfigurationStub() returns an instance', () => {
@@ -18,6 +24,11 @@ describe('stubs', () => {
 
 	it('createDesignerContextStub() returns an instance', () => {
 		const context = createDesignerContextStub();
+		expect(context).toBeDefined();
+	});
+
+	it('createComponentContextStub() returns an instance', () => {
+		const context = createComponentContextStub();
 		expect(context).toBeDefined();
 	});
 });

@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer-angular",
 	"description": "Angular wrapper for Sequential Workflow Designer component.",
-	"version": "0.5.4",
+	"version": "0.6.0",
 	"author": "N4NO.com",
 	"license": "MIT",
 	"repository": {
@@ -11,7 +11,7 @@
 	"peerDependencies": {
 		"@angular/common": "^15.1.0",
 		"@angular/core": "^15.1.0",
-		"sequential-workflow-designer": "^0.5.4"
+		"sequential-workflow-designer": "^0.6.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"
