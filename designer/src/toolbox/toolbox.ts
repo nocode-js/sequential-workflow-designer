@@ -1,12 +1,12 @@
 import { DesignerConfiguration, ToolboxGroupConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
+import { UiComponent } from '../designer-extension';
 import { DesignerState } from '../designer-state';
-import { ComponentContext } from '../workspace/component-context';
 import { ToolboxView } from './toolbox-view';
 
-export class Toolbox {
-	public static create(parent: HTMLElement, designerContext: DesignerContext, componentContext: ComponentContext): Toolbox {
-		const view = ToolboxView.create(parent, designerContext, componentContext);
+export class Toolbox implements UiComponent {
+	public static create(parent: HTMLElement, designerContext: DesignerContext): Toolbox {
+		const view = ToolboxView.create(parent, designerContext);
 		view.setIsCollapsed(designerContext.state.isToolboxCollapsed);
 
 		const toolbox = new Toolbox(view, designerContext.state, designerContext.configuration);

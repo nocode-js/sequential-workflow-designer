@@ -1,5 +1,5 @@
 import { ContainerStep } from '../../definition';
-import { StepChildren, StepChildrenType, StepExtension } from '../../designer-configuration';
+import { StepChildren, StepChildrenType, StepExtension } from '../../designer-extension';
 import { ContainerStepComponent } from './container-step-component';
 
 export class ContainerStepExtension implements StepExtension<ContainerStep> {

@@ -1,4 +1,5 @@
 import { SimpleEvent } from './core/simple-event';
+import { isElementAttached } from './core/is-element-attached';
 import { Definition, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
@@ -6,25 +7,35 @@ import { DesignerView } from './designer-view';
 import { DesignerState } from './designer-state';
 import { DefinitionModifier } from './definition-modifier';
 import { WorkspaceController } from './workspace/workspace-controller';
-import { ComponentContext } from './workspace/component-context';
-import { StepExtensionResolver } from './workspace/step-extension-resolver';
 import { StepOrName, StepsTraverser } from './core/steps-traverser';
+import { ServicesResolver } from './services';
 
 export class Designer {
 	/**
 	 * Creates a designer.
-	 * @param placeholder Placeholder where a designer will be attached.
+	 * @param placeholder Placeholder where the designer will be attached.
 	 * @param startDefinition Start definition of a flow.
 	 * @param configuration Designer's configuration.
-	 * @returns An instance of a designer.
+	 * @returns An instance of the designer.
 	 */
 	public static create(placeholder: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
-		const stepExtensionResolver = StepExtensionResolver.create(configuration.extensions);
+		if (!placeholder) {
+			throw new Error('Placeholder is not set');
+		}
+		if (!isElementAttached(placeholder)) {
+			throw new Error('Placeholder is not attached to the DOM');
+		}
+		if (!startDefinition) {
+			throw new Error('Start definition is not set');
+		}
+		if (!configuration) {
+			throw new Error('Configuration is not set');
+		}
 
-		const designerContext = DesignerContext.create(placeholder, startDefinition, configuration, stepExtensionResolver);
-		const componentContext = ComponentContext.create(configuration.steps, stepExtensionResolver);
+		const services = ServicesResolver.resolve(configuration.extensions);
+		const designerContext = DesignerContext.create(placeholder, startDefinition, configuration, services);
 
-		const view = DesignerView.create(placeholder, designerContext, componentContext, designerContext.layoutController, configuration);
+		const view = DesignerView.create(placeholder, designerContext, configuration);
 		const designer = new Designer(
 			view,
 			designerContext.state,

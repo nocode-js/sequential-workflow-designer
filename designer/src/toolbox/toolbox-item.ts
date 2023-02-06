@@ -9,20 +9,14 @@ import { Step } from '../definition';
 import { StepDefinition } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
 import { DesignerState } from '../designer-state';
-import { ComponentContext } from '../workspace/component-context';
 import { ToolboxItemView } from './toolbox-item-view';
 
 export class ToolboxItem {
-	public static create(
-		parent: HTMLElement,
-		step: StepDefinition,
-		designerContext: DesignerContext,
-		componentContext: ComponentContext
-	): ToolboxItem {
+	public static create(parent: HTMLElement, step: StepDefinition, designerContext: DesignerContext): ToolboxItem {
 		StepTypeValidator.validate(step.type);
 
 		const view = ToolboxItemView.create(parent, step, designerContext.configuration.steps);
-		const item = new ToolboxItem(step, designerContext.state, designerContext.behaviorController, designerContext, componentContext);
+		const item = new ToolboxItem(step, designerContext.state, designerContext.behaviorController, designerContext);
 		view.bindMousedown(e => item.onMousedown(e));
 		view.bindTouchstart(e => item.onTouchstart(e));
 		view.bindContextMenu(e => item.onContextMenu(e));
@@ -33,8 +27,7 @@ export class ToolboxItem {
 		private readonly step: StepDefinition,
 		private readonly state: DesignerState,
 		private readonly behaviorController: BehaviorController,
-		private readonly designerContext: DesignerContext,
-		private readonly componentContext: ComponentContext
+		private readonly designerContext: DesignerContext
 	) {}
 
 	private onTouchstart(e: TouchEvent) {
@@ -60,7 +53,7 @@ export class ToolboxItem {
 	private startDrag(position: Vector) {
 		if (!this.state.isReadonly) {
 			const newStep = createStep(this.step);
-			this.behaviorController.start(position, DragStepBehavior.create(this.designerContext, this.componentContext, newStep));
+			this.behaviorController.start(position, DragStepBehavior.create(this.designerContext, newStep));
 		}
 	}
 }

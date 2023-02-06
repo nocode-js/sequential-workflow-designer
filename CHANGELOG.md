@@ -1,3 +1,11 @@
+## 0.6.0
+
+Fixed support for touchpad.
+
+#### Breaking Changes
+
+* Redesigned the `DesignerExtension` interface. This change increases the extensibility of the designer.
+
 ## 0.5.4
 
 This version introduces the first release of the [Sequential Workflow Designer for Angular](./angular/designer/) package.

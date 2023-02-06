@@ -1,8 +1,8 @@
 import { Definition, Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
-import { ComponentContext } from '../workspace/component-context';
-import { StepExtensionResolver } from '../workspace/step-extension-resolver';
+import { ServicesResolver } from '../services';
+import { ComponentContext } from '../workspace';
 
 export function createDesignerConfigurationStub(): DesignerConfiguration {
 	return {
@@ -36,11 +36,10 @@ export function createDefinitionStub(): Definition {
 
 export function createDesignerContextStub(): DesignerContext {
 	const parent = document.createElement('div');
-	const resolver = StepExtensionResolver.create([]);
-	return DesignerContext.create(parent, createDefinitionStub(), createDesignerConfigurationStub(), resolver);
+	const services = ServicesResolver.resolve([]);
+	return DesignerContext.create(parent, createDefinitionStub(), createDesignerConfigurationStub(), services);
 }
 
 export function createComponentContextStub(): ComponentContext {
-	const resolver = StepExtensionResolver.create([]);
-	return ComponentContext.create(createDesignerConfigurationStub().steps, resolver);
+	return createDesignerContextStub().componentContext;
 }

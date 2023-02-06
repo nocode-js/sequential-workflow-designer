@@ -1,13 +1,12 @@
 import { Dom } from '../core/dom';
 import { Step } from '../definition';
-import { createComponentContextStub, createDesignerContextStub } from '../test-tools/stubs';
+import { createDesignerContextStub } from '../test-tools/stubs';
 import { ToolboxItem } from './toolbox-item';
 
 describe('ToolboxItem', () => {
 	it('create() creates item', () => {
 		const parent = Dom.element('div');
 		const designerContext = createDesignerContextStub();
-		const componentContext = createComponentContextStub();
 		const step: Step = {
 			id: '0x0',
 			componentType: 'task',
@@ -16,7 +15,7 @@ describe('ToolboxItem', () => {
 			type: 'foo'
 		};
 
-		const item = ToolboxItem.create(parent, step, designerContext, componentContext);
+		const item = ToolboxItem.create(parent, step, designerContext);
 
 		expect(item).toBeDefined();
 	});

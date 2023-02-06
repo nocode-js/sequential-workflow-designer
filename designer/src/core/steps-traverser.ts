@@ -1,5 +1,5 @@
 import { Branches, Definition, Sequence, Step } from '../definition';
-import { StepChildrenType, StepChildren } from '../designer-configuration';
+import { StepChildren, StepChildrenType } from '../designer-extension';
 import { StepExtensionResolver } from '../workspace/step-extension-resolver';
 
 export interface StepWithParentSequence {
@@ -25,8 +25,8 @@ export class StepsTraverser {
 	public constructor(private readonly stepExtensionResolver: StepExtensionResolver) {}
 
 	private getChildren(step: Step): StepChildren | null {
-		const stepExtension = this.stepExtensionResolver.resolve(step.componentType);
-		return stepExtension.getChildren(step);
+		const resolver = this.stepExtensionResolver.resolve(step.componentType);
+		return resolver.getChildren(step);
 	}
 
 	private find(

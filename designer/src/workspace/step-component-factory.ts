@@ -7,7 +7,7 @@ export class StepComponentFactory {
 	public constructor(private readonly stepExtensionResolver: StepExtensionResolver) {}
 
 	public create(parentElement: SVGElement, step: Step, parentSequence: Sequence, context: ComponentContext): StepComponent {
-		const stepExtension = this.stepExtensionResolver.resolve(step.componentType);
-		return stepExtension.createComponent(parentElement, step, parentSequence, context);
+		const extension = this.stepExtensionResolver.resolve(step.componentType);
+		return extension.createComponent(parentElement, step, parentSequence, context);
 	}
 }

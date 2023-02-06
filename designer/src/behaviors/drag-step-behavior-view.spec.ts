@@ -1,4 +1,4 @@
-import { createComponentContextStub, createDesignerConfigurationStub, createStepStub } from '../test-tools/stubs';
+import { createDesignerConfigurationStub, createComponentContextStub, createStepStub } from '../test-tools/stubs';
 import { DragStepView } from './drag-step-behavior-view';
 
 describe('DragStepView', () => {

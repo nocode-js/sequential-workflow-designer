@@ -1,6 +1,5 @@
-import { Branches, ComponentType, Definition, Sequence, Step } from './definition';
-import { StepComponent } from './workspace/component';
-import { ComponentContext } from './workspace/component-context';
+import { ComponentType, Definition, Sequence, Step } from './definition';
+import { DesignerExtension } from './designer-extension';
 
 export interface DesignerConfiguration {
 	theme?: string;
@@ -33,27 +32,6 @@ export interface StepsConfiguration {
 
 	iconUrlProvider?: StepIconUrlProvider;
 	validator?: StepValidator;
-}
-
-export interface DesignerExtension {
-	name: string;
-	steps: StepExtension[];
-}
-
-export interface StepExtension<S extends Step = Step> {
-	componentType: ComponentType;
-	createComponent(parentElement: SVGElement, step: S, parentSequence: Sequence, componentContext: ComponentContext): StepComponent;
-	getChildren(step: S): StepChildren | null;
-}
-
-export interface StepChildren {
-	type: StepChildrenType;
-	sequences: Sequence | Branches;
-}
-
-export enum StepChildrenType {
-	singleSequence = 1,
-	branches = 2
 }
 
 export type StepIconUrlProvider = (componentType: ComponentType, type: string) => string | null;

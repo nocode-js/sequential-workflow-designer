@@ -17,6 +17,8 @@ describe('Designer', () => {
 		const smartEditorSpy = spyOn(SmartEditor, 'create');
 
 		const parent = Dom.element('div');
+		document.body.appendChild(parent);
+
 		const definition = createDefinitionStub();
 		const configuration = createDesignerConfigurationStub();
 
@@ -29,5 +31,7 @@ describe('Designer', () => {
 		expect(toolboxSpy).toHaveBeenCalled();
 		expect(controlBarSpy).toHaveBeenCalled();
 		expect(smartEditorSpy).toHaveBeenCalled();
+
+		document.body.removeChild(parent);
 	});
 });

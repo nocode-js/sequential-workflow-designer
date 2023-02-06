@@ -1,6 +1,7 @@
 import { Step } from '../definition';
+import { StepExtension } from '../designer-extension';
+import { ServicesResolver } from '../services';
 import { StepComponent } from './component';
-import { DesignerExtension, StepExtension } from '../designer-configuration';
 import { StepExtensionResolver } from './step-extension-resolver';
 
 class OwnTaskStepExtension implements StepExtension<Step> {
@@ -16,14 +17,10 @@ class OwnTaskStepExtension implements StepExtension<Step> {
 
 const ownTaskStepExtension = new OwnTaskStepExtension();
 
-class OwnTaskDesignerExtension implements DesignerExtension {
-	public readonly name: string = 'test';
-	public steps: StepExtension<Step>[] = [ownTaskStepExtension];
-}
-
-describe('StepExtensionsResolver', () => {
+describe('StepExtensionResolver', () => {
 	describe('default resolver', () => {
-		const resolver = StepExtensionResolver.create([]);
+		const services = ServicesResolver.resolve([]);
+		const resolver = StepExtensionResolver.create(services);
 
 		it('resolves task', () => {
 			expect(resolver.resolve('task')).toBeDefined();
@@ -39,7 +36,12 @@ describe('StepExtensionsResolver', () => {
 	});
 
 	it('can replace default extension', () => {
-		const resolver = StepExtensionResolver.create([new OwnTaskDesignerExtension()]);
+		const services = ServicesResolver.resolve([
+			{
+				steps: [ownTaskStepExtension]
+			}
+		]);
+		const resolver = StepExtensionResolver.create(services);
 
 		expect(resolver.resolve('task')).toEqual(ownTaskStepExtension);
 	});

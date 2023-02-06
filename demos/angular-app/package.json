@@ -25,8 +25,8 @@
 		"rxjs": "~7.8.0",
 		"tslib": "^2.3.0",
 		"zone.js": "~0.12.0",
-		"sequential-workflow-designer": "^0.5.4",
-		"sequential-workflow-designer-angular": "^0.5.4"
+		"sequential-workflow-designer": "^0.6.0",
+		"sequential-workflow-designer-angular": "^0.6.0"
 	},
 	"devDependencies": {
 		"@angular-devkit/build-angular": "^15.1.1",

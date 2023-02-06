@@ -21,9 +21,8 @@ export class MoveViewPortBehavior implements Behavior {
 	}
 
 	public onMove(delta: Vector) {
-		const newPosition = this.startPosition.subtract(delta);
 		this.state.setViewPort({
-			position: newPosition,
+			position: this.startPosition.subtract(delta),
 			scale: this.state.viewPort.scale
 		});
 	}

@@ -1,22 +1,14 @@
-import { ControlBar } from './control-bar/control-bar';
 import { Dom } from './core/dom';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
+import { UiComponent } from './designer-extension';
 import { LayoutController } from './layout-controller';
-import { PathBar } from './path-bar/path-bar';
 import { SmartEditor } from './smart-editor/smart-editor';
 import { Toolbox } from './toolbox/toolbox';
-import { ComponentContext } from './workspace/component-context';
 import { Workspace } from './workspace/workspace';
 
 export class DesignerView {
-	public static create(
-		parent: HTMLElement,
-		designerContext: DesignerContext,
-		componentContext: ComponentContext,
-		layoutController: LayoutController,
-		configuration: DesignerConfiguration
-	): DesignerView {
+	public static create(parent: HTMLElement, designerContext: DesignerContext, configuration: DesignerConfiguration): DesignerView {
 		const theme = configuration.theme || 'light';
 
 		const root = Dom.element('div', {
@@ -24,18 +16,18 @@ export class DesignerView {
 		});
 		parent.appendChild(root);
 
-		const workspace = Workspace.create(root, designerContext, componentContext);
-		let toolbox: Toolbox | undefined = undefined;
+		const workspace = Workspace.create(root, designerContext);
+
+		const uiComponents = designerContext.services.uiComponents.map(factory => factory.create(root, designerContext));
 
 		if (!configuration.toolbox.isHidden) {
-			toolbox = Toolbox.create(root, designerContext, componentContext);
+			uiComponents.push(Toolbox.create(root, designerContext));
 		}
-		ControlBar.create(root, designerContext);
-		PathBar.create(root, designerContext);
+
 		if (!configuration.editors.isHidden) {
 			SmartEditor.create(root, designerContext);
 		}
-		const view = new DesignerView(root, layoutController, workspace, toolbox);
+		const view = new DesignerView(root, designerContext.layoutController, workspace, uiComponents);
 		view.reloadLayout();
 		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;
@@ -48,7 +40,7 @@ export class DesignerView {
 		private readonly root: HTMLElement,
 		private readonly layoutController: LayoutController,
 		public readonly workspace: Workspace,
-		private readonly toolbox?: Toolbox
+		private readonly uiComponents: UiComponent[]
 	) {}
 
 	public bindKeyUp(handler: KeyUpHandler) {
@@ -61,7 +53,7 @@ export class DesignerView {
 		this.onKeyUpHandlers.forEach(h => document.removeEventListener('keyup', h, false));
 
 		this.workspace.destroy();
-		this.toolbox?.destroy();
+		this.uiComponents.forEach(component => component.destroy());
 
 		this.root.parentElement?.removeChild(this.root);
 	}

@@ -4,9 +4,10 @@ import { HistoryController } from '../history-controller';
 import { DesignerState } from '../designer-state';
 import { DefinitionModifier } from '../definition-modifier';
 import { WorkspaceController } from '../workspace/workspace-controller';
+import { UiComponent } from '../designer-extension';
 
-export class ControlBar {
-	public static create(parent: HTMLElement, context: DesignerContext): ControlBar {
+export class ControlBar implements UiComponent {
+	public static create(parent: HTMLElement, context: DesignerContext): UiComponent {
 		const view = ControlBarView.create(parent, !!context.historyController);
 		const bar = new ControlBar(view, context.state, context.workspaceController, context.historyController, context.definitionModifier);
 
@@ -36,6 +37,10 @@ export class ControlBar {
 		private readonly historyController: HistoryController | undefined,
 		private readonly definitionModifier: DefinitionModifier
 	) {}
+
+	public destroy() {
+		//
+	}
 
 	private onResetButtonClicked() {
 		this.workspaceController.resetViewPort();
