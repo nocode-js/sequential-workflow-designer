@@ -1,13 +1,14 @@
 import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
-import { Sequence, Step } from '../definition';
+import { Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
-import { ComponentContext } from '../workspace/component-context';
+import { ComponentContext } from '../component-context';
+import { StepContext } from '../designer-extension';
 
 const SAFE_OFFSET = 10;
 
 export class DragStepView {
-	public static create(step: Step, configuration: DesignerConfiguration, context: ComponentContext): DragStepView {
+	public static create(step: Step, configuration: DesignerConfiguration, componentContext: ComponentContext): DragStepView {
 		const theme = configuration.theme || 'light';
 		const layer = Dom.element('div', {
 			class: `sqd-drag sqd-theme-${theme}`
@@ -17,8 +18,15 @@ export class DragStepView {
 		const canvas = Dom.svg('svg');
 		layer.appendChild(canvas);
 
-		const fakeSequence: Sequence = [];
-		const stepComponent = context.stepComponentFactory.create(canvas, step, fakeSequence, context);
+		const fakeStepContext: StepContext = {
+			parentSequence: [],
+			step,
+			depth: 0,
+			position: 0,
+			isInputConnected: true,
+			isOutputConnected: true
+		};
+		const stepComponent = componentContext.stepComponentFactory.create(canvas, fakeStepContext, componentContext);
 
 		Dom.attrs(canvas, {
 			width: stepComponent.view.width + SAFE_OFFSET * 2,

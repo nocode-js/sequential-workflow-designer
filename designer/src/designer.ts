@@ -164,6 +164,10 @@ export class Designer {
 
 		e.preventDefault();
 		e.stopPropagation();
-		this.definitionModifier.tryDelete(this.state.selectedStepId);
+
+		const isDeletable = this.definitionModifier.isDeletable(this.state.selectedStepId);
+		if (isDeletable) {
+			this.definitionModifier.tryDelete(this.state.selectedStepId);
+		}
 	}
 }

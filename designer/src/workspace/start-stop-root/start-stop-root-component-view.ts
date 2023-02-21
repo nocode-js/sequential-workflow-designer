@@ -4,26 +4,35 @@ import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
 import { RectPlaceholderDirection, RectPlaceholderView } from '../common-views/rect-placeholder-view';
 import { ComponentView } from '../component';
-import { ComponentContext } from '../component-context';
+import { ComponentContext } from '../../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
 
 const SIZE = 30;
 const DEFAULT_ICON_SIZE = 22;
 const FOLDER_ICON_SIZE = 18;
 
-export class StartStopComponentView implements ComponentView {
+export class StartStopRootComponentView implements ComponentView {
 	public static create(
 		parent: SVGElement,
 		sequence: Sequence,
 		isInsideFolder: boolean,
 		context: ComponentContext
-	): StartStopComponentView {
+	): StartStopRootComponentView {
 		const g = Dom.svg('g', {
-			class: 'sqd-step-start-stop'
+			class: 'sqd-root-start-stop'
 		});
 		parent.appendChild(g);
 
-		const sequenceComponent = SequenceComponent.create(g, sequence, context);
+		const sequenceComponent = SequenceComponent.create(
+			g,
+			{
+				sequence,
+				depth: 0,
+				isInputConnected: true,
+				isOutputConnected: true
+			},
+			context
+		);
 		const view = sequenceComponent.view;
 
 		const x = view.joinX - SIZE / 2;
@@ -47,7 +56,7 @@ export class StartStopComponentView implements ComponentView {
 			endPlaceholderView = RectPlaceholderView.create(g, x, endY, SIZE, SIZE, RectPlaceholderDirection.out);
 		}
 
-		return new StartStopComponentView(
+		return new StartStopRootComponentView(
 			g,
 			view.width,
 			view.height + SIZE * 2,
@@ -80,7 +89,7 @@ export class StartStopComponentView implements ComponentView {
 function createCircle(d: string, iconSize: number): SVGGElement {
 	const r = SIZE / 2;
 	const circle = Dom.svg('circle', {
-		class: 'sqd-step-start-stop-circle',
+		class: 'sqd-root-start-stop-circle',
 		cx: r,
 		cy: r,
 		r: r
@@ -90,7 +99,7 @@ function createCircle(d: string, iconSize: number): SVGGElement {
 	g.appendChild(circle);
 
 	const offset = (SIZE - iconSize) / 2;
-	const icon = Icons.appendPath(g, 'sqd-step-start-stop-icon', d, iconSize);
+	const icon = Icons.appendPath(g, 'sqd-root-start-stop-icon', d, iconSize);
 	Dom.translate(icon, offset, offset);
 	return g;
 }

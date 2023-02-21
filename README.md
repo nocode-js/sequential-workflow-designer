@@ -29,6 +29,7 @@ Features:
 * [📐 Simple Flow](https://nocode-js.github.io/sequential-workflow-designer/examples/simple-flow.html)
 * [🌻 Rendering Test](https://nocode-js.github.io/sequential-workflow-designer/examples/rendering-test.html)
 * [🚄 Stress Test](https://nocode-js.github.io/sequential-workflow-designer/examples/stress-test.html)
+* [🚪 Editing Restrictions](https://nocode-js.github.io/sequential-workflow-designer/examples/editing-restrictions.html)
 
 Pro:
 
@@ -75,10 +76,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/dist/index.umd.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.7.0/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.7.0/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.7.0/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.7.0/dist/index.umd.js"></script>
 ```
 
 Call the designer by:
@@ -131,11 +132,19 @@ const configuration = {
   },
 
   steps: {
+    // all properties in this section are optional
+
     iconUrlProvider: (componentType, type) => {
       return `icon-${componentType}-${type}.svg`;
     },
-    validator: (step) => {
+    validator: (step, sourceSequence) => {
       return /^[a-z]+$/.test(step.name);
+    },
+    isDraggable: (step, parentSequence) => {
+      return step.name !== 'y';
+    },
+    isDeletable: (step, parentSequence) => {
+      return step.properties['isDeletable'];
     },
     canInsertStep: (step, targetSequence, targetIndex) => {
       return targetSequence.length < 5;

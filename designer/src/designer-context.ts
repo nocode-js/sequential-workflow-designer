@@ -1,4 +1,5 @@
 import { BehaviorController } from './behaviors/behavior-controller';
+import { ComponentContext } from './component-context';
 import { ObjectCloner } from './core/object-cloner';
 import { StepsTraverser } from './core/steps-traverser';
 import { Definition } from './definition';
@@ -8,7 +9,6 @@ import { DesignerState } from './designer-state';
 import { HistoryController } from './history-controller';
 import { LayoutController } from './layout-controller';
 import { Services } from './services';
-import { ComponentContext } from './workspace';
 import { StepExtensionResolver } from './workspace/step-extension-resolver';
 import { WorkspaceController, WorkspaceControllerWrapper } from './workspace/workspace-controller';
 
@@ -37,7 +37,7 @@ export class DesignerContext {
 			historyController = HistoryController.create(state, definitionModifier, configuration);
 		}
 
-		const componentContext = ComponentContext.create(configuration.steps, stepExtensionResolver);
+		const componentContext = ComponentContext.create(configuration.steps, stepExtensionResolver, services);
 
 		return new DesignerContext(
 			state,

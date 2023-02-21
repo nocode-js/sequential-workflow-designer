@@ -1,29 +1,23 @@
 import { Sequence } from '../../definition';
-import { RectPlaceholder } from '../common-views/rect-placeholder';
+import { RectPlaceholder } from '../placeholder/rect-placeholder';
 import { ClickDetails, ClickResult, Component, Placeholder, StepComponent } from '../component';
-import { ComponentContext } from '../component-context';
-import { StartStopComponentView } from './start-stop-component-view';
+import { ComponentContext } from '../../component-context';
+import { StartStopRootComponentView } from './start-stop-root-component-view';
+import { SequencePlaceIndicator } from '../../designer-extension';
 
-export interface SequencePlaceIndicator {
-	sequence: Sequence;
-	index: number;
-}
-
-export class StartStopComponent implements Component {
+export class StartStopRootComponent implements Component {
 	public static create(
 		parentElement: SVGElement,
 		sequence: Sequence,
 		parentSequencePlaceIndicator: SequencePlaceIndicator | null,
 		context: ComponentContext
-	): StartStopComponent {
-		const view = StartStopComponentView.create(parentElement, sequence, !!parentSequencePlaceIndicator, context);
-		return new StartStopComponent(view, parentSequencePlaceIndicator);
+	): StartStopRootComponent {
+		const view = StartStopRootComponentView.create(parentElement, sequence, !!parentSequencePlaceIndicator, context);
+		return new StartStopRootComponent(view, parentSequencePlaceIndicator);
 	}
 
-	public readonly isInterrupted = false;
-
 	private constructor(
-		public readonly view: StartStopComponentView,
+		public readonly view: StartStopRootComponentView,
 		private readonly parentSequencePlaceIndicator: SequencePlaceIndicator | null
 	) {}
 
@@ -58,7 +52,7 @@ export class StartStopComponent implements Component {
 		return this.view.component.validate();
 	}
 
-	public destroy() {
-		this.view.destroy();
-	}
+	//public destroy() {
+	//	this.view.destroy();
+	//}
 }

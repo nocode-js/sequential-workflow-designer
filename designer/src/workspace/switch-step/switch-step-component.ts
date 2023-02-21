@@ -1,18 +1,14 @@
 import { Sequence, Step, SwitchStep } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent } from '../component';
-import { ComponentContext } from '../component-context';
+import { ComponentContext } from '../../component-context';
 import { SwitchStepComponentView } from './switch-step-component-view';
+import { StepContext } from '../../designer-extension';
 
 export class SwitchStepComponent implements StepComponent {
-	public static create(
-		parentElement: SVGElement,
-		step: SwitchStep,
-		parentSequence: Sequence,
-		context: ComponentContext
-	): SwitchStepComponent {
-		const view = SwitchStepComponentView.create(parentElement, step, context);
-		return new SwitchStepComponent(view, step, parentSequence, view.isInterrupted(), context.configuration);
+	public static create(parentElement: SVGElement, stepContext: StepContext<SwitchStep>, context: ComponentContext): SwitchStepComponent {
+		const view = SwitchStepComponentView.create(parentElement, stepContext, context);
+		return new SwitchStepComponent(view, stepContext.step, stepContext.parentSequence, view.hasOutput(), context.configuration);
 	}
 
 	private isDisabled = false;
@@ -21,7 +17,7 @@ export class SwitchStepComponent implements StepComponent {
 		public readonly view: SwitchStepComponentView,
 		public readonly step: Step,
 		public readonly parentSequence: Sequence,
-		public readonly isInterrupted: boolean,
+		public readonly hasOutput: boolean,
 		private readonly configuration: StepsConfiguration
 	) {}
 
@@ -79,7 +75,7 @@ export class SwitchStepComponent implements StepComponent {
 	}
 
 	public validate(): boolean {
-		const isValid = this.configuration.validator ? this.configuration.validator(this.step) : true;
+		const isValid = this.configuration.validator ? this.configuration.validator(this.step, this.parentSequence) : true;
 		this.view.setIsValid(isValid);
 
 		let areChildrenValid = true;

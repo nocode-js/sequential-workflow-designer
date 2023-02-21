@@ -3,7 +3,6 @@ import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { DesignerContext } from '../designer-context';
 import { Component, Placeholder, StepComponent } from './component';
-import { SequencePlaceIndicator } from './start-stop/start-stop-component';
 import { WorkspaceView } from './workspace-view';
 import { DefinitionChangedEvent, DefinitionChangeType, DesignerState, ViewPort } from '../designer-state';
 import { ViewPortAnimator } from './view-port/view-port-animator';
@@ -14,7 +13,7 @@ import { StepsTraverser } from '../core/steps-traverser';
 import { CenteredViewPortCalculator } from './view-port/centered-view-port-calculator';
 import { SimpleEvent } from '../core/simple-event';
 import { QuantifiedScaleViewPortCalculator } from './view-port';
-import { WheelController } from '../designer-extension';
+import { SequencePlaceIndicator, WheelController } from '../designer-extension';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext): Workspace {
@@ -151,7 +150,8 @@ export class Workspace implements WorkspaceController {
 
 		if (isPrimaryButton || isMiddleButton) {
 			const rootComponent = this.getRootComponent();
-			const behavior = this.clickBehaviorResolver.resolve(rootComponent, target, position, isMiddleButton);
+			const forceDisableDrag = isMiddleButton;
+			const behavior = this.clickBehaviorResolver.resolve(rootComponent, target, position, forceDisableDrag);
 			this.behaviorController.start(position, behavior);
 		}
 	}

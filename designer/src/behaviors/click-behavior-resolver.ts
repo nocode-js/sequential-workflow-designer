@@ -24,7 +24,10 @@ export class ClickBehaviorResolver {
 
 		switch (result.action.type) {
 			case ClickBehaviorType.selectStep: {
-				const isDragDisabled = forceDisableDrag || this.state.isDragDisabled;
+				const isDragDisabled =
+					forceDisableDrag ||
+					this.state.isDragDisabled ||
+					!this.designerContext.definitionModifier.isDraggable(result.component.step, result.component.parentSequence);
 				return SelectStepBehavior.create(result.component, isDragDisabled, this.designerContext);
 			}
 

@@ -113,12 +113,12 @@
 	fill: #FFF;
 }
 
-/* light > .sqd-step-start-stop */
+/* light > .sqd-root-start-stop */
 
-.sqd-theme-light .sqd-step-start-stop-circle {
+.sqd-theme-light .sqd-root-start-stop-circle {
 	fill: #2C18DF;
 }
-.sqd-theme-light .sqd-step-start-stop-icon {
+.sqd-theme-light .sqd-root-start-stop-icon {
 	fill: #FFF;
 }
 

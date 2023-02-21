@@ -1,18 +1,19 @@
 import { Sequence } from '../../definition';
 import { ClickDetails, ClickResult, Component, Placeholder, StepComponent } from '../component';
 import { SequenceComponentView } from './sequence-component-view';
-import { ComponentContext } from '../component-context';
-import { RectPlaceholder } from '../common-views/rect-placeholder';
+import { ComponentContext } from '../../component-context';
+import { RectPlaceholder } from '../placeholder/rect-placeholder';
+import { SequenceContext } from './sequence-context';
 
 export class SequenceComponent implements Component {
-	public static create(parentElement: SVGElement, sequence: Sequence, context: ComponentContext): SequenceComponent {
-		const view = SequenceComponentView.create(parentElement, sequence, context);
-		return new SequenceComponent(view, view.isInterrupted(), sequence);
+	public static create(parentElement: SVGElement, sequenceContext: SequenceContext, context: ComponentContext): SequenceComponent {
+		const view = SequenceComponentView.create(parentElement, sequenceContext, context);
+		return new SequenceComponent(view, view.hasOutput(), sequenceContext.sequence);
 	}
 
 	private constructor(
 		public readonly view: SequenceComponentView,
-		public readonly isInterrupted: boolean,
+		public readonly hasOutput: boolean,
 		private readonly sequence: Sequence
 	) {}
 
@@ -37,8 +38,8 @@ export class SequenceComponent implements Component {
 	}
 
 	public getPlaceholders(result: Placeholder[]) {
-		this.view.placeholderViews.forEach((view, index) => {
-			result.push(new RectPlaceholder(view, this.sequence, index));
+		this.view.placeholderViews.forEach(view => {
+			result.push(new RectPlaceholder(view, this.sequence, view.index));
 		});
 		this.view.components.forEach(c => c.getPlaceholders(result));
 	}
