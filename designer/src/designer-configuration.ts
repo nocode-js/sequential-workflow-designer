@@ -27,7 +27,9 @@ export interface ToolboxGroupConfiguration {
 
 export interface StepsConfiguration {
 	canInsertStep?: (step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
+	isDraggable?: (step: Step, parentSequence: Sequence) => boolean;
 	canMoveStep?: (sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
+	isDeletable?: (step: Step, parentSequence: Sequence) => boolean;
 	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
 
 	iconUrlProvider?: StepIconUrlProvider;
@@ -36,7 +38,7 @@ export interface StepsConfiguration {
 
 export type StepIconUrlProvider = (componentType: ComponentType, type: string) => string | null;
 
-export type StepValidator = (step: Step) => boolean;
+export type StepValidator = (step: Step, parentSequence: Sequence) => boolean;
 
 export interface EditorsConfiguration {
 	isHidden?: boolean;

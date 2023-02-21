@@ -2,6 +2,7 @@ import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { Step } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
+import { StepContext } from '../../designer-extension';
 import { ChildlessComponentView } from '../childless-step-component';
 import { InputView } from '../common-views/input-view';
 import { OutputView } from '../common-views/output-view';
@@ -15,11 +16,17 @@ const ICON_SIZE = 22;
 const RECT_RADIUS = 5;
 
 export class TaskStepComponentView implements ChildlessComponentView {
-	public static create(parent: SVGElement, isStop: boolean, step: Step, configuration: StepsConfiguration): TaskStepComponentView {
+	public static create(
+		parentElement: SVGElement,
+		stepContext: StepContext<Step>,
+		configuration: StepsConfiguration,
+		isInterrupted: boolean
+	): TaskStepComponentView {
+		const { step } = stepContext;
 		const g = Dom.svg('g', {
 			class: `sqd-step-task sqd-type-${step.type}`
 		});
-		parent.appendChild(g);
+		parentElement.appendChild(g);
 
 		const boxHeight = ICON_SIZE + PADDING_Y * 2;
 
@@ -63,8 +70,11 @@ export class TaskStepComponentView implements ChildlessComponentView {
 		});
 		g.appendChild(icon);
 
-		const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
-		const outputView = isStop ? null : OutputView.create(g, boxWidth / 2, boxHeight);
+		const isInputViewHidden = stepContext.depth === 0 && stepContext.position === 0 && !stepContext.isInputConnected;
+		const isOutputViewHidden = isInterrupted;
+
+		const inputView = isInputViewHidden ? null : InputView.createRoundInput(g, boxWidth / 2, 0);
+		const outputView = isOutputViewHidden ? null : OutputView.create(g, boxWidth / 2, boxHeight);
 		const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
 		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView, validationErrorView);
 	}
@@ -75,7 +85,7 @@ export class TaskStepComponentView implements ChildlessComponentView {
 		public readonly height: number,
 		public readonly joinX: number,
 		private readonly rect: SVGRectElement,
-		private readonly inputView: InputView,
+		private readonly inputView: InputView | null,
 		private readonly outputView: OutputView | null,
 		private readonly validationErrorView: ValidationErrorView
 	) {}
@@ -95,7 +105,7 @@ export class TaskStepComponentView implements ChildlessComponentView {
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		this.inputView.setIsHidden(isDragging);
+		this.inputView?.setIsHidden(isDragging);
 		this.outputView?.setIsHidden(isDragging);
 	}
 

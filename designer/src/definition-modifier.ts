@@ -11,6 +11,14 @@ export class DefinitionModifier {
 		private readonly configuration: DesignerConfiguration
 	) {}
 
+	public isDeletable(stepId: string): boolean {
+		if (this.configuration.steps.isDeletable) {
+			const result = this.stepsTraverser.getParentSequence(this.state.definition, stepId);
+			return this.configuration.steps.isDeletable(result.step, result.parentSequence);
+		}
+		return true;
+	}
+
 	public tryDelete(stepId: string): boolean {
 		const result = this.stepsTraverser.getParentSequence(this.state.definition, stepId);
 
@@ -40,6 +48,10 @@ export class DefinitionModifier {
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepInserted, step.id);
 		this.state.setSelectedStepId(step.id);
 		return true;
+	}
+
+	public isDraggable(step: Step, parentSequence: Sequence): boolean {
+		return this.configuration.steps.isDraggable ? this.configuration.steps.isDraggable(step, parentSequence) : true;
 	}
 
 	public tryMove(sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number): boolean {

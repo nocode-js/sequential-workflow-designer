@@ -1,14 +1,16 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { SwitchStep } from '../../definition';
-import { JoinView } from '../common-views//join-view';
-import { LabelView, LABEL_HEIGHT } from '../common-views//label-view';
+import { JoinView } from '../common-views/join-view';
+import { LabelView, LABEL_HEIGHT } from '../common-views/label-view';
 import { RegionView } from '../common-views//region-view';
-import { ValidationErrorView } from '../common-views//validation-error-view';
+import { ValidationErrorView } from '../common-views/validation-error-view';
 import { InputView } from '../common-views/input-view';
 import { ClickDetails, ComponentView } from '../component';
-import { ComponentContext } from '../component-context';
+import { ComponentContext } from '../../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
+import { StepContext } from '../../designer-extension';
+import { SequenceContext } from '../sequence/sequence-context';
 
 const MIN_CONTAINER_WIDTH = 40;
 const PADDING_X = 20;
@@ -16,14 +18,23 @@ const PADDING_TOP = 20;
 const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponentView implements ComponentView {
-	public static create(parent: SVGElement, step: SwitchStep, context: ComponentContext): SwitchStepComponentView {
+	public static create(parent: SVGElement, stepContext: StepContext<SwitchStep>, context: ComponentContext): SwitchStepComponentView {
+		const { step } = stepContext;
 		const g = Dom.svg('g', {
 			class: `sqd-step-switch sqd-type-${step.type}`
 		});
 		parent.appendChild(g);
 
 		const branchNames = Object.keys(step.branches);
-		const branchComponents = branchNames.map(branchName => SequenceComponent.create(g, step.branches[branchName], context));
+		const branchComponents = branchNames.map(branchName => {
+			const sequenceContext: SequenceContext = {
+				sequence: step.branches[branchName],
+				depth: stepContext.depth + 1,
+				isInputConnected: true,
+				isOutputConnected: stepContext.isOutputConnected
+			};
+			return SequenceComponent.create(g, sequenceContext, context);
+		});
 
 		const branchLabelViews = branchNames.map(branchName => {
 			return LabelView.create(g, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT, branchName, 'secondary');
@@ -75,7 +86,7 @@ export class SwitchStepComponentView implements ComponentView {
 			Dom.translate(branchLabelViews[i].g, switchOffsetLeft + branchSize.offsetX + branchSize.joinX, 0);
 			Dom.translate(component.view.g, branchOffsetLeft, branchOffsetTop);
 
-			if (!component.isInterrupted) {
+			if (component.hasOutput && stepContext.isOutputConnected) {
 				const endOffsetTopOfComponent = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + component.view.height;
 				const missingHeight = viewHeight - endOffsetTopOfComponent - CONNECTION_HEIGHT;
 				if (missingHeight > 0) {
@@ -99,18 +110,20 @@ export class SwitchStepComponentView implements ComponentView {
 			branchSizes.map(o => new Vector(switchOffsetLeft + o.offsetX + o.joinX, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT))
 		);
 
-		const ongoingSequenceIndexes = branchComponents
-			.map((component, index) => (component.isInterrupted ? null : index))
-			.filter(index => index !== null) as number[];
-		const ongoingJoinTargets = ongoingSequenceIndexes.map(
-			(i: number) =>
-				new Vector(
-					switchOffsetLeft + branchSizes[i].offsetX + branchSizes[i].joinX,
-					PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxBranchesHeight
-				)
-		);
-		if (ongoingJoinTargets.length > 0) {
-			JoinView.createJoins(g, new Vector(shiftedJoinX, viewHeight), ongoingJoinTargets);
+		if (stepContext.isOutputConnected) {
+			const ongoingSequenceIndexes = branchComponents
+				.map((component, index) => (component.hasOutput ? index : null))
+				.filter(index => index !== null) as number[];
+			const ongoingJoinTargets = ongoingSequenceIndexes.map(
+				(i: number) =>
+					new Vector(
+						switchOffsetLeft + branchSizes[i].offsetX + branchSizes[i].joinX,
+						PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxBranchesHeight
+					)
+			);
+			if (ongoingJoinTargets.length > 0) {
+				JoinView.createJoins(g, new Vector(shiftedJoinX, viewHeight), ongoingJoinTargets);
+			}
 		}
 
 		const regions = branchSizes.map(s => s.width);
@@ -152,7 +165,7 @@ export class SwitchStepComponentView implements ComponentView {
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		this.inputView.setIsHidden(isDragging);
+		this.inputView?.setIsHidden(isDragging);
 	}
 
 	public setIsSelected(isSelected: boolean) {
@@ -167,7 +180,7 @@ export class SwitchStepComponentView implements ComponentView {
 		this.validationErrorView.setIsHidden(isValid);
 	}
 
-	public isInterrupted(): boolean {
-		return this.sequenceComponents.every(c => c.isInterrupted);
+	public hasOutput(): boolean {
+		return this.sequenceComponents.some(c => c.hasOutput);
 	}
 }

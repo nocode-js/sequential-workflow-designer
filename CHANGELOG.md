@@ -1,3 +1,13 @@
+## 0.7.0
+
+* The step validator has two parameters from now: `step` and `parentSequence`.
+* Added new editing restrictions: `isDraggable` and `isDeletable`.
+
+#### Breaking Changes
+
+* Refactored step components by introducing the `StepContext` interface.
+* Renamed `.sqd-step-start-stop*` CSS selectors to `.sqd-root-start-stop*`.
+
 ## 0.6.0
 
 Fixed support for touchpad.

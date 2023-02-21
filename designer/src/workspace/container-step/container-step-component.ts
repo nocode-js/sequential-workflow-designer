@@ -1,18 +1,24 @@
 import { ContainerStep, Sequence, Step } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent } from '../component';
-import { ComponentContext } from '../component-context';
+import { ComponentContext } from '../../component-context';
 import { ContainerStepComponentView } from './container-step-component-view';
+import { StepContext } from '../../designer-extension';
 
 export class ContainerStepComponent implements StepComponent {
 	public static create(
 		parentElement: SVGElement,
-		step: ContainerStep,
-		parentSequence: Sequence,
-		context: ComponentContext
+		stepContext: StepContext<ContainerStep>,
+		componentContext: ComponentContext
 	): ContainerStepComponent {
-		const view = ContainerStepComponentView.create(parentElement, step, context);
-		return new ContainerStepComponent(view, step, parentSequence, view.isInterrupted(), context.configuration);
+		const view = ContainerStepComponentView.create(parentElement, stepContext, componentContext);
+		return new ContainerStepComponent(
+			view,
+			stepContext.step,
+			stepContext.parentSequence,
+			view.hasOutput(),
+			componentContext.configuration
+		);
 	}
 
 	private isDisabled = false;
@@ -21,7 +27,7 @@ export class ContainerStepComponent implements StepComponent {
 		public readonly view: ContainerStepComponentView,
 		public readonly step: Step,
 		public readonly parentSequence: Sequence,
-		public readonly isInterrupted: boolean,
+		public readonly hasOutput: boolean,
 		private readonly configuration: StepsConfiguration
 	) {}
 
@@ -72,7 +78,7 @@ export class ContainerStepComponent implements StepComponent {
 	}
 
 	public validate(): boolean {
-		const isValid = this.configuration.validator ? this.configuration.validator(this.step) : true;
+		const isValid = this.configuration.validator ? this.configuration.validator(this.step, this.parentSequence) : true;
 		this.view.setIsValid(isValid);
 		const isSequenceValid = this.view.sequenceComponent.validate();
 		return isValid && isSequenceValid;

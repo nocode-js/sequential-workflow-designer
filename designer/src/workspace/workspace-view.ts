@@ -2,16 +2,16 @@ import { Dom } from '../core/dom';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
-import { WorkspaceClientPositionSource } from '../designer-extension';
-import { ComponentContext } from './component-context';
-import { SequencePlaceIndicator, StartStopComponent } from './start-stop/start-stop-component';
+import { SequencePlaceIndicator, WorkspaceClientPositionSource } from '../designer-extension';
+import { ComponentContext } from '../component-context';
+import { Component } from './component';
 
 const GRID_SIZE = 48;
 
 let lastGridPatternId = 0;
 
 export class WorkspaceView implements WorkspaceClientPositionSource {
-	public static create(parent: HTMLElement, context: ComponentContext): WorkspaceView {
+	public static create(parent: HTMLElement, componentContext: ComponentContext): WorkspaceView {
 		const defs = Dom.svg('defs');
 		const gridPatternId = 'sqd-grid-pattern-' + lastGridPatternId++;
 		const gridPattern = Dom.svg('pattern', {
@@ -46,13 +46,13 @@ export class WorkspaceView implements WorkspaceClientPositionSource {
 		workspace.appendChild(canvas);
 		parent.appendChild(workspace);
 
-		const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, context);
+		const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, componentContext);
 		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;
 	}
 
 	private onResizeHandler = () => this.onResize();
-	public rootComponent?: StartStopComponent;
+	public rootComponent?: Component;
 
 	private constructor(
 		private readonly workspace: HTMLElement,
@@ -65,9 +65,14 @@ export class WorkspaceView implements WorkspaceClientPositionSource {
 
 	public render(sequence: Sequence, parentSequencePlaceIndicator: SequencePlaceIndicator | null) {
 		if (this.rootComponent) {
-			this.rootComponent.destroy();
+			this.foreground.removeChild(this.rootComponent.view.g);
 		}
-		this.rootComponent = StartStopComponent.create(this.foreground, sequence, parentSequencePlaceIndicator, this.context);
+		this.rootComponent = this.context.services.rootComponent.create(
+			this.foreground,
+			sequence,
+			parentSequencePlaceIndicator,
+			this.context
+		);
 		this.refreshSize();
 	}
 

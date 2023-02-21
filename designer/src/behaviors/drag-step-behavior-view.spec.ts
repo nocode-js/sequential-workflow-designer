@@ -7,9 +7,9 @@ describe('DragStepView', () => {
 
 		const step = createStepStub();
 		const configuration = createDesignerConfigurationStub();
-		const context = createComponentContextStub();
+		const componentContext = createComponentContextStub();
 
-		const component = DragStepView.create(step, configuration, context);
+		const component = DragStepView.create(step, configuration, componentContext);
 
 		expect(component).toBeDefined();
 		expect(appendChildSpy).toHaveBeenCalled();

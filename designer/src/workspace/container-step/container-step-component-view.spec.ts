@@ -1,5 +1,6 @@
 import { Dom } from '../../core/dom';
 import { ContainerStep } from '../../definition';
+import { StepContext } from '../../designer-extension';
 import { createComponentContextStub } from '../../test-tools/stubs';
 import { ContainerStepComponentView } from './container-step-component-view';
 
@@ -15,8 +16,16 @@ describe('ContainerStepComponentView', () => {
 		};
 
 		const parent = Dom.svg('svg');
-		const context = createComponentContextStub();
-		const view = ContainerStepComponentView.create(parent, step, context);
+		const stepContext: StepContext<ContainerStep> = {
+			step,
+			depth: 0,
+			position: 0,
+			isInputConnected: true,
+			isOutputConnected: true,
+			parentSequence: []
+		};
+		const componentContext = createComponentContextStub();
+		const view = ContainerStepComponentView.create(parent, stepContext, componentContext);
 
 		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);

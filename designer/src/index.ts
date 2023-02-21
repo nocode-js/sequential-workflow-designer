@@ -1,4 +1,5 @@
 export * from './core';
+export * from './component-context';
 export * from './workspace';
 export * from './definition';
 export * from './designer-configuration';

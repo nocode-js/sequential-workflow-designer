@@ -1,6 +1,6 @@
 import { Sequence } from '../../definition';
 import { Placeholder } from '../component';
-import { RectPlaceholderView } from './rect-placeholder-view';
+import { RectPlaceholderView } from '../common-views/rect-placeholder-view';
 
 export class RectPlaceholder implements Placeholder {
 	public constructor(

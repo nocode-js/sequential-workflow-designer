@@ -8,20 +8,33 @@ import { JoinView } from '../common-views/join-view';
 import { LabelView, LABEL_HEIGHT } from '../common-views/label-view';
 import { RegionView } from '../common-views/region-view';
 import { ValidationErrorView } from '../common-views/validation-error-view';
-import { ComponentContext } from '../component-context';
+import { ComponentContext } from '../../component-context';
+import { StepContext } from '../../designer-extension';
+import { SequenceContext } from '../sequence/sequence-context';
 
 const PADDING_TOP = 20;
 const PADDING_X = 20;
 
 export class ContainerStepComponentView implements ComponentView {
-	public static create(parent: SVGElement, step: ContainerStep, context: ComponentContext): ContainerStepComponentView {
+	public static create(
+		parentElement: SVGElement,
+		stepContext: StepContext<ContainerStep>,
+		componentContext: ComponentContext
+	): ContainerStepComponentView {
+		const { step } = stepContext;
 		const g = Dom.svg('g', {
 			class: `sqd-step-container sqd-type-${step.type}`
 		});
-		parent.appendChild(g);
+		parentElement.appendChild(g);
 
 		const labelView = LabelView.create(g, PADDING_TOP, step.name, 'primary');
-		const component = SequenceComponent.create(g, step.sequence, context);
+		const sequenceContext: SequenceContext = {
+			sequence: step.sequence,
+			depth: stepContext.depth + 1,
+			isInputConnected: true,
+			isOutputConnected: stepContext.isOutputConnected
+		};
+		const component = SequenceComponent.create(g, sequenceContext, componentContext);
 
 		const halfOfWidestElement = labelView.width / 2;
 		const offsetLeft = Math.max(halfOfWidestElement - component.view.joinX, 0) + PADDING_X;
@@ -34,7 +47,9 @@ export class ContainerStepComponentView implements ComponentView {
 		Dom.translate(labelView.g, joinX, 0);
 		Dom.translate(component.view.g, offsetLeft, PADDING_TOP + LABEL_HEIGHT);
 
-		const iconUrl = context.configuration.iconUrlProvider ? context.configuration.iconUrlProvider(step.componentType, step.type) : null;
+		const iconUrl = componentContext.configuration.iconUrlProvider
+			? componentContext.configuration.iconUrlProvider(step.componentType, step.type)
+			: null;
 		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
 
 		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);
@@ -82,7 +97,7 @@ export class ContainerStepComponentView implements ComponentView {
 		this.validationErrorView.setIsHidden(isHidden);
 	}
 
-	public isInterrupted(): boolean {
-		return this.sequenceComponent.isInterrupted;
+	public hasOutput(): boolean {
+		return this.sequenceComponent.hasOutput;
 	}
 }

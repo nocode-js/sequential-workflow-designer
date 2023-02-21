@@ -3,7 +3,6 @@ import { Sequence, Step } from '../definition';
 
 export interface Component {
 	view: ComponentView;
-	isInterrupted: boolean;
 
 	findById(stepId: string): StepComponent | null;
 	findByClick(click: ClickDetails): ClickResult | null;
@@ -53,6 +52,7 @@ export interface Placeholder {
 export interface StepComponent extends Component {
 	step: Step;
 	parentSequence: Sequence;
+	hasOutput: boolean;
 
 	setIsSelected(isSelected: boolean): void;
 	setIsDisabled(isDisabled: boolean): void;

@@ -15,6 +15,7 @@ export class RectPlaceholderView {
 		y: number,
 		width: number,
 		height: number,
+		index: number,
 		direction?: RectPlaceholderDirection
 	): RectPlaceholderView {
 		const g = Dom.svg('g', {
@@ -40,10 +41,10 @@ export class RectPlaceholderView {
 		}
 
 		parent.appendChild(g);
-		return new RectPlaceholderView(rect, g);
+		return new RectPlaceholderView(rect, g, index);
 	}
 
-	private constructor(public readonly rect: SVGElement, public readonly g: SVGElement) {}
+	private constructor(public readonly rect: SVGElement, public readonly g: SVGElement, public readonly index: number) {}
 
 	public setIsHover(isHover: boolean) {
 		Dom.toggleClass(this.g, isHover, 'sqd-hover');

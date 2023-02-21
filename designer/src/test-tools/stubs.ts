@@ -1,8 +1,8 @@
+import { ComponentContext } from '../component-context';
 import { Definition, Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
 import { ServicesResolver } from '../services';
-import { ComponentContext } from '../workspace';
 
 export function createDesignerConfigurationStub(): DesignerConfiguration {
 	return {

@@ -15,7 +15,7 @@ export class ChildlessStepComponent<S extends Step> implements StepComponent {
 		public readonly view: ChildlessComponentView,
 		public readonly step: S,
 		public readonly parentSequence: Sequence,
-		public readonly isInterrupted: boolean,
+		public readonly hasOutput: boolean,
 		private readonly configuration: StepsConfiguration
 	) {}
 
@@ -51,7 +51,7 @@ export class ChildlessStepComponent<S extends Step> implements StepComponent {
 	}
 
 	public validate(): boolean {
-		const isValid = this.configuration.validator ? this.configuration.validator(this.step) : true;
+		const isValid = this.configuration.validator ? this.configuration.validator(this.step, this.parentSequence) : true;
 		this.view.setIsValid(isValid);
 		return isValid;
 	}

@@ -1,20 +1,32 @@
+import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { Branches, ComponentType, Sequence, Step } from './definition';
 import { DesignerContext } from './designer-context';
-import { ComponentContext, StepComponent } from './workspace';
+import { StepComponent, Component } from './workspace';
 
 export interface DesignerExtension {
 	steps?: StepExtension[];
 	uiComponents?: UiComponentExtension[];
 	wheelController?: WheelControllerExtension;
+	placeholderController?: PlaceholderControllerExtension;
+	rootComponent?: RootComponentExtension;
 }
 
 // StepExtension
 
 export interface StepExtension<S extends Step = Step> {
 	componentType: ComponentType;
-	createComponent(parentElement: SVGElement, step: S, parentSequence: Sequence, componentContext: ComponentContext): StepComponent;
+	createComponent(parentElement: SVGElement, stepContext: StepContext<S>, componentContext: ComponentContext): StepComponent;
 	getChildren(step: S): StepChildren | null;
+}
+
+export interface StepContext<S extends Step = Step> {
+	parentSequence: Sequence;
+	step: S;
+	depth: number;
+	position: number;
+	isInputConnected: boolean;
+	isOutputConnected: boolean;
 }
 
 export interface StepChildren {
@@ -50,4 +62,30 @@ export interface UiComponentExtension {
 
 export interface UiComponent {
 	destroy(): void;
+}
+
+// RootComponentExtension
+
+export interface RootComponentExtension {
+	create(
+		parentElement: SVGElement,
+		sequence: Sequence,
+		parentSequencePlaceIndicator: SequencePlaceIndicator | null,
+		context: ComponentContext
+	): Component;
+}
+
+export interface SequencePlaceIndicator {
+	sequence: Sequence;
+	index: number;
+}
+
+// PlaceholderController
+
+export interface PlaceholderControllerExtension {
+	create(): PlaceholderController;
+}
+
+export interface PlaceholderController {
+	canCreate(sequence: Sequence, index: number): boolean;
 }

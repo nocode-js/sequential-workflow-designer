@@ -104,7 +104,8 @@ export class ControlBar implements UiComponent {
 	}
 
 	private refreshDeleteButtonVisibility() {
-		const isHidden = !this.state.selectedStepId || this.state.isReadonly;
+		const isHidden =
+			!this.state.selectedStepId || this.state.isReadonly || !this.definitionModifier.isDeletable(this.state.selectedStepId);
 		this.view.setIsDeleteButtonHidden(isHidden);
 	}
 }
