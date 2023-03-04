@@ -1,5 +1,5 @@
 import { Dom } from '../../core/dom';
-import { SwitchStep } from '../../definition';
+import { BranchedStep } from '../../definition';
 import { StepContext } from '../../designer-extension';
 import { createComponentContextStub } from '../../test-tools/stubs';
 import { SwitchStepComponentView } from './switch-step-component-view';
@@ -8,7 +8,7 @@ describe('SwitchStepComponentView', () => {
 	it('create() creates view', () => {
 		const parent = Dom.svg('svg');
 
-		const step: SwitchStep = {
+		const step: BranchedStep = {
 			id: '0x',
 			branches: {
 				x: [],
@@ -19,7 +19,7 @@ describe('SwitchStepComponentView', () => {
 			properties: {},
 			type: 'test'
 		};
-		const stepContext: StepContext<SwitchStep> = {
+		const stepContext: StepContext<BranchedStep> = {
 			depth: 0,
 			position: 0,
 			isInputConnected: true,

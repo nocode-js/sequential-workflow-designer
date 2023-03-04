@@ -1,12 +1,12 @@
 import { Dom } from '../../core/dom';
-import { Sequence, SwitchStep } from '../../definition';
+import { Sequence, BranchedStep } from '../../definition';
 import { StepContext } from '../../designer-extension';
 import { createComponentContextStub, createStepStub } from '../../test-tools/stubs';
 import { SwitchStepComponent } from './switch-step-component';
 
 describe('SwitchStepComponent', () => {
 	it('creates component', () => {
-		const step: SwitchStep = {
+		const step: BranchedStep = {
 			id: '0x0',
 			componentType: 'switch',
 			name: 'Foo',
@@ -18,7 +18,7 @@ describe('SwitchStepComponent', () => {
 			type: 'foo'
 		};
 		const parentSequence: Sequence = [step];
-		const stepContext: StepContext<SwitchStep> = {
+		const stepContext: StepContext<BranchedStep> = {
 			depth: 0,
 			position: 0,
 			isInputConnected: true,

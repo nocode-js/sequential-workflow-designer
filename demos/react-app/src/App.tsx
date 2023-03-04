@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Definition, ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration } from 'sequential-workflow-designer';
+import { ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration } from 'sequential-workflow-designer';
 import { SequentialWorkflowDesigner, wrapDefinition } from 'sequential-workflow-designer-react';
 import { GlobalEditor } from './GlobalEditor';
 import { StepEditor } from './StepEditor';
 import { createSwitchStep, createTaskStep } from './StepUtils';
+import { WorkflowDefinition } from './model';
 
-const startDefinition: Definition = {
+const startDefinition: WorkflowDefinition = {
 	properties: {},
 	sequence: [createTaskStep(), createSwitchStep()]
 };
@@ -15,7 +16,7 @@ const toolboxConfiguration: ToolboxConfiguration = {
 };
 
 const stepsConfiguration: StepsConfiguration = {
-	validator: (step: Step) => !!step.name
+	validator: (step: Step) => Boolean(step.name)
 };
 
 export function App() {

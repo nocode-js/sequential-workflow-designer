@@ -1,4 +1,4 @@
-import { ContainerStep, Sequence, Step } from '../../definition';
+import { SequentialStep, Sequence, Step } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent } from '../component';
 import { ComponentContext } from '../../component-context';
@@ -8,7 +8,7 @@ import { StepContext } from '../../designer-extension';
 export class ContainerStepComponent implements StepComponent {
 	public static create(
 		parentElement: SVGElement,
-		stepContext: StepContext<ContainerStep>,
+		stepContext: StepContext<SequentialStep>,
 		componentContext: ComponentContext
 	): ContainerStepComponent {
 		const view = ContainerStepComponentView.create(parentElement, stepContext, componentContext);

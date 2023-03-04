@@ -7824,18 +7824,25 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sequential-workflow-designer-react@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-designer-react/-/sequential-workflow-designer-react-0.6.0.tgz#b2d166e0ddf24cd87032e039b9c2fe80fdc6001d"
-  integrity sha512-M0JaslaUOXlxsOUJKKBQLiKmypF59QkLFsYJ19icnneBeK7PnyrOFDfZkbK8sEC8PbqBz1ZhBrMspMjE4LQH8A==
+sequential-workflow-designer-react@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-designer-react/-/sequential-workflow-designer-react-0.8.0.tgz#9f745ccce66f16b018678a6331815df74863eeaa"
+  integrity sha512-p3qIj2e4sHnNrfXngnLNbN6wJnBURcMwvtmNztOsIOsiriKAFRdd34VlCV1dOiPdC0dben3ABCO8LORpJ9nNZQ==
   dependencies:
     react "^18.2.0"
     react-dom "^18.2.0"
 
-sequential-workflow-designer@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-designer/-/sequential-workflow-designer-0.6.0.tgz#6043156611a5620ee93edccacc1f4848ba10e1b8"
-  integrity sha512-SvAsEUo1JejAOqAi55bNnn7SbTfksq3W3tIg806BtS+T9TlHCQwlXDQgn9CLfv8LtpOH7IvN9dAPUlbFWObtEw==
+sequential-workflow-designer@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-designer/-/sequential-workflow-designer-0.8.0.tgz#149634094b64efc94cd8991720baa99b79e1433b"
+  integrity sha512-TShcrtUGSOwk3FkdxuCtVgMWDcoA7apSGgtwhDTaUvsMKaKi0T0JsgFcKwzbqmgoDyKvTQRnzMcNpZzonjwMZQ==
+  dependencies:
+    sequential-workflow-model "^0.1.0"
+
+sequential-workflow-model@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-model/-/sequential-workflow-model-0.1.0.tgz#ed80a6e769810fa68ec4cded7b35e7327d63427a"
+  integrity sha512-VQVJuJQfxid9nYiUPwU5GUc3igeFPeHlgTSoqIaYhzulmZqB3bpLmVg1WY7Ve3lKvG8pjs9NzoissvG8PDhaEQ==
 
 serialize-javascript@^4.0.0:
   version "4.0.0"

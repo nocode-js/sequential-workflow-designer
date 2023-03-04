@@ -1,3 +1,14 @@
+## 0.8.0
+
+* This release introduces a better support for TypeScript.
+* The model of the workflow definition is moved from the `sequential-workflow-designer` package to the `sequential-workflow-model` package. By this it's possible to create a common package with your workflow model and use it for the front-end and back-end applications at the same time. The `sequential-workflow-designer` package exports definition types as before, but these types come from the `sequential-workflow-model` package. You don't have to include the `sequential-workflow-model` package to your project if you don't need it. You can read more about this approach [here](https://nocode-js.com/docs/sequential-workflow-designer/sharing-types-between-frontend-and-backend).
+
+#### Breaking Changes
+
+`TaskStep`, `SwitchStep`, `ContainerStep` interfaces are depreciated now. Those types will be removed in the future.
+
+🤩 We launched a new project: [Sequential Workflow Machine](https://github.com/nocode-js/sequential-workflow-machine). It's a JavaScript workflow engine for the frontend and the backend. The engine uses exactly the same data model as the Sequential Workflow Designer. It means you can use the same workflow definition for the designer and the engine. The new package is powered by the `xstate` library.
+
 ## 0.7.0
 
 * The step validator has two parameters from now: `step` and `parentSequence`.

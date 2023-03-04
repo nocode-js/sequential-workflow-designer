@@ -1,12 +1,12 @@
 import { Dom } from '../../core/dom';
-import { ContainerStep } from '../../definition';
+import { SequentialStep } from '../../definition';
 import { StepContext } from '../../designer-extension';
 import { createComponentContextStub } from '../../test-tools/stubs';
 import { ContainerStepComponentView } from './container-step-component-view';
 
 describe('ContainerStepComponentView', () => {
 	it('creates view', () => {
-		const step: ContainerStep = {
+		const step: SequentialStep = {
 			id: '0x0',
 			componentType: 'container',
 			name: 'Foo',
@@ -16,7 +16,7 @@ describe('ContainerStepComponentView', () => {
 		};
 
 		const parent = Dom.svg('svg');
-		const stepContext: StepContext<ContainerStep> = {
+		const stepContext: StepContext<SequentialStep> = {
 			step,
 			depth: 0,
 			position: 0,

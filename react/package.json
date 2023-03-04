@@ -1,9 +1,15 @@
 {
 	"name": "sequential-workflow-designer-react",
 	"description": "React wrapper for Sequential Workflow Designer component.",
-	"version": "0.7.0",
+	"version": "0.8.0",
 	"main": "./lib/index.js",
 	"types": "./lib/index.d.ts",
+	"author": {
+		"name": "NoCode JS",
+		"url": "https://nocode-js.com/"
+	},
+	"homepage": "https://nocode-js.com/",
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nocode-js/sequential-workflow-designer.git"
@@ -14,8 +20,6 @@
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/"
 	},
-	"author": "N4NO.com",
-	"license": "MIT",
 	"scripts": {
 		"prepare": "cp ../LICENSE LICENSE",
 		"clean": "rm -rf lib",
@@ -32,7 +36,7 @@
 		"react-dom": "^18.2.0"
 	},
 	"peerDependencies": {
-		"sequential-workflow-designer": "^0.7.0"
+		"sequential-workflow-designer": "^0.8.0"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^5.47.0",

@@ -1,14 +1,19 @@
 import dts from 'rollup-plugin-dts';
 import typescript from 'rollup-plugin-typescript2';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 const ts = typescript({
 	useTsconfigDeclarationDir: true
 });
 
+const external = ['sequential-workflow-model'];
+
 export default [
 	{
 		input: './src/index.ts',
 		plugins: [ts],
+		cache: false,
+		external,
 		output: [
 			{
 				file: './lib/index.mjs',
@@ -18,7 +23,11 @@ export default [
 	},
 	{
 		input: './src/index.ts',
-		plugins: [ts],
+		plugins: [
+			ts,
+			nodeResolve({ browser: true })
+		],
+		cache: false,
 		output: [
 			{
 				file: './dist/index.umd.js',

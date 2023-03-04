@@ -1,34 +1,34 @@
 import { createContext, useContext, useState } from 'react';
-import { ComponentType, Properties, PropertyValue, Step, StepEditorContext } from 'sequential-workflow-designer';
+import { StepEditorContext, PropertyValue, Step } from 'sequential-workflow-designer';
 
-export interface StepEditorWrapper {
+export interface StepEditorWrapper<TStep extends Step> {
 	readonly id: string;
-	readonly type: string;
-	readonly componentType: ComponentType;
+	readonly type: TStep['type'];
+	readonly componentType: TStep['componentType'];
 	readonly name: string;
-	readonly properties: Properties;
-	readonly step: Step;
+	readonly properties: TStep['properties'];
+	readonly step: TStep;
 
 	setName(name: string): void;
-	setProperty(name: string, value: PropertyValue): void;
+	setProperty(name: keyof TStep['properties'], value: TStep['properties'][typeof name]): void;
 	notifyPropertiesChanged(): void;
 	notifyChildrenChanged(): void;
 }
 
-const globalEditorWrapperContext = createContext<StepEditorWrapper | null>(null);
+const globalEditorWrapperContext = createContext<StepEditorWrapper<Step> | null>(null);
 
-export function useStepEditor(): StepEditorWrapper {
+export function useStepEditor<TStep extends Step = Step>(): StepEditorWrapper<TStep> {
 	const wrapper = useContext(globalEditorWrapperContext);
 	if (!wrapper) {
 		throw new Error('Cannot find step editor context');
 	}
-	return wrapper;
+	return wrapper as unknown as StepEditorWrapper<TStep>;
 }
 
 export function StepEditorWrapperContext(props: { children: JSX.Element; step: Step; context: StepEditorContext }) {
 	const [wrapper, setWrapper] = useState(() => createWrapper());
 
-	function createWrapper(): StepEditorWrapper {
+	function createWrapper(): StepEditorWrapper<Step> {
 		return {
 			id: props.step.id,
 			type: props.step.type,

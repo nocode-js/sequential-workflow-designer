@@ -20,6 +20,11 @@ module.exports = config => {
 		karmaTypescriptConfig: {
 			compilerOptions: {
 				skipLibCheck: true
+			},
+			bundlerOptions: {
+				transforms: [
+					require("karma-typescript-es6-transform")()
+				]
 			}
 		}
 	});
