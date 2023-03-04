@@ -1,10 +1,10 @@
-import { ContainerStep, Step, SwitchStep, TaskStep } from '../definition';
+import { BranchedStep, SequentialStep, Step } from '../definition';
 import { ServicesResolver } from '../services';
 import { StepExtensionResolver } from '../workspace/step-extension-resolver';
 import { StepsTraverser } from './steps-traverser';
 
 describe('StepsTraverser', () => {
-	function createIf(name: string, falseStep: Step): SwitchStep {
+	function createIf(name: string, falseStep: Step): BranchedStep {
 		return {
 			componentType: 'switch',
 			id: 'if' + name,
@@ -18,7 +18,7 @@ describe('StepsTraverser', () => {
 		};
 	}
 
-	function createTask(name: string): TaskStep {
+	function createTask(name: string): Step {
 		return {
 			componentType: 'task',
 			id: 'task' + name,
@@ -28,7 +28,7 @@ describe('StepsTraverser', () => {
 		};
 	}
 
-	const taskFoo: TaskStep = createTask('foo');
+	const taskFoo: Step = createTask('foo');
 	const ifAlfa = createIf('beta', taskFoo);
 	const ifBeta = createIf('alfa', ifAlfa);
 	const loop = {
@@ -38,7 +38,7 @@ describe('StepsTraverser', () => {
 		type: 'loop',
 		properties: {},
 		sequence: [ifBeta]
-	} as ContainerStep;
+	} as SequentialStep;
 	const definition = {
 		sequence: [
 			createIf('q', createTask('p')),

@@ -1,40 +1,24 @@
-export interface Definition {
-	sequence: Sequence;
-	properties: Properties;
-}
+import { BranchedStep, SequentialStep, Step } from 'sequential-workflow-model';
 
-export type Sequence = Step[];
+export * from 'sequential-workflow-model';
 
-export interface Step {
-	id: string;
-	componentType: ComponentType;
-	type: string;
-	name: string;
-	properties: Properties;
-}
-
-export type ComponentType = 'task' | 'switch' | 'container' | string;
-
+/**
+ * @deprecated Use {@link Step} instead.
+ */
 export interface TaskStep extends Step {
 	componentType: 'task';
 }
 
-export interface SwitchStep extends Step {
+/**
+ * @deprecated Use {@link BranchedStep} instead.
+ */
+export interface SwitchStep extends BranchedStep {
 	componentType: 'switch';
-	branches: Branches;
 }
 
-export interface ContainerStep extends Step {
+/**
+ * @deprecated Use {@link SequentialStep} instead.
+ */
+export interface ContainerStep extends SequentialStep {
 	componentType: 'container';
-	sequence: Sequence;
 }
-
-export interface Branches {
-	[branchName: string]: Sequence;
-}
-
-export interface Properties {
-	[name: string]: PropertyValue;
-}
-
-export type PropertyValue = string | number | boolean | null;

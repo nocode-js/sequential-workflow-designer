@@ -1,14 +1,14 @@
 import { ComponentType, Definition, Sequence, Step } from './definition';
 import { DesignerExtension } from './designer-extension';
 
-export interface DesignerConfiguration {
+export interface DesignerConfiguration<TDefinition extends Definition = Definition> {
 	theme?: string;
 	isReadonly?: boolean;
 	undoStackSize?: number;
 
 	toolbox: ToolboxConfiguration;
 	steps: StepsConfiguration;
-	editors: EditorsConfiguration;
+	editors: EditorsConfiguration<TDefinition>;
 
 	extensions?: DesignerExtension[];
 }
@@ -40,10 +40,10 @@ export type StepIconUrlProvider = (componentType: ComponentType, type: string) =
 
 export type StepValidator = (step: Step, parentSequence: Sequence) => boolean;
 
-export interface EditorsConfiguration {
+export interface EditorsConfiguration<TDefinition extends Definition> {
 	isHidden?: boolean;
 	stepEditorProvider: StepEditorProvider;
-	globalEditorProvider: GlobalEditorProvider;
+	globalEditorProvider: GlobalEditorProvider<TDefinition>;
 }
 
 export interface StepEditorContext {
@@ -58,4 +58,4 @@ export interface GlobalEditorContext {
 	notifyPropertiesChanged(): void;
 }
 
-export type GlobalEditorProvider = (definition: Definition, context: GlobalEditorContext) => HTMLElement;
+export type GlobalEditorProvider<TDefinition extends Definition> = (definition: TDefinition, context: GlobalEditorContext) => HTMLElement;

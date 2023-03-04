@@ -10,7 +10,7 @@ import { WorkspaceController } from './workspace/workspace-controller';
 import { StepOrName, StepsTraverser } from './core/steps-traverser';
 import { ServicesResolver } from './services';
 
-export class Designer {
+export class Designer<TDefinition extends Definition = Definition> {
 	/**
 	 * Creates a designer.
 	 * @param placeholder Placeholder where the designer will be attached.
@@ -18,7 +18,11 @@ export class Designer {
 	 * @param configuration Designer's configuration.
 	 * @returns An instance of the designer.
 	 */
-	public static create(placeholder: HTMLElement, startDefinition: Definition, configuration: DesignerConfiguration): Designer {
+	public static create<TDef extends Definition>(
+		placeholder: HTMLElement,
+		startDefinition: TDef,
+		configuration: DesignerConfiguration<TDef>
+	): Designer<TDef> {
 		if (!placeholder) {
 			throw new Error('Placeholder is not set');
 		}
@@ -32,11 +36,13 @@ export class Designer {
 			throw new Error('Configuration is not set');
 		}
 
-		const services = ServicesResolver.resolve(configuration.extensions);
-		const designerContext = DesignerContext.create(placeholder, startDefinition, configuration, services);
+		const config = configuration as DesignerConfiguration;
 
-		const view = DesignerView.create(placeholder, designerContext, configuration);
-		const designer = new Designer(
+		const services = ServicesResolver.resolve(configuration.extensions);
+		const designerContext = DesignerContext.create(placeholder, startDefinition, config, services);
+
+		const view = DesignerView.create(placeholder, designerContext, config);
+		const designer = new Designer<TDef>(
 			view,
 			designerContext.state,
 			designerContext.definitionModifier,
@@ -47,7 +53,7 @@ export class Designer {
 		view.workspace.onReady.subscribe(() => designer.onReady.forward());
 
 		designerContext.state.onDefinitionChanged.subscribe(() => {
-			setTimeout(() => designer.onDefinitionChanged.forward(designerContext.state.definition));
+			setTimeout(() => designer.onDefinitionChanged.forward(designerContext.state.definition as TDef));
 		});
 		designerContext.state.onSelectedStepIdChanged.subscribe(() =>
 			designer.onSelectedStepIdChanged.forward(designerContext.state.selectedStepId)
@@ -71,7 +77,7 @@ export class Designer {
 	/**
 	 * @description Fires when the definition has changed.
 	 */
-	public readonly onDefinitionChanged = new SimpleEvent<Definition>();
+	public readonly onDefinitionChanged = new SimpleEvent<TDefinition>();
 
 	/**
 	 * @description Fires when the selected step has changed.
@@ -81,8 +87,8 @@ export class Designer {
 	/**
 	 * @returns the current definition of the workflow.
 	 */
-	public getDefinition(): Definition {
-		return this.state.definition;
+	public getDefinition(): TDefinition {
+		return this.state.definition as TDefinition;
 	}
 
 	/**

@@ -14,9 +14,9 @@ import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
 import { wrapDefinition, WrappedDefinition } from './WrappedDefinition';
 
-export interface SequentialWorkflowDesignerProps {
-	definition: WrappedDefinition;
-	onDefinitionChange: (state: WrappedDefinition) => void;
+export interface SequentialWorkflowDesignerProps<TDefinition extends Definition> {
+	definition: WrappedDefinition<TDefinition>;
+	onDefinitionChange: (state: WrappedDefinition<TDefinition>) => void;
 	selectedStepId?: string | null;
 	onSelectedStepIdChanged?: (stepId: string | null) => void;
 	isReadonly?: boolean;
@@ -30,7 +30,7 @@ export interface SequentialWorkflowDesignerProps {
 	extensions?: DesignerExtension[];
 }
 
-export function SequentialWorkflowDesigner(props: SequentialWorkflowDesignerProps) {
+export function SequentialWorkflowDesigner<TDefinition extends Definition>(props: SequentialWorkflowDesignerProps<TDefinition>) {
 	const [placeholder, setPlaceholder] = useState<HTMLElement | null>(null);
 
 	const onDefinitionChangeRef = useRef(props.onDefinitionChange);
@@ -38,7 +38,7 @@ export function SequentialWorkflowDesigner(props: SequentialWorkflowDesignerProp
 	const globalEditorRef = useRef(props.globalEditor);
 	const stepEditorRef = useRef(props.stepEditor);
 
-	const designerRef = useRef<Designer | null>(null);
+	const designerRef = useRef<Designer<TDefinition> | null>(null);
 	const editorRootRef = useRef<ReactDOM.Root | null>(null);
 
 	const definition = props.definition;
@@ -57,7 +57,7 @@ export function SequentialWorkflowDesigner(props: SequentialWorkflowDesignerProp
 		}
 	}
 
-	function globalEditorProvider(def: Definition, context: GlobalEditorContext) {
+	function globalEditorProvider(def: TDefinition, context: GlobalEditorContext) {
 		return editorProvider(
 			editorRootRef,
 			<GlobalEditorWrapperContext definition={def} context={context}>

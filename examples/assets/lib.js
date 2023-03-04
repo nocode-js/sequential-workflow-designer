@@ -4,6 +4,7 @@ function isTestEnv() {
 	const hostname = location.hostname.toLowerCase();
 	return (
 		hostname === 'localhost' ||
+		hostname === '127.0.0.1' ||
 		hostname.startsWith('192.168.')
 	);
 }
@@ -18,7 +19,7 @@ function embedStylesheet(url) {
 
 const baseUrl = isTestEnv()
 	? '../designer'
-	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.7.0';
+	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.8.0';
 
 embedScript(`${baseUrl}/dist/index.umd.js`);
 embedStylesheet(`${baseUrl}/css/designer.css`);

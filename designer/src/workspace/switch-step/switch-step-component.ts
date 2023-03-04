@@ -1,4 +1,4 @@
-import { Sequence, Step, SwitchStep } from '../../definition';
+import { Sequence, Step, BranchedStep } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { ClickBehaviorType, ClickDetails, ClickResult, Placeholder, StepComponent } from '../component';
 import { ComponentContext } from '../../component-context';
@@ -6,7 +6,11 @@ import { SwitchStepComponentView } from './switch-step-component-view';
 import { StepContext } from '../../designer-extension';
 
 export class SwitchStepComponent implements StepComponent {
-	public static create(parentElement: SVGElement, stepContext: StepContext<SwitchStep>, context: ComponentContext): SwitchStepComponent {
+	public static create(
+		parentElement: SVGElement,
+		stepContext: StepContext<BranchedStep>,
+		context: ComponentContext
+	): SwitchStepComponent {
 		const view = SwitchStepComponentView.create(parentElement, stepContext, context);
 		return new SwitchStepComponent(view, stepContext.step, stepContext.parentSequence, view.hasOutput(), context.configuration);
 	}

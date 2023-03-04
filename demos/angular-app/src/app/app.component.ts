@@ -7,7 +7,6 @@ import {
 	Step,
 	StepEditorContext,
 	StepsConfiguration,
-	TaskStep,
 	ToolboxConfiguration
 } from 'sequential-workflow-designer';
 
@@ -36,12 +35,11 @@ export class AppComponent implements OnInit {
 				name: 'Step',
 				steps: [
 					{
-						id: '_',
 						componentType: 'task',
 						name: 'Step',
 						properties: { velocity: 0 },
 						type: 'task'
-					} as TaskStep
+					}
 				]
 			}
 		]

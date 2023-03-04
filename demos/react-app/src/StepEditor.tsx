@@ -1,9 +1,11 @@
 import { ChangeEvent } from 'react';
-import { SwitchStep } from 'sequential-workflow-designer';
 import { useStepEditor } from 'sequential-workflow-designer-react';
+import { SwitchStep, TaskStep } from './model';
 
 export function StepEditor() {
-	const { type, name, step, properties, setName, setProperty, notifyPropertiesChanged, notifyChildrenChanged } = useStepEditor();
+	const { type, name, step, properties, setName, setProperty, notifyPropertiesChanged, notifyChildrenChanged } = useStepEditor<
+		TaskStep | SwitchStep
+	>();
 
 	function onNameChanged(e: ChangeEvent) {
 		setName((e.target as HTMLInputElement).value);
@@ -36,10 +38,10 @@ export function StepEditor() {
 			<input type="text" value={name} onChange={onNameChanged} />
 
 			<h4>X Variable</h4>
-			<input type="text" value={(properties['x'] as string) || ''} onChange={onXChanged} />
+			<input type="text" value={properties.x || ''} onChange={onXChanged} />
 
 			<h4>Y Variable</h4>
-			<input type="text" value={(properties['y'] as string) || ''} onChange={onYChanged} />
+			<input type="text" value={properties.y || ''} onChange={onYChanged} />
 
 			{type === 'switch' && (
 				<>

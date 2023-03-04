@@ -1,9 +1,15 @@
 {
 	"name": "sequential-workflow-designer",
 	"description": "Customizable no-code component for building flow-based programming applications.",
-	"version": "0.7.0",
+	"version": "0.8.0",
 	"main": "./lib/index.mjs",
 	"types": "./lib/index.d.ts",
+	"author": {
+		"name": "NoCode JS",
+		"url": "https://nocode-js.com/"
+	},
+	"homepage": "https://nocode-js.com/",
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nocode-js/sequential-workflow-designer.git"
@@ -28,8 +34,9 @@
 		"prettier": "prettier --check ./src",
 		"prettier:fix": "prettier --write ./src"
 	},
-	"author": "N4NO.com",
-	"license": "MIT",
+	"dependencies": {
+		"sequential-workflow-model": "^0.1.0"
+	},
 	"devDependencies": {
 		"@types/jasmine": "^4.3.1",
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
@@ -40,10 +47,12 @@
 		"karma-jasmine": "^5.1.0",
 		"karma-spec-reporter": "^0.0.36",
 		"karma-typescript": "^5.5.3",
+		"karma-typescript-es6-transform": "^5.5.3",
 		"prettier": "^2.8.2",
-		"rollup": "^3.13.0",
-		"rollup-plugin-dts": "^5.1.1",
+		"rollup": "^3.18.0",
+		"rollup-plugin-dts": "^5.2.0",
 		"rollup-plugin-typescript2": "^0.34.1",
+		"@rollup/plugin-node-resolve": "^15.0.1",
 		"typescript": "^4.9.5"
 	},
 	"keywords": [

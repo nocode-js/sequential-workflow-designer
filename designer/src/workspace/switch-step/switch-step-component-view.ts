@@ -1,6 +1,6 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
-import { SwitchStep } from '../../definition';
+import { BranchedStep } from '../../definition';
 import { JoinView } from '../common-views/join-view';
 import { LabelView, LABEL_HEIGHT } from '../common-views/label-view';
 import { RegionView } from '../common-views//region-view';
@@ -18,7 +18,7 @@ const PADDING_TOP = 20;
 const CONNECTION_HEIGHT = 16;
 
 export class SwitchStepComponentView implements ComponentView {
-	public static create(parent: SVGElement, stepContext: StepContext<SwitchStep>, context: ComponentContext): SwitchStepComponentView {
+	public static create(parent: SVGElement, stepContext: StepContext<BranchedStep>, context: ComponentContext): SwitchStepComponentView {
 		const { step } = stepContext;
 		const g = Dom.svg('g', {
 			class: `sqd-step-switch sqd-type-${step.type}`

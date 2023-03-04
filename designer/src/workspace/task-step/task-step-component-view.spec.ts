@@ -1,19 +1,19 @@
 import { Dom } from '../../core/dom';
-import { TaskStep } from '../../definition';
+import { Step } from '../../definition';
 import { StepContext } from '../../designer-extension';
 import { TaskStepComponentView } from './task-step-component-view';
 
 describe('TaskStepComponentView', () => {
 	it('create() creates view', () => {
 		const parent = Dom.svg('svg');
-		const step: TaskStep = {
+		const step: Step = {
 			id: '0x',
 			componentType: 'task',
 			name: 'x',
 			properties: {},
 			type: 'test'
 		};
-		const stepContext: StepContext<TaskStep> = {
+		const stepContext: StepContext<Step> = {
 			depth: 0,
 			position: 0,
 			isInputConnected: true,

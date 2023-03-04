@@ -1,6 +1,6 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
-import { ContainerStep } from '../../definition';
+import { SequentialStep } from '../../definition';
 import { ClickDetails, ComponentView } from '../component';
 import { SequenceComponent } from '../sequence/sequence-component';
 import { InputView } from '../common-views/input-view';
@@ -18,7 +18,7 @@ const PADDING_X = 20;
 export class ContainerStepComponentView implements ComponentView {
 	public static create(
 		parentElement: SVGElement,
-		stepContext: StepContext<ContainerStep>,
+		stepContext: StepContext<SequentialStep>,
 		componentContext: ComponentContext
 	): ContainerStepComponentView {
 		const { step } = stepContext;

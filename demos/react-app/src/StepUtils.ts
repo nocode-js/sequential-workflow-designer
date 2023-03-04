@@ -1,4 +1,5 @@
-import { SwitchStep, TaskStep, Uid } from 'sequential-workflow-designer';
+import { Uid } from 'sequential-workflow-designer';
+import { SwitchStep, TaskStep } from './model';
 
 export function createTaskStep(): TaskStep {
 	return {

@@ -1,5 +1,5 @@
 import { Dom } from '../../core/dom';
-import { ContainerStep } from '../../definition';
+import { SequentialStep } from '../../definition';
 import { StepContext } from '../../designer-extension';
 import { createComponentContextStub } from '../../test-tools/stubs';
 import { ContainerStepComponent } from './container-step-component';
@@ -7,7 +7,7 @@ import { ContainerStepComponent } from './container-step-component';
 describe('ContainerStepComponent', () => {
 	it('create() creates component', () => {
 		const parentElement = Dom.svg('svg');
-		const step: ContainerStep = {
+		const step: SequentialStep = {
 			id: '0x0',
 			componentType: 'container',
 			name: 'Foo',
@@ -15,7 +15,7 @@ describe('ContainerStepComponent', () => {
 			type: 'foo',
 			sequence: []
 		};
-		const stepContext: StepContext<ContainerStep> = {
+		const stepContext: StepContext<SequentialStep> = {
 			step,
 			depth: 0,
 			position: 0,
