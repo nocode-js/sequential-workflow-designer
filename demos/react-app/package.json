@@ -23,8 +23,8 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "react-scripts test",
-		"test:single": "react-scripts test --watchAll=false",
+		"test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!sequential-workflow-model)/\"",
+		"test:single": "yarn test --watchAll=false",
 		"eject": "react-scripts eject",
 		"prettier": "prettier --check ./src",
 		"prettier:fix": "prettier --write ./src",
