@@ -8,3 +8,4 @@ yarn install
 yarn build
 yarn eslint
 yarn prettier
+yarn test:single

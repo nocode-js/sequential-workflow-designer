@@ -8,5 +8,8 @@ module.exports = {
 	testEnvironment: 'jsdom',
 	moduleNameMapper: {
 		'^sequential-workflow-designer': path.join(__dirname, '../designer/src'),
-	}
+	},
+	transformIgnorePatterns: [
+		'node_modules/(?!sequential-workflow-model)'
+	],
 };
