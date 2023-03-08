@@ -17,10 +17,10 @@
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"outDir": "lib",
+		"outDir": "build",
 		"jsx": "react-jsx",
 		"declaration": true,
-		"declarationDir": "lib"
+		"declarationDir": "build"
 	},
 	"include": [
 		"src/**/*.ts"

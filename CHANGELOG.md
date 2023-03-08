@@ -1,3 +1,10 @@
+## 0.8.1
+
+Changed format of bundles:
+
+* `sequential-workflow-designer` to UMD, ESM and CommonJS,
+* `sequential-workflow-designer-react` to ESM and CommonJS.
+
 ## 0.8.0
 
 * This release introduces a better support for TypeScript.
