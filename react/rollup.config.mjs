@@ -1,17 +1,23 @@
 import dts from 'rollup-plugin-dts';
 import typescript from 'rollup-plugin-typescript2';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import fs from 'fs';
 
-const ts = typescript({
-	useTsconfigDeclarationDir: true
-});
+const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
-const external = ['sequential-workflow-model'];
+const external = [
+	...Object.keys(packageJson.peerDependencies),
+	'react-dom/client',
+	'react/jsx-runtime'
+];
 
 export default [
 	{
 		input: './src/index.ts',
-		plugins: [ts],
+		plugins: [
+			typescript({
+				useTsconfigDeclarationDir: true
+			})
+		],
 		cache: false,
 		external,
 		output: [
@@ -26,21 +32,6 @@ export default [
 		]
 	},
 	{
-		input: './src/index.ts',
-		plugins: [
-			ts,
-			nodeResolve({ browser: true })
-		],
-		cache: false,
-		output: [
-			{
-				file: './dist/index.umd.js',
-				format: 'umd',
-				name: 'sequentialWorkflowDesigner'
-			}
-		]
-	},
-	{
 		input: './build/index.d.ts',
 		output: [
 			{
@@ -49,5 +40,6 @@ export default [
 			}
 		],
 		plugins: [dts()],
+		cache: false,
 	}
 ];

@@ -10,7 +10,7 @@ This project contains a simple demo of using the `sequential-workflow-designer-a
 
 ## 🔨 Development
 
-Replace packages in the `package.json` files to:
+Replace dependencies in the `package.json` file:
 
 ```
 "dependencies": {

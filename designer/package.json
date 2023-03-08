@@ -1,9 +1,31 @@
 {
 	"name": "sequential-workflow-designer",
 	"description": "Customizable no-code component for building flow-based programming applications.",
-	"version": "0.8.0",
-	"main": "./lib/index.mjs",
+	"version": "0.8.1",
+	"type": "module",
+	"main": "./lib/esm/index.js",
 	"types": "./lib/index.d.ts",
+	"exports": {
+		".": {
+			"types": {
+				"require": "./lib/index.d.ts",
+				"default": "./lib/index.d.ts"
+			},
+			"default": {
+				"require": "./lib/cjs/index.cjs",
+				"default": "./lib/esm/index.js"
+			}
+		},
+		"./css/designer.css": {
+			"default": "./css/designer.css"
+		},
+		"./css/designer-light.css": {
+			"default": "./css/designer-light.css"
+		},
+		"./css/designer-dark.css": {
+			"default": "./css/designer-dark.css"
+		}
+	},
 	"author": {
 		"name": "NoCode JS",
 		"url": "https://nocode-js.com/"
@@ -28,14 +50,14 @@
 		"start": "rollup -c --watch",
 		"start:clean": "yarn clean && npm run start",
 		"build": "yarn clean && rollup -c",
-		"test": "karma start",
-		"test:single": "karma start --single-run",
+		"test": "karma start karma.conf.cjs",
+		"test:single": "karma start karma.conf.cjs --single-run",
 		"eslint": "eslint ./src --ext .ts",
 		"prettier": "prettier --check ./src",
 		"prettier:fix": "prettier --write ./src"
 	},
 	"dependencies": {
-		"sequential-workflow-model": "^0.1.0"
+		"sequential-workflow-model": "^0.1.1"
 	},
 	"devDependencies": {
 		"@types/jasmine": "^4.3.1",

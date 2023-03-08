@@ -5090,24 +5090,24 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sequential-workflow-designer-angular@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-designer-angular/-/sequential-workflow-designer-angular-0.8.0.tgz#b8bbce6b2c141ff908a47eadb17a787c99b730ff"
-  integrity sha512-ogwojf02XLOTgt/baD3sPOxO9JbETczSiP0HZ36WzEFcW5hV4u8VhHfjpGpclJ6WJN5Bll59WAQXxjvbc+3/+w==
+sequential-workflow-designer-angular@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-designer-angular/-/sequential-workflow-designer-angular-0.8.1.tgz#da24ac1a294b3216d2e18c47afce21000d52f4e4"
+  integrity sha512-0+wsv7ZtcM38Am+hcNERXw4bzn8aK9OtJH1k5jy5t4Gw6JwMuB4gb8ofwDPdDhzrpRZ1T5ypBtI5z4NtYSWNsg==
   dependencies:
     tslib "^2.3.0"
 
-sequential-workflow-designer@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-designer/-/sequential-workflow-designer-0.8.0.tgz#149634094b64efc94cd8991720baa99b79e1433b"
-  integrity sha512-TShcrtUGSOwk3FkdxuCtVgMWDcoA7apSGgtwhDTaUvsMKaKi0T0JsgFcKwzbqmgoDyKvTQRnzMcNpZzonjwMZQ==
+sequential-workflow-designer@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-designer/-/sequential-workflow-designer-0.8.1.tgz#b6fc23b022cf74bb1a6564db358c9c378d4e0cf5"
+  integrity sha512-tuu4OtulhgdlmdyQZr/OHV+ITPkj4KAM47A9n7znyl0EvujSbyZ4FxDTc/fpN03yVWKV6T3zENS5EVT2/c4wZA==
   dependencies:
-    sequential-workflow-model "^0.1.0"
+    sequential-workflow-model "^0.1.1"
 
-sequential-workflow-model@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-model/-/sequential-workflow-model-0.1.0.tgz#ed80a6e769810fa68ec4cded7b35e7327d63427a"
-  integrity sha512-VQVJuJQfxid9nYiUPwU5GUc3igeFPeHlgTSoqIaYhzulmZqB3bpLmVg1WY7Ve3lKvG8pjs9NzoissvG8PDhaEQ==
+sequential-workflow-model@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-model/-/sequential-workflow-model-0.1.1.tgz#3dc79bbcfaf45f09db1313302a504be843b44847"
+  integrity sha512-1IfXr3ze7uVlXC54xeCtIrG+rP026gjawuBy7MEDmg597MduOw9yKnBpXwAmM9GSN56Zp7gsoMxZGv5kwXIleg==
 
 serialize-javascript@^6.0.0:
   version "6.0.1"
