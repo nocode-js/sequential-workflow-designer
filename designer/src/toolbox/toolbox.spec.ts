@@ -1,13 +1,14 @@
 import { Dom } from '../core/dom';
-import { createDesignerContextStub } from '../test-tools/stubs';
+import { createDesignerApiStub, getToolboxConfigurationStub } from '../test-tools/stubs';
 import { Toolbox } from './toolbox';
 
 describe('Toolbox', () => {
 	it('create() creates toolbox', () => {
 		const parent = Dom.element('div');
-		const designerContext = createDesignerContextStub();
+		const configuration = getToolboxConfigurationStub();
+		const api = createDesignerApiStub();
 
-		const item = Toolbox.create(parent, designerContext);
+		const item = Toolbox.create(parent, api, configuration);
 
 		expect(item).toBeDefined();
 	});

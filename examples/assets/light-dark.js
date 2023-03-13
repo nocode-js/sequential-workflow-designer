@@ -26,7 +26,6 @@ function install(placeholder, theme) {
 	const configuration = {
 		theme,
 		toolbox: {
-			isHidden: false,
 			groups: [
 				{
 					name: 'Tasks',
@@ -53,7 +52,9 @@ function install(placeholder, theme) {
 			stepEditorProvider: (step) => {
 				return createEditor(`Selected step: ${step.type}`);
 			}
-		}
+		},
+
+		controlBar: true,
 	};
 	sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
 }

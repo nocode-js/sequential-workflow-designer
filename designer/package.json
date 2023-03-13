@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer",
 	"description": "Customizable no-code component for building flow-based programming applications.",
-	"version": "0.8.1",
+	"version": "0.9.0",
 	"type": "module",
 	"main": "./lib/esm/index.js",
 	"types": "./lib/index.d.ts",
@@ -60,6 +60,7 @@
 		"sequential-workflow-model": "^0.1.1"
 	},
 	"devDependencies": {
+		"@rollup/plugin-node-resolve": "^15.0.1",
 		"@types/jasmine": "^4.3.1",
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
 		"@typescript-eslint/parser": "^5.47.0",
@@ -74,7 +75,6 @@
 		"rollup": "^3.18.0",
 		"rollup-plugin-dts": "^5.2.0",
 		"rollup-plugin-typescript2": "^0.34.1",
-		"@rollup/plugin-node-resolve": "^15.0.1",
 		"typescript": "^4.9.5"
 	},
 	"keywords": [

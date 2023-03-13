@@ -60,6 +60,7 @@ export function App() {
 					onSelectedStepIdChanged={setSelectedStepId}
 					toolboxConfiguration={toolboxConfiguration}
 					stepsConfiguration={stepsConfiguration}
+					controlBar={true}
 					globalEditor={<GlobalEditor />}
 					stepEditor={<StepEditor />}
 				/>

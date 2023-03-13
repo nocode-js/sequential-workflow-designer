@@ -1,4 +1,4 @@
-/* global document, sequentialWorkflowDesigner, prompt, alert */
+/* global document, sequentialWorkflowDesigner, localStorage */
 
 function uid() {
 	return sequentialWorkflowDesigner.Uid.next();
@@ -116,10 +116,7 @@ function initDesigner(testCaseName) {
 
 	const definition = testCases[testCaseName];
 	const configuration = {
-		toolbox: {
-			isHidden: true,
-			groups: []
-		},
+		toolbox: false,
 
 		steps: {
 			iconUrlProvider: () => './assets/icon-task.svg',
@@ -137,7 +134,9 @@ function initDesigner(testCaseName) {
 				editor.innerText = `Component type: ${step.componentType}`;
 				return editor;
 			}
-		}
+		},
+
+		controlBar: true,
 	};
 
 	const placeholder = document.getElementById('designer');

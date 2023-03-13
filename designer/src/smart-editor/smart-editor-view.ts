@@ -1,9 +1,11 @@
+import { DesignerApi } from '../api/designer-api';
 import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
-import { EditorView } from './editor';
+import { EditorsConfiguration } from '../designer-configuration';
+import { Editor } from './editor';
 
 export class SmartEditorView {
-	public static create(parent: HTMLElement): SmartEditorView {
+	public static create(parent: HTMLElement, api: DesignerApi, configuration: EditorsConfiguration): SmartEditorView {
 		const root = Dom.element('div', {
 			class: 'sqd-smart-editor'
 		});
@@ -15,13 +17,21 @@ export class SmartEditorView {
 
 		parent.appendChild(toggle);
 		parent.appendChild(root);
-		return new SmartEditorView(root, toggle);
+
+		const editor = Editor.create(
+			root,
+			api,
+			'sqd-editor sqd-step-editor',
+			configuration.stepEditorProvider,
+			'sqd-editor sqd-global-editor',
+			configuration.globalEditorProvider
+		);
+		return new SmartEditorView(root, toggle, editor);
 	}
 
-	private view?: EditorView;
 	private toggleIcon?: SVGElement;
 
-	private constructor(private readonly root: HTMLElement, private readonly toggle: HTMLElement) {}
+	private constructor(private readonly root: HTMLElement, private readonly toggle: HTMLElement, private readonly editor: Editor) {}
 
 	public bindToggleIsCollapsedClick(handler: () => void) {
 		this.toggle.addEventListener(
@@ -45,11 +55,7 @@ export class SmartEditorView {
 		this.toggle.appendChild(this.toggleIcon);
 	}
 
-	public setView(view: EditorView) {
-		if (this.view) {
-			this.root.removeChild(this.view.root);
-		}
-		this.root.appendChild(view.root);
-		this.view = view;
+	public destroy() {
+		this.editor.destroy();
 	}
 }

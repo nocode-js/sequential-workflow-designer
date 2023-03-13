@@ -1,19 +1,19 @@
-import { DesignerContext } from '../../designer-context';
-import { WheelController, WorkspaceClientPositionSource } from '../../designer-extension';
-import { DesignerState } from '../../designer-state';
+import { DesignerApi } from '../../api/designer-api';
+import { WorkspaceApi } from '../../api/workspace-api';
+import { WheelController } from '../../designer-extension';
 import { QuantifiedScaleViewPortCalculator } from './quantified-scale-view-port-calculator';
 
 export class ClassicWheelController implements WheelController {
-	public static create(context: DesignerContext, positionSource: WorkspaceClientPositionSource) {
-		return new ClassicWheelController(context.state, positionSource);
+	public static create(api: DesignerApi) {
+		return new ClassicWheelController(api.workspace);
 	}
 
-	private constructor(private readonly state: DesignerState, private readonly positionSource: WorkspaceClientPositionSource) {}
+	private constructor(private readonly api: WorkspaceApi) {}
 
 	public onWheel(e: WheelEvent) {
-		const newViewPort = QuantifiedScaleViewPortCalculator.zoomByWheel(this.state.viewPort, e, this.positionSource.getClientPosition());
+		const newViewPort = QuantifiedScaleViewPortCalculator.zoomByWheel(this.api.getViewPort(), e, this.api.getClientPosition());
 		if (newViewPort) {
-			this.state.setViewPort(newViewPort);
+			this.api.setViewPort(newViewPort);
 		}
 	}
 

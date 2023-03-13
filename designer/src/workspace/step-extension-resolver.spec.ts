@@ -1,6 +1,7 @@
 import { Step } from '../definition';
 import { StepExtension } from '../designer-extension';
 import { ServicesResolver } from '../services';
+import { createDesignerConfigurationStub } from '../test-tools/stubs';
 import { StepComponent } from './component';
 import { StepExtensionResolver } from './step-extension-resolver';
 
@@ -19,7 +20,8 @@ const ownTaskStepExtension = new OwnTaskStepExtension();
 
 describe('StepExtensionResolver', () => {
 	describe('default resolver', () => {
-		const services = ServicesResolver.resolve([]);
+		const configuration = createDesignerConfigurationStub();
+		const services = ServicesResolver.resolve([], configuration);
 		const resolver = StepExtensionResolver.create(services);
 
 		it('resolves task', () => {
@@ -36,11 +38,15 @@ describe('StepExtensionResolver', () => {
 	});
 
 	it('can replace default extension', () => {
-		const services = ServicesResolver.resolve([
-			{
-				steps: [ownTaskStepExtension]
-			}
-		]);
+		const configuration = createDesignerConfigurationStub();
+		const services = ServicesResolver.resolve(
+			[
+				{
+					steps: [ownTaskStepExtension]
+				}
+			],
+			configuration
+		);
 		const resolver = StepExtensionResolver.create(services);
 
 		expect(resolver.resolve('task')).toEqual(ownTaskStepExtension);

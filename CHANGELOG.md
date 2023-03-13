@@ -1,3 +1,38 @@
+## 0.9.0
+
+#### Breaking Changes
+
+This version changes the main configuration. The "isHidden" properties are depreciated now and will be removed. Also we added a possibility to hide the control bar. To hide the control bar or other UI component you need to set `false` in the corresponding configuration property.
+
+```js
+const configuration = {
+  toolbox: false,
+  editors: false,
+  controlBar: false,
+  // ...
+};
+```
+
+To display components you need to set a proper value.
+
+```js
+const configuration = {
+  toolbox: {
+    groups: [ /* ... */ ]
+  },
+  editors: {
+    globalEditorProvider: () => { /* ... */ },
+    stepEditorProvider: () => { /* ... */ },
+  },
+  controlBar: true,
+  // ...
+};
+```
+
+## React & Angular
+
+The `controlBar` property is required from now. This change applies for the `sequential-workflow-designer-angular` and `sequential-workflow-designer-react` packages as well.
+
 ## 0.8.1
 
 Changed format of bundles:

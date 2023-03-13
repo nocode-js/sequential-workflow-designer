@@ -5,8 +5,8 @@
 	"dependencies": {
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"sequential-workflow-designer": "^0.8.1",
-		"sequential-workflow-designer-react": "^0.8.1"
+		"sequential-workflow-designer": "^0.9.0",
+		"sequential-workflow-designer-react": "^0.9.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.2.5",
@@ -28,8 +28,7 @@
 		"eject": "react-scripts eject",
 		"prettier": "prettier --check ./src",
 		"prettier:fix": "prettier --write ./src",
-		"eslint": "eslint ./src --ext .ts",
-		"upgrade:locals": "yarn upgrade sequential-workflow-designer sequential-workflow-designer-react"
+		"eslint": "eslint ./src --ext .ts"
 	},
 	"eslintConfig": {
 		"extends": [

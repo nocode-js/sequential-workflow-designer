@@ -36,10 +36,7 @@ function load() {
 	};
 	let designer;
 	const configuration = {
-		toolbox: {
-			isHidden: true,
-			groups: []
-		},
+		toolbox: false,
 
 		steps: {
 			canInsertStep: (step) => {
@@ -77,7 +74,8 @@ function load() {
 			stepEditorProvider: (step) => {
 				return createEditor(`Selected step: ${step.type}`);
 			}
-		}
+		},
+		controlBar: true,
 	};
 	designer = sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
 }

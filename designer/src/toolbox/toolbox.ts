@@ -1,54 +1,50 @@
-import { DesignerConfiguration, ToolboxGroupConfiguration } from '../designer-configuration';
-import { DesignerContext } from '../designer-context';
+import { DesignerApi } from '../api/designer-api';
+import { ToolboxConfiguration, ToolboxGroupConfiguration } from '../designer-configuration';
 import { UiComponent } from '../designer-extension';
-import { DesignerState } from '../designer-state';
 import { ToolboxView } from './toolbox-view';
 
 export class Toolbox implements UiComponent {
-	public static create(parent: HTMLElement, designerContext: DesignerContext): Toolbox {
-		const view = ToolboxView.create(parent, designerContext);
-		view.setIsCollapsed(designerContext.state.isToolboxCollapsed);
+	public static create(root: HTMLElement, api: DesignerApi, configuration: ToolboxConfiguration): Toolbox {
+		const view = ToolboxView.create(root, api.toolbox);
 
-		const toolbox = new Toolbox(view, designerContext.state, designerContext.configuration);
+		const toolbox = new Toolbox(view, configuration);
 		toolbox.render();
-		designerContext.state.onIsToolboxCollapsedChanged.subscribe(ic => toolbox.onIsToolboxCollapsedChanged(ic));
+		toolbox.setIsCollapsed(api.toolbox.isVisibleAtStart());
 		view.bindToggleIsCollapsedClick(() => toolbox.toggleIsCollapsedClick());
 		view.bindFilterInputChange(v => toolbox.onFilterInputChanged(v));
 		return toolbox;
 	}
 
+	private isCollapsed?: boolean;
 	private filter?: string;
 
-	private constructor(
-		private readonly view: ToolboxView,
-		private readonly state: DesignerState,
-		private readonly configuration: DesignerConfiguration
-	) {}
+	private constructor(private readonly view: ToolboxView, private readonly configuration: ToolboxConfiguration) {}
 
 	public destroy() {
 		this.view.destroy();
 	}
 
 	private render() {
-		const groups: ToolboxGroupConfiguration[] = this.configuration.toolbox.groups
-			.map(g => {
+		const groups: ToolboxGroupConfiguration[] = this.configuration.groups
+			.map(group => {
 				return {
-					name: g.name,
-					steps: g.steps.filter(s => {
+					name: group.name,
+					steps: group.steps.filter(s => {
 						return this.filter ? s.name.toLowerCase().includes(this.filter) : true;
 					})
 				};
 			})
-			.filter(g => g.steps.length > 0);
+			.filter(group => group.steps.length > 0);
 		this.view.setGroups(groups);
 	}
 
-	private toggleIsCollapsedClick() {
-		this.state.toggleIsToolboxCollapsed();
+	private setIsCollapsed(isCollapsed: boolean) {
+		this.isCollapsed = isCollapsed;
+		this.view.setIsCollapsed(isCollapsed);
 	}
 
-	private onIsToolboxCollapsedChanged(isCollapsed: boolean) {
-		this.view.setIsCollapsed(isCollapsed);
+	private toggleIsCollapsedClick() {
+		this.setIsCollapsed(!this.isCollapsed);
 	}
 
 	private onFilterInputChanged(value: string) {

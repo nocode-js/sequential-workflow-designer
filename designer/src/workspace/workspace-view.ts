@@ -2,7 +2,7 @@ import { Dom } from '../core/dom';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
-import { SequencePlaceIndicator, WorkspaceClientPositionSource } from '../designer-extension';
+import { SequencePlaceIndicator } from '../designer-extension';
 import { ComponentContext } from '../component-context';
 import { Component } from './component';
 
@@ -10,7 +10,7 @@ const GRID_SIZE = 48;
 
 let lastGridPatternId = 0;
 
-export class WorkspaceView implements WorkspaceClientPositionSource {
+export class WorkspaceView {
 	public static create(parent: HTMLElement, componentContext: ComponentContext): WorkspaceView {
 		const defs = Dom.svg('defs');
 		const gridPatternId = 'sqd-grid-pattern-' + lastGridPatternId++;

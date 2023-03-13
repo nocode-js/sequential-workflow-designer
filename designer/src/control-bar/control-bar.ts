@@ -1,41 +1,34 @@
-import { DesignerContext } from '../designer-context';
 import { ControlBarView } from './control-bar-view';
-import { HistoryController } from '../history-controller';
-import { DesignerState } from '../designer-state';
-import { DefinitionModifier } from '../definition-modifier';
-import { WorkspaceController } from '../workspace/workspace-controller';
 import { UiComponent } from '../designer-extension';
+import { ControlBarApi } from '../api/control-bar-api';
+import { DesignerApi } from '../api/designer-api';
 
 export class ControlBar implements UiComponent {
-	public static create(parent: HTMLElement, context: DesignerContext): UiComponent {
-		const view = ControlBarView.create(parent, !!context.historyController);
-		const bar = new ControlBar(view, context.state, context.workspaceController, context.historyController, context.definitionModifier);
+	public static create(parent: HTMLElement, api: DesignerApi): UiComponent {
+		const isUndoRedoSupported = api.controlBar.isUndoRedoSupported();
+		const view = ControlBarView.create(parent, isUndoRedoSupported);
+		const bar = new ControlBar(view, api.controlBar, isUndoRedoSupported);
 
 		view.bindResetButtonClick(() => bar.onResetButtonClicked());
 		view.bindZoomInButtonClick(() => bar.onZoomInButtonClicked());
 		view.bindZoomOutButtonClick(() => bar.onZoomOutButtonClicked());
 		view.bindDisableDragButtonClick(() => bar.onMoveButtonClicked());
 		view.bindDeleteButtonClick(() => bar.onDeleteButtonClicked());
-		context.state.onIsReadonlyChanged.subscribe(() => bar.onIsReadonlyChanged());
-		context.state.onSelectedStepIdChanged.subscribe(() => bar.onSelectedStepIdChanged());
-		context.state.onIsDragDisabledChanged.subscribe(i => bar.onIsDragDisabledChanged(i));
+		api.controlBar.subscribe(() => bar.refreshButtons());
 
-		if (context.historyController) {
+		if (isUndoRedoSupported) {
 			view.bindUndoButtonClick(() => bar.onUndoButtonClicked());
 			view.bindRedoButtonClick(() => bar.onRedoButtonClicked());
-			context.state.onDefinitionChanged.subscribe(() => bar.onDefinitionChanged());
-
-			bar.refreshUndoRedoAvailability();
 		}
+
+		bar.refreshButtons();
 		return bar;
 	}
 
 	private constructor(
 		private readonly view: ControlBarView,
-		private readonly state: DesignerState,
-		private readonly workspaceController: WorkspaceController,
-		private readonly historyController: HistoryController | undefined,
-		private readonly definitionModifier: DefinitionModifier
+		private readonly controlBarApi: ControlBarApi,
+		private readonly isUndoRedoSupported: boolean
 	) {}
 
 	public destroy() {
@@ -43,69 +36,57 @@ export class ControlBar implements UiComponent {
 	}
 
 	private onResetButtonClicked() {
-		this.workspaceController.resetViewPort();
+		this.controlBarApi.resetViewPort();
 	}
 
 	private onZoomInButtonClicked() {
-		this.workspaceController.zoom(true);
+		this.controlBarApi.zoomIn();
 	}
 
 	private onZoomOutButtonClicked() {
-		this.workspaceController.zoom(false);
+		this.controlBarApi.zoomOut();
 	}
 
 	private onMoveButtonClicked() {
-		this.state.toggleIsDragDisabled();
+		this.controlBarApi.toggleIsDragDisabled();
 	}
 
 	private onUndoButtonClicked() {
-		if (!this.state.isReadonly && this.historyController?.canUndo()) {
-			this.historyController.undo();
-		}
+		this.controlBarApi.tryUndo();
 	}
 
 	private onRedoButtonClicked() {
-		if (!this.state.isReadonly && this.historyController?.canRedo()) {
-			this.historyController.redo();
-		}
+		this.controlBarApi.tryRedo();
 	}
 
 	private onDeleteButtonClicked() {
-		if (!this.state.isReadonly && this.state.selectedStepId) {
-			this.definitionModifier.tryDelete(this.state.selectedStepId);
+		this.controlBarApi.tryDelete();
+	}
+
+	private refreshButtons() {
+		this.refreshDeleteButtonVisibility();
+		this.refreshIsDragDisabled();
+		if (this.isUndoRedoSupported) {
+			this.refreshUndoRedoAvailability();
 		}
 	}
 
-	private onIsReadonlyChanged() {
-		this.refreshDeleteButtonVisibility();
-	}
+	//
 
-	private onSelectedStepIdChanged() {
-		this.refreshDeleteButtonVisibility();
-	}
-
-	private onIsDragDisabledChanged(isEnabled: boolean) {
-		this.view.setDisableDragButtonDisabled(!isEnabled);
-	}
-
-	private onDefinitionChanged() {
-		this.refreshUndoRedoAvailability();
+	private refreshIsDragDisabled() {
+		const isDragDisabled = this.controlBarApi.isDragDisabled();
+		this.view.setDisableDragButtonDisabled(!isDragDisabled);
 	}
 
 	private refreshUndoRedoAvailability() {
-		if (!this.historyController) {
-			throw new Error('Undo/redo is disabled');
-		}
-
-		const canUndo = this.historyController.canUndo();
-		const canRedo = this.historyController.canRedo();
+		const canUndo = this.controlBarApi.canUndo();
+		const canRedo = this.controlBarApi.canRedo();
 		this.view.setUndoButtonDisabled(!canUndo);
 		this.view.setRedoButtonDisabled(!canRedo);
 	}
 
 	private refreshDeleteButtonVisibility() {
-		const isHidden =
-			!this.state.selectedStepId || this.state.isReadonly || !this.definitionModifier.isDeletable(this.state.selectedStepId);
-		this.view.setIsDeleteButtonHidden(isHidden);
+		const canDelete = this.controlBarApi.canDelete();
+		this.view.setIsDeleteButtonHidden(!canDelete);
 	}
 }

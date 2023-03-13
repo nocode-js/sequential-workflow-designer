@@ -1,14 +1,15 @@
+import { ToolboxApi } from '../api/toolbox-api';
 import { Dom } from '../core/dom';
-import { StepDefinition, StepsConfiguration } from '../designer-configuration';
+import { StepDefinition } from '../designer-configuration';
 
 export class ToolboxItemView {
-	public static create(parent: HTMLElement, step: StepDefinition, configuration: StepsConfiguration): ToolboxItemView {
+	public static create(parent: HTMLElement, step: StepDefinition, api: ToolboxApi): ToolboxItemView {
 		const root = Dom.element('div', {
 			class: `sqd-toolbox-item sqd-type-${step.type}`,
 			title: step.name
 		});
 
-		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+		const iconUrl = api.tryGetIconUrl(step);
 
 		const icon = Dom.element('div', {
 			class: 'sqd-toolbox-item-icon'

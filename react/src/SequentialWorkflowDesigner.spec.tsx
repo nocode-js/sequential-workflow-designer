@@ -10,10 +10,16 @@ describe('SequentialWorkflowDesigner', () => {
 		sequence: []
 	};
 
-	it('renders designer correctly', done => {
+	function expectUiComponents(container: HTMLElement, count: number) {
+		expect(container.getElementsByClassName('sqd-smart-editor').length).toBe(count);
+		expect(container.getElementsByClassName('sqd-control-bar').length).toBe(count);
+		expect(container.getElementsByClassName('sqd-toolbox').length).toBe(count);
+	}
+
+	it('renders designer correctly with all components', done => {
 		const wrappedDefinition = wrapDefinition(definition);
 
-		const { container } = render(
+		const { container, unmount } = render(
 			<SequentialWorkflowDesigner
 				definition={wrappedDefinition}
 				onDefinitionChange={definitionChanged}
@@ -21,15 +27,41 @@ describe('SequentialWorkflowDesigner', () => {
 				stepEditor={<div />}
 				stepsConfiguration={{}}
 				toolboxConfiguration={{ groups: [] }}
+				controlBar={true}
 			/>
 		);
 
 		expect(container.getElementsByClassName('sqd-designer').length).toBe(1);
+		expectUiComponents(container, 1);
 
 		function definitionChanged(def: WrappedDefinition) {
 			expect(def).not.toEqual(wrappedDefinition);
 			expect(def.isValid).toBeDefined();
+			unmount();
 			done();
 		}
+	});
+
+	it('hides all UI components', () => {
+		const wrappedDefinition = wrapDefinition(definition);
+
+		const { container, unmount } = render(
+			<SequentialWorkflowDesigner
+				definition={wrappedDefinition}
+				onDefinitionChange={() => {
+					/* nothing */
+				}}
+				globalEditor={false}
+				stepEditor={false}
+				stepsConfiguration={{}}
+				toolboxConfiguration={false}
+				controlBar={false}
+			/>
+		);
+
+		expect(container.getElementsByClassName('sqd-designer').length).toBe(1);
+		expectUiComponents(container, 0);
+
+		unmount();
 	});
 });

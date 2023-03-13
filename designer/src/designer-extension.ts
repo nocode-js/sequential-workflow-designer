@@ -1,7 +1,6 @@
+import { DesignerApi } from './api/designer-api';
 import { ComponentContext } from './component-context';
-import { Vector } from './core';
 import { Branches, ComponentType, Sequence, Step } from './definition';
-import { DesignerContext } from './designer-context';
 import { StepComponent, Component } from './workspace';
 
 export interface DesignerExtension {
@@ -10,6 +9,7 @@ export interface DesignerExtension {
 	wheelController?: WheelControllerExtension;
 	placeholderController?: PlaceholderControllerExtension;
 	rootComponent?: RootComponentExtension;
+	daemons?: DaemonExtension[];
 }
 
 // StepExtension
@@ -42,11 +42,7 @@ export enum StepChildrenType {
 // WheelControllerExtension
 
 export interface WheelControllerExtension {
-	create(designerContext: DesignerContext, positionSource: WorkspaceClientPositionSource): WheelController;
-}
-
-export interface WorkspaceClientPositionSource {
-	getClientPosition(): Vector;
+	create(api: DesignerApi): WheelController;
 }
 
 export interface WheelController {
@@ -57,7 +53,7 @@ export interface WheelController {
 // UiComponentExtension
 
 export interface UiComponentExtension {
-	create(parent: HTMLElement, designerContext: DesignerContext): UiComponent;
+	create(root: HTMLElement, api: DesignerApi): UiComponent;
 }
 
 export interface UiComponent {
@@ -88,4 +84,14 @@ export interface PlaceholderControllerExtension {
 
 export interface PlaceholderController {
 	canCreate(sequence: Sequence, index: number): boolean;
+}
+
+// Daemon
+
+export interface DaemonExtension {
+	create(api: DesignerApi): Daemon;
+}
+
+export interface Daemon {
+	destroy(): void;
 }

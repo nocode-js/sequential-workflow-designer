@@ -1,5 +1,7 @@
+export * from './api';
 export * from './core';
 export * from './component-context';
+export * from './smart-editor';
 export * from './workspace';
 export * from './definition';
 export * from './designer-configuration';

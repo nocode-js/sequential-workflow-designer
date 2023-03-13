@@ -1,5 +1,6 @@
 import { Dom } from '../core/dom';
 import { Step } from '../definition';
+import { createDesignerApiStub } from '../test-tools/stubs';
 import { ToolboxItemView } from './toolbox-item-view';
 
 describe('ToolboxItemView', () => {
@@ -12,8 +13,9 @@ describe('ToolboxItemView', () => {
 			properties: {},
 			type: 'y'
 		};
+		const api = createDesignerApiStub();
 
-		const view = ToolboxItemView.create(parent, step, {});
+		const view = ToolboxItemView.create(parent, step, api.toolbox);
 
 		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);
