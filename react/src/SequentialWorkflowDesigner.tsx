@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Definition,
 	ToolboxConfiguration,
@@ -13,6 +13,9 @@ import {
 import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
 import { wrapDefinition, WrappedDefinition } from './WrappedDefinition';
+import { Presenter } from './core/Presenter';
+
+const externalEditorClassName = 'sqd-editor-react';
 
 export interface SequentialWorkflowDesignerProps<TDefinition extends Definition> {
 	definition: WrappedDefinition<TDefinition>;
@@ -20,13 +23,18 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	selectedStepId?: string | null;
 	onSelectedStepIdChanged?: (stepId: string | null) => void;
 	isReadonly?: boolean;
-	globalEditor: JSX.Element;
-	stepEditor: JSX.Element;
+
+	globalEditor: false | JSX.Element;
+	stepEditor: false | JSX.Element;
 
 	theme?: string;
 	undoStackSize?: number;
 	stepsConfiguration: StepsConfiguration;
-	toolboxConfiguration: ToolboxConfiguration;
+	toolboxConfiguration: false | ToolboxConfiguration;
+	/**
+	 * @description If true, the control bar will be displayed.
+	 */
+	controlBar: boolean;
 	extensions?: DesignerExtension[];
 }
 
@@ -46,9 +54,14 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const isReadonly = props.isReadonly;
 	const theme = props.theme;
 	const undoStackSize = props.undoStackSize;
-	const stepsConfiguration = props.stepsConfiguration;
-	const toolboxConfiguration = props.toolboxConfiguration;
+	const steps = props.stepsConfiguration;
+	const toolbox = props.toolboxConfiguration;
+	const controlBar = props.controlBar;
 	const extensions = props.extensions;
+
+	if (props.controlBar === undefined) {
+		throw new Error('The "controlBar" property is not set');
+	}
 
 	function forwardDefinition() {
 		if (designerRef.current) {
@@ -58,7 +71,11 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	}
 
 	function globalEditorProvider(def: TDefinition, context: GlobalEditorContext) {
-		return editorProvider(
+		if (!globalEditorRef.current) {
+			throw new Error('Global editor is not provided');
+		}
+		return Presenter.render(
+			externalEditorClassName,
 			editorRootRef,
 			<GlobalEditorWrapperContext definition={def} context={context}>
 				{globalEditorRef.current}
@@ -67,7 +84,11 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	}
 
 	function stepEditorProvider(step: Step, context: StepEditorContext) {
-		return editorProvider(
+		if (!stepEditorRef.current) {
+			throw new Error('Step editor is not provided');
+		}
+		return Presenter.render(
+			externalEditorClassName,
 			editorRootRef,
 			<StepEditorWrapperContext step={step} context={context}>
 				{stepEditorRef.current}
@@ -122,13 +143,16 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		const designer = Designer.create(placeholder, definition.value, {
 			theme,
 			undoStackSize,
-			toolbox: toolboxConfiguration,
-			steps: stepsConfiguration,
-			editors: {
-				isHidden: false,
-				globalEditorProvider,
-				stepEditorProvider
-			},
+			toolbox,
+			steps,
+			controlBar,
+			editors:
+				globalEditorRef.current && stepEditorRef.current
+					? {
+							globalEditorProvider,
+							stepEditorProvider
+					  }
+					: false,
 			extensions
 		});
 		if (selectedStepId) {
@@ -149,15 +173,12 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		});
 
 		designerRef.current = designer;
-	}, [placeholder, definition, selectedStepId, isReadonly, theme, undoStackSize, toolboxConfiguration, stepsConfiguration, extensions]);
+	}, [placeholder, definition, selectedStepId, isReadonly, theme, undoStackSize, toolbox, controlBar, steps, extensions]);
 
 	useEffect(() => {
 		return () => {
-			if (editorRootRef.current) {
-				const oldRoot = editorRootRef.current;
-				editorRootRef.current = null;
-				setTimeout(() => oldRoot.unmount());
-			}
+			Presenter.tryDestroy(editorRootRef);
+
 			if (designerRef.current) {
 				designerRef.current.destroy();
 				designerRef.current = null;
@@ -167,18 +188,4 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	}, []);
 
 	return <div ref={setPlaceholder} className="sqd-designer-react"></div>;
-}
-
-function editorProvider(rootRef: MutableRefObject<ReactDOM.Root | null>, element: JSX.Element): HTMLElement {
-	if (rootRef.current) {
-		const oldRoot = rootRef.current;
-		rootRef.current = null;
-		setTimeout(() => oldRoot.unmount());
-	}
-
-	const container = document.createElement('div');
-	container.className = 'sqd-editor-react';
-	rootRef.current = ReactDOM.createRoot(container);
-	rootRef.current.render(element);
-	return container;
 }

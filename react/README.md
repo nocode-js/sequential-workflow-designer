@@ -101,10 +101,23 @@ At the end attach the designer.
 <SequentialWorkflowDesigner
   definition={definition}
   onDefinitionChange={setDefinition}
-  toolboxConfiguration={toolboxConfiguration}
   stepsConfiguration={stepsConfiguration}
+  toolboxConfiguration={toolboxConfiguration}
+  controlBar={true}
   globalEditor={<GlobalEditor />}
   stepEditor={<StepEditor />}>
+  />
+```
+
+You can hide any UI component.
+
+```tsx
+<SequentialWorkflowDesigner
+  // ...
+  toolboxConfiguration={false}
+  controlBar={false}
+  globalEditor={false}
+  stepEditor={false}>
   />
 ```
 

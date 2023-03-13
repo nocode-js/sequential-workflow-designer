@@ -1,5 +1,6 @@
 import { BranchedStep, SequentialStep, Step } from '../definition';
 import { ServicesResolver } from '../services';
+import { createDesignerConfigurationStub } from '../test-tools/stubs';
 import { StepExtensionResolver } from '../workspace/step-extension-resolver';
 import { StepsTraverser } from './steps-traverser';
 
@@ -50,7 +51,8 @@ describe('StepsTraverser', () => {
 	let traverser: StepsTraverser;
 
 	beforeAll(() => {
-		const services = ServicesResolver.resolve([]);
+		const configuration = createDesignerConfigurationStub();
+		const services = ServicesResolver.resolve([], configuration);
 		const resolver = StepExtensionResolver.create(services);
 		traverser = new StepsTraverser(resolver);
 	});

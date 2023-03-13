@@ -147,6 +147,7 @@ At the end attach the designer:
   [definition]="startDefinition"
   [toolboxConfiguration]="toolboxConfiguration"
   [stepsConfiguration]="stepsConfiguration"
+  [controlBar]="true"
   [areEditorsHidden]="false"
   [globalEditor]="globalEditor"
   [stepEditor]="stepEditor"

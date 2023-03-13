@@ -215,7 +215,8 @@ class Popup {
 				stepEditorProvider: (step) => {
 					return createEditor('Edit step ' + step.name, step.properties);
 				}
-			}
+			},
+			controlBar: true,
 		});
 
 		popupCloseButton.addEventListener('click', () => {

@@ -1,5 +1,16 @@
-import { createContext, useContext, useState } from 'react';
+import { Context, createContext, useContext, useState } from 'react';
 import { StepEditorContext, PropertyValue, Step } from 'sequential-workflow-designer';
+
+declare global {
+	interface Window {
+		sqdStepEditorContext?: Context<StepEditorWrapper<Step> | null>;
+	}
+}
+
+if (!window.sqdStepEditorContext) {
+	window.sqdStepEditorContext = createContext<StepEditorWrapper<Step> | null>(null);
+}
+const stepEditorContext = window.sqdStepEditorContext;
 
 export interface StepEditorWrapper<TStep extends Step> {
 	readonly id: string;
@@ -15,10 +26,8 @@ export interface StepEditorWrapper<TStep extends Step> {
 	notifyChildrenChanged(): void;
 }
 
-const globalEditorWrapperContext = createContext<StepEditorWrapper<Step> | null>(null);
-
 export function useStepEditor<TStep extends Step = Step>(): StepEditorWrapper<TStep> {
-	const wrapper = useContext(globalEditorWrapperContext);
+	const wrapper = useContext(stepEditorContext);
 	if (!wrapper) {
 		throw new Error('Cannot find step editor context');
 	}
@@ -72,5 +81,5 @@ export function StepEditorWrapperContext(props: { children: JSX.Element; step: S
 		forward();
 	}
 
-	return <globalEditorWrapperContext.Provider value={wrapper}>{props.children}</globalEditorWrapperContext.Provider>;
+	return <stepEditorContext.Provider value={wrapper}>{props.children}</stepEditorContext.Provider>;
 }

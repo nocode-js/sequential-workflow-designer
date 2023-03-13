@@ -1,10 +1,9 @@
+import { DesignerApi } from './api/designer-api';
 import { Dom } from './core/dom';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
-import { UiComponent } from './designer-extension';
+import { Daemon, UiComponent } from './designer-extension';
 import { LayoutController } from './layout-controller';
-import { SmartEditor } from './smart-editor/smart-editor';
-import { Toolbox } from './toolbox/toolbox';
 import { Workspace } from './workspace/workspace';
 
 export class DesignerView {
@@ -16,44 +15,35 @@ export class DesignerView {
 		});
 		parent.appendChild(root);
 
-		const workspace = Workspace.create(root, designerContext);
+		const api = DesignerApi.create(designerContext);
 
-		const uiComponents = designerContext.services.uiComponents.map(factory => factory.create(root, designerContext));
+		const workspace = Workspace.create(root, designerContext, api);
 
-		if (!configuration.toolbox.isHidden) {
-			uiComponents.push(Toolbox.create(root, designerContext));
-		}
+		const uiComponents = designerContext.services.uiComponents.map(factory => factory.create(root, api));
+		const daemons = designerContext.services.daemons.map(factory => factory.create(api));
 
-		if (!configuration.editors.isHidden) {
-			SmartEditor.create(root, designerContext);
-		}
-		const view = new DesignerView(root, designerContext.layoutController, workspace, uiComponents);
+		const view = new DesignerView(root, designerContext.layoutController, workspace, uiComponents, daemons);
 		view.reloadLayout();
 		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;
 	}
 
 	private readonly onResizeHandler = () => this.onResize();
-	private readonly onKeyUpHandlers: KeyUpHandler[] = [];
 
 	public constructor(
 		private readonly root: HTMLElement,
 		private readonly layoutController: LayoutController,
 		public readonly workspace: Workspace,
-		private readonly uiComponents: UiComponent[]
+		private readonly uiComponents: UiComponent[],
+		private readonly daemons: Daemon[]
 	) {}
-
-	public bindKeyUp(handler: KeyUpHandler) {
-		document.addEventListener('keyup', handler, false);
-		this.onKeyUpHandlers.push(handler);
-	}
 
 	public destroy() {
 		window.removeEventListener('resize', this.onResizeHandler, false);
-		this.onKeyUpHandlers.forEach(h => document.removeEventListener('keyup', h, false));
 
 		this.workspace.destroy();
 		this.uiComponents.forEach(component => component.destroy());
+		this.daemons.forEach(daemon => daemon.destroy());
 
 		this.root.parentElement?.removeChild(this.root);
 	}

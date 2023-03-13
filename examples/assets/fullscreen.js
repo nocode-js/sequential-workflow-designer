@@ -72,13 +72,14 @@ const configuration = {
 	undoStackSize: 20,
 
 	toolbox: {
-		isHidden: false,
 		groups: [
 			toolboxGroup('Main'),
 			toolboxGroup('File system'),
 			toolboxGroup('E-mail')
 		]
 	},
+
+	controlBar: true,
 
 	steps: {
 		iconUrlProvider: (componentType, type) => {
@@ -91,7 +92,6 @@ const configuration = {
 	},
 
 	editors: {
-		isHidden: false,
 		globalEditorProvider: (definition) => {
 			const root = document.createElement('div');
 			root.innerHTML = '<textarea style="width: 100%; border: 0;" rows="50"></textarea>';

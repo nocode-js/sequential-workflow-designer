@@ -5,10 +5,10 @@ import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
 import { DesignerState } from './designer-state';
-import { DefinitionModifier } from './definition-modifier';
 import { WorkspaceController } from './workspace/workspace-controller';
 import { StepOrName, StepsTraverser } from './core/steps-traverser';
 import { ServicesResolver } from './services';
+import { validateConfiguration } from './designer-configuration-validator';
 
 export class Designer<TDefinition extends Definition = Definition> {
 	/**
@@ -35,21 +35,20 @@ export class Designer<TDefinition extends Definition = Definition> {
 		if (!configuration) {
 			throw new Error('Configuration is not set');
 		}
-
 		const config = configuration as DesignerConfiguration;
 
-		const services = ServicesResolver.resolve(configuration.extensions);
+		validateConfiguration(config);
+
+		const services = ServicesResolver.resolve(configuration.extensions, config);
 		const designerContext = DesignerContext.create(placeholder, startDefinition, config, services);
 
 		const view = DesignerView.create(placeholder, designerContext, config);
 		const designer = new Designer<TDef>(
 			view,
 			designerContext.state,
-			designerContext.definitionModifier,
 			designerContext.workspaceController,
 			designerContext.stepsTraverser
 		);
-		view.bindKeyUp(e => designer.onKeyUp(e));
 		view.workspace.onReady.subscribe(() => designer.onReady.forward());
 
 		designerContext.state.onDefinitionChanged.subscribe(() => {
@@ -64,7 +63,6 @@ export class Designer<TDefinition extends Definition = Definition> {
 	private constructor(
 		private readonly view: DesignerView,
 		private readonly state: DesignerState,
-		private readonly definitionModifier: DefinitionModifier,
 		private readonly workspaceController: WorkspaceController,
 		private readonly stepsTraverser: StepsTraverser
 	) {}
@@ -153,27 +151,5 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 */
 	public destroy() {
 		this.view.destroy();
-	}
-
-	private onKeyUp(e: KeyboardEvent) {
-		const supportedKeys = ['Backspace', 'Delete'];
-		if (!supportedKeys.includes(e.key)) {
-			return;
-		}
-		const ignoreTagNames = ['INPUT', 'TEXTAREA'];
-		if (document.activeElement && ignoreTagNames.includes(document.activeElement.tagName)) {
-			return;
-		}
-		if (!this.state.selectedStepId || this.state.isReadonly || this.state.isDragging) {
-			return;
-		}
-
-		e.preventDefault();
-		e.stopPropagation();
-
-		const isDeletable = this.definitionModifier.isDeletable(this.state.selectedStepId);
-		if (isDeletable) {
-			this.definitionModifier.tryDelete(this.state.selectedStepId);
-		}
 	}
 }

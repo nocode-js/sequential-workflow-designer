@@ -167,7 +167,6 @@ const configuration = {
 	undoStackSize: 5,
 
 	toolbox: {
-		isHidden: false,
 		groups: [
 			{
 				name: 'Tasks',
@@ -203,7 +202,9 @@ const configuration = {
 	editors: {
 		globalEditorProvider,
 		stepEditorProvider
-	}
+	},
+
+	controlBar: true,
 };
 
 const startDefinition = {

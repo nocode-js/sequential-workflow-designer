@@ -94,7 +94,6 @@ const configuration = {
 	undoStackSize: 10,
 
 	toolbox: {
-		isHidden: false,
 		groups: [
 			{
 				name: 'Filters',
@@ -116,15 +115,7 @@ const configuration = {
 		validator: () => true
 	},
 
-	editors: {
-		isHidden: true,
-		globalEditorProvider: () => {
-			throw new Error('Not implemented');
-		},
-		stepEditorProvider: () => {
-			throw new Error('Not implemented');
-		}
-	}
+	controlBar: true,
 };
 
 const startDefinition = {

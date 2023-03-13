@@ -180,7 +180,6 @@ function reload(definition) {
 
 const configuration = {
 	toolbox: {
-		isHidden: false,
 		groups: [
 			{
 				name: 'Expressions',
@@ -217,7 +216,8 @@ const configuration = {
 	editors: {
 		globalEditorProvider: Editors.createGlobalEditor,
 		stepEditorProvider: Editors.createStepEditor
-	}
+	},
+	controlBar: true,
 };
 
 const startDefinition = {

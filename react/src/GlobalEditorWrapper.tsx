@@ -1,5 +1,16 @@
-import { createContext, useContext, useState } from 'react';
+import { Context, createContext, useContext, useState } from 'react';
 import { Definition, GlobalEditorContext, Properties, PropertyValue } from 'sequential-workflow-designer';
+
+declare global {
+	interface Window {
+		sqdGlobalEditorContext?: Context<GlobalEditorWrapper<Definition> | null>;
+	}
+}
+
+if (!window.sqdGlobalEditorContext) {
+	window.sqdGlobalEditorContext = createContext<GlobalEditorWrapper<Definition> | null>(null);
+}
+const globalEditorContext = window.sqdGlobalEditorContext;
 
 export interface GlobalEditorWrapper<TDefinition extends Definition> {
 	readonly properties: TDefinition['properties'];
@@ -7,10 +18,8 @@ export interface GlobalEditorWrapper<TDefinition extends Definition> {
 	setProperty(name: keyof TDefinition['properties'], value: TDefinition['properties'][typeof name]): void;
 }
 
-const globalEditorWrapperContext = createContext<GlobalEditorWrapper<Definition> | null>(null);
-
 export function useGlobalEditor<TDefinition extends Definition = Definition>(): GlobalEditorWrapper<TDefinition> {
-	const wrapper = useContext(globalEditorWrapperContext);
+	const wrapper = useContext(globalEditorContext);
 	if (!wrapper) {
 		throw new Error('Cannot find global editor context');
 	}
@@ -37,5 +46,5 @@ export function GlobalEditorWrapperContext(props: { children: JSX.Element; defin
 		forward();
 	}
 
-	return <globalEditorWrapperContext.Provider value={wrapper}>{props.children}</globalEditorWrapperContext.Provider>;
+	return <globalEditorContext.Provider value={wrapper}>{props.children}</globalEditorContext.Provider>;
 }

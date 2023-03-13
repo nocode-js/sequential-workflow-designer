@@ -1,40 +1,29 @@
-import { BehaviorController } from '../behaviors/behavior-controller';
-import { DragStepBehavior } from '../behaviors/drag-step-behavior';
+import { ToolboxApi } from '../api/toolbox-api';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
-import { ObjectCloner } from '../core/object-cloner';
 import { StepTypeValidator } from '../core/step-type-validator';
-import { Uid } from '../core/uid';
 import { Vector } from '../core/vector';
-import { Step } from '../definition';
 import { StepDefinition } from '../designer-configuration';
-import { DesignerContext } from '../designer-context';
-import { DesignerState } from '../designer-state';
 import { ToolboxItemView } from './toolbox-item-view';
 
 export class ToolboxItem {
-	public static create(parent: HTMLElement, step: StepDefinition, designerContext: DesignerContext): ToolboxItem {
+	public static create(parent: HTMLElement, step: StepDefinition, api: ToolboxApi): ToolboxItem {
 		StepTypeValidator.validate(step.type);
 
-		const view = ToolboxItemView.create(parent, step, designerContext.configuration.steps);
-		const item = new ToolboxItem(step, designerContext.state, designerContext.behaviorController, designerContext);
+		const view = ToolboxItemView.create(parent, step, api);
+		const item = new ToolboxItem(step, api);
 		view.bindMousedown(e => item.onMousedown(e));
 		view.bindTouchstart(e => item.onTouchstart(e));
 		view.bindContextMenu(e => item.onContextMenu(e));
 		return item;
 	}
 
-	private constructor(
-		private readonly step: StepDefinition,
-		private readonly state: DesignerState,
-		private readonly behaviorController: BehaviorController,
-		private readonly designerContext: DesignerContext
-	) {}
+	private constructor(private readonly step: StepDefinition, private readonly api: ToolboxApi) {}
 
 	private onTouchstart(e: TouchEvent) {
 		e.preventDefault();
 		if (e.touches.length === 1) {
 			e.stopPropagation();
-			this.startDrag(readTouchPosition(e));
+			this.tryDrag(readTouchPosition(e));
 		}
 	}
 
@@ -42,7 +31,7 @@ export class ToolboxItem {
 		e.stopPropagation();
 		const isPrimaryButton = e.button === 0;
 		if (isPrimaryButton) {
-			this.startDrag(readMousePosition(e));
+			this.tryDrag(readMousePosition(e));
 		}
 	}
 
@@ -50,16 +39,7 @@ export class ToolboxItem {
 		e.preventDefault();
 	}
 
-	private startDrag(position: Vector) {
-		if (!this.state.isReadonly) {
-			const newStep = createStep(this.step);
-			this.behaviorController.start(position, DragStepBehavior.create(this.designerContext, newStep));
-		}
+	private tryDrag(position: Vector) {
+		this.api.tryDrag(position, this.step);
 	}
-}
-
-function createStep(step: StepDefinition): Step {
-	const newStep = ObjectCloner.deepClone(step) as Step;
-	newStep.id = Uid.next();
-	return newStep;
 }

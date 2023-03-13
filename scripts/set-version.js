@@ -37,6 +37,7 @@ function updatePackage(filePath, setVersion) {
 	}
 	updateDependencies(json['dependencies']);
 	updateDependencies(json['peerDependencies']);
+	updateDependencies(json['devDependencies']);
 
 	fs.writeFileSync(filePath, JSON.stringify(json, null, '\t'), 'utf-8');
 }

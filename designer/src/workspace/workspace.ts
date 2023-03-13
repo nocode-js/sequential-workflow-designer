@@ -14,14 +14,15 @@ import { CenteredViewPortCalculator } from './view-port/centered-view-port-calcu
 import { SimpleEvent } from '../core/simple-event';
 import { QuantifiedScaleViewPortCalculator } from './view-port';
 import { SequencePlaceIndicator, WheelController } from '../designer-extension';
+import { DesignerApi } from '../api/designer-api';
 
 export class Workspace implements WorkspaceController {
-	public static create(parent: HTMLElement, designerContext: DesignerContext): Workspace {
+	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {
 		const view = WorkspaceView.create(parent, designerContext.componentContext);
 
 		const viewPortAnimator = new ViewPortAnimator(designerContext.state);
 		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext, designerContext.state);
-		const wheelController = designerContext.services.wheelController.create(designerContext, view);
+		const wheelController = designerContext.services.wheelController.create(api);
 		const workspace = new Workspace(
 			view,
 			designerContext.stepsTraverser,
@@ -40,7 +41,6 @@ export class Workspace implements WorkspaceController {
 		designerContext.setWorkspaceController(workspace);
 		designerContext.state.onViewPortChanged.subscribe(vp => workspace.onViewPortChanged(vp));
 		designerContext.state.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
-		designerContext.state.onIsSmartEditorCollapsedChanged.subscribe(() => workspace.onIsSmartEditorCollapsedChanged());
 
 		race(
 			0,
@@ -135,6 +135,14 @@ export class Workspace implements WorkspaceController {
 		this.viewPortAnimator.execute(newPosition, 1);
 	}
 
+	public getClientPosition(): Vector {
+		return this.view.getClientPosition();
+	}
+
+	public refreshSize() {
+		setTimeout(() => this.view.refreshSize());
+	}
+
 	public destroy() {
 		this.wheelController.destroy();
 		this.view.destroy();
@@ -169,10 +177,6 @@ export class Workspace implements WorkspaceController {
 
 	private onIsDraggingChanged(isDragging: boolean) {
 		this.getRootComponent().setIsDragging(isDragging);
-	}
-
-	private onIsSmartEditorCollapsedChanged() {
-		setTimeout(() => this.view.refreshSize());
 	}
 
 	private onViewPortChanged(viewPort: ViewPort) {

@@ -19,7 +19,5 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - name: Packages
-        run: bash .github/workflows/packages.sh
-      - name: Demos
-        run: bash .github/workflows/demos.sh
+      - name: main.sh
+        run: bash .github/workflows/main.sh

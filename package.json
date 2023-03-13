@@ -6,12 +6,14 @@
 		"eslint": "yarn workspaces run eslint",
 		"prettier": "yarn workspaces run prettier",
 		"prettier:fix": "yarn workspaces run prettier:fix",
-		"serve": "http-server -c-1 ./"
+		"serve": "http-server -c-1 ./",
+		"ci": "bash .github/workflows/main.sh"
 	},
 	"workspaces": [
 		"designer",
 		"react",
-		"angular"
+		"angular",
+		"demos/react-app"
 	],
 	"devDependencies": {
 		"http-server": "^14.1.1"

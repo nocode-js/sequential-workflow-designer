@@ -2,7 +2,6 @@
 
 const configuration = {
 	toolbox: {
-		isHidden: false,
 		groups: [
 			{
 				name: 'Steps',
@@ -78,7 +77,9 @@ const configuration = {
 
 			return editor;
 		}
-	}
+	},
+
+	controlBar: true,
 };
 
 const startDefinition = {

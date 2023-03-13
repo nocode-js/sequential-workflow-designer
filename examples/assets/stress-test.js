@@ -1,4 +1,4 @@
-/* global document, sequentialWorkflowDesigner, prompt, alert */
+/* global document, sequentialWorkflowDesigner */
 
 const uid = sequentialWorkflowDesigner.Uid.next;
 
@@ -29,28 +29,14 @@ class Steps {
 }
 
 const configuration = {
-	toolbox: {
-		isHidden: true,
-		groups: []
-	},
-
 	steps: {
 		iconUrlProvider: (_, type) => {
 			return `./assets/icon-${type}.svg`;
 		},
-
-		validator: () => true
 	},
-
-	editors: {
-		isHidden: true,
-		globalEditorProvider: () => {
-			throw new Error('Not implemented');
-		},
-		stepEditorProvider: (step) => {
-			throw new Error('Not implemented');
-		}
-	}
+	toolbox: false,
+	editors: false,
+	controlBar: true,
 };
 
 const LIMIT = 256;
@@ -100,4 +86,4 @@ const startDefinition = {
 };
 
 const placeholder = document.getElementById('designer');
-const designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
+sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);

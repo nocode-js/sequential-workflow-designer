@@ -1,12 +1,12 @@
+import { ToolboxApi } from '../api/toolbox-api';
 import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
 import { ToolboxGroupConfiguration } from '../designer-configuration';
-import { DesignerContext } from '../designer-context';
 import { ScrollBoxView } from './scrollbox-view';
 import { ToolboxItem } from './toolbox-item';
 
 export class ToolboxView {
-	public static create(parent: HTMLElement, designerContext: DesignerContext): ToolboxView {
+	public static create(parent: HTMLElement, api: ToolboxApi): ToolboxView {
 		const root = Dom.element('div', {
 			class: 'sqd-toolbox'
 		});
@@ -36,7 +36,7 @@ export class ToolboxView {
 		parent.appendChild(root);
 
 		const scrollBoxView = ScrollBoxView.create(body, parent);
-		return new ToolboxView(header, body, filterInput, scrollBoxView, designerContext);
+		return new ToolboxView(header, body, filterInput, scrollBoxView, api);
 	}
 
 	private headerToggleIcon?: SVGElement;
@@ -46,7 +46,7 @@ export class ToolboxView {
 		private readonly body: HTMLElement,
 		private readonly filterInput: HTMLInputElement,
 		private readonly scrollBoxView: ScrollBoxView,
-		private readonly designerContext: DesignerContext
+		private readonly api: ToolboxApi
 	) {}
 
 	public bindToggleIsCollapsedClick(handler: () => void) {
@@ -89,7 +89,7 @@ export class ToolboxView {
 			groupTitle.innerText = group.name;
 			list.appendChild(groupTitle);
 
-			group.steps.forEach(s => ToolboxItem.create(list, s, this.designerContext));
+			group.steps.forEach(s => ToolboxItem.create(list, s, this.api));
 		});
 		this.scrollBoxView.setContent(list);
 	}

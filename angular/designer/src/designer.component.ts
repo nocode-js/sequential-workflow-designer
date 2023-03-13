@@ -54,7 +54,9 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Input('stepsConfiguration')
 	public stepsConfiguration?: StepsConfiguration;
 	@Input('toolboxConfiguration')
-	public toolboxConfiguration?: ToolboxConfiguration;
+	public toolboxConfiguration?: ToolboxConfiguration | false;
+	@Input('controlBar')
+	public controlBar?: boolean;
 	@Input('extensions')
 	public extensions?: DesignerExtension[];
 	@Input('areEditorsHidden')
@@ -105,8 +107,11 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 			if (!this.stepsConfiguration) {
 				throw new Error('Input "stepsConfiguration" is not set');
 			}
-			if (!this.toolboxConfiguration) {
+			if (this.toolboxConfiguration === undefined) {
 				throw new Error('Input "toolboxConfiguration" is not set');
+			}
+			if (this.controlBar === undefined) {
+				throw new Error('Input "controlBar" is not set');
 			}
 
 			if (this.designer) {
@@ -117,13 +122,15 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 			const designer = Designer.create(this.placeholder.nativeElement, this.definition, {
 				theme: this.theme,
 				undoStackSize: this.undoStackSize,
-				editors: {
-					isHidden: this.areEditorsHidden,
-					globalEditorProvider: this.globalEditorProvider,
-					stepEditorProvider: this.stepEditorProvider
-				},
+				editors: this.areEditorsHidden
+					? false
+					: {
+							globalEditorProvider: this.globalEditorProvider,
+							stepEditorProvider: this.stepEditorProvider
+					  },
 				steps: this.stepsConfiguration,
 				toolbox: this.toolboxConfiguration,
+				controlBar: this.controlBar,
 				extensions: this.extensions
 			});
 			designer.onReady.subscribe(() => {

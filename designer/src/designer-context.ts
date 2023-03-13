@@ -22,10 +22,9 @@ export class DesignerContext {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
 		const layoutController = new LayoutController(parent);
-		const isMobile = layoutController.isMobile();
 		const isReadonly = !!configuration.isReadonly;
 
-		const state = new DesignerState(definition, isReadonly, isMobile, isMobile);
+		const state = new DesignerState(definition, isReadonly);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = new BehaviorController();
 		const stepExtensionResolver = StepExtensionResolver.create(services);
