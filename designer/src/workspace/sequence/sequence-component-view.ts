@@ -1,7 +1,7 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { JoinView } from '../common-views/join-view';
-import { RectPlaceholderView } from '../common-views/rect-placeholder-view';
+import { RectPlaceholderDirection, RectPlaceholderView } from '../common-views/rect-placeholder-view';
 import { ComponentView, StepComponent } from '../component';
 import { ComponentContext } from '../../component-context';
 import { StepContext } from '../../designer-extension';
@@ -34,7 +34,7 @@ export class SequenceComponentView implements ComponentView {
 
 		let offsetY = PH_HEIGHT;
 
-		const placeholderViews: RectPlaceholderView[] = [];
+		const placeholders: SequencePlaceholder[] = [];
 		for (let i = 0; i < components.length; i++) {
 			const component = components[i];
 			const offsetX = maxJoinX - component.view.joinX;
@@ -44,8 +44,18 @@ export class SequenceComponentView implements ComponentView {
 			}
 
 			if (componentContext.placeholderController.canCreate(sequence, i)) {
-				const placeholderView = RectPlaceholderView.create(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT, PH_WIDTH, PH_HEIGHT, i);
-				placeholderViews.push(placeholderView);
+				const view = RectPlaceholderView.create(
+					g,
+					maxJoinX - PH_WIDTH / 2,
+					offsetY - PH_HEIGHT,
+					PH_WIDTH,
+					PH_HEIGHT,
+					RectPlaceholderDirection.none
+				);
+				placeholders.push({
+					view,
+					index: i
+				});
 			}
 
 			Dom.translate(component.view.g, offsetX, offsetY);
@@ -58,17 +68,20 @@ export class SequenceComponentView implements ComponentView {
 
 		const newIndex = components.length;
 		if (componentContext.placeholderController.canCreate(sequence, newIndex)) {
-			const newPlaceholderView = RectPlaceholderView.create(
+			const view = RectPlaceholderView.create(
 				g,
 				maxJoinX - PH_WIDTH / 2,
 				offsetY - PH_HEIGHT,
 				PH_WIDTH,
 				PH_HEIGHT,
-				newIndex
+				RectPlaceholderDirection.none
 			);
-			placeholderViews.push(newPlaceholderView);
+			placeholders.push({
+				view,
+				index: newIndex
+			});
 		}
-		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholderViews, components);
+		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
 	}
 
 	private constructor(
@@ -76,7 +89,7 @@ export class SequenceComponentView implements ComponentView {
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		public readonly placeholderViews: RectPlaceholderView[],
+		public readonly placeholders: SequencePlaceholder[],
 		public readonly components: StepComponent[]
 	) {}
 
@@ -85,8 +98,8 @@ export class SequenceComponentView implements ComponentView {
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		this.placeholderViews.forEach(placeholder => {
-			placeholder.setIsVisible(isDragging);
+		this.placeholders.forEach(placeholder => {
+			placeholder.view.setIsVisible(isDragging);
 		});
 	}
 
@@ -96,4 +109,9 @@ export class SequenceComponentView implements ComponentView {
 		}
 		return true;
 	}
+}
+
+export interface SequencePlaceholder {
+	view: RectPlaceholderView;
+	index: number;
 }

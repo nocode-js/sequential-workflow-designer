@@ -1,5 +1,5 @@
 import { Vector } from '../core/vector';
-import { ViewPort } from '../designer-state';
+import { ViewPort } from '../designer-extension';
 import { createDesignerContextStub } from '../test-tools/stubs';
 import { MoveViewPortBehavior } from './move-view-port-behavior';
 

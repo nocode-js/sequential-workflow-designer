@@ -92,12 +92,12 @@ export class WorkspaceView {
 		});
 	}
 
-	public getClientPosition(): Vector {
+	public getCanvasPosition(): Vector {
 		const rect = this.canvas.getBoundingClientRect();
 		return new Vector(rect.x, rect.y);
 	}
 
-	public getClientCanvasSize(): Vector {
+	public getCanvasSize(): Vector {
 		return new Vector(this.canvas.clientWidth, this.canvas.clientHeight);
 	}
 

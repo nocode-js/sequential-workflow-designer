@@ -6,7 +6,7 @@ describe('Workspace', () => {
 	it('create() creates bar', () => {
 		const parent = Dom.element('div');
 		const designerContext = createDesignerContextStub();
-		const api = createDesignerApiStub();
+		const api = createDesignerApiStub(designerContext);
 
 		const bar = Workspace.create(parent, designerContext, api);
 

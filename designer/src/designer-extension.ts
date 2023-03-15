@@ -1,12 +1,16 @@
+import { WorkspaceApi } from './api';
 import { DesignerApi } from './api/designer-api';
 import { ComponentContext } from './component-context';
+import { Vector } from './core';
 import { Branches, ComponentType, Sequence, Step } from './definition';
 import { StepComponent, Component } from './workspace';
 
 export interface DesignerExtension {
 	steps?: StepExtension[];
 	uiComponents?: UiComponentExtension[];
+	draggedComponent?: DraggedComponentExtension;
 	wheelController?: WheelControllerExtension;
+	viewPortController?: ViewPortControllerExtension;
 	placeholderController?: PlaceholderControllerExtension;
 	rootComponent?: RootComponentExtension;
 	daemons?: DaemonExtension[];
@@ -42,12 +46,11 @@ export enum StepChildrenType {
 // WheelControllerExtension
 
 export interface WheelControllerExtension {
-	create(api: DesignerApi): WheelController;
+	create(api: WorkspaceApi): WheelController;
 }
 
 export interface WheelController {
 	onWheel(e: WheelEvent): void;
-	destroy(): void;
 }
 
 // UiComponentExtension
@@ -57,6 +60,18 @@ export interface UiComponentExtension {
 }
 
 export interface UiComponent {
+	destroy(): void;
+}
+
+// DraggedComponentExtension
+
+export interface DraggedComponentExtension {
+	create(parent: HTMLElement, step: Step, componentContext: ComponentContext): DraggedComponent;
+}
+
+export interface DraggedComponent {
+	width: number;
+	height: number;
 	destroy(): void;
 }
 
@@ -76,7 +91,7 @@ export interface SequencePlaceIndicator {
 	index: number;
 }
 
-// PlaceholderController
+// PlaceholderControllerExtension
 
 export interface PlaceholderControllerExtension {
 	create(): PlaceholderController;
@@ -84,6 +99,23 @@ export interface PlaceholderControllerExtension {
 
 export interface PlaceholderController {
 	canCreate(sequence: Sequence, index: number): boolean;
+}
+
+// ViewPortControllerExtension
+
+export interface ViewPortControllerExtension {
+	create(api: WorkspaceApi): ViewPortController;
+}
+
+export interface ViewPortController {
+	setDefault(): void;
+	zoom(direction: boolean): void;
+	focusOnComponent(componentPosition: Vector, componentSize: Vector): void;
+}
+
+export interface ViewPort {
+	position: Vector;
+	scale: number;
 }
 
 // Daemon

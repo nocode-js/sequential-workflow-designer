@@ -1,8 +1,12 @@
+## 0.9.1
+
+Fixed the bug with displaying nested placeholders in folders.
+
 ## 0.9.0
 
 #### Breaking Changes
 
-This version changes the main configuration. The "isHidden" properties are depreciated now and will be removed. Also we added a possibility to hide the control bar. To hide the control bar or other UI component you need to set `false` in the corresponding configuration property.
+This version changes the main configuration. The "isHidden" properties are prohibited. Also we added a possibility to hide the control bar. To hide the control bar or other UI component you need to set `false` in the corresponding configuration property.
 
 ```js
 const configuration = {

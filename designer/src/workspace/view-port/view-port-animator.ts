@@ -1,25 +1,26 @@
+import { WorkspaceApi } from '../../api';
 import { animate, Animation } from '../../core/animation';
-import { Vector } from '../../core/vector';
-import { DesignerState } from '../../designer-state';
+import { ViewPort } from '../../designer-extension';
 
 export class ViewPortAnimator {
 	private animation?: Animation;
 
-	public constructor(private readonly state: DesignerState) {}
+	public constructor(private readonly api: WorkspaceApi) {}
 
-	public execute(position: Vector, scale: number) {
+	public execute(target: ViewPort) {
 		if (this.animation && this.animation.isAlive) {
 			this.animation.stop();
 		}
 
-		const startPosition = this.state.viewPort.position;
-		const startScale = this.state.viewPort.scale;
-		const deltaPosition = startPosition.subtract(position);
-		const deltaScale = startScale - scale;
+		const viewPort = this.api.getViewPort();
+		const startPosition = viewPort.position;
+		const startScale = viewPort.scale;
+		const deltaPosition = startPosition.subtract(target.position);
+		const deltaScale = startScale - target.scale;
 
 		this.animation = animate(150, progress => {
 			const newScale = startScale - deltaScale * progress;
-			this.state.setViewPort({
+			this.api.setViewPort({
 				position: startPosition.subtract(deltaPosition.multiplyByScalar(progress)),
 				scale: newScale
 			});

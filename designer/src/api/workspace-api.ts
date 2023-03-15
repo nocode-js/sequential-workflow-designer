@@ -1,12 +1,21 @@
 import { Vector } from '../core';
-import { DesignerState, ViewPort } from '../designer-state';
+import { ViewPort } from '../designer-extension';
+import { DesignerState } from '../designer-state';
 import { WorkspaceControllerWrapper } from '../workspace/workspace-controller';
 
 export class WorkspaceApi {
 	public constructor(private readonly state: DesignerState, private readonly workspaceController: WorkspaceControllerWrapper) {}
 
-	public getClientPosition(): Vector {
-		return this.workspaceController.getClientPosition();
+	public getCanvasPosition(): Vector {
+		return this.workspaceController.getCanvasPosition();
+	}
+
+	public getCanvasSize(): Vector {
+		return this.workspaceController.getCanvasSize();
+	}
+
+	public getRootComponentSize(): Vector {
+		return this.workspaceController.getRootComponentSize();
 	}
 
 	public getViewPort(): ViewPort {

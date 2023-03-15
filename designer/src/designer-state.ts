@@ -1,6 +1,7 @@
 import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
 import { Definition } from './definition';
+import { ViewPort } from './designer-extension';
 
 export interface DefinitionChangedEvent {
 	changeType: DefinitionChangeType;
@@ -16,11 +17,6 @@ export enum DefinitionChangeType {
 	stepInserted,
 	globalPropertyChanged,
 	rootReplaced
-}
-
-export interface ViewPort {
-	position: Vector;
-	scale: number;
 }
 
 export class DesignerState {

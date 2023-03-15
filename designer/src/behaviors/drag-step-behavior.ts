@@ -39,22 +39,32 @@ export class DragStepBehavior implements Behavior {
 	) {}
 
 	public onStart(position: Vector) {
-		let offset: Vector;
+		let offset: Vector | null = null;
+
 		if (this.draggedStepComponent) {
 			this.draggedStepComponent.setIsDisabled(true);
 
-			const clientPosition = this.draggedStepComponent.view.getClientPosition();
-			offset = position.subtract(clientPosition);
-		} else {
-			offset = new Vector(this.view.width / 2, this.view.height / 2);
+			const hasSameSize =
+				this.draggedStepComponent.view.width === this.view.component.width &&
+				this.draggedStepComponent.view.height === this.view.component.height;
+			if (hasSameSize) {
+				// Mouse cursor will be positioned on the same place as the source component.
+				const clientPosition = this.draggedStepComponent.view.getClientPosition();
+				offset = position.subtract(clientPosition);
+			}
+		}
+		if (!offset) {
+			// Mouse cursor will be positioned in the center of the component.
+			offset = new Vector(this.view.component.width, this.view.component.height).divideByScalar(2);
 		}
 
 		this.view.setPosition(position.subtract(offset));
 		this.designerState.setIsDragging(true);
 
+		const placeholders = this.workspaceController.getPlaceholders();
 		this.state = {
 			startPosition: position,
-			finder: PlaceholderFinder.create(this.workspaceController.getPlaceholders(), this.designerState),
+			finder: PlaceholderFinder.create(placeholders, this.designerState),
 			offset
 		};
 	}
@@ -64,7 +74,7 @@ export class DragStepBehavior implements Behavior {
 			const newPosition = this.state.startPosition.subtract(delta).subtract(this.state.offset);
 			this.view.setPosition(newPosition);
 
-			const placeholder = this.state.finder.find(newPosition, this.view.width, this.view.height);
+			const placeholder = this.state.finder.find(newPosition, this.view.component.width, this.view.component.height);
 
 			if (this.currentPlaceholder !== placeholder) {
 				if (this.currentPlaceholder) {

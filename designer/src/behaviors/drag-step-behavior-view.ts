@@ -3,9 +3,7 @@ import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerConfiguration } from '../designer-configuration';
 import { ComponentContext } from '../component-context';
-import { StepContext } from '../designer-extension';
-
-const SAFE_OFFSET = 10;
+import { DraggedComponent } from '../designer-extension';
 
 export class DragStepView {
 	public static create(step: Step, configuration: DesignerConfiguration, componentContext: ComponentContext): DragStepView {
@@ -15,37 +13,20 @@ export class DragStepView {
 		});
 		document.body.appendChild(layer);
 
-		const canvas = Dom.svg('svg');
-		layer.appendChild(canvas);
+		const component = componentContext.services.draggedComponent.create(layer, step, componentContext);
 
-		const fakeStepContext: StepContext = {
-			parentSequence: [],
-			step,
-			depth: 0,
-			position: 0,
-			isInputConnected: true,
-			isOutputConnected: true
-		};
-		const stepComponent = componentContext.stepComponentFactory.create(canvas, fakeStepContext, componentContext);
-
-		Dom.attrs(canvas, {
-			width: stepComponent.view.width + SAFE_OFFSET * 2,
-			height: stepComponent.view.height + SAFE_OFFSET * 2
-		});
-
-		Dom.translate(stepComponent.view.g, SAFE_OFFSET, SAFE_OFFSET);
-
-		return new DragStepView(stepComponent.view.width, stepComponent.view.height, layer);
+		return new DragStepView(component, layer);
 	}
 
-	private constructor(public readonly width: number, public readonly height: number, private readonly layer: HTMLElement) {}
+	private constructor(public readonly component: DraggedComponent, private readonly layer: HTMLElement) {}
 
 	public setPosition(position: Vector) {
-		this.layer.style.top = position.y - SAFE_OFFSET + 'px';
-		this.layer.style.left = position.x - SAFE_OFFSET + 'px';
+		this.layer.style.top = position.y + 'px';
+		this.layer.style.left = position.x + 'px';
 	}
 
 	public remove() {
+		this.component.destroy();
 		document.body.removeChild(this.layer);
 	}
 }

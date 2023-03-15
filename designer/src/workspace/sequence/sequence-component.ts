@@ -38,8 +38,8 @@ export class SequenceComponent implements Component {
 	}
 
 	public getPlaceholders(result: Placeholder[]) {
-		this.view.placeholderViews.forEach(view => {
-			result.push(new RectPlaceholder(view, this.sequence, view.index));
+		this.view.placeholders.forEach(placeholder => {
+			result.push(new RectPlaceholder(placeholder.view, this.sequence, placeholder.index));
 		});
 		this.view.components.forEach(c => c.getPlaceholders(result));
 	}

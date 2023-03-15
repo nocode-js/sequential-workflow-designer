@@ -7,15 +7,18 @@ import { LayoutController } from './layout-controller';
 import { Workspace } from './workspace/workspace';
 
 export class DesignerView {
-	public static create(parent: HTMLElement, designerContext: DesignerContext, configuration: DesignerConfiguration): DesignerView {
+	public static create(
+		parent: HTMLElement,
+		designerContext: DesignerContext,
+		configuration: DesignerConfiguration,
+		api: DesignerApi
+	): DesignerView {
 		const theme = configuration.theme || 'light';
 
 		const root = Dom.element('div', {
 			class: `sqd-designer sqd-theme-${theme}`
 		});
 		parent.appendChild(root);
-
-		const api = DesignerApi.create(designerContext);
 
 		const workspace = Workspace.create(root, designerContext, api);
 

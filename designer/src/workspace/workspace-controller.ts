@@ -4,11 +4,10 @@ import { Placeholder, StepComponent } from './component';
 export interface WorkspaceController {
 	getPlaceholders(): Placeholder[];
 	getComponentByStepId(stepId: string): StepComponent;
-	resetViewPort(): void;
 	refreshSize(): void;
-	zoom(direction: boolean): void;
-	moveViewPortToStep(stepComponent: StepComponent): void;
-	getClientPosition(): Vector;
+	getCanvasPosition(): Vector;
+	getCanvasSize(): Vector;
+	getRootComponentSize(): Vector;
 }
 
 export class WorkspaceControllerWrapper implements WorkspaceController {
@@ -36,23 +35,19 @@ export class WorkspaceControllerWrapper implements WorkspaceController {
 		return this.get().getComponentByStepId(stepId);
 	}
 
-	public resetViewPort() {
-		this.get().resetViewPort();
-	}
-
 	public refreshSize() {
 		this.get().refreshSize();
 	}
 
-	public zoom(direction: boolean) {
-		this.get().zoom(direction);
+	public getCanvasPosition(): Vector {
+		return this.get().getCanvasPosition();
 	}
 
-	public moveViewPortToStep(stepComponent: StepComponent) {
-		this.get().moveViewPortToStep(stepComponent);
+	public getCanvasSize(): Vector {
+		return this.get().getCanvasSize();
 	}
 
-	public getClientPosition(): Vector {
-		return this.get().getClientPosition();
+	public getRootComponentSize(): Vector {
+		return this.get().getRootComponentSize();
 	}
 }
