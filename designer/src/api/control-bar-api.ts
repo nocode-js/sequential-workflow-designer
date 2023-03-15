@@ -1,14 +1,14 @@
 import { DefinitionModifier } from '../definition-modifier';
 import { DesignerState } from '../designer-state';
 import { HistoryController } from '../history-controller';
-import { WorkspaceController } from '../workspace/workspace-controller';
+import { ViewPortApi } from './view-port-api';
 
 export class ControlBarApi {
 	public constructor(
 		private readonly state: DesignerState,
-		private readonly workspaceController: WorkspaceController,
 		private readonly historyController: HistoryController | undefined,
-		private readonly definitionModifier: DefinitionModifier
+		private readonly definitionModifier: DefinitionModifier,
+		private readonly viewPortApi: ViewPortApi
 	) {}
 
 	/**
@@ -26,15 +26,15 @@ export class ControlBarApi {
 	}
 
 	public resetViewPort() {
-		this.workspaceController.resetViewPort();
+		this.viewPortApi.resetViewPort();
 	}
 
 	public zoomIn() {
-		this.workspaceController.zoom(true);
+		this.viewPortApi.zoom(true);
 	}
 
 	public zoomOut() {
-		this.workspaceController.zoom(false);
+		this.viewPortApi.zoom(false);
 	}
 
 	public isDragDisabled(): boolean {

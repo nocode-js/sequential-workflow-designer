@@ -1,5 +1,5 @@
 import { Vector } from '../../core';
-import { ViewPort } from '../../designer-state';
+import { ViewPort } from '../../designer-extension';
 import { NextQuantifiedNumber } from './next-quantified-number';
 
 const SCALES = [0.06, 0.08, 0.1, 0.12, 0.16, 0.2, 0.26, 0.32, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
@@ -16,7 +16,7 @@ export class QuantifiedScaleViewPortCalculator {
 		};
 	}
 
-	public static zoomByWheel(current: ViewPort, e: WheelEvent, clientPosition: Vector): ViewPort | null {
+	public static zoomByWheel(current: ViewPort, e: WheelEvent, canvasPosition: Vector): ViewPort | null {
 		if (e.deltaY === 0) {
 			return null;
 		}
@@ -33,7 +33,7 @@ export class QuantifiedScaleViewPortCalculator {
 			scale = nextScale.next;
 		}
 
-		const mousePoint = new Vector(e.pageX, e.pageY).subtract(clientPosition);
+		const mousePoint = new Vector(e.pageX, e.pageY).subtract(canvasPosition);
 		// The real point is point on canvas with no scale.
 		const mouseRealPoint = mousePoint.divideByScalar(current.scale).subtract(current.position.divideByScalar(current.scale));
 

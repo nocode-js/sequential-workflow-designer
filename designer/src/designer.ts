@@ -5,10 +5,10 @@ import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
 import { DesignerState } from './designer-state';
-import { WorkspaceController } from './workspace/workspace-controller';
 import { StepOrName, StepsTraverser } from './core/steps-traverser';
 import { ServicesResolver } from './services';
 import { validateConfiguration } from './designer-configuration-validator';
+import { DesignerApi } from './api';
 
 export class Designer<TDefinition extends Definition = Definition> {
 	/**
@@ -41,14 +41,10 @@ export class Designer<TDefinition extends Definition = Definition> {
 
 		const services = ServicesResolver.resolve(configuration.extensions, config);
 		const designerContext = DesignerContext.create(placeholder, startDefinition, config, services);
+		const designerApi = DesignerApi.create(designerContext);
 
-		const view = DesignerView.create(placeholder, designerContext, config);
-		const designer = new Designer<TDef>(
-			view,
-			designerContext.state,
-			designerContext.workspaceController,
-			designerContext.stepsTraverser
-		);
+		const view = DesignerView.create(placeholder, designerContext, config, designerApi);
+		const designer = new Designer<TDef>(view, designerContext.state, designerContext.stepsTraverser, designerApi);
 		view.workspace.onReady.subscribe(() => designer.onReady.forward());
 
 		designerContext.state.onDefinitionChanged.subscribe(() => {
@@ -63,8 +59,8 @@ export class Designer<TDefinition extends Definition = Definition> {
 	private constructor(
 		private readonly view: DesignerView,
 		private readonly state: DesignerState,
-		private readonly workspaceController: WorkspaceController,
-		private readonly stepsTraverser: StepsTraverser
+		private readonly stepsTraverser: StepsTraverser,
+		private readonly api: DesignerApi
 	) {}
 
 	/**
@@ -135,8 +131,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Moves the view port to the step with the animation.
 	 */
 	public moveViewPortToStep(stepId: string) {
-		const component = this.workspaceController.getComponentByStepId(stepId);
-		this.workspaceController.moveViewPortToStep(component);
+		this.api.viewPort.moveViewPortToStep(stepId);
 	}
 
 	/**

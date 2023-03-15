@@ -1,3 +1,4 @@
+import { DefaultDraggedComponentExtension } from './behaviors/default-dragged-component-extension';
 import { ControlBarExtension } from './control-bar/control-bar-extension';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerExtension } from './designer-extension';
@@ -10,6 +11,7 @@ import { StartStopRootComponentExtension } from './workspace/start-stop-root/sta
 import { SwitchStepExtension } from './workspace/switch-step/switch-step-extension';
 import { TaskStepExtension } from './workspace/task-step/task-step-extension';
 import { ClassicWheelControllerExtension } from './workspace/view-port/classic-wheel-controller-extension';
+import { DefaultViewPortControllerExtension } from './workspace/view-port/default-view-port-controller-extension';
 
 export type Services = Required<DesignerExtension>;
 
@@ -30,11 +32,17 @@ function merge(services: Partial<Services>, extensions: DesignerExtension[]) {
 		if (ext.uiComponents) {
 			services.uiComponents = (services.uiComponents || []).concat(ext.uiComponents);
 		}
+		if (ext.draggedComponent) {
+			services.draggedComponent = ext.draggedComponent;
+		}
 		if (ext.wheelController) {
 			services.wheelController = ext.wheelController;
 		}
 		if (ext.placeholderController) {
 			services.placeholderController = ext.placeholderController;
+		}
+		if (ext.viewPortController) {
+			services.viewPortController = ext.viewPortController;
 		}
 		if (ext.rootComponent) {
 			services.rootComponent = ext.rootComponent;
@@ -52,6 +60,10 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 	services.steps.push(new ContainerStepExtension());
 	services.steps.push(new SwitchStepExtension());
 	services.steps.push(new TaskStepExtension());
+
+	if (!services.draggedComponent) {
+		services.draggedComponent = new DefaultDraggedComponentExtension();
+	}
 
 	if (!services.uiComponents) {
 		services.uiComponents = [];
@@ -71,6 +83,9 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 	}
 	if (!services.placeholderController) {
 		services.placeholderController = new DefaultPlaceholderControllerExtension();
+	}
+	if (!services.viewPortController) {
+		services.viewPortController = new DefaultViewPortControllerExtension();
 	}
 	if (!services.rootComponent) {
 		services.rootComponent = new StartStopRootComponentExtension();

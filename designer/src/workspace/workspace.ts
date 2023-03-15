@@ -4,25 +4,22 @@ import { Sequence } from '../definition';
 import { DesignerContext } from '../designer-context';
 import { Component, Placeholder, StepComponent } from './component';
 import { WorkspaceView } from './workspace-view';
-import { DefinitionChangedEvent, DefinitionChangeType, DesignerState, ViewPort } from '../designer-state';
-import { ViewPortAnimator } from './view-port/view-port-animator';
+import { DefinitionChangedEvent, DefinitionChangeType, DesignerState } from '../designer-state';
 import { WorkspaceController } from './workspace-controller';
 import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
 import { StepsTraverser } from '../core/steps-traverser';
-import { CenteredViewPortCalculator } from './view-port/centered-view-port-calculator';
 import { SimpleEvent } from '../core/simple-event';
-import { QuantifiedScaleViewPortCalculator } from './view-port';
-import { SequencePlaceIndicator, WheelController } from '../designer-extension';
+import { SequencePlaceIndicator, ViewPort, WheelController } from '../designer-extension';
 import { DesignerApi } from '../api/designer-api';
+import { ViewPortApi } from '../api/view-port-api';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {
 		const view = WorkspaceView.create(parent, designerContext.componentContext);
 
-		const viewPortAnimator = new ViewPortAnimator(designerContext.state);
 		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext, designerContext.state);
-		const wheelController = designerContext.services.wheelController.create(api);
+		const wheelController = designerContext.services.wheelController.create(api.workspace);
 		const workspace = new Workspace(
 			view,
 			designerContext.stepsTraverser,
@@ -30,17 +27,17 @@ export class Workspace implements WorkspaceController {
 			designerContext.behaviorController,
 			wheelController,
 			clickBehaviorResolver,
-			viewPortAnimator
+			api.viewPort
 		);
 		setTimeout(() => {
 			workspace.render();
-			workspace.resetViewPort();
+			api.viewPort.resetViewPort();
 			workspace.onReady.forward();
 		});
 
 		designerContext.setWorkspaceController(workspace);
 		designerContext.state.onViewPortChanged.subscribe(vp => workspace.onViewPortChanged(vp));
-		designerContext.state.onIsDraggingChanged.subscribe(i => workspace.onIsDraggingChanged(i));
+		designerContext.state.onIsDraggingChanged.subscribe(is => workspace.onIsDraggingChanged(is));
 
 		race(
 			0,
@@ -69,7 +66,7 @@ export class Workspace implements WorkspaceController {
 		private readonly behaviorController: BehaviorController,
 		private readonly wheelController: WheelController,
 		private readonly clickBehaviorResolver: ClickBehaviorResolver,
-		private readonly viewPortAnimator: ViewPortAnimator
+		private readonly viewPortApi: ViewPortApi
 	) {}
 
 	public render() {
@@ -110,33 +107,17 @@ export class Workspace implements WorkspaceController {
 		return component;
 	}
 
-	public resetViewPort() {
-		const rcv = this.getRootComponent().view;
-		const clientCanvasSize = this.view.getClientCanvasSize();
-		const newViewPort = CenteredViewPortCalculator.calculate(clientCanvasSize, rcv);
-		this.state.setViewPort(newViewPort);
+	public getCanvasPosition(): Vector {
+		return this.view.getCanvasPosition();
 	}
 
-	public zoom(direction: boolean): void {
-		const newViewPort = QuantifiedScaleViewPortCalculator.zoom(this.state.viewPort, direction);
-		this.state.setViewPort(newViewPort);
+	public getCanvasSize(): Vector {
+		return this.view.getCanvasSize();
 	}
 
-	public moveViewPortToStep(stepComponent: StepComponent) {
-		const vp = this.state.viewPort;
-		const componentPosition = stepComponent.view.getClientPosition();
-		const clientSize = this.view.getClientCanvasSize();
-
-		const realPos = vp.position.divideByScalar(vp.scale).subtract(componentPosition.divideByScalar(vp.scale));
-		const componentOffset = new Vector(stepComponent.view.width, stepComponent.view.height).divideByScalar(2);
-
-		const newPosition = realPos.add(clientSize.divideByScalar(2)).subtract(componentOffset);
-
-		this.viewPortAnimator.execute(newPosition, 1);
-	}
-
-	public getClientPosition(): Vector {
-		return this.view.getClientPosition();
+	public getRootComponentSize(): Vector {
+		const view = this.getRootComponent().view;
+		return new Vector(view.width, view.height);
 	}
 
 	public refreshSize() {
@@ -144,7 +125,6 @@ export class Workspace implements WorkspaceController {
 	}
 
 	public destroy() {
-		this.wheelController.destroy();
 		this.view.destroy();
 	}
 
@@ -190,7 +170,7 @@ export class Workspace implements WorkspaceController {
 	) {
 		if (folderPathChanged) {
 			this.render();
-			this.resetViewPort();
+			this.viewPortApi.resetViewPort();
 		} else if (definitionChanged) {
 			if (definitionChanged.changeType === DefinitionChangeType.stepPropertyChanged) {
 				this.revalidate();

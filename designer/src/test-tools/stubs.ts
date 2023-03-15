@@ -55,7 +55,9 @@ export function createComponentContextStub(): ComponentContext {
 	return createDesignerContextStub().componentContext;
 }
 
-export function createDesignerApiStub(): DesignerApi {
-	const designerContext = createDesignerContextStub();
+export function createDesignerApiStub(designerContext?: DesignerContext): DesignerApi {
+	if (!designerContext) {
+		designerContext = createDesignerContextStub();
+	}
 	return DesignerApi.create(designerContext);
 }

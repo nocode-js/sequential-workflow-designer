@@ -4,6 +4,7 @@ import { Icons } from '../../core/icons';
 const ICON_SIZE = 16;
 
 export enum RectPlaceholderDirection {
+	none = 0,
 	in = 1,
 	out = 2
 }
@@ -15,8 +16,7 @@ export class RectPlaceholderView {
 		y: number,
 		width: number,
 		height: number,
-		index: number,
-		direction?: RectPlaceholderDirection
+		direction: RectPlaceholderDirection
 	): RectPlaceholderView {
 		const g = Dom.svg('g', {
 			visibility: 'hidden',
@@ -41,10 +41,10 @@ export class RectPlaceholderView {
 		}
 
 		parent.appendChild(g);
-		return new RectPlaceholderView(rect, g, index);
+		return new RectPlaceholderView(rect, g);
 	}
 
-	private constructor(public readonly rect: SVGElement, public readonly g: SVGElement, public readonly index: number) {}
+	private constructor(public readonly rect: SVGElement, public readonly g: SVGElement) {}
 
 	public setIsHover(isHover: boolean) {
 		Dom.toggleClass(this.g, isHover, 'sqd-hover');
