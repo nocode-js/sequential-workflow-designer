@@ -10,7 +10,7 @@
 		"prettier:fix": "prettier --write ./designer/src",
 		"eslint": "eslint ./designer/src --ext .ts",
 		"test": "ng test",
-		"test:single": "ng test --watch false --browsers ChromeHeadless"
+		"test:single": "ng test --watch false"
 	},
 	"private": true,
 	"dependencies": {
@@ -33,7 +33,7 @@
 		"@types/jasmine": "~3.10.0",
 		"jasmine-core": "~4.0.0",
 		"karma": "~6.3.0",
-		"karma-chrome-launcher": "~3.1.0",
+		"karma-chrome-launcher": "~3.1.1",
 		"karma-coverage": "~2.1.0",
 		"karma-jasmine": "~4.0.0",
 		"karma-jasmine-html-reporter": "~1.7.0",
