@@ -4,6 +4,12 @@ module.exports = config => {
 			'jasmine',
 			'karma-typescript'
 		],
+		plugins: [
+			require('karma-jasmine'),
+			require('karma-chrome-launcher'),
+			require('karma-spec-reporter'),
+			require('karma-typescript')
+		],
 		files: [
 			{ pattern: 'src/**/*.ts' }
 		],

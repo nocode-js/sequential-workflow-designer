@@ -6,6 +6,9 @@
 			"jasmine"
 		]
 	},
+	"files": [
+		"src/test.ts"
+	],
 	"include": [
 		"**/*.spec.ts",
 		"**/*.d.ts"

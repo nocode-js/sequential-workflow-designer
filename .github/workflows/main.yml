@@ -1,9 +1,11 @@
 name: main
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
-      - develop
 jobs:
   build:
     name: Build

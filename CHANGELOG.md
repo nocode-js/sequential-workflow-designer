@@ -1,3 +1,7 @@
+## 0.9.2
+
+The `sequential-workflow-designer-angular` package supports Angular 12 - 15 now.
+
 ## 0.9.1
 
 Fixed the bug with displaying nested placeholders in folders.
