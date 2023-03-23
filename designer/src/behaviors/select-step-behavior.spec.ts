@@ -1,5 +1,5 @@
 import { createDesignerContextStub, createStepStub } from '../test-tools/stubs';
-import { StepComponent } from '../workspace/component';
+import { StepComponent } from '../workspace/step-component';
 import { SelectStepBehavior } from './select-step-behavior';
 
 describe('SelectStepBehavior', () => {

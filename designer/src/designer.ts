@@ -128,10 +128,24 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
-	 * @description Moves the view port to the step with the animation.
+	 * @description Moves the viewport to the step with the animation.
+	 */
+	public moveViewportToStep(stepId: string) {
+		this.api.viewport.moveViewportToStep(stepId);
+	}
+
+	/**
+	 * @deprecated Use `moveViewportToStep` instead.
 	 */
 	public moveViewPortToStep(stepId: string) {
-		this.api.viewPort.moveViewPortToStep(stepId);
+		this.moveViewportToStep(stepId);
+	}
+
+	/**
+	 * @description Updates all badges.
+	 */
+	public updateBadges() {
+		this.api.workspace.updateBadges();
 	}
 
 	/**

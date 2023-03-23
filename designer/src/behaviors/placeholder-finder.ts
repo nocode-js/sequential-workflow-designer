@@ -5,7 +5,7 @@ import { Placeholder } from '../workspace/component';
 export class PlaceholderFinder {
 	public static create(placeholders: Placeholder[], state: DesignerState): PlaceholderFinder {
 		const checker = new PlaceholderFinder(placeholders, state);
-		state.onViewPortChanged.subscribe(checker.clearCacheHandler);
+		state.onViewportChanged.subscribe(checker.clearCacheHandler);
 		window.addEventListener('scroll', checker.clearCacheHandler, false);
 		return checker;
 	}
@@ -41,7 +41,7 @@ export class PlaceholderFinder {
 	}
 
 	public destroy() {
-		this.state.onViewPortChanged.unsubscribe(this.clearCacheHandler);
+		this.state.onViewportChanged.unsubscribe(this.clearCacheHandler);
 		window.removeEventListener('scroll', this.clearCacheHandler, false);
 	}
 

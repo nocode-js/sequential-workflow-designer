@@ -1,7 +1,7 @@
 import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
 import { Definition } from './definition';
-import { ViewPort } from './designer-extension';
+import { Viewport } from './designer-extension';
 
 export interface DefinitionChangedEvent {
 	changeType: DefinitionChangeType;
@@ -20,7 +20,7 @@ export enum DefinitionChangeType {
 }
 
 export class DesignerState {
-	public readonly onViewPortChanged = new SimpleEvent<ViewPort>();
+	public readonly onViewportChanged = new SimpleEvent<Viewport>();
 	public readonly onSelectedStepIdChanged = new SimpleEvent<string | null>();
 	public readonly onFolderPathChanged = new SimpleEvent<string[]>();
 	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
@@ -28,7 +28,7 @@ export class DesignerState {
 	public readonly onIsDragDisabledChanged = new SimpleEvent<boolean>();
 	public readonly onDefinitionChanged = new SimpleEvent<DefinitionChangedEvent>();
 
-	public viewPort: ViewPort = {
+	public viewport: Viewport = {
 		position: new Vector(0, 0),
 		scale: 1
 	};
@@ -69,9 +69,9 @@ export class DesignerState {
 		this.onDefinitionChanged.forward({ changeType, stepId });
 	}
 
-	public setViewPort(viewPort: ViewPort) {
-		this.viewPort = viewPort;
-		this.onViewPortChanged.forward(viewPort);
+	public setViewport(viewport: Viewport) {
+		this.viewport = viewport;
+		this.onViewportChanged.forward(viewport);
 	}
 
 	public setIsReadonly(isReadonly: boolean) {

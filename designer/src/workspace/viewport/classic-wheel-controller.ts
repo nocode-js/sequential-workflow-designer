@@ -1,6 +1,6 @@
 import { WorkspaceApi } from '../../api/workspace-api';
 import { WheelController } from '../../designer-extension';
-import { QuantifiedScaleViewPortCalculator } from './quantified-scale-view-port-calculator';
+import { QuantifiedScaleViewportCalculator } from './quantified-scale-viewport-calculator';
 
 export class ClassicWheelController implements WheelController {
 	public static create(api: WorkspaceApi) {
@@ -10,11 +10,11 @@ export class ClassicWheelController implements WheelController {
 	private constructor(private readonly api: WorkspaceApi) {}
 
 	public onWheel(e: WheelEvent) {
-		const viewPort = this.api.getViewPort();
+		const viewport = this.api.getViewport();
 		const canvasPosition = this.api.getCanvasPosition();
-		const newViewPort = QuantifiedScaleViewPortCalculator.zoomByWheel(viewPort, e, canvasPosition);
-		if (newViewPort) {
-			this.api.setViewPort(newViewPort);
+		const newViewport = QuantifiedScaleViewportCalculator.zoomByWheel(viewport, e, canvasPosition);
+		if (newViewport) {
+			this.api.setViewport(newViewport);
 		}
 	}
 }

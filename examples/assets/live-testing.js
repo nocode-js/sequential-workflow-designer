@@ -93,7 +93,7 @@ function onRunClicked() {
 		onStepExecuted: (step, data) => {
 			document.getElementById('variables').innerText = JSON.stringify(data, null, 2) + '\r\n';
 			designer.selectStepById(step.id);
-			designer.moveViewPortToStep(step.id);
+			designer.moveViewportToStep(step.id);
 		},
 
 		onFinished: () => {

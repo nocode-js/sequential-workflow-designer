@@ -1,9 +1,10 @@
 import { Sequence } from '../../definition';
 import { RectPlaceholder } from '../placeholder/rect-placeholder';
-import { ClickDetails, ClickResult, Component, Placeholder, StepComponent } from '../component';
+import { BadgesResult, ClickDetails, ResolvedClick, Component, Placeholder } from '../component';
 import { ComponentContext } from '../../component-context';
 import { StartStopRootComponentView } from './start-stop-root-component-view';
 import { SequencePlaceIndicator } from '../../designer-extension';
+import { StepComponent } from '../step-component';
 
 export class StartStopRootComponent implements Component {
 	public static create(
@@ -21,8 +22,8 @@ export class StartStopRootComponent implements Component {
 		private readonly parentSequencePlaceIndicator: SequencePlaceIndicator | null
 	) {}
 
-	public findByClick(click: ClickDetails): ClickResult | null {
-		return this.view.component.findByClick(click);
+	public resolveClick(click: ClickDetails): ResolvedClick | null {
+		return this.view.component.resolveClick(click);
 	}
 
 	public findById(stepId: string): StepComponent | null {
@@ -48,11 +49,7 @@ export class StartStopRootComponent implements Component {
 		}
 	}
 
-	public validate(): boolean {
-		return this.view.component.validate();
+	public updateBadges(result: BadgesResult) {
+		this.view.component.updateBadges(result);
 	}
-
-	//public destroy() {
-	//	this.view.destroy();
-	//}
 }

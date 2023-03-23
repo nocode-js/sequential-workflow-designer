@@ -1,5 +1,5 @@
 import { Vector } from '../core';
-import { ViewPort } from '../designer-extension';
+import { Viewport } from '../designer-extension';
 import { DesignerState } from '../designer-state';
 import { WorkspaceControllerWrapper } from '../workspace/workspace-controller';
 
@@ -18,15 +18,19 @@ export class WorkspaceApi {
 		return this.workspaceController.getRootComponentSize();
 	}
 
-	public getViewPort(): ViewPort {
-		return this.state.viewPort;
+	public getViewport(): Viewport {
+		return this.state.viewport;
 	}
 
-	public setViewPort(viewPort: ViewPort) {
-		this.state.setViewPort(viewPort);
+	public setViewport(viewport: Viewport) {
+		this.state.setViewport(viewport);
 	}
 
-	public refreshSize() {
-		this.workspaceController.refreshSize();
+	public updateBadges() {
+		this.workspaceController.updateBadges();
+	}
+
+	public updateSize() {
+		this.workspaceController.updateSize();
 	}
 }

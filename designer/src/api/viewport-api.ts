@@ -1,25 +1,25 @@
 import { Vector } from '../core';
-import { ViewPortController } from '../designer-extension';
+import { ViewportController } from '../designer-extension';
 import { WorkspaceControllerWrapper } from '../workspace/workspace-controller';
 
-export class ViewPortApi {
+export class ViewportApi {
 	public constructor(
 		private readonly workspaceController: WorkspaceControllerWrapper,
-		private readonly viewPortController: ViewPortController
+		private readonly viewportController: ViewportController
 	) {}
 
-	public resetViewPort() {
-		this.viewPortController.setDefault();
+	public resetViewport() {
+		this.viewportController.setDefault();
 	}
 
 	public zoom(direction: boolean) {
-		this.viewPortController.zoom(direction);
+		this.viewportController.zoom(direction);
 	}
 
-	public moveViewPortToStep(stepId: string) {
+	public moveViewportToStep(stepId: string) {
 		const component = this.workspaceController.getComponentByStepId(stepId);
 		const componentPosition = component.view.getClientPosition();
 		const componentSize = new Vector(component.view.width, component.view.height);
-		this.viewPortController.focusOnComponent(componentPosition, componentSize);
+		this.viewportController.focusOnComponent(componentPosition, componentSize);
 	}
 }

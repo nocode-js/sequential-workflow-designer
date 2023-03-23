@@ -1,14 +1,14 @@
 import { DefinitionModifier } from '../definition-modifier';
 import { DesignerState } from '../designer-state';
 import { HistoryController } from '../history-controller';
-import { ViewPortApi } from './view-port-api';
+import { ViewportApi } from './viewport-api';
 
 export class ControlBarApi {
 	public constructor(
 		private readonly state: DesignerState,
 		private readonly historyController: HistoryController | undefined,
 		private readonly definitionModifier: DefinitionModifier,
-		private readonly viewPortApi: ViewPortApi
+		private readonly viewportApi: ViewportApi
 	) {}
 
 	/**
@@ -25,16 +25,16 @@ export class ControlBarApi {
 		}
 	}
 
-	public resetViewPort() {
-		this.viewPortApi.resetViewPort();
+	public resetViewport() {
+		this.viewportApi.resetViewport();
 	}
 
 	public zoomIn() {
-		this.viewPortApi.zoom(true);
+		this.viewportApi.zoom(true);
 	}
 
 	public zoomOut() {
-		this.viewPortApi.zoom(false);
+		this.viewportApi.zoom(false);
 	}
 
 	public isDragDisabled(): boolean {

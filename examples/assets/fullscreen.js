@@ -1,12 +1,12 @@
 /* global document, sequentialWorkflowDesigner, console */
 
-function createTaskStep(id, type, name) {
+function createTaskStep(id, type, name, properties) {
 	return {
 		id,
 		componentType: 'task',
 		type,
 		name,
-		properties: {}
+		properties: properties || {}
 	};
 }
 
@@ -67,6 +67,11 @@ function appendCheckbox(root, label, isChecked, onClick) {
 
 let designer;
 let changeReadonlyButton;
+let validationStatusText;
+
+function refreshValidationStatus() {
+	validationStatusText.innerText = designer.isValid() ? 'Definition is valid' : 'Definition is invalid';
+}
 
 const configuration = {
 	undoStackSize: 20,
@@ -127,7 +132,7 @@ const startDefinition = {
 	properties: {},
 	sequence: [
 		createIfStep('00000000000000000000000000000001',
-			[ createTaskStep('00000000000000000000000000000002', 'save', 'Save file') ],
+			[ createTaskStep('00000000000000000000000000000002', 'save', 'Save file', { isInvalid: true }) ],
 			[ createTaskStep('00000000000000000000000000000003', 'text', 'Send email') ]
 		),
 		createContainerStep('00000000000000000000000000000004', [
@@ -139,6 +144,7 @@ const startDefinition = {
 const placeholder = document.getElementById('designer');
 designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
 designer.onDefinitionChanged.subscribe((newDefinition) => {
+	refreshValidationStatus();
 	console.log('the definition has changed', newDefinition);
 });
 
@@ -148,3 +154,6 @@ changeReadonlyButton.addEventListener('click', () => {
 	reloadChangeReadonlyButtonText();
 });
 reloadChangeReadonlyButtonText();
+
+validationStatusText = document.getElementById('validationStatus');
+refreshValidationStatus();

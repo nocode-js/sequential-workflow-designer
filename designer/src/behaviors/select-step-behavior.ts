@@ -1,10 +1,10 @@
 import { Vector } from '../core/vector';
 import { DesignerContext } from '../designer-context';
 import { DesignerState } from '../designer-state';
-import { StepComponent } from '../workspace/component';
+import { StepComponent } from '../workspace/step-component';
 import { Behavior } from './behavior';
 import { DragStepBehavior } from './drag-step-behavior';
-import { MoveViewPortBehavior } from './move-view-port-behavior';
+import { MoveViewportBehavior } from './move-viewport-behavior';
 
 export class SelectStepBehavior implements Behavior {
 	public static create(
@@ -33,7 +33,7 @@ export class SelectStepBehavior implements Behavior {
 				this.state.setSelectedStepId(null);
 				return DragStepBehavior.create(this.designerContext, this.pressedStepComponent.step, this.pressedStepComponent);
 			} else {
-				return MoveViewPortBehavior.create(this.state, false);
+				return MoveViewportBehavior.create(this.state, false);
 			}
 		}
 	}
