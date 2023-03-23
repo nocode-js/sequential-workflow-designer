@@ -36,7 +36,7 @@ export class ControlBar implements UiComponent {
 	}
 
 	private onResetButtonClicked() {
-		this.controlBarApi.resetViewPort();
+		this.controlBarApi.resetViewport();
 	}
 
 	private onZoomInButtonClicked() {

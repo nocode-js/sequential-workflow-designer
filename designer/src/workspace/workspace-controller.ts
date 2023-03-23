@@ -1,13 +1,15 @@
 import { Vector } from '../core';
-import { Placeholder, StepComponent } from './component';
+import { Placeholder } from './component';
+import { StepComponent } from './step-component';
 
 export interface WorkspaceController {
 	getPlaceholders(): Placeholder[];
 	getComponentByStepId(stepId: string): StepComponent;
-	refreshSize(): void;
 	getCanvasPosition(): Vector;
 	getCanvasSize(): Vector;
 	getRootComponentSize(): Vector;
+	updateBadges(): void;
+	updateSize(): void;
 }
 
 export class WorkspaceControllerWrapper implements WorkspaceController {
@@ -35,10 +37,6 @@ export class WorkspaceControllerWrapper implements WorkspaceController {
 		return this.get().getComponentByStepId(stepId);
 	}
 
-	public refreshSize() {
-		this.get().refreshSize();
-	}
-
 	public getCanvasPosition(): Vector {
 		return this.get().getCanvasPosition();
 	}
@@ -49,5 +47,13 @@ export class WorkspaceControllerWrapper implements WorkspaceController {
 
 	public getRootComponentSize(): Vector {
 		return this.get().getRootComponentSize();
+	}
+
+	public updateBadges() {
+		this.get().updateBadges();
+	}
+
+	public updateSize() {
+		this.get().updateSize();
 	}
 }

@@ -1,13 +1,14 @@
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { Placeholder, StepComponent } from '../workspace/component';
+import { Placeholder } from '../workspace/component';
 import { Behavior } from './behavior';
 import { DragStepView } from './drag-step-behavior-view';
 import { PlaceholderFinder } from './placeholder-finder';
 import { DesignerState } from '../designer-state';
 import { DefinitionModifier } from '../definition-modifier';
 import { WorkspaceController } from '../workspace/workspace-controller';
+import { StepComponent } from '../workspace/step-component';
 
 export class DragStepBehavior implements Behavior {
 	public static create(designerContext: DesignerContext, step: Step, draggedStepComponent?: StepComponent): DragStepBehavior {

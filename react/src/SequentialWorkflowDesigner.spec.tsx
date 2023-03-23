@@ -1,8 +1,9 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { Definition } from 'sequential-workflow-designer';
 import { SequentialWorkflowDesigner } from './SequentialWorkflowDesigner';
 import { wrapDefinition, WrappedDefinition } from './WrappedDefinition';
+import { SequentialWorkflowDesignerController } from './SequentialWorkflowDesignerController';
 
 describe('SequentialWorkflowDesigner', () => {
 	const definition: Definition = {
@@ -63,5 +64,35 @@ describe('SequentialWorkflowDesigner', () => {
 		expectUiComponents(container, 0);
 
 		unmount();
+	});
+
+	it('sets instance of designer to controller and after destroy removes it', async () => {
+		const wrappedDefinition = wrapDefinition(definition);
+		const controller = SequentialWorkflowDesignerController.create();
+
+		expect(controller.isReady()).toBe(false);
+
+		const { unmount, getByTestId } = render(
+			<SequentialWorkflowDesigner
+				definition={wrappedDefinition}
+				onDefinitionChange={() => {
+					/* nothing */
+				}}
+				globalEditor={false}
+				stepEditor={false}
+				stepsConfiguration={{}}
+				toolboxConfiguration={false}
+				controlBar={false}
+				controller={controller}
+			/>
+		);
+
+		await waitFor(() => getByTestId('designer'));
+
+		expect(controller.isReady()).toBe(true);
+
+		unmount();
+
+		expect(controller.isReady()).toBe(false);
 	});
 });

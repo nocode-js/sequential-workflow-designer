@@ -4,7 +4,7 @@ import { DefinitionModifier } from '../definition-modifier';
 import { GlobalEditorContext, StepEditorContext } from '../designer-configuration';
 import { EditorRenderer, EditorRendererHandler } from './editor-renderer';
 import { LayoutController } from '../layout-controller';
-import { Definition } from 'sequential-workflow-model';
+import { Definition } from '../definition';
 
 export class EditorApi {
 	public constructor(

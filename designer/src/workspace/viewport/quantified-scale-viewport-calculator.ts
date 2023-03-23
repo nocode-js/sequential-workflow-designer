@@ -1,5 +1,5 @@
 import { Vector } from '../../core';
-import { ViewPort } from '../../designer-extension';
+import { Viewport } from '../../designer-extension';
 import { NextQuantifiedNumber } from './next-quantified-number';
 
 const SCALES = [0.06, 0.08, 0.1, 0.12, 0.16, 0.2, 0.26, 0.32, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
@@ -7,8 +7,8 @@ const MAX_DELTA_Y = 16;
 
 const quantifiedScale = new NextQuantifiedNumber(SCALES);
 
-export class QuantifiedScaleViewPortCalculator {
-	public static zoom(current: ViewPort, direction: boolean): ViewPort {
+export class QuantifiedScaleViewportCalculator {
+	public static zoom(current: Viewport, direction: boolean): Viewport {
 		const nextScale = quantifiedScale.next(current.scale, direction);
 		return {
 			position: current.position,
@@ -16,7 +16,7 @@ export class QuantifiedScaleViewPortCalculator {
 		};
 	}
 
-	public static zoomByWheel(current: ViewPort, e: WheelEvent, canvasPosition: Vector): ViewPort | null {
+	public static zoomByWheel(current: Viewport, e: WheelEvent, canvasPosition: Vector): Viewport | null {
 		if (e.deltaY === 0) {
 			return null;
 		}

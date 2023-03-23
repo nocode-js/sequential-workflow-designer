@@ -5,6 +5,7 @@ import { GlobalEditor } from './GlobalEditor';
 import { StepEditor } from './StepEditor';
 import { createSwitchStep, createTaskStep } from './StepUtils';
 import { WorkflowDefinition } from './model';
+import { useSequentialWorkflowDesignerController } from 'sequential-workflow-designer-react';
 
 const startDefinition: WorkflowDefinition = {
 	properties: {},
@@ -20,6 +21,7 @@ const stepsConfiguration: StepsConfiguration = {
 };
 
 export function App() {
+	const controller = useSequentialWorkflowDesignerController();
 	const [isVisible, setIsVisible] = useState(true);
 	const [definition, setDefinition] = useState(() => wrapDefinition(startDefinition));
 	const [selectedStepId, setSelectedStepId] = useState<string | null>(null);
@@ -43,6 +45,13 @@ export function App() {
 		setIsReadonly(!isReadonly);
 	}
 
+	function moveViewportToFirstStepClicked() {
+		const fistStep = definition.value.sequence[0];
+		if (fistStep) {
+			controller.moveViewportToStep(fistStep.id);
+		}
+	}
+
 	function reloadDefinitionClicked() {
 		const newDefinition = ObjectCloner.deepClone(startDefinition);
 		setDefinition(wrapDefinition(newDefinition));
@@ -63,6 +72,7 @@ export function App() {
 					controlBar={true}
 					globalEditor={<GlobalEditor />}
 					stepEditor={<StepEditor />}
+					controller={controller}
 				/>
 			)}
 
@@ -78,6 +88,7 @@ export function App() {
 				<button onClick={reloadDefinitionClicked}>Reload definition</button>
 				<button onClick={toggleSelectionClicked}>Toggle selection</button>
 				<button onClick={toggleIsReadonlyClicked}>Toggle readonly</button>
+				<button onClick={moveViewportToFirstStepClicked}>Move viewport to first step</button>
 			</div>
 
 			<div>

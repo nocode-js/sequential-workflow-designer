@@ -1,13 +1,12 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { SequentialStep } from '../../definition';
-import { ClickDetails, ComponentView } from '../component';
+import { ClickCommand, ClickCommandType, ClickDetails, StepComponentView } from '../component';
 import { SequenceComponent } from '../sequence/sequence-component';
 import { InputView } from '../common-views/input-view';
 import { JoinView } from '../common-views/join-view';
 import { LabelView, LABEL_HEIGHT } from '../common-views/label-view';
 import { RegionView } from '../common-views/region-view';
-import { ValidationErrorView } from '../common-views/validation-error-view';
 import { ComponentContext } from '../../component-context';
 import { StepContext } from '../../designer-extension';
 import { SequenceContext } from '../sequence/sequence-context';
@@ -15,7 +14,7 @@ import { SequenceContext } from '../sequence/sequence-context';
 const PADDING_TOP = 20;
 const PADDING_X = 20;
 
-export class ContainerStepComponentView implements ComponentView {
+export class ContainerStepComponentView implements StepComponentView {
 	public static create(
 		parentElement: SVGElement,
 		stepContext: StepContext<SequentialStep>,
@@ -56,28 +55,33 @@ export class ContainerStepComponentView implements ComponentView {
 
 		const regionView = RegionView.create(g, [viewWidth], viewHeight);
 
-		const validationErrorView = ValidationErrorView.create(g, viewWidth, 0);
-
-		return new ContainerStepComponentView(g, viewWidth, viewHeight, joinX, component, inputView, regionView, validationErrorView);
+		return new ContainerStepComponentView(g, viewWidth, viewHeight, joinX, component, inputView, regionView);
 	}
+
+	public readonly sequenceComponents = [this.sequenceComponent];
+	public readonly placeholders = null;
 
 	private constructor(
 		public readonly g: SVGGElement,
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		public readonly sequenceComponent: SequenceComponent,
+		private readonly sequenceComponent: SequenceComponent,
 		private readonly inputView: InputView,
-		private readonly regionView: RegionView,
-		private readonly validationErrorView: ValidationErrorView
+		private readonly regionView: RegionView
 	) {}
 
 	public getClientPosition(): Vector {
 		return this.regionView.getClientPosition();
 	}
 
-	public resolveClick(click: ClickDetails): boolean {
-		return this.regionView.resolveClick(click) || this.g.contains(click.element);
+	public resolveClick(click: ClickDetails): ClickCommand | null {
+		if (this.regionView.resolveClick(click) || this.g.contains(click.element)) {
+			return {
+				type: ClickCommandType.selectStep
+			};
+		}
+		return null;
 	}
 
 	public setIsDragging(isDragging: boolean) {
@@ -91,10 +95,6 @@ export class ContainerStepComponentView implements ComponentView {
 
 	public setIsDisabled(isDisabled: boolean) {
 		Dom.toggleClass(this.g, isDisabled, 'sqd-disabled');
-	}
-
-	public setIsValid(isHidden: boolean) {
-		this.validationErrorView.setIsHidden(isHidden);
 	}
 
 	public hasOutput(): boolean {

@@ -4,9 +4,8 @@ import { BranchedStep } from '../../definition';
 import { JoinView } from '../common-views/join-view';
 import { LabelView, LABEL_HEIGHT } from '../common-views/label-view';
 import { RegionView } from '../common-views//region-view';
-import { ValidationErrorView } from '../common-views/validation-error-view';
 import { InputView } from '../common-views/input-view';
-import { ClickDetails, ComponentView } from '../component';
+import { ClickCommand, ClickCommandType, ClickDetails, StepComponentView } from '../component';
 import { ComponentContext } from '../../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
 import { StepContext } from '../../designer-extension';
@@ -17,7 +16,7 @@ const PADDING_X = 20;
 const PADDING_TOP = 20;
 const CONNECTION_HEIGHT = 16;
 
-export class SwitchStepComponentView implements ComponentView {
+export class SwitchStepComponentView implements StepComponentView {
 	public static create(parent: SVGElement, stepContext: StepContext<BranchedStep>, context: ComponentContext): SwitchStepComponentView {
 		const { step } = stepContext;
 		const g = Dom.svg('g', {
@@ -131,19 +130,10 @@ export class SwitchStepComponentView implements ComponentView {
 		regions[regions.length - 1] += switchOffsetRight;
 		const regionView = RegionView.create(g, regions, viewHeight);
 
-		const validationErrorView = ValidationErrorView.create(g, viewWidth, 0);
-
-		return new SwitchStepComponentView(
-			g,
-			viewWidth,
-			viewHeight,
-			shiftedJoinX,
-			branchComponents,
-			regionView,
-			inputView,
-			validationErrorView
-		);
+		return new SwitchStepComponentView(g, viewWidth, viewHeight, shiftedJoinX, branchComponents, regionView, inputView);
 	}
+
+	public readonly placeholders = null;
 
 	private constructor(
 		public readonly g: SVGGElement,
@@ -152,16 +142,20 @@ export class SwitchStepComponentView implements ComponentView {
 		public readonly joinX: number,
 		public readonly sequenceComponents: SequenceComponent[],
 		private readonly regionView: RegionView,
-		private readonly inputView: InputView,
-		private readonly validationErrorView: ValidationErrorView
+		private readonly inputView: InputView
 	) {}
 
 	public getClientPosition(): Vector {
 		return this.regionView.getClientPosition();
 	}
 
-	public resolveClick(click: ClickDetails): boolean {
-		return this.regionView.resolveClick(click) || this.g.contains(click.element);
+	public resolveClick(click: ClickDetails): ClickCommand | null {
+		if (this.regionView.resolveClick(click) || this.g.contains(click.element)) {
+			return {
+				type: ClickCommandType.selectStep
+			};
+		}
+		return null;
 	}
 
 	public setIsDragging(isDragging: boolean) {
@@ -174,10 +168,6 @@ export class SwitchStepComponentView implements ComponentView {
 
 	public setIsDisabled(isDisabled: boolean) {
 		Dom.toggleClass(this.g, isDisabled, 'sqd-disabled');
-	}
-
-	public setIsValid(isValid: boolean) {
-		this.validationErrorView.setIsHidden(isValid);
 	}
 
 	public hasOutput(): boolean {

@@ -1,9 +1,10 @@
 import { Sequence } from '../../definition';
-import { ClickDetails, ClickResult, Component, Placeholder, StepComponent } from '../component';
+import { BadgesResult, ClickDetails, ResolvedClick, Component, Placeholder } from '../component';
 import { SequenceComponentView } from './sequence-component-view';
 import { ComponentContext } from '../../component-context';
 import { RectPlaceholder } from '../placeholder/rect-placeholder';
 import { SequenceContext } from './sequence-context';
+import { StepComponent } from '../step-component';
 
 export class SequenceComponent implements Component {
 	public static create(parentElement: SVGElement, sequenceContext: SequenceContext, context: ComponentContext): SequenceComponent {
@@ -17,9 +18,9 @@ export class SequenceComponent implements Component {
 		private readonly sequence: Sequence
 	) {}
 
-	public findByClick(click: ClickDetails): ClickResult | null {
+	public resolveClick(click: ClickDetails): ResolvedClick | null {
 		for (const component of this.view.components) {
-			const result = component.findByClick(click);
+			const result = component.resolveClick(click);
 			if (result) {
 				return result;
 			}
@@ -49,11 +50,9 @@ export class SequenceComponent implements Component {
 		this.view.components.forEach(c => c.setIsDragging(isDragging));
 	}
 
-	public validate(): boolean {
-		let isValid = true;
+	public updateBadges(result: BadgesResult) {
 		for (const component of this.view.components) {
-			isValid = component.validate() && isValid;
+			component.updateBadges(result);
 		}
-		return isValid;
 	}
 }

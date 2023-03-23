@@ -8,12 +8,14 @@ import {
 	Step,
 	StepEditorContext,
 	StepsConfiguration,
-	DesignerExtension
+	DesignerExtension,
+	CustomActionHandler
 } from 'sequential-workflow-designer';
 import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
 import { wrapDefinition, WrappedDefinition } from './WrappedDefinition';
 import { Presenter } from './core/Presenter';
+import { SequentialWorkflowDesignerController } from './SequentialWorkflowDesignerController';
 
 const externalEditorClassName = 'sqd-editor-react';
 
@@ -35,6 +37,8 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	 * @description If true, the control bar will be displayed.
 	 */
 	controlBar: boolean;
+	controller?: SequentialWorkflowDesignerController;
+	customActionHandler?: CustomActionHandler;
 	extensions?: DesignerExtension[];
 }
 
@@ -45,6 +49,8 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const onSelectedStepIdChangedRef = useRef(props.onSelectedStepIdChanged);
 	const globalEditorRef = useRef(props.globalEditor);
 	const stepEditorRef = useRef(props.stepEditor);
+	const controllerRef = useRef(props.controller);
+	const customActionHandlerRef = useRef(props.customActionHandler);
 
 	const designerRef = useRef<Designer<TDefinition> | null>(null);
 	const editorRootRef = useRef<ReactDOM.Root | null>(null);
@@ -96,6 +102,25 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		);
 	}
 
+	function customActionHandler(action: string, step: Step) {
+		if (customActionHandlerRef.current) {
+			customActionHandlerRef.current(action, step);
+		}
+	}
+
+	function tryDestroy() {
+		Presenter.tryDestroy(editorRootRef);
+
+		if (controllerRef.current) {
+			controllerRef.current.setDesigner(null);
+		}
+		if (designerRef.current) {
+			designerRef.current.destroy();
+			designerRef.current = null;
+			// console.log('sqd: designer destroyed');
+		}
+	}
+
 	useEffect(() => {
 		onDefinitionChangeRef.current = props.onDefinitionChange;
 	}, [props.onDefinitionChange]);
@@ -111,6 +136,10 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	useEffect(() => {
 		stepEditorRef.current = props.stepEditor;
 	}, [props.stepEditor]);
+
+	useEffect(() => {
+		customActionHandlerRef.current = props.customActionHandler;
+	}, [props.customActionHandler]);
 
 	useEffect(() => {
 		if (!placeholder) {
@@ -136,8 +165,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 				return;
 			}
 
-			designerRef.current.destroy();
-			designerRef.current = null;
+			tryDestroy();
 		}
 
 		const designer = Designer.create(placeholder, definition.value, {
@@ -153,8 +181,12 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 							stepEditorProvider
 					  }
 					: false,
+			customActionHandler: customActionHandlerRef.current && customActionHandler,
 			extensions
 		});
+		if (controllerRef.current) {
+			controllerRef.current.setDesigner(designer);
+		}
 		if (selectedStepId) {
 			designer.selectStepById(selectedStepId);
 		}
@@ -176,16 +208,8 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	}, [placeholder, definition, selectedStepId, isReadonly, theme, undoStackSize, toolbox, controlBar, steps, extensions]);
 
 	useEffect(() => {
-		return () => {
-			Presenter.tryDestroy(editorRootRef);
-
-			if (designerRef.current) {
-				designerRef.current.destroy();
-				designerRef.current = null;
-				// console.log('sqd: designer destroyed');
-			}
-		};
+		return tryDestroy;
 	}, []);
 
-	return <div ref={setPlaceholder} className="sqd-designer-react"></div>;
+	return <div ref={setPlaceholder} data-testid="designer" className="sqd-designer-react"></div>;
 }

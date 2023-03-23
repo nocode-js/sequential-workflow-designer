@@ -2,7 +2,7 @@ import { race } from '../core/simple-event-race';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { Component, Placeholder, StepComponent } from './component';
+import { Component, Placeholder } from './component';
 import { WorkspaceView } from './workspace-view';
 import { DefinitionChangedEvent, DefinitionChangeType, DesignerState } from '../designer-state';
 import { WorkspaceController } from './workspace-controller';
@@ -10,9 +10,12 @@ import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
 import { StepsTraverser } from '../core/steps-traverser';
 import { SimpleEvent } from '../core/simple-event';
-import { SequencePlaceIndicator, ViewPort, WheelController } from '../designer-extension';
+import { SequencePlaceIndicator, Viewport, WheelController } from '../designer-extension';
 import { DesignerApi } from '../api/designer-api';
-import { ViewPortApi } from '../api/view-port-api';
+import { ViewportApi } from '../api/viewport-api';
+import { StepComponent } from './step-component';
+import { BadgesResultFactory } from './badges/badges-result-factory';
+import { Services } from '../services';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {
@@ -27,16 +30,17 @@ export class Workspace implements WorkspaceController {
 			designerContext.behaviorController,
 			wheelController,
 			clickBehaviorResolver,
-			api.viewPort
+			api.viewport,
+			designerContext.services
 		);
 		setTimeout(() => {
 			workspace.render();
-			api.viewPort.resetViewPort();
+			api.viewport.resetViewport();
 			workspace.onReady.forward();
 		});
 
 		designerContext.setWorkspaceController(workspace);
-		designerContext.state.onViewPortChanged.subscribe(vp => workspace.onViewPortChanged(vp));
+		designerContext.state.onViewportChanged.subscribe(vp => workspace.onViewportChanged(vp));
 		designerContext.state.onIsDraggingChanged.subscribe(is => workspace.onIsDraggingChanged(is));
 
 		race(
@@ -66,7 +70,8 @@ export class Workspace implements WorkspaceController {
 		private readonly behaviorController: BehaviorController,
 		private readonly wheelController: WheelController,
 		private readonly clickBehaviorResolver: ClickBehaviorResolver,
-		private readonly viewPortApi: ViewPortApi
+		private readonly viewportApi: ViewportApi,
+		private readonly services: Services
 	) {}
 
 	public render() {
@@ -90,7 +95,7 @@ export class Workspace implements WorkspaceController {
 
 		this.view.render(sequence, parentSequencePlaceIndicator);
 		this.trySelectStepComponent(this.state.selectedStepId);
-		this.revalidate();
+		this.updateBadges();
 	}
 
 	public getPlaceholders(): Placeholder[] {
@@ -120,16 +125,19 @@ export class Workspace implements WorkspaceController {
 		return new Vector(view.width, view.height);
 	}
 
-	public refreshSize() {
+	public updateSize() {
 		setTimeout(() => this.view.refreshSize());
+	}
+
+	public updateBadges() {
+		const result = BadgesResultFactory.create(this.services);
+		this.getRootComponent().updateBadges(result);
+		// TODO: this is a weak assumption
+		this.isValid = Boolean(result[0]);
 	}
 
 	public destroy() {
 		this.view.destroy();
-	}
-
-	private revalidate() {
-		this.isValid = this.getRootComponent().validate();
 	}
 
 	private onClick(position: Vector, target: Element, buttonIndex: number) {
@@ -159,8 +167,8 @@ export class Workspace implements WorkspaceController {
 		this.getRootComponent().setIsDragging(isDragging);
 	}
 
-	private onViewPortChanged(viewPort: ViewPort) {
-		this.view.setPositionAndScale(viewPort.position, viewPort.scale);
+	private onViewportChanged(viewport: Viewport) {
+		this.view.setPositionAndScale(viewport.position, viewport.scale);
 	}
 
 	private onStateChanged(
@@ -170,10 +178,10 @@ export class Workspace implements WorkspaceController {
 	) {
 		if (folderPathChanged) {
 			this.render();
-			this.viewPortApi.resetViewPort();
+			this.viewportApi.resetViewport();
 		} else if (definitionChanged) {
 			if (definitionChanged.changeType === DefinitionChangeType.stepPropertyChanged) {
-				this.revalidate();
+				this.updateBadges();
 			} else {
 				this.render();
 			}

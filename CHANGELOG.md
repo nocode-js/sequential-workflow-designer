@@ -1,3 +1,13 @@
+## 0.10.0
+
+Refactored the step component interface. Extracted the logic of the step validation to a separated layer called badges. This allowed to create a new type of badge: `counter`. The counter badge is available in the pro version.
+
+Additionally, now it's possible manually refreshing the validation from outside of the designer. The validation is a special case of a badge. To refresh the validation you need to call the `updateBadges` method.
+
+```ts
+designer.updateBadges(); 
+```
+
 ## 0.9.2
 
 The `sequential-workflow-designer-angular` package supports Angular 12 - 15 now.

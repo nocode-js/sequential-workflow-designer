@@ -1,8 +1,8 @@
 import { Vector } from '../../core';
-import { ViewPort } from '../../designer-extension';
+import { Viewport } from '../../designer-extension';
 
-export class CenteredViewPortCalculator {
-	public static center(margin: number, canvasSize: Vector, rootComponentSize: Vector): ViewPort {
+export class CenteredViewportCalculator {
+	public static center(margin: number, canvasSize: Vector, rootComponentSize: Vector): Viewport {
 		const canvasSafeWidth = Math.max(canvasSize.x - margin * 2, 0);
 		const canvasSafeHeight = Math.max(canvasSize.y - margin * 2, 0);
 
@@ -19,8 +19,8 @@ export class CenteredViewPortCalculator {
 		};
 	}
 
-	public static focusOnComponent(canvasSize: Vector, viewPort: ViewPort, componentPosition: Vector, componentSize: Vector): ViewPort {
-		const realPosition = viewPort.position.divideByScalar(viewPort.scale).subtract(componentPosition.divideByScalar(viewPort.scale));
+	public static focusOnComponent(canvasSize: Vector, viewport: Viewport, componentPosition: Vector, componentSize: Vector): Viewport {
+		const realPosition = viewport.position.divideByScalar(viewport.scale).subtract(componentPosition.divideByScalar(viewport.scale));
 		const componentOffset = componentSize.divideByScalar(2);
 
 		const position = realPosition.add(canvasSize.divideByScalar(2)).subtract(componentOffset);

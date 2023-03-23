@@ -1,6 +1,5 @@
 import { Icons } from '../../core';
 import { Dom } from '../../core/dom';
-import { Vector } from '../../core/vector';
 import { Sequence } from '../../definition';
 import { RectPlaceholderDirection, RectPlaceholderView } from '../common-views/rect-placeholder-view';
 import { ComponentView } from '../component';
@@ -76,10 +75,6 @@ export class StartStopRootComponentView implements ComponentView {
 		public readonly startPlaceholderView: RectPlaceholderView | null,
 		public readonly endPlaceholderView: RectPlaceholderView | null
 	) {}
-
-	public getClientPosition(): Vector {
-		throw new Error('Not supported');
-	}
 
 	public destroy() {
 		this.g.parentNode?.removeChild(this.g);

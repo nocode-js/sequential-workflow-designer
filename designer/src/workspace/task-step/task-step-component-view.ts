@@ -3,11 +3,9 @@ import { Vector } from '../../core/vector';
 import { Step } from '../../definition';
 import { StepsConfiguration } from '../../designer-configuration';
 import { StepContext } from '../../designer-extension';
-import { ChildlessComponentView } from '../childless-step-component';
 import { InputView } from '../common-views/input-view';
 import { OutputView } from '../common-views/output-view';
-import { ValidationErrorView } from '../common-views/validation-error-view';
-import { ClickDetails, ClickBehavior, ClickBehaviorType } from '../component';
+import { ClickDetails, ClickCommand, ClickCommandType, StepComponentView } from '../component';
 
 const PADDING_X = 12;
 const PADDING_Y = 10;
@@ -15,7 +13,7 @@ const MIN_TEXT_WIDTH = 70;
 const ICON_SIZE = 22;
 const RECT_RADIUS = 5;
 
-export class TaskStepComponentView implements ChildlessComponentView {
+export class TaskStepComponentView implements StepComponentView {
 	public static create(
 		parentElement: SVGElement,
 		stepContext: StepContext<Step>,
@@ -75,9 +73,11 @@ export class TaskStepComponentView implements ChildlessComponentView {
 
 		const inputView = isInputViewHidden ? null : InputView.createRoundInput(g, boxWidth / 2, 0);
 		const outputView = isOutputViewHidden ? null : OutputView.create(g, boxWidth / 2, boxHeight);
-		const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
-		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView, validationErrorView);
+		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView);
 	}
+
+	public readonly sequenceComponents = null;
+	public readonly placeholders = null;
 
 	private constructor(
 		public readonly g: SVGGElement,
@@ -86,19 +86,22 @@ export class TaskStepComponentView implements ChildlessComponentView {
 		public readonly joinX: number,
 		private readonly rect: SVGRectElement,
 		private readonly inputView: InputView | null,
-		private readonly outputView: OutputView | null,
-		private readonly validationErrorView: ValidationErrorView
+		private readonly outputView: OutputView | null
 	) {}
+
+	public hasOutput(): boolean {
+		return !!this.outputView;
+	}
 
 	public getClientPosition(): Vector {
 		const rect = this.rect.getBoundingClientRect();
 		return new Vector(rect.x, rect.y);
 	}
 
-	public resolveClick(click: ClickDetails): ClickBehavior | null {
+	public resolveClick(click: ClickDetails): ClickCommand | null {
 		if (this.g.contains(click.element)) {
 			return {
-				type: ClickBehaviorType.selectStep
+				type: ClickCommandType.selectStep
 			};
 		}
 		return null;
@@ -115,9 +118,5 @@ export class TaskStepComponentView implements ChildlessComponentView {
 
 	public setIsSelected(isSelected: boolean) {
 		Dom.toggleClass(this.rect, isSelected, 'sqd-selected');
-	}
-
-	public setIsValid(isValid: boolean) {
-		this.validationErrorView.setIsHidden(isValid);
 	}
 }

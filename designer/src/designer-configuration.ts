@@ -26,8 +26,12 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	 */
 	controlBar: boolean;
 
+	customActionHandler?: CustomActionHandler;
+
 	extensions?: DesignerExtension[];
 }
+
+export type CustomActionHandler = (action: string, step: Step) => void;
 
 export interface ToolboxConfiguration {
 	groups: ToolboxGroupConfiguration[];

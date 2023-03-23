@@ -2,9 +2,9 @@ import { Vector } from '../core/vector';
 import { DesignerState } from '../designer-state';
 import { Behavior } from './behavior';
 
-export class MoveViewPortBehavior implements Behavior {
-	public static create(state: DesignerState, resetSelectedStep: boolean): MoveViewPortBehavior {
-		return new MoveViewPortBehavior(state.viewPort.position, resetSelectedStep, state);
+export class MoveViewportBehavior implements Behavior {
+	public static create(state: DesignerState, resetSelectedStep: boolean): MoveViewportBehavior {
+		return new MoveViewportBehavior(state.viewport.position, resetSelectedStep, state);
 	}
 
 	private constructor(
@@ -21,9 +21,9 @@ export class MoveViewPortBehavior implements Behavior {
 	}
 
 	public onMove(delta: Vector) {
-		this.state.setViewPort({
+		this.state.setViewport({
 			position: this.startPosition.subtract(delta),
-			scale: this.state.viewPort.scale
+			scale: this.state.viewport.scale
 		});
 	}
 

@@ -1,11 +1,12 @@
 import { Vector } from '../core';
 import { DesignerContext } from '../designer-context';
 import { DesignerState } from '../designer-state';
-import { ClickBehaviorType, ClickDetails, Component } from '../workspace';
+import { ClickCommandType, ClickDetails, Component } from '../workspace';
 import { Behavior } from './behavior';
-import { MoveViewPortBehavior } from './move-view-port-behavior';
-import { OpenFolderBehavior } from './open-folder-behavior';
+import { MoveViewportBehavior } from './move-viewport-behavior';
+import { TriggerCustomActionBehavior } from './trigger-custom-action-behavior';
 import { SelectStepBehavior } from './select-step-behavior';
+import { OpenFolderBehavior } from './open-folder-behavior';
 
 export class ClickBehaviorResolver {
 	public constructor(private readonly designerContext: DesignerContext, private readonly state: DesignerState) {}
@@ -14,16 +15,16 @@ export class ClickBehaviorResolver {
 		const click: ClickDetails = {
 			element,
 			position,
-			scale: this.state.viewPort.scale
+			scale: this.state.viewport.scale
 		};
 
-		const result = rootComponent.findByClick(click);
+		const result = rootComponent.resolveClick(click);
 		if (!result) {
-			return MoveViewPortBehavior.create(this.state, true);
+			return MoveViewportBehavior.create(this.state, true);
 		}
 
-		switch (result.action.type) {
-			case ClickBehaviorType.selectStep: {
+		switch (result.command.type) {
+			case ClickCommandType.selectStep: {
 				const isDragDisabled =
 					forceDisableDrag ||
 					this.state.isDragDisabled ||
@@ -31,8 +32,11 @@ export class ClickBehaviorResolver {
 				return SelectStepBehavior.create(result.component, isDragDisabled, this.designerContext);
 			}
 
-			case ClickBehaviorType.openFolder:
+			case ClickCommandType.openFolder:
 				return OpenFolderBehavior.create(this.designerContext, element, result);
+
+			case ClickCommandType.triggerCustomAction:
+				return TriggerCustomActionBehavior.create(this.designerContext, element, result);
 
 			default:
 				throw new Error('Not supported behavior type');

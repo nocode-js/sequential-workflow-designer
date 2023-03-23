@@ -17,7 +17,7 @@ export class SmartEditor implements UiComponent {
 
 	private isCollapsed?: boolean;
 
-	private constructor(private readonly view: SmartEditorView, private viewPortApi: WorkspaceApi) {}
+	private constructor(private readonly view: SmartEditorView, private workspaceApi: WorkspaceApi) {}
 
 	private setIsCollapsed(isCollapsed: boolean) {
 		this.isCollapsed = isCollapsed;
@@ -26,7 +26,7 @@ export class SmartEditor implements UiComponent {
 
 	private toggleIsCollapsedClick() {
 		this.setIsCollapsed(!this.isCollapsed);
-		this.viewPortApi.refreshSize();
+		this.workspaceApi.updateSize();
 	}
 
 	public destroy() {

@@ -3,14 +3,15 @@ import { DesignerApi } from './api/designer-api';
 import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { Branches, ComponentType, Sequence, Step } from './definition';
-import { StepComponent, Component } from './workspace';
+import { Badge, Component, StepComponentView } from './workspace';
 
 export interface DesignerExtension {
 	steps?: StepExtension[];
+	badges?: BadgeExtension[];
 	uiComponents?: UiComponentExtension[];
 	draggedComponent?: DraggedComponentExtension;
 	wheelController?: WheelControllerExtension;
-	viewPortController?: ViewPortControllerExtension;
+	viewportController?: ViewportControllerExtension;
 	placeholderController?: PlaceholderControllerExtension;
 	rootComponent?: RootComponentExtension;
 	daemons?: DaemonExtension[];
@@ -20,7 +21,7 @@ export interface DesignerExtension {
 
 export interface StepExtension<S extends Step = Step> {
 	componentType: ComponentType;
-	createComponent(parentElement: SVGElement, stepContext: StepContext<S>, componentContext: ComponentContext): StepComponent;
+	createComponentView(parentElement: SVGElement, stepContext: StepContext<S>, componentContext: ComponentContext): StepComponentView;
 	getChildren(step: S): StepChildren | null;
 }
 
@@ -41,6 +42,13 @@ export interface StepChildren {
 export enum StepChildrenType {
 	singleSequence = 1,
 	branches = 2
+}
+
+// BadgeExtension
+
+export interface BadgeExtension {
+	createBadge(parentElement: SVGElement, stepContext: StepContext, componentContext: ComponentContext): Badge;
+	createStartValue(): unknown;
 }
 
 // WheelControllerExtension
@@ -101,19 +109,19 @@ export interface PlaceholderController {
 	canCreate(sequence: Sequence, index: number): boolean;
 }
 
-// ViewPortControllerExtension
+// ViewportControllerExtension
 
-export interface ViewPortControllerExtension {
-	create(api: WorkspaceApi): ViewPortController;
+export interface ViewportControllerExtension {
+	create(api: WorkspaceApi): ViewportController;
 }
 
-export interface ViewPortController {
+export interface ViewportController {
 	setDefault(): void;
 	zoom(direction: boolean): void;
 	focusOnComponent(componentPosition: Vector, componentSize: Vector): void;
 }
 
-export interface ViewPort {
+export interface Viewport {
 	position: Vector;
 	scale: number;
 }

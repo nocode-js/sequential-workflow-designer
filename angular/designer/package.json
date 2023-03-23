@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer-angular",
 	"description": "Angular wrapper for Sequential Workflow Designer component.",
-	"version": "0.9.2",
+	"version": "0.10.0",
 	"author": {
 		"name": "NoCode JS",
 		"url": "https://nocode-js.com/"
@@ -15,7 +15,7 @@
 	"peerDependencies": {
 		"@angular/common": "12 - 15",
 		"@angular/core": "12 - 15",
-		"sequential-workflow-designer": "^0.9.2"
+		"sequential-workflow-designer": "^0.10.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"

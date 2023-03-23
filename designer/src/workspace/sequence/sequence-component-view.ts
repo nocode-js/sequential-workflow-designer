@@ -2,10 +2,11 @@ import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { JoinView } from '../common-views/join-view';
 import { RectPlaceholderDirection, RectPlaceholderView } from '../common-views/rect-placeholder-view';
-import { ComponentView, StepComponent } from '../component';
+import { ComponentView } from '../component';
 import { ComponentContext } from '../../component-context';
 import { StepContext } from '../../designer-extension';
 import { SequenceContext } from './sequence-context';
+import { StepComponent } from '../step-component';
 
 const PH_WIDTH = 100;
 const PH_HEIGHT = 24;
@@ -92,10 +93,6 @@ export class SequenceComponentView implements ComponentView {
 		public readonly placeholders: SequencePlaceholder[],
 		public readonly components: StepComponent[]
 	) {}
-
-	public getClientPosition(): Vector {
-		throw new Error('Not supported');
-	}
 
 	public setIsDragging(isDragging: boolean) {
 		this.placeholders.forEach(placeholder => {

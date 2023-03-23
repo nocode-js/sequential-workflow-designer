@@ -2,13 +2,13 @@ import { Step } from '../definition';
 import { StepExtension } from '../designer-extension';
 import { ServicesResolver } from '../services';
 import { createDesignerConfigurationStub } from '../test-tools/stubs';
-import { StepComponent } from './component';
+import { StepComponentView } from './component';
 import { StepExtensionResolver } from './step-extension-resolver';
 
 class OwnTaskStepExtension implements StepExtension<Step> {
 	public readonly componentType = 'task';
 
-	public createComponent(): StepComponent {
+	public createComponentView(): StepComponentView {
 		throw new Error('Not implemented');
 	}
 	public getChildren() {
