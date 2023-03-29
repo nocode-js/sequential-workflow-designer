@@ -1,5 +1,5 @@
 import { Vector } from '../core/vector';
-import { Sequence } from '../definition';
+import { Sequence, Step } from '../definition';
 import { SequenceComponent } from './sequence';
 import { StepComponent } from './step-component';
 
@@ -7,7 +7,7 @@ export interface Component {
 	view: ComponentView;
 
 	findById(stepId: string): StepComponent | null;
-	resolveClick(click: ClickDetails): ResolvedClick | null;
+	resolveClick(click: ClickDetails): ClickCommand | null;
 	getPlaceholders(result: Placeholder[]): void;
 	setIsDragging(isDragging: boolean): void;
 	updateBadges(result: BadgesResult): void;
@@ -19,18 +19,28 @@ export interface ClickDetails {
 	scale: number;
 }
 
-export interface ResolvedClick {
-	component: StepComponent;
-	command: ClickCommand;
-}
+export type ClickCommand = SelectStepClickCommand | OpenFolderClickCommand | TriggerCustomActionClickCommand;
 
-export interface ClickCommand {
+export interface BaseClickCommand {
 	type: ClickCommandType;
 }
 
-export interface TriggerCustomActionClickCommand extends ClickCommand {
+export interface SelectStepClickCommand extends BaseClickCommand {
+	type: ClickCommandType.selectStep;
+	component: StepComponent;
+}
+
+export interface OpenFolderClickCommand extends BaseClickCommand {
+	type: ClickCommandType.openFolder;
+	step: Step;
+}
+
+export interface TriggerCustomActionClickCommand extends BaseClickCommand {
 	type: ClickCommandType.triggerCustomAction;
+	step: Step | null;
+	sequence: Sequence;
 	action: string;
+	payload?: unknown;
 }
 
 export enum ClickCommandType {
@@ -51,7 +61,11 @@ export interface StepComponentView extends ComponentView {
 	placeholders: Placeholder[] | null;
 
 	hasOutput(): boolean;
-	resolveClick(click: ClickDetails): ClickCommand | null;
+	/**
+	 * @param click Details about the click.
+	 * @returns `true` if selected a step, a click command if clicked a specific action, `null` if not clicked at this view.
+	 */
+	resolveClick(click: ClickDetails): true | ClickCommand | null;
 	setIsDragging(isDragging: boolean): void;
 	setIsSelected(isSelected: boolean): void;
 	setIsDisabled(isDisabled: boolean): void;
@@ -72,10 +86,23 @@ export interface Badge {
 
 export type BadgesResult = unknown[];
 
+export enum PlaceholderDirection {
+	none = 0,
+	in = 1,
+	out = 2
+}
+
 export interface Placeholder {
+	view: PlaceholderView;
 	parentSequence: Sequence;
 	index: number;
 
 	getRect(): DOMRect;
 	setIsHover(isHover: boolean): void;
+	setIsVisible(isVisible: boolean): void;
+	resolveClick(click: ClickDetails): ClickCommand | null;
+}
+
+export interface PlaceholderView {
+	g: SVGGElement;
 }

@@ -18,25 +18,25 @@ export class ClickBehaviorResolver {
 			scale: this.state.viewport.scale
 		};
 
-		const result = rootComponent.resolveClick(click);
-		if (!result) {
+		const command = rootComponent.resolveClick(click);
+		if (!command) {
 			return MoveViewportBehavior.create(this.state, true);
 		}
 
-		switch (result.command.type) {
+		switch (command.type) {
 			case ClickCommandType.selectStep: {
 				const isDragDisabled =
 					forceDisableDrag ||
 					this.state.isDragDisabled ||
-					!this.designerContext.definitionModifier.isDraggable(result.component.step, result.component.parentSequence);
-				return SelectStepBehavior.create(result.component, isDragDisabled, this.designerContext);
+					!this.designerContext.definitionModifier.isDraggable(command.component.step, command.component.parentSequence);
+				return SelectStepBehavior.create(command.component, isDragDisabled, this.designerContext);
 			}
 
 			case ClickCommandType.openFolder:
-				return OpenFolderBehavior.create(this.designerContext, element, result);
+				return OpenFolderBehavior.create(this.designerContext, element, command);
 
 			case ClickCommandType.triggerCustomAction:
-				return TriggerCustomActionBehavior.create(this.designerContext, element, result);
+				return TriggerCustomActionBehavior.create(this.designerContext, element, command);
 
 			default:
 				throw new Error('Not supported behavior type');

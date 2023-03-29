@@ -5,14 +5,16 @@ import { DesignerExtension } from './designer-extension';
 import { KeyboardDaemonExtension } from './keyboard/keyboard-daemon-extension';
 import { SmartEditorExtension } from './smart-editor/smart-editor-extension';
 import { ToolboxExtension } from './toolbox/toolbox-extension';
-import { ValidationErrorBadgeExtension } from './workspace/badges/validation-error-badge-extension';
+import { ValidationErrorBadgeExtension } from './workspace/badges/validation-error/validation-error-badge-extension';
 import { ContainerStepExtension } from './workspace/container-step/container-step-extension';
 import { DefaultPlaceholderControllerExtension } from './workspace/placeholder/default-placeholder-controller-extension';
+import { RectPlaceholderExtension } from './workspace/placeholder/rect-placeholder-extension';
 import { StartStopRootComponentExtension } from './workspace/start-stop-root/start-stop-root-component-extension';
 import { SwitchStepExtension } from './workspace/switch-step/switch-step-extension';
 import { TaskStepExtension } from './workspace/task-step/task-step-extension';
 import { ClassicWheelControllerExtension } from './workspace/viewport/classic-wheel-controller-extension';
 import { DefaultViewportControllerExtension } from './workspace/viewport/default-viewport-controller-extension';
+import { findValidationBadgeIndex } from './workspace/badges/find-validation-badge-index';
 
 export type Services = Required<DesignerExtension>;
 
@@ -61,15 +63,16 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 	if (!services.steps) {
 		services.steps = [];
 	}
-	services.steps.push(new ContainerStepExtension());
-	services.steps.push(new SwitchStepExtension());
-	services.steps.push(new TaskStepExtension());
+	services.steps.push(ContainerStepExtension.create());
+	services.steps.push(SwitchStepExtension.create());
+	services.steps.push(TaskStepExtension.create());
 
 	if (!services.badges) {
 		services.badges = [];
 	}
-	// TODO: this is a weak assumption
-	services.badges.unshift(new ValidationErrorBadgeExtension());
+	if (findValidationBadgeIndex(services.badges) < 0) {
+		services.badges.push(ValidationErrorBadgeExtension.create());
+	}
 
 	if (!services.draggedComponent) {
 		services.draggedComponent = new DefaultDraggedComponentExtension();
@@ -92,6 +95,9 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 	}
 	if (!services.placeholderController) {
 		services.placeholderController = new DefaultPlaceholderControllerExtension();
+	}
+	if (!services.placeholder) {
+		services.placeholder = RectPlaceholderExtension.create();
 	}
 	if (!services.viewportController) {
 		services.viewportController = new DefaultViewportControllerExtension();

@@ -1,6 +1,7 @@
 import { Dom } from '../../core/dom';
 import { Step } from '../../definition';
 import { StepContext } from '../../designer-extension';
+import { createComponentContextStub } from '../../test-tools/stubs';
 import { TaskStepComponentView } from './task-step-component-view';
 
 describe('TaskStepComponentView', () => {
@@ -21,7 +22,17 @@ describe('TaskStepComponentView', () => {
 			step,
 			parentSequence: [step]
 		};
-		TaskStepComponentView.create(parent, stepContext, {}, false);
+		const componentContext = createComponentContextStub();
+		TaskStepComponentView.create(parent, stepContext, false, componentContext, {
+			iconSize: 20,
+			minTextWidth: 50,
+			textMarginLeft: 10,
+			paddingX: 10,
+			paddingY: 10,
+			radius: 5,
+			inputSize: 10,
+			outputSize: 10
+		});
 		expect(parent.children.length).not.toEqual(0);
 	});
 });

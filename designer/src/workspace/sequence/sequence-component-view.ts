@@ -1,18 +1,17 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { JoinView } from '../common-views/join-view';
-import { RectPlaceholderDirection, RectPlaceholderView } from '../common-views/rect-placeholder-view';
-import { ComponentView } from '../component';
+import { ComponentView, Placeholder } from '../component';
 import { ComponentContext } from '../../component-context';
 import { StepContext } from '../../designer-extension';
 import { SequenceContext } from './sequence-context';
 import { StepComponent } from '../step-component';
 
-const PH_WIDTH = 100;
-const PH_HEIGHT = 24;
-
 export class SequenceComponentView implements ComponentView {
 	public static create(parent: SVGElement, sequenceContext: SequenceContext, componentContext: ComponentContext): SequenceComponentView {
+		const phWidth = componentContext.services.placeholder.gapSize.x;
+		const phHeight = componentContext.services.placeholder.gapSize.y;
+
 		const { sequence } = sequenceContext;
 		const g = Dom.svg('g');
 		parent.appendChild(g);
@@ -30,57 +29,39 @@ export class SequenceComponentView implements ComponentView {
 			components[index] = componentContext.stepComponentFactory.create(g, stepContext, componentContext);
 		}
 
-		const maxJoinX = components.length > 0 ? Math.max(...components.map(c => c.view.joinX)) : PH_WIDTH / 2;
-		const maxWidth = components.length > 0 ? Math.max(...components.map(c => c.view.width)) : PH_WIDTH;
+		const maxJoinX = components.length > 0 ? Math.max(...components.map(c => c.view.joinX)) : phWidth / 2;
+		const maxWidth = components.length > 0 ? Math.max(...components.map(c => c.view.width)) : phWidth;
 
-		let offsetY = PH_HEIGHT;
+		let offsetY = phHeight;
 
-		const placeholders: SequencePlaceholder[] = [];
+		const placeholders: Placeholder[] = [];
 		for (let i = 0; i < components.length; i++) {
 			const component = components[i];
 			const offsetX = maxJoinX - component.view.joinX;
 
 			if ((i === 0 && sequenceContext.isInputConnected) || (i > 0 && components[i - 1].hasOutput)) {
-				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - phHeight), phHeight);
 			}
 
 			if (componentContext.placeholderController.canCreate(sequence, i)) {
-				const view = RectPlaceholderView.create(
-					g,
-					maxJoinX - PH_WIDTH / 2,
-					offsetY - PH_HEIGHT,
-					PH_WIDTH,
-					PH_HEIGHT,
-					RectPlaceholderDirection.none
-				);
-				placeholders.push({
-					view,
-					index: i
-				});
+				const ph = componentContext.services.placeholder.createForGap(g, sequence, i);
+				Dom.translate(ph.view.g, maxJoinX - phWidth / 2, offsetY - phHeight);
+				placeholders.push(ph);
 			}
 
 			Dom.translate(component.view.g, offsetX, offsetY);
-			offsetY += component.view.height + PH_HEIGHT;
+			offsetY += component.view.height + phHeight;
 		}
 
 		if (sequenceContext.isOutputConnected && (components.length === 0 || components[components.length - 1].hasOutput)) {
-			JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+			JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - phHeight), phHeight);
 		}
 
 		const newIndex = components.length;
 		if (componentContext.placeholderController.canCreate(sequence, newIndex)) {
-			const view = RectPlaceholderView.create(
-				g,
-				maxJoinX - PH_WIDTH / 2,
-				offsetY - PH_HEIGHT,
-				PH_WIDTH,
-				PH_HEIGHT,
-				RectPlaceholderDirection.none
-			);
-			placeholders.push({
-				view,
-				index: newIndex
-			});
+			const ph = componentContext.services.placeholder.createForGap(g, sequence, newIndex);
+			Dom.translate(ph.view.g, maxJoinX - phWidth / 2, offsetY - phHeight);
+			placeholders.push(ph);
 		}
 		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
 	}
@@ -90,13 +71,13 @@ export class SequenceComponentView implements ComponentView {
 		public readonly width: number,
 		public readonly height: number,
 		public readonly joinX: number,
-		public readonly placeholders: SequencePlaceholder[],
+		public readonly placeholders: Placeholder[],
 		public readonly components: StepComponent[]
 	) {}
 
 	public setIsDragging(isDragging: boolean) {
 		this.placeholders.forEach(placeholder => {
-			placeholder.view.setIsVisible(isDragging);
+			placeholder.setIsVisible(isDragging);
 		});
 	}
 
@@ -106,9 +87,4 @@ export class SequenceComponentView implements ComponentView {
 		}
 		return true;
 	}
-}
-
-export interface SequencePlaceholder {
-	view: RectPlaceholderView;
-	index: number;
 }

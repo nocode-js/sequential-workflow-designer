@@ -3,7 +3,7 @@ import { DesignerApi } from './api/designer-api';
 import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { Branches, ComponentType, Sequence, Step } from './definition';
-import { Badge, Component, StepComponentView } from './workspace';
+import { Badge, Component, Placeholder, PlaceholderDirection, StepComponentView } from './workspace';
 
 export interface DesignerExtension {
 	steps?: StepExtension[];
@@ -13,6 +13,7 @@ export interface DesignerExtension {
 	wheelController?: WheelControllerExtension;
 	viewportController?: ViewportControllerExtension;
 	placeholderController?: PlaceholderControllerExtension;
+	placeholder?: PlaceholderExtension;
 	rootComponent?: RootComponentExtension;
 	daemons?: DaemonExtension[];
 }
@@ -47,6 +48,7 @@ export enum StepChildrenType {
 // BadgeExtension
 
 export interface BadgeExtension {
+	id: string;
 	createBadge(parentElement: SVGElement, stepContext: StepContext, componentContext: ComponentContext): Badge;
 	createStartValue(): unknown;
 }
@@ -89,7 +91,7 @@ export interface RootComponentExtension {
 	create(
 		parentElement: SVGElement,
 		sequence: Sequence,
-		parentSequencePlaceIndicator: SequencePlaceIndicator | null,
+		parentPlaceIndicator: SequencePlaceIndicator | null,
 		context: ComponentContext
 	): Component;
 }
@@ -109,6 +111,14 @@ export interface PlaceholderController {
 	canCreate(sequence: Sequence, index: number): boolean;
 }
 
+// PlaceholderExtension
+
+export interface PlaceholderExtension {
+	gapSize: Vector;
+	createForGap(parent: SVGElement, parentSequence: Sequence, index: number): Placeholder;
+	createForArea(parent: SVGElement, size: Vector, direction: PlaceholderDirection, parentSequence: Sequence, index: number): Placeholder;
+}
+
 // ViewportControllerExtension
 
 export interface ViewportControllerExtension {
@@ -126,7 +136,7 @@ export interface Viewport {
 	scale: number;
 }
 
-// Daemon
+// DaemonExtension
 
 export interface DaemonExtension {
 	create(api: DesignerApi): Daemon;

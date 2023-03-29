@@ -1,16 +1,16 @@
 import { DesignerContext } from '../designer-context';
-import { ResolvedClick } from '../workspace';
+import { OpenFolderClickCommand } from '../workspace';
 import { Behavior } from './behavior';
 
 export class OpenFolderBehavior implements Behavior {
-	public static create(context: DesignerContext, clickedElement: Element, resolvedClick: ResolvedClick): OpenFolderBehavior {
-		return new OpenFolderBehavior(context, clickedElement, resolvedClick);
+	public static create(context: DesignerContext, clickedElement: Element, clickCommand: OpenFolderClickCommand): OpenFolderBehavior {
+		return new OpenFolderBehavior(context, clickedElement, clickCommand);
 	}
 
 	private constructor(
 		private readonly context: DesignerContext,
 		private readonly clickedElement: Element,
-		private readonly resolvedClick: ResolvedClick
+		private readonly clickCommand: OpenFolderClickCommand
 	) {}
 
 	public onStart() {
@@ -23,7 +23,7 @@ export class OpenFolderBehavior implements Behavior {
 
 	public onEnd(_: boolean, element: Element | null) {
 		if (this.clickedElement === element) {
-			const stepId = this.resolvedClick.component.step.id;
+			const stepId = this.clickCommand.step.id;
 			this.context.state.pushStepIdToFolderPath(stepId);
 		}
 	}

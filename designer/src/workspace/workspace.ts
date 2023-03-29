@@ -16,6 +16,7 @@ import { ViewportApi } from '../api/viewport-api';
 import { StepComponent } from './step-component';
 import { BadgesResultFactory } from './badges/badges-result-factory';
 import { Services } from '../services';
+import { findValidationBadgeIndex } from './badges/find-validation-badge-index';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {
@@ -62,6 +63,7 @@ export class Workspace implements WorkspaceController {
 	public isValid = false;
 
 	private selectedStepComponent: StepComponent | null = null;
+	private validationErrorBadgeIndex: number | null = null;
 
 	private constructor(
 		private readonly view: WorkspaceView,
@@ -132,8 +134,11 @@ export class Workspace implements WorkspaceController {
 	public updateBadges() {
 		const result = BadgesResultFactory.create(this.services);
 		this.getRootComponent().updateBadges(result);
-		// TODO: this is a weak assumption
-		this.isValid = Boolean(result[0]);
+
+		if (this.validationErrorBadgeIndex === null) {
+			this.validationErrorBadgeIndex = findValidationBadgeIndex(this.services.badges);
+		}
+		this.isValid = Boolean(result[this.validationErrorBadgeIndex]);
 	}
 
 	public destroy() {

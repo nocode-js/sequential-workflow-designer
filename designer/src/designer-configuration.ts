@@ -31,7 +31,7 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	extensions?: DesignerExtension[];
 }
 
-export type CustomActionHandler = (action: string, step: Step) => void;
+export type CustomActionHandler = (action: string, step: Step | null, sequence: Sequence) => void;
 
 export interface ToolboxConfiguration {
 	groups: ToolboxGroupConfiguration[];

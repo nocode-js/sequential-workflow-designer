@@ -1,24 +1,23 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { SequentialStep } from '../../definition';
-import { ClickCommand, ClickCommandType, ClickDetails, StepComponentView } from '../component';
+import { ClickDetails, StepComponentView } from '../component';
 import { SequenceComponent } from '../sequence/sequence-component';
 import { InputView } from '../common-views/input-view';
 import { JoinView } from '../common-views/join-view';
-import { LabelView, LABEL_HEIGHT } from '../common-views/label-view';
+import { LabelView } from '../common-views/label-view';
 import { RegionView } from '../common-views/region-view';
 import { ComponentContext } from '../../component-context';
 import { StepContext } from '../../designer-extension';
 import { SequenceContext } from '../sequence/sequence-context';
-
-const PADDING_TOP = 20;
-const PADDING_X = 20;
+import { ContainerStepComponentViewConfiguration } from './container-step-component-view-configuration';
 
 export class ContainerStepComponentView implements StepComponentView {
 	public static create(
 		parentElement: SVGElement,
 		stepContext: StepContext<SequentialStep>,
-		componentContext: ComponentContext
+		componentContext: ComponentContext,
+		cfg: ContainerStepComponentViewConfiguration
 	): ContainerStepComponentView {
 		const { step } = stepContext;
 		const g = Dom.svg('g', {
@@ -26,7 +25,16 @@ export class ContainerStepComponentView implements StepComponentView {
 		});
 		parentElement.appendChild(g);
 
-		const labelView = LabelView.create(g, PADDING_TOP, step.name, 'primary');
+		const labelView = LabelView.create(
+			g,
+			cfg.paddingTop,
+			cfg.labelMinWidth,
+			cfg.labelHeight,
+			cfg.labelPaddingX,
+			cfg.labelRadius,
+			step.name,
+			'primary'
+		);
 		const sequenceContext: SequenceContext = {
 			sequence: step.sequence,
 			depth: stepContext.depth + 1,
@@ -36,22 +44,22 @@ export class ContainerStepComponentView implements StepComponentView {
 		const component = SequenceComponent.create(g, sequenceContext, componentContext);
 
 		const halfOfWidestElement = labelView.width / 2;
-		const offsetLeft = Math.max(halfOfWidestElement - component.view.joinX, 0) + PADDING_X;
-		const offsetRight = Math.max(halfOfWidestElement - (component.view.width - component.view.joinX), 0) + PADDING_X;
+		const offsetLeft = Math.max(halfOfWidestElement - component.view.joinX, 0) + cfg.paddingX;
+		const offsetRight = Math.max(halfOfWidestElement - (component.view.width - component.view.joinX), 0) + cfg.paddingX;
 
 		const viewWidth = offsetLeft + component.view.width + offsetRight;
-		const viewHeight = PADDING_TOP + LABEL_HEIGHT + component.view.height;
+		const viewHeight = cfg.paddingTop + cfg.labelHeight + component.view.height;
 		const joinX = component.view.joinX + offsetLeft;
 
 		Dom.translate(labelView.g, joinX, 0);
-		Dom.translate(component.view.g, offsetLeft, PADDING_TOP + LABEL_HEIGHT);
+		Dom.translate(component.view.g, offsetLeft, cfg.paddingTop + cfg.labelHeight);
 
 		const iconUrl = componentContext.configuration.iconUrlProvider
 			? componentContext.configuration.iconUrlProvider(step.componentType, step.type)
 			: null;
-		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
+		const inputView = InputView.createRectInput(g, joinX, 0, cfg.inputSize, cfg.inputIconSize, iconUrl);
 
-		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);
+		JoinView.createStraightJoin(g, new Vector(joinX, 0), cfg.paddingTop);
 
 		const regionView = RegionView.create(g, [viewWidth], viewHeight);
 
@@ -75,13 +83,8 @@ export class ContainerStepComponentView implements StepComponentView {
 		return this.regionView.getClientPosition();
 	}
 
-	public resolveClick(click: ClickDetails): ClickCommand | null {
-		if (this.regionView.resolveClick(click) || this.g.contains(click.element)) {
-			return {
-				type: ClickCommandType.selectStep
-			};
-		}
-		return null;
+	public resolveClick(click: ClickDetails): true | null {
+		return this.regionView.resolveClick(click) || this.g.contains(click.element) ? true : null;
 	}
 
 	public setIsDragging(isDragging: boolean) {

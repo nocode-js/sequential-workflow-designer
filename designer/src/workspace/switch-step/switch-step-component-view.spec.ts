@@ -29,7 +29,18 @@ describe('SwitchStepComponentView', () => {
 		};
 		const componentContext = createComponentContextStub();
 
-		SwitchStepComponentView.create(parent, stepContext, componentContext);
+		SwitchStepComponentView.create(parent, stepContext, componentContext, {
+			minContainerWidth: 40,
+			paddingX: 20,
+			paddingTop: 20,
+			connectionHeight: 16,
+			inputSize: 18,
+			inputIconSize: 14,
+			labelHeight: 22,
+			labelPaddingX: 10,
+			labelMinWidth: 50,
+			labelRadius: 10
+		});
 		expect(parent.children.length).not.toEqual(0);
 	});
 });

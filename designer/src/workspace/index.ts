@@ -1,3 +1,4 @@
+export * from './badges';
 export * from './common-views';
 export * from './sequence';
 export * from './task-step';

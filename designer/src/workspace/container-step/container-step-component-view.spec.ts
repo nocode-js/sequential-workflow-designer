@@ -25,7 +25,16 @@ describe('ContainerStepComponentView', () => {
 			parentSequence: []
 		};
 		const componentContext = createComponentContextStub();
-		const view = ContainerStepComponentView.create(parent, stepContext, componentContext);
+		const view = ContainerStepComponentView.create(parent, stepContext, componentContext, {
+			inputIconSize: 10,
+			inputSize: 14,
+			paddingTop: 20,
+			paddingX: 20,
+			labelHeight: 22,
+			labelMinWidth: 50,
+			labelPaddingX: 10,
+			labelRadius: 10
+		});
 
 		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);

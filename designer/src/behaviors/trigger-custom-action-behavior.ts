@@ -1,20 +1,20 @@
 import { CustomActionHandler } from '../designer-configuration';
 import { DesignerContext } from '../designer-context';
-import { ResolvedClick, TriggerCustomActionClickCommand } from '../workspace';
+import { TriggerCustomActionClickCommand } from '../workspace';
 import { Behavior } from './behavior';
 
 export class TriggerCustomActionBehavior implements Behavior {
 	public static create(
 		designerContext: DesignerContext,
 		clickedElement: Element,
-		resolvedClick: ResolvedClick
+		clickCommand: TriggerCustomActionClickCommand
 	): TriggerCustomActionBehavior {
-		return new TriggerCustomActionBehavior(clickedElement, resolvedClick, designerContext.configuration.customActionHandler);
+		return new TriggerCustomActionBehavior(clickedElement, clickCommand, designerContext.configuration.customActionHandler);
 	}
 
 	private constructor(
 		private readonly clickedElement: Element,
-		private readonly resolvedClick: ResolvedClick,
+		private readonly clickCommand: TriggerCustomActionClickCommand,
 		private readonly customActionHandler: CustomActionHandler | undefined
 	) {}
 
@@ -31,10 +31,9 @@ export class TriggerCustomActionBehavior implements Behavior {
 			return;
 		}
 		if (!this.customActionHandler) {
-			console.warn('Custom action handler is not defined');
+			console.warn(`Custom action handler is not defined (${this.clickCommand.action})`);
 			return;
 		}
-		const action = (this.resolvedClick.command as TriggerCustomActionClickCommand).action;
-		this.customActionHandler(action, this.resolvedClick.component.step);
+		this.customActionHandler(this.clickCommand.action, this.clickCommand.step, this.clickCommand.sequence);
 	}
 }

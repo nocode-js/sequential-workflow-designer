@@ -1,26 +1,26 @@
-import { Sequence } from '../../definition';
-import { BadgesResult, ClickDetails, ResolvedClick, Component, Placeholder } from '../component';
+import { BadgesResult, ClickCommand, ClickDetails, Component, Placeholder } from '../component';
 import { SequenceComponentView } from './sequence-component-view';
 import { ComponentContext } from '../../component-context';
-import { RectPlaceholder } from '../placeholder/rect-placeholder';
 import { SequenceContext } from './sequence-context';
 import { StepComponent } from '../step-component';
 
 export class SequenceComponent implements Component {
 	public static create(parentElement: SVGElement, sequenceContext: SequenceContext, context: ComponentContext): SequenceComponent {
 		const view = SequenceComponentView.create(parentElement, sequenceContext, context);
-		return new SequenceComponent(view, view.hasOutput(), sequenceContext.sequence);
+		return new SequenceComponent(view, view.hasOutput());
 	}
 
-	private constructor(
-		public readonly view: SequenceComponentView,
-		public readonly hasOutput: boolean,
-		private readonly sequence: Sequence
-	) {}
+	private constructor(public readonly view: SequenceComponentView, public readonly hasOutput: boolean) {}
 
-	public resolveClick(click: ClickDetails): ResolvedClick | null {
+	public resolveClick(click: ClickDetails): ClickCommand | null {
 		for (const component of this.view.components) {
 			const result = component.resolveClick(click);
+			if (result) {
+				return result;
+			}
+		}
+		for (const placeholder of this.view.placeholders) {
+			const result = placeholder.resolveClick(click);
 			if (result) {
 				return result;
 			}
@@ -39,9 +39,7 @@ export class SequenceComponent implements Component {
 	}
 
 	public getPlaceholders(result: Placeholder[]) {
-		this.view.placeholders.forEach(placeholder => {
-			result.push(new RectPlaceholder(placeholder.view, this.sequence, placeholder.index));
-		});
+		this.view.placeholders.forEach(placeholder => result.push(placeholder));
 		this.view.components.forEach(c => c.getPlaceholders(result));
 	}
 

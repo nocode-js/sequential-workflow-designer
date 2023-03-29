@@ -1,24 +1,20 @@
+import { ComponentContext } from '../../component-context';
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { Step } from '../../definition';
-import { StepsConfiguration } from '../../designer-configuration';
 import { StepContext } from '../../designer-extension';
 import { InputView } from '../common-views/input-view';
 import { OutputView } from '../common-views/output-view';
-import { ClickDetails, ClickCommand, ClickCommandType, StepComponentView } from '../component';
-
-const PADDING_X = 12;
-const PADDING_Y = 10;
-const MIN_TEXT_WIDTH = 70;
-const ICON_SIZE = 22;
-const RECT_RADIUS = 5;
+import { ClickDetails, StepComponentView } from '../component';
+import { TaskStepComponentViewConfiguration } from './task-step-component-view-configuration';
 
 export class TaskStepComponentView implements StepComponentView {
 	public static create(
 		parentElement: SVGElement,
 		stepContext: StepContext<Step>,
-		configuration: StepsConfiguration,
-		isInterrupted: boolean
+		isInterrupted: boolean,
+		componentContext: ComponentContext,
+		cfg: TaskStepComponentViewConfiguration
 	): TaskStepComponentView {
 		const { step } = stepContext;
 		const g = Dom.svg('g', {
@@ -26,18 +22,18 @@ export class TaskStepComponentView implements StepComponentView {
 		});
 		parentElement.appendChild(g);
 
-		const boxHeight = ICON_SIZE + PADDING_Y * 2;
+		const boxHeight = cfg.paddingY * 2 + cfg.iconSize;
 
 		const text = Dom.svg('text', {
-			x: ICON_SIZE + PADDING_X * 2,
+			x: cfg.paddingX + cfg.iconSize + cfg.textMarginLeft,
 			y: boxHeight / 2,
 			class: 'sqd-step-task-text'
 		});
 		text.textContent = step.name;
 		g.appendChild(text);
-		const textWidth = Math.max(text.getBBox().width, MIN_TEXT_WIDTH);
+		const textWidth = Math.max(text.getBBox().width, cfg.minTextWidth);
 
-		const boxWidth = ICON_SIZE + PADDING_X * 3 + textWidth;
+		const boxWidth = cfg.iconSize + cfg.paddingX * 2 + cfg.textMarginLeft + textWidth;
 
 		const rect = Dom.svg('rect', {
 			x: 0.5,
@@ -45,34 +41,36 @@ export class TaskStepComponentView implements StepComponentView {
 			class: 'sqd-step-task-rect',
 			width: boxWidth,
 			height: boxHeight,
-			rx: RECT_RADIUS,
-			ry: RECT_RADIUS
+			rx: cfg.radius,
+			ry: cfg.radius
 		});
 		g.insertBefore(rect, text);
 
-		const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+		const iconUrl = componentContext.configuration.iconUrlProvider
+			? componentContext.configuration.iconUrlProvider(step.componentType, step.type)
+			: null;
 		const icon = iconUrl
 			? Dom.svg('image', {
 					href: iconUrl
 			  })
 			: Dom.svg('rect', {
 					class: 'sqd-step-task-empty-icon',
-					rx: 4,
-					ry: 4
+					rx: cfg.radius,
+					ry: cfg.radius
 			  });
 		Dom.attrs(icon, {
-			x: PADDING_X,
-			y: PADDING_Y,
-			width: ICON_SIZE,
-			height: ICON_SIZE
+			x: cfg.paddingX,
+			y: cfg.paddingY,
+			width: cfg.iconSize,
+			height: cfg.iconSize
 		});
 		g.appendChild(icon);
 
 		const isInputViewHidden = stepContext.depth === 0 && stepContext.position === 0 && !stepContext.isInputConnected;
 		const isOutputViewHidden = isInterrupted;
 
-		const inputView = isInputViewHidden ? null : InputView.createRoundInput(g, boxWidth / 2, 0);
-		const outputView = isOutputViewHidden ? null : OutputView.create(g, boxWidth / 2, boxHeight);
+		const inputView = isInputViewHidden ? null : InputView.createRoundInput(g, boxWidth / 2, 0, cfg.inputSize);
+		const outputView = isOutputViewHidden ? null : OutputView.create(g, boxWidth / 2, boxHeight, cfg.outputSize);
 		return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView);
 	}
 
@@ -98,13 +96,8 @@ export class TaskStepComponentView implements StepComponentView {
 		return new Vector(rect.x, rect.y);
 	}
 
-	public resolveClick(click: ClickDetails): ClickCommand | null {
-		if (this.g.contains(click.element)) {
-			return {
-				type: ClickCommandType.selectStep
-			};
-		}
-		return null;
+	public resolveClick(click: ClickDetails): true | null {
+		return this.g.contains(click.element) ? true : null;
 	}
 
 	public setIsDragging(isDragging: boolean) {

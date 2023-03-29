@@ -1,10 +1,10 @@
-import { Icons } from '../../core';
+import { Icons, Vector } from '../../core';
 import { Dom } from '../../core/dom';
 import { Sequence } from '../../definition';
-import { RectPlaceholderDirection, RectPlaceholderView } from '../common-views/rect-placeholder-view';
-import { ComponentView } from '../component';
+import { ComponentView, Placeholder, PlaceholderDirection } from '../component';
 import { ComponentContext } from '../../component-context';
 import { SequenceComponent } from '../sequence/sequence-component';
+import { SequencePlaceIndicator } from '../../designer-extension';
 
 const SIZE = 30;
 const DEFAULT_ICON_SIZE = 22;
@@ -14,7 +14,7 @@ export class StartStopRootComponentView implements ComponentView {
 	public static create(
 		parent: SVGElement,
 		sequence: Sequence,
-		isInsideFolder: boolean,
+		parentPlaceIndicator: SequencePlaceIndicator | null,
 		context: ComponentContext
 	): StartStopRootComponentView {
 		const g = Dom.svg('g', {
@@ -37,22 +37,38 @@ export class StartStopRootComponentView implements ComponentView {
 		const x = view.joinX - SIZE / 2;
 		const endY = SIZE + view.height;
 
-		const iconSize = isInsideFolder ? FOLDER_ICON_SIZE : DEFAULT_ICON_SIZE;
-		const startCircle = createCircle(isInsideFolder ? Icons.folder : Icons.play, iconSize);
+		const iconSize = parentPlaceIndicator ? FOLDER_ICON_SIZE : DEFAULT_ICON_SIZE;
+		const startCircle = createCircle(parentPlaceIndicator ? Icons.folder : Icons.play, iconSize);
 		Dom.translate(startCircle, x, 0);
 		g.appendChild(startCircle);
 
 		Dom.translate(view.g, 0, SIZE);
 
-		const endCircle = createCircle(isInsideFolder ? Icons.folder : Icons.stop, iconSize);
+		const endCircle = createCircle(parentPlaceIndicator ? Icons.folder : Icons.stop, iconSize);
 		Dom.translate(endCircle, x, endY);
 		g.appendChild(endCircle);
 
-		let startPlaceholderView: RectPlaceholderView | null = null;
-		let endPlaceholderView: RectPlaceholderView | null = null;
-		if (isInsideFolder) {
-			startPlaceholderView = RectPlaceholderView.create(g, x, 0, SIZE, SIZE, RectPlaceholderDirection.out);
-			endPlaceholderView = RectPlaceholderView.create(g, x, endY, SIZE, SIZE, RectPlaceholderDirection.out);
+		let startPlaceholder: Placeholder | null = null;
+		let endPlaceholder: Placeholder | null = null;
+		if (parentPlaceIndicator) {
+			const size = new Vector(SIZE, SIZE);
+			startPlaceholder = context.services.placeholder.createForArea(
+				g,
+				size,
+				PlaceholderDirection.out,
+				parentPlaceIndicator.sequence,
+				parentPlaceIndicator.index
+			);
+			endPlaceholder = context.services.placeholder.createForArea(
+				g,
+				size,
+				PlaceholderDirection.out,
+				parentPlaceIndicator.sequence,
+				parentPlaceIndicator.index
+			);
+
+			Dom.translate(startPlaceholder.view.g, x, 0);
+			Dom.translate(endPlaceholder.view.g, x, endY);
 		}
 
 		return new StartStopRootComponentView(
@@ -61,8 +77,8 @@ export class StartStopRootComponentView implements ComponentView {
 			view.height + SIZE * 2,
 			view.joinX,
 			sequenceComponent,
-			startPlaceholderView,
-			endPlaceholderView
+			startPlaceholder,
+			endPlaceholder
 		);
 	}
 
@@ -72,8 +88,8 @@ export class StartStopRootComponentView implements ComponentView {
 		public readonly height: number,
 		public readonly joinX: number,
 		public readonly component: SequenceComponent,
-		public readonly startPlaceholderView: RectPlaceholderView | null,
-		public readonly endPlaceholderView: RectPlaceholderView | null
+		public readonly startPlaceholder: Placeholder | null,
+		public readonly endPlaceholder: Placeholder | null
 	) {}
 
 	public destroy() {
