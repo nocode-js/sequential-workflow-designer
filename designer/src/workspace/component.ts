@@ -76,6 +76,6 @@ export interface Placeholder {
 	parentSequence: Sequence;
 	index: number;
 
-	getRect(): DOMRect;
+	getClientRect(): DOMRect;
 	setIsHover(isHover: boolean): void;
 }

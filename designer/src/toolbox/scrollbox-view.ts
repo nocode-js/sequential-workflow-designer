@@ -2,6 +2,10 @@ import { Dom } from '../core/dom';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 
+const listenerOptions: AddEventListenerOptions & EventListenerOptions = {
+	passive: false
+};
+
 export class ScrollBoxView {
 	public static create(parent: HTMLElement, viewport: HTMLElement): ScrollBoxView {
 		const root = Dom.element('div', {
@@ -10,18 +14,12 @@ export class ScrollBoxView {
 		parent.appendChild(root);
 
 		const view = new ScrollBoxView(root, viewport);
-		window.addEventListener('resize', view.onResizeHandler, false);
+		window.addEventListener('resize', view.onResize, false);
 		root.addEventListener('wheel', e => view.onWheel(e), false);
-		root.addEventListener('touchstart', e => view.onTouchStart(e), false);
+		root.addEventListener('touchstart', e => view.onTouchStart(e), listenerOptions);
 		root.addEventListener('mousedown', e => view.onMouseDown(e), false);
 		return view;
 	}
-
-	private readonly onResizeHandler = () => this.onResize();
-	private readonly onTouchMoveHandler = (e: TouchEvent) => this.onTouchMove(e);
-	private readonly onMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
-	private readonly onTouchEndHandler = (e: TouchEvent) => this.onTouchEnd(e);
-	private readonly onMouseUpHandler = (e: MouseEvent) => this.onMouseUp(e);
 
 	private content?: {
 		element: HTMLElement;
@@ -50,7 +48,7 @@ export class ScrollBoxView {
 	}
 
 	public destroy() {
-		window.removeEventListener('resize', this.onResizeHandler, false);
+		window.removeEventListener('resize', this.onResize, false);
 	}
 
 	private reload(element: HTMLElement) {
@@ -69,9 +67,9 @@ export class ScrollBoxView {
 		};
 	}
 
-	private onResize() {
+	private readonly onResize = () => {
 		this.refresh();
-	}
+	};
 
 	private onWheel(e: WheelEvent) {
 		e.stopPropagation();
@@ -83,41 +81,41 @@ export class ScrollBoxView {
 		}
 	}
 
-	private onTouchStart(e: TouchEvent) {
+	private readonly onTouchStart = (e: TouchEvent) => {
 		e.preventDefault();
 		this.startScroll(readTouchPosition(e));
-	}
+	};
 
-	private onMouseDown(e: MouseEvent) {
+	private readonly onMouseDown = (e: MouseEvent) => {
 		this.startScroll(readMousePosition(e));
-	}
+	};
 
-	private onTouchMove(e: TouchEvent) {
+	private readonly onTouchMove = (e: TouchEvent) => {
 		e.preventDefault();
 		this.moveScroll(readTouchPosition(e));
-	}
+	};
 
-	private onMouseMove(e: MouseEvent) {
+	private readonly onMouseMove = (e: MouseEvent) => {
 		e.preventDefault();
 		this.moveScroll(readMousePosition(e));
-	}
+	};
 
-	private onTouchEnd(e: TouchEvent) {
+	private readonly onTouchEnd = (e: TouchEvent) => {
 		e.preventDefault();
 		this.stopScroll();
-	}
+	};
 
-	private onMouseUp(e: MouseEvent) {
+	private readonly onMouseUp = (e: MouseEvent) => {
 		e.preventDefault();
 		this.stopScroll();
-	}
+	};
 
 	private startScroll(startPosition: Vector) {
 		if (!this.scroll) {
-			window.addEventListener('touchmove', this.onTouchMoveHandler, false);
-			window.addEventListener('mousemove', this.onMouseMoveHandler, false);
-			window.addEventListener('touchend', this.onTouchEndHandler, false);
-			window.addEventListener('mouseup', this.onMouseUpHandler, false);
+			window.addEventListener('touchmove', this.onTouchMove, listenerOptions);
+			window.addEventListener('mousemove', this.onMouseMove, false);
+			window.addEventListener('touchend', this.onTouchEnd, listenerOptions);
+			window.addEventListener('mouseup', this.onMouseUp, false);
 		}
 
 		this.scroll = {
@@ -135,10 +133,10 @@ export class ScrollBoxView {
 
 	private stopScroll() {
 		if (this.scroll) {
-			window.removeEventListener('touchmove', this.onTouchMoveHandler, false);
-			window.removeEventListener('mousemove', this.onMouseMoveHandler, false);
-			window.removeEventListener('touchend', this.onTouchEndHandler, false);
-			window.removeEventListener('mouseup', this.onMouseUpHandler, false);
+			window.removeEventListener('touchmove', this.onTouchMove, listenerOptions);
+			window.removeEventListener('mousemove', this.onMouseMove, false);
+			window.removeEventListener('touchend', this.onTouchEnd, listenerOptions);
+			window.removeEventListener('mouseup', this.onMouseUp, false);
 			this.scroll = undefined;
 		}
 	}

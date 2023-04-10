@@ -30,24 +30,33 @@ export class SequenceComponentView implements ComponentView {
 			components[index] = componentContext.stepComponentFactory.create(g, stepContext, componentContext);
 		}
 
-		const maxJoinX = components.length > 0 ? Math.max(...components.map(c => c.view.joinX)) : PH_WIDTH / 2;
-		const maxWidth = components.length > 0 ? Math.max(...components.map(c => c.view.width)) : PH_WIDTH;
+		let joinX: number;
+		let totalWidth: number;
+		if (components.length > 0) {
+			const restWidth = Math.max(...components.map(c => c.view.width - c.view.joinX));
+
+			joinX = Math.max(...components.map(c => c.view.joinX));
+			totalWidth = joinX + restWidth;
+		} else {
+			joinX = PH_WIDTH / 2;
+			totalWidth = PH_WIDTH;
+		}
 
 		let offsetY = PH_HEIGHT;
 
 		const placeholders: SequencePlaceholder[] = [];
 		for (let i = 0; i < components.length; i++) {
 			const component = components[i];
-			const offsetX = maxJoinX - component.view.joinX;
+			const offsetX = joinX - component.view.joinX;
 
 			if ((i === 0 && sequenceContext.isInputConnected) || (i > 0 && components[i - 1].hasOutput)) {
-				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+				JoinView.createStraightJoin(g, new Vector(joinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 			}
 
 			if (componentContext.placeholderController.canCreate(sequence, i)) {
 				const view = RectPlaceholderView.create(
 					g,
-					maxJoinX - PH_WIDTH / 2,
+					joinX - PH_WIDTH / 2,
 					offsetY - PH_HEIGHT,
 					PH_WIDTH,
 					PH_HEIGHT,
@@ -64,14 +73,14 @@ export class SequenceComponentView implements ComponentView {
 		}
 
 		if (sequenceContext.isOutputConnected && (components.length === 0 || components[components.length - 1].hasOutput)) {
-			JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+			JoinView.createStraightJoin(g, new Vector(joinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 		}
 
 		const newIndex = components.length;
 		if (componentContext.placeholderController.canCreate(sequence, newIndex)) {
 			const view = RectPlaceholderView.create(
 				g,
-				maxJoinX - PH_WIDTH / 2,
+				joinX - PH_WIDTH / 2,
 				offsetY - PH_HEIGHT,
 				PH_WIDTH,
 				PH_HEIGHT,
@@ -82,7 +91,7 @@ export class SequenceComponentView implements ComponentView {
 				index: newIndex
 			});
 		}
-		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
+		return new SequenceComponentView(g, totalWidth, offsetY, joinX, placeholders, components);
 	}
 
 	private constructor(

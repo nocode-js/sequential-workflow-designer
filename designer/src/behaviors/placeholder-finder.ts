@@ -22,12 +22,14 @@ export class PlaceholderFinder {
 
 	public find(vLt: Vector, vWidth: number, vHeight: number): Placeholder | undefined {
 		if (!this.cache) {
+			const scroll = new Vector(window.scrollX, window.scrollY);
+
 			this.cache = this.placeholders.map(placeholder => {
-				const rect = placeholder.getRect();
+				const rect = placeholder.getClientRect();
 				return {
 					placeholder,
-					lt: new Vector(rect.x, rect.y),
-					br: new Vector(rect.x + rect.width, rect.y + rect.height)
+					lt: new Vector(rect.x, rect.y).add(scroll),
+					br: new Vector(rect.x + rect.width, rect.y + rect.height).add(scroll)
 				};
 			});
 			this.cache.sort((a, b) => a.lt.y - b.lt.y);

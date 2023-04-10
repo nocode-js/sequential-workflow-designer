@@ -1,3 +1,9 @@
+## 0.10.1
+
+* Fixed the bug with the auto-hide feature in the smart editor.
+* Fixed the bug with rendering wide components in the sequence component.
+* Fixed the bug with dragging when the designer is attached to a scrolled page.
+
 ## 0.10.0
 
 Refactored the step component interface. Extracted the logic of the step validation to a separated layer called badges. This allowed to create a new type of badge: `counter`. The counter badge is available in the pro version.

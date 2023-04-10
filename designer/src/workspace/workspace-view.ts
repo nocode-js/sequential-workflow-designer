@@ -1,5 +1,5 @@
 import { Dom } from '../core/dom';
-import { readMousePosition, readTouchPosition } from '../core/event-readers';
+import { readMousePosition, readTouchClientPosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { SequencePlaceIndicator } from '../designer-extension';
@@ -94,7 +94,7 @@ export class WorkspaceView {
 
 	public getCanvasPosition(): Vector {
 		const rect = this.canvas.getBoundingClientRect();
-		return new Vector(rect.x, rect.y);
+		return new Vector(rect.x + window.scrollX, rect.y + window.scrollY);
 	}
 
 	public getCanvasSize(): Vector {
@@ -114,13 +114,14 @@ export class WorkspaceView {
 			'touchstart',
 			e => {
 				e.preventDefault();
-				const position = readTouchPosition(e);
-				const element = document.elementFromPoint(position.x, position.y);
+				const clientPosition = readTouchClientPosition(e);
+				const element = document.elementFromPoint(clientPosition.x, clientPosition.y);
 				if (element) {
+					const position = readTouchPosition(e);
 					handler(position, element, 0);
 				}
 			},
-			false
+			{ passive: false }
 		);
 	}
 
