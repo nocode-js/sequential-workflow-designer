@@ -1,6 +1,6 @@
 body, h1, select {font: 13px/1.3em 'Open Sans', Arial, Verdana, Serif; margin: 0; padding: 0;}
 
-.title-bar {display: flex; min-height: 40px; background: #242424; align-items: center; width: 100vw; box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);}
+.title-bar {display: flex; min-height: 40px; background: #242424; align-items: center; width: 100%; box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);}
 .title-bar, .title-bar a {color: #FFF; text-decoration: none;}
 .title-bar a:hover {text-decoration: underline;}
 .title-bar .column {padding: 0 10px;}

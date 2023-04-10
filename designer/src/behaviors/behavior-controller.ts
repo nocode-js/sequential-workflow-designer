@@ -4,13 +4,11 @@ import { readMousePosition, readTouchPosition } from '../core/event-readers';
 
 const notInitializedError = 'State is not initialized';
 
-export class BehaviorController {
-	private readonly onMouseMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
-	private readonly onMouseUpHandler = (e: MouseEvent) => this.onMouseUp(e);
-	private readonly onTouchMoveHandler = (e: TouchEvent) => this.onTouchMove(e);
-	private readonly onTouchEndHandler = (e: TouchEvent) => this.onTouchEnd(e);
-	private readonly onTouchStartHandler = (e: TouchEvent) => this.onTouchStart(e);
+const nonPassiveOptions: AddEventListenerOptions & EventListenerOptions = {
+	passive: false
+};
 
+export class BehaviorController {
 	private state?: {
 		startPosition: Vector;
 		behavior: Behavior;
@@ -29,29 +27,29 @@ export class BehaviorController {
 		};
 		behavior.onStart(this.state.startPosition);
 
-		window.addEventListener('mousemove', this.onMouseMoveHandler, false);
-		window.addEventListener('touchmove', this.onTouchMoveHandler, false);
-		window.addEventListener('mouseup', this.onMouseUpHandler, false);
-		window.addEventListener('touchend', this.onTouchEndHandler, false);
-		window.addEventListener('touchstart', this.onTouchStartHandler, false);
+		window.addEventListener('mousemove', this.onMouseMove, false);
+		window.addEventListener('touchmove', this.onTouchMove, nonPassiveOptions);
+		window.addEventListener('mouseup', this.onMouseUp, false);
+		window.addEventListener('touchend', this.onTouchEnd, nonPassiveOptions);
+		window.addEventListener('touchstart', this.onTouchStart, nonPassiveOptions);
 	}
 
-	private onMouseMove(e: MouseEvent) {
+	private readonly onMouseMove = (e: MouseEvent) => {
 		e.preventDefault();
 		this.move(readMousePosition(e));
-	}
+	};
 
-	private onTouchMove(e: TouchEvent) {
+	private readonly onTouchMove = (e: TouchEvent) => {
 		e.preventDefault();
 		this.move(readTouchPosition(e));
-	}
+	};
 
-	private onMouseUp(e: MouseEvent) {
+	private readonly onMouseUp = (e: MouseEvent) => {
 		e.preventDefault();
 		this.stop(false, e.target as Element | null);
-	}
+	};
 
-	private onTouchEnd(e: TouchEvent) {
+	private readonly onTouchEnd = (e: TouchEvent) => {
 		e.preventDefault();
 		if (!this.state) {
 			throw new Error(notInitializedError);
@@ -60,14 +58,14 @@ export class BehaviorController {
 		const position = this.state.lastPosition ?? this.state.startPosition;
 		const element = document.elementFromPoint(position.x, position.y);
 		this.stop(false, element);
-	}
+	};
 
-	private onTouchStart(e: TouchEvent) {
+	private readonly onTouchStart = (e: TouchEvent) => {
 		e.preventDefault();
 		if (e.touches.length !== 1) {
 			this.stop(true, null);
 		}
-	}
+	};
 
 	private move(position: Vector) {
 		if (!this.state) {
@@ -92,11 +90,11 @@ export class BehaviorController {
 			throw new Error(notInitializedError);
 		}
 
-		window.removeEventListener('mousemove', this.onMouseMoveHandler, false);
-		window.removeEventListener('touchmove', this.onTouchMoveHandler, false);
-		window.removeEventListener('mouseup', this.onMouseUpHandler, false);
-		window.removeEventListener('touchend', this.onTouchEndHandler, false);
-		window.removeEventListener('touchstart', this.onTouchEndHandler, false);
+		window.removeEventListener('mousemove', this.onMouseMove, false);
+		window.removeEventListener('touchmove', this.onTouchMove, nonPassiveOptions);
+		window.removeEventListener('mouseup', this.onMouseUp, false);
+		window.removeEventListener('touchend', this.onTouchEnd, nonPassiveOptions);
+		window.removeEventListener('touchstart', this.onTouchStart, nonPassiveOptions);
 
 		this.state.behavior.onEnd(interrupt, element);
 		this.state = undefined;
