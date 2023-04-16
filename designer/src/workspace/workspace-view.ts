@@ -105,6 +105,7 @@ export class WorkspaceView {
 		this.canvas.addEventListener(
 			'mousedown',
 			e => {
+				e.preventDefault();
 				handler(readMousePosition(e), e.target as Element, e.button);
 			},
 			false

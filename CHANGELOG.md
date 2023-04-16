@@ -1,3 +1,8 @@
+## 0.10.2
+
+* Fixed the bug with moving the viewport by the scroll wheel button.
+* Added a simple animation to placeholders during dragging.
+
 ## 0.10.1
 
 * Fixed the bug with the auto-hide feature in the smart editor.
