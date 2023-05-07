@@ -9,7 +9,10 @@ import {
 	StepEditorContext,
 	StepsConfiguration,
 	DesignerExtension,
-	CustomActionHandler
+	CustomActionHandler,
+	CustomActionHandlerContext,
+	CustomAction,
+	Sequence
 } from 'sequential-workflow-designer';
 import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -102,9 +105,9 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		);
 	}
 
-	function customActionHandler(action: string, step: Step) {
+	function customActionHandler(action: CustomAction, step: Step | null, sequence: Sequence, context: CustomActionHandlerContext) {
 		if (customActionHandlerRef.current) {
-			customActionHandlerRef.current(action, step);
+			customActionHandlerRef.current(action, step, sequence, context);
 		}
 	}
 
