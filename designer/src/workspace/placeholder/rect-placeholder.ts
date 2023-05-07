@@ -9,12 +9,12 @@ export class RectPlaceholder implements Placeholder {
 		parent: SVGElement,
 		size: Vector,
 		direction: PlaceholderDirection,
-		parentSequence: Sequence,
+		sequence: Sequence,
 		index: number,
 		configuration: RectPlaceholderConfiguration
 	): RectPlaceholder {
-		const view = RectPlaceholderView.create(parent, size.x, size.y, configuration.radius, direction, configuration.iconSize);
-		return new RectPlaceholder(view, parentSequence, index);
+		const view = RectPlaceholderView.create(parent, size.x, size.y, configuration.radius, configuration.iconSize, direction);
+		return new RectPlaceholder(view, sequence, index);
 	}
 
 	public constructor(

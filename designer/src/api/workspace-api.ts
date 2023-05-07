@@ -26,11 +26,15 @@ export class WorkspaceApi {
 		this.state.setViewport(viewport);
 	}
 
+	public updateRootComponent() {
+		this.workspaceController.updateRootComponent();
+	}
+
 	public updateBadges() {
 		this.workspaceController.updateBadges();
 	}
 
-	public updateSize() {
-		this.workspaceController.updateSize();
+	public updateCanvasSize() {
+		this.workspaceController.updateCanvasSize();
 	}
 }

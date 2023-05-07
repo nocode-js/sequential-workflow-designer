@@ -142,6 +142,13 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
+	 * @description Rerender the root component and all its children.
+	 */
+	public updateRootComponent() {
+		this.api.workspace.updateRootComponent();
+	}
+
+	/**
 	 * @description Updates all badges.
 	 */
 	public updateBadges() {

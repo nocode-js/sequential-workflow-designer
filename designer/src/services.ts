@@ -15,6 +15,8 @@ import { TaskStepExtension } from './workspace/task-step/task-step-extension';
 import { ClassicWheelControllerExtension } from './workspace/viewport/classic-wheel-controller-extension';
 import { DefaultViewportControllerExtension } from './workspace/viewport/default-viewport-controller-extension';
 import { findValidationBadgeIndex } from './workspace/badges/find-validation-badge-index';
+import { DefaultSequenceComponentExtension } from './workspace/sequence/default-sequence-component-extension';
+import { DefaultStepComponentViewWrapperExtension } from './workspace/default-step-component-view-wrapper-extension';
 
 export type Services = Required<DesignerExtension>;
 
@@ -32,6 +34,9 @@ function merge(services: Partial<Services>, extensions: DesignerExtension[]) {
 		if (ext.steps) {
 			services.steps = (services.steps || []).concat(ext.steps);
 		}
+		if (ext.stepComponentViewWrapper) {
+			services.stepComponentViewWrapper = ext.stepComponentViewWrapper;
+		}
 		if (ext.badges) {
 			services.badges = (services.badges || []).concat(ext.badges);
 		}
@@ -47,11 +52,17 @@ function merge(services: Partial<Services>, extensions: DesignerExtension[]) {
 		if (ext.placeholderController) {
 			services.placeholderController = ext.placeholderController;
 		}
+		if (ext.placeholder) {
+			services.placeholder = ext.placeholder;
+		}
 		if (ext.viewportController) {
 			services.viewportController = ext.viewportController;
 		}
 		if (ext.rootComponent) {
 			services.rootComponent = ext.rootComponent;
+		}
+		if (ext.sequenceComponent) {
+			services.sequenceComponent = ext.sequenceComponent;
 		}
 		if (ext.daemons) {
 			services.daemons = (services.daemons || []).concat(ext.daemons);
@@ -66,6 +77,10 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 	services.steps.push(ContainerStepExtension.create());
 	services.steps.push(SwitchStepExtension.create());
 	services.steps.push(TaskStepExtension.create());
+
+	if (!services.stepComponentViewWrapper) {
+		services.stepComponentViewWrapper = new DefaultStepComponentViewWrapperExtension();
+	}
 
 	if (!services.badges) {
 		services.badges = [];
@@ -104,6 +119,9 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 	}
 	if (!services.rootComponent) {
 		services.rootComponent = new StartStopRootComponentExtension();
+	}
+	if (!services.sequenceComponent) {
+		services.sequenceComponent = new DefaultSequenceComponentExtension();
 	}
 
 	if (!services.daemons) {

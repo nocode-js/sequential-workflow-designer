@@ -1,16 +1,16 @@
-import { BadgesResult, ClickCommand, ClickDetails, Component, Placeholder } from '../component';
-import { SequenceComponentView } from './sequence-component-view';
+import { BadgesResult, ClickCommand, ClickDetails, Placeholder, SequenceComponent } from '../component';
+import { DefaultSequenceComponentView } from './default-sequence-component-view';
 import { ComponentContext } from '../../component-context';
-import { SequenceContext } from './sequence-context';
 import { StepComponent } from '../step-component';
+import { SequenceContext } from '../../designer-extension';
 
-export class SequenceComponent implements Component {
-	public static create(parentElement: SVGElement, sequenceContext: SequenceContext, context: ComponentContext): SequenceComponent {
-		const view = SequenceComponentView.create(parentElement, sequenceContext, context);
-		return new SequenceComponent(view, view.hasOutput());
+export class DefaultSequenceComponent implements SequenceComponent {
+	public static create(parentElement: SVGElement, sequenceContext: SequenceContext, context: ComponentContext): DefaultSequenceComponent {
+		const view = DefaultSequenceComponentView.create(parentElement, sequenceContext, context);
+		return new DefaultSequenceComponent(view, view.hasOutput());
 	}
 
-	private constructor(public readonly view: SequenceComponentView, public readonly hasOutput: boolean) {}
+	private constructor(public readonly view: DefaultSequenceComponentView, public readonly hasOutput: boolean) {}
 
 	public resolveClick(click: ClickDetails): ClickCommand | null {
 		for (const component of this.view.components) {

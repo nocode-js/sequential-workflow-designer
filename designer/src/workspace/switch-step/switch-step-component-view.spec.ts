@@ -2,7 +2,8 @@ import { Dom } from '../../core/dom';
 import { BranchedStep } from '../../definition';
 import { StepContext } from '../../designer-extension';
 import { createComponentContextStub } from '../../test-tools/stubs';
-import { SwitchStepComponentView } from './switch-step-component-view';
+import { StepComponentViewContextFactory } from '../step-component-view-context-factory';
+import { createSwitchStepComponentViewFactory } from './switch-step-component-view';
 
 describe('SwitchStepComponentView', () => {
 	it('create() creates view', () => {
@@ -28,19 +29,26 @@ describe('SwitchStepComponentView', () => {
 			step
 		};
 		const componentContext = createComponentContextStub();
+		const viewContext = StepComponentViewContextFactory.create(stepContext, componentContext);
 
-		SwitchStepComponentView.create(parent, stepContext, componentContext, {
+		const labelViewCfg = {
+			height: 22,
+			paddingX: 10,
+			minWidth: 50,
+			radius: 10
+		};
+		const factory = createSwitchStepComponentViewFactory({
 			minContainerWidth: 40,
 			paddingX: 20,
 			paddingTop: 20,
 			connectionHeight: 16,
 			inputSize: 18,
 			inputIconSize: 14,
-			labelHeight: 22,
-			labelPaddingX: 10,
-			labelMinWidth: 50,
-			labelRadius: 10
+			branchNameLabel: labelViewCfg,
+			nameLabel: labelViewCfg
 		});
+		factory(parent, stepContext, viewContext);
+
 		expect(parent.children.length).not.toEqual(0);
 	});
 });

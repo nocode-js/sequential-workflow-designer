@@ -3,12 +3,15 @@ import { Vector } from '../../core/vector';
 import { JoinView } from '../common-views/join-view';
 import { ComponentView, Placeholder } from '../component';
 import { ComponentContext } from '../../component-context';
-import { StepContext } from '../../designer-extension';
-import { SequenceContext } from './sequence-context';
+import { SequenceContext, StepContext } from '../../designer-extension';
 import { StepComponent } from '../step-component';
 
-export class SequenceComponentView implements ComponentView {
-	public static create(parent: SVGElement, sequenceContext: SequenceContext, componentContext: ComponentContext): SequenceComponentView {
+export class DefaultSequenceComponentView implements ComponentView {
+	public static create(
+		parent: SVGElement,
+		sequenceContext: SequenceContext,
+		componentContext: ComponentContext
+	): DefaultSequenceComponentView {
 		const phWidth = componentContext.services.placeholder.gapSize.x;
 		const phHeight = componentContext.services.placeholder.gapSize.y;
 
@@ -29,23 +32,32 @@ export class SequenceComponentView implements ComponentView {
 			components[index] = componentContext.stepComponentFactory.create(g, stepContext, componentContext);
 		}
 
-		const maxJoinX = components.length > 0 ? Math.max(...components.map(c => c.view.joinX)) : phWidth / 2;
-		const maxWidth = components.length > 0 ? Math.max(...components.map(c => c.view.width)) : phWidth;
+		let joinX: number;
+		let totalWidth: number;
+		if (components.length > 0) {
+			const restWidth = Math.max(...components.map(c => c.view.width - c.view.joinX));
+
+			joinX = Math.max(...components.map(c => c.view.joinX));
+			totalWidth = joinX + restWidth;
+		} else {
+			joinX = phWidth / 2;
+			totalWidth = phWidth;
+		}
 
 		let offsetY = phHeight;
 
 		const placeholders: Placeholder[] = [];
 		for (let i = 0; i < components.length; i++) {
 			const component = components[i];
-			const offsetX = maxJoinX - component.view.joinX;
+			const offsetX = joinX - component.view.joinX;
 
 			if ((i === 0 && sequenceContext.isInputConnected) || (i > 0 && components[i - 1].hasOutput)) {
-				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - phHeight), phHeight);
+				JoinView.createStraightJoin(g, new Vector(joinX, offsetY - phHeight), phHeight);
 			}
 
 			if (componentContext.placeholderController.canCreate(sequence, i)) {
 				const ph = componentContext.services.placeholder.createForGap(g, sequence, i);
-				Dom.translate(ph.view.g, maxJoinX - phWidth / 2, offsetY - phHeight);
+				Dom.translate(ph.view.g, joinX - phWidth / 2, offsetY - phHeight);
 				placeholders.push(ph);
 			}
 
@@ -54,16 +66,16 @@ export class SequenceComponentView implements ComponentView {
 		}
 
 		if (sequenceContext.isOutputConnected && (components.length === 0 || components[components.length - 1].hasOutput)) {
-			JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - phHeight), phHeight);
+			JoinView.createStraightJoin(g, new Vector(joinX, offsetY - phHeight), phHeight);
 		}
 
 		const newIndex = components.length;
 		if (componentContext.placeholderController.canCreate(sequence, newIndex)) {
 			const ph = componentContext.services.placeholder.createForGap(g, sequence, newIndex);
-			Dom.translate(ph.view.g, maxJoinX - phWidth / 2, offsetY - phHeight);
+			Dom.translate(ph.view.g, joinX - phWidth / 2, offsetY - phHeight);
 			placeholders.push(ph);
 		}
-		return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
+		return new DefaultSequenceComponentView(g, totalWidth, offsetY, joinX, placeholders, components);
 	}
 
 	private constructor(

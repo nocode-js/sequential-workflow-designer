@@ -9,7 +9,8 @@ export interface WorkspaceController {
 	getCanvasSize(): Vector;
 	getRootComponentSize(): Vector;
 	updateBadges(): void;
-	updateSize(): void;
+	updateRootComponent(): void;
+	updateCanvasSize(): void;
 }
 
 export class WorkspaceControllerWrapper implements WorkspaceController {
@@ -53,7 +54,11 @@ export class WorkspaceControllerWrapper implements WorkspaceController {
 		this.get().updateBadges();
 	}
 
-	public updateSize() {
-		this.get().updateSize();
+	public updateRootComponent() {
+		this.get().updateRootComponent();
+	}
+
+	public updateCanvasSize() {
+		this.get().updateCanvasSize();
 	}
 }

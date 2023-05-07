@@ -1,3 +1,2 @@
-export * from './sequence-context';
-export * from './sequence-component-view';
-export * from './sequence-component';
+export * from './default-sequence-component-view';
+export * from './default-sequence-component';

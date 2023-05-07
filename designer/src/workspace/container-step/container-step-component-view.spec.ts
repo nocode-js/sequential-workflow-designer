@@ -2,7 +2,8 @@ import { Dom } from '../../core/dom';
 import { SequentialStep } from '../../definition';
 import { StepContext } from '../../designer-extension';
 import { createComponentContextStub } from '../../test-tools/stubs';
-import { ContainerStepComponentView } from './container-step-component-view';
+import { StepComponentViewContextFactory } from '../step-component-view-context-factory';
+import { createContainerStepComponentViewFactory } from './container-step-component-view';
 
 describe('ContainerStepComponentView', () => {
 	it('creates view', () => {
@@ -25,16 +26,21 @@ describe('ContainerStepComponentView', () => {
 			parentSequence: []
 		};
 		const componentContext = createComponentContextStub();
-		const view = ContainerStepComponentView.create(parent, stepContext, componentContext, {
+		const viewContext = StepComponentViewContextFactory.create(stepContext, componentContext);
+
+		const factory = createContainerStepComponentViewFactory({
 			inputIconSize: 10,
 			inputSize: 14,
 			paddingTop: 20,
 			paddingX: 20,
-			labelHeight: 22,
-			labelMinWidth: 50,
-			labelPaddingX: 10,
-			labelRadius: 10
+			label: {
+				height: 22,
+				minWidth: 50,
+				paddingX: 10,
+				radius: 10
+			}
 		});
+		const view = factory(parent, stepContext, viewContext);
 
 		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);

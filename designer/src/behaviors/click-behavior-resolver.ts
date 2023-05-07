@@ -4,9 +4,11 @@ import { DesignerState } from '../designer-state';
 import { ClickCommandType, ClickDetails, Component } from '../workspace';
 import { Behavior } from './behavior';
 import { MoveViewportBehavior } from './move-viewport-behavior';
-import { TriggerCustomActionBehavior } from './trigger-custom-action-behavior';
 import { SelectStepBehavior } from './select-step-behavior';
-import { OpenFolderBehavior } from './open-folder-behavior';
+import { PressingBehavior } from './pressing-behaviors/pressing-behavior';
+import { RerenderStepPressingBehaviorHandler } from './pressing-behaviors/rerender-step-pressing-behavior-handler';
+import { OpenFolderPressingBehaviorHandler } from './pressing-behaviors/open-folder-pressing-behavior-handler';
+import { TriggerCustomActionPressingBehaviorHandler } from './pressing-behaviors/trigger-custom-action-pressing-behavior-handler';
 
 export class ClickBehaviorResolver {
 	public constructor(private readonly designerContext: DesignerContext, private readonly state: DesignerState) {}
@@ -24,19 +26,17 @@ export class ClickBehaviorResolver {
 		}
 
 		switch (command.type) {
-			case ClickCommandType.selectStep: {
-				const isDragDisabled =
-					forceDisableDrag ||
-					this.state.isDragDisabled ||
-					!this.designerContext.definitionModifier.isDraggable(command.component.step, command.component.parentSequence);
-				return SelectStepBehavior.create(command.component, isDragDisabled, this.designerContext);
-			}
+			case ClickCommandType.selectStep:
+				return SelectStepBehavior.create(command.component, forceDisableDrag, this.designerContext);
+
+			case ClickCommandType.rerenderStep:
+				return PressingBehavior.create(element, new RerenderStepPressingBehaviorHandler(this.designerContext));
 
 			case ClickCommandType.openFolder:
-				return OpenFolderBehavior.create(this.designerContext, element, command);
+				return PressingBehavior.create(element, new OpenFolderPressingBehaviorHandler(command, this.designerContext));
 
 			case ClickCommandType.triggerCustomAction:
-				return TriggerCustomActionBehavior.create(this.designerContext, element, command);
+				return PressingBehavior.create(element, new TriggerCustomActionPressingBehaviorHandler(command, this.designerContext));
 
 			default:
 				throw new Error('Not supported behavior type');

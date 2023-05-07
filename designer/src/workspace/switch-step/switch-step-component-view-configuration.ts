@@ -1,3 +1,5 @@
+import { LabelViewConfiguration } from '../common-views/label-view-configuration';
+
 export interface SwitchStepComponentViewConfiguration {
 	minContainerWidth: number;
 	paddingX: number;
@@ -5,8 +7,6 @@ export interface SwitchStepComponentViewConfiguration {
 	connectionHeight: number;
 	inputSize: number;
 	inputIconSize: number;
-	labelMinWidth: number;
-	labelHeight: number;
-	labelPaddingX: number;
-	labelRadius: number;
+	nameLabel: LabelViewConfiguration;
+	branchNameLabel: LabelViewConfiguration;
 }

@@ -3,10 +3,11 @@ import { DesignerApi } from './api/designer-api';
 import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { Branches, ComponentType, Sequence, Step } from './definition';
-import { Badge, Component, Placeholder, PlaceholderDirection, StepComponentView } from './workspace';
+import { Badge, Component, Placeholder, PlaceholderDirection, SequenceComponent, StepComponentView } from './workspace';
 
 export interface DesignerExtension {
 	steps?: StepExtension[];
+	stepComponentViewWrapper?: StepComponentViewWrapperExtension;
 	badges?: BadgeExtension[];
 	uiComponents?: UiComponentExtension[];
 	draggedComponent?: DraggedComponentExtension;
@@ -15,6 +16,7 @@ export interface DesignerExtension {
 	placeholderController?: PlaceholderControllerExtension;
 	placeholder?: PlaceholderExtension;
 	rootComponent?: RootComponentExtension;
+	sequenceComponent?: SequenceComponentExtension;
 	daemons?: DaemonExtension[];
 }
 
@@ -22,8 +24,22 @@ export interface DesignerExtension {
 
 export interface StepExtension<S extends Step = Step> {
 	componentType: ComponentType;
-	createComponentView(parentElement: SVGElement, stepContext: StepContext<S>, componentContext: ComponentContext): StepComponentView;
+	createComponentView(parentElement: SVGElement, stepContext: StepContext<S>, viewContext: StepComponentViewContext): StepComponentView;
 	getChildren(step: S): StepChildren | null;
+}
+
+export type StepComponentViewFactory = StepExtension['createComponentView'];
+
+export interface StepComponentViewContext {
+	getStepIconUrl(): string | null;
+	createSequenceComponent(parentElement: SVGElement, sequence: Sequence): SequenceComponent;
+	createPlaceholderForArea(
+		parentElement: SVGElement,
+		size: Vector,
+		direction: PlaceholderDirection,
+		sequence: Sequence,
+		index: number
+	): Placeholder;
 }
 
 export interface StepContext<S extends Step = Step> {
@@ -43,6 +59,17 @@ export interface StepChildren {
 export enum StepChildrenType {
 	singleSequence = 1,
 	branches = 2
+}
+
+export interface SequenceContext {
+	sequence: Sequence;
+	depth: number;
+	isInputConnected: boolean;
+	isOutputConnected: boolean;
+}
+
+export interface StepComponentViewWrapperExtension {
+	wrap(view: StepComponentView, stepContext: StepContext): StepComponentView;
 }
 
 // BadgeExtension
@@ -76,7 +103,7 @@ export interface UiComponent {
 // DraggedComponentExtension
 
 export interface DraggedComponentExtension {
-	create(parent: HTMLElement, step: Step, componentContext: ComponentContext): DraggedComponent;
+	create(parentElement: HTMLElement, step: Step, componentContext: ComponentContext): DraggedComponent;
 }
 
 export interface DraggedComponent {
@@ -101,6 +128,12 @@ export interface SequencePlaceIndicator {
 	index: number;
 }
 
+// SequenceComponentExtension
+
+export interface SequenceComponentExtension {
+	create(parentElement: SVGElement, sequenceContext: SequenceContext, componentContext: ComponentContext): SequenceComponent;
+}
+
 // PlaceholderControllerExtension
 
 export interface PlaceholderControllerExtension {
@@ -115,8 +148,8 @@ export interface PlaceholderController {
 
 export interface PlaceholderExtension {
 	gapSize: Vector;
-	createForGap(parent: SVGElement, parentSequence: Sequence, index: number): Placeholder;
-	createForArea(parent: SVGElement, size: Vector, direction: PlaceholderDirection, parentSequence: Sequence, index: number): Placeholder;
+	createForGap(parentElement: SVGElement, sequence: Sequence, index: number): Placeholder;
+	createForArea(parentElement: SVGElement, size: Vector, direction: PlaceholderDirection, sequence: Sequence, index: number): Placeholder;
 }
 
 // ViewportControllerExtension

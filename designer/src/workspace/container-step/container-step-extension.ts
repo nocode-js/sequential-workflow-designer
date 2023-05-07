@@ -1,8 +1,6 @@
-import { ComponentContext } from '../../component-context';
 import { SequentialStep } from '../../definition';
-import { StepChildren, StepChildrenType, StepContext, StepExtension } from '../../designer-extension';
-import { StepComponentView } from '../component';
-import { ContainerStepComponentView } from './container-step-component-view';
+import { StepChildren, StepChildrenType, StepExtension } from '../../designer-extension';
+import { createContainerStepComponentViewFactory } from './container-step-component-view';
 import { ContainerStepExtensionConfiguration } from './container-step-extension-configuration';
 
 const defaultConfiguration: ContainerStepExtensionConfiguration = {
@@ -11,10 +9,12 @@ const defaultConfiguration: ContainerStepExtensionConfiguration = {
 		paddingX: 20,
 		inputSize: 18,
 		inputIconSize: 14,
-		labelHeight: 22,
-		labelPaddingX: 10,
-		labelMinWidth: 50,
-		labelRadius: 10
+		label: {
+			height: 22,
+			paddingX: 10,
+			minWidth: 50,
+			radius: 10
+		}
 	}
 };
 
@@ -27,13 +27,7 @@ export class ContainerStepExtension implements StepExtension<SequentialStep> {
 
 	private constructor(private readonly configuration: ContainerStepExtensionConfiguration) {}
 
-	public createComponentView(
-		parentElement: SVGElement,
-		stepContext: StepContext<SequentialStep>,
-		componentContext: ComponentContext
-	): StepComponentView {
-		return ContainerStepComponentView.create(parentElement, stepContext, componentContext, this.configuration.view);
-	}
+	public readonly createComponentView = createContainerStepComponentViewFactory(this.configuration.view);
 
 	public getChildren(step: SequentialStep): StepChildren {
 		return {

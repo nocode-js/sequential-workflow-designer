@@ -72,8 +72,13 @@ export class StepComponent implements Component {
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		if (!this.isDisabled && this.view.sequenceComponents) {
-			this.view.sequenceComponents.forEach(component => component.setIsDragging(isDragging));
+		if (!this.isDisabled) {
+			if (this.view.sequenceComponents) {
+				this.view.sequenceComponents.forEach(component => component.setIsDragging(isDragging));
+			}
+			if (this.view.placeholders) {
+				this.view.placeholders.forEach(ph => ph.setIsVisible(isDragging));
+			}
 		}
 		this.view.setIsDragging(isDragging);
 	}

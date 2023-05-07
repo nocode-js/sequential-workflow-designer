@@ -103,10 +103,10 @@
 .sqd-theme-light .sqd-region.sqd-selected {
 	stroke: #ED4800;
 }
-.sqd-theme-light .sqd-label-rect {
+.sqd-theme-light .sqd-label-primary .sqd-label-rect {
 	fill: #2411DB;
 }
-.sqd-theme-light .sqd-label-rect.sqd-label-secondary {
+.sqd-theme-light .sqd-label-secondary .sqd-label-rect {
 	fill: #000;
 }
 .sqd-theme-light .sqd-label-text {

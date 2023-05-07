@@ -35,7 +35,7 @@ export class Workspace implements WorkspaceController {
 			designerContext.services
 		);
 		setTimeout(() => {
-			workspace.render();
+			workspace.updateRootComponent();
 			api.viewport.resetViewport();
 			workspace.onReady.forward();
 		});
@@ -76,7 +76,7 @@ export class Workspace implements WorkspaceController {
 		private readonly services: Services
 	) {}
 
-	public render() {
+	public updateRootComponent() {
 		this.selectedStepComponent = null;
 
 		let parentSequencePlaceIndicator: SequencePlaceIndicator | null;
@@ -98,6 +98,16 @@ export class Workspace implements WorkspaceController {
 		this.view.render(sequence, parentSequencePlaceIndicator);
 		this.trySelectStepComponent(this.state.selectedStepId);
 		this.updateBadges();
+	}
+
+	public updateBadges() {
+		const result = BadgesResultFactory.create(this.services);
+		this.getRootComponent().updateBadges(result);
+
+		if (this.validationErrorBadgeIndex === null) {
+			this.validationErrorBadgeIndex = findValidationBadgeIndex(this.services.badges);
+		}
+		this.isValid = Boolean(result[this.validationErrorBadgeIndex]);
 	}
 
 	public getPlaceholders(): Placeholder[] {
@@ -127,18 +137,8 @@ export class Workspace implements WorkspaceController {
 		return new Vector(view.width, view.height);
 	}
 
-	public updateSize() {
+	public updateCanvasSize() {
 		setTimeout(() => this.view.refreshSize());
-	}
-
-	public updateBadges() {
-		const result = BadgesResultFactory.create(this.services);
-		this.getRootComponent().updateBadges(result);
-
-		if (this.validationErrorBadgeIndex === null) {
-			this.validationErrorBadgeIndex = findValidationBadgeIndex(this.services.badges);
-		}
-		this.isValid = Boolean(result[this.validationErrorBadgeIndex]);
 	}
 
 	public destroy() {
@@ -182,13 +182,13 @@ export class Workspace implements WorkspaceController {
 		folderPathChanged: string[] | undefined
 	) {
 		if (folderPathChanged) {
-			this.render();
+			this.updateRootComponent();
 			this.viewportApi.resetViewport();
 		} else if (definitionChanged) {
 			if (definitionChanged.changeType === DefinitionChangeType.stepPropertyChanged) {
 				this.updateBadges();
 			} else {
-				this.render();
+				this.updateRootComponent();
 			}
 		} else if (selectedStepIdChanged !== undefined) {
 			this.trySelectStepComponent(selectedStepIdChanged);

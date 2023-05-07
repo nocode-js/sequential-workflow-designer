@@ -1,9 +1,9 @@
 import { Icons, Vector } from '../../core';
 import { Dom } from '../../core/dom';
 import { Sequence } from '../../definition';
-import { ComponentView, Placeholder, PlaceholderDirection } from '../component';
+import { ComponentView, Placeholder, PlaceholderDirection, SequenceComponent } from '../component';
 import { ComponentContext } from '../../component-context';
-import { SequenceComponent } from '../sequence/sequence-component';
+import { DefaultSequenceComponent } from '../sequence/default-sequence-component';
 import { SequencePlaceIndicator } from '../../designer-extension';
 
 const SIZE = 30;
@@ -22,7 +22,7 @@ export class StartStopRootComponentView implements ComponentView {
 		});
 		parent.appendChild(g);
 
-		const sequenceComponent = SequenceComponent.create(
+		const sequenceComponent = DefaultSequenceComponent.create(
 			g,
 			{
 				sequence,

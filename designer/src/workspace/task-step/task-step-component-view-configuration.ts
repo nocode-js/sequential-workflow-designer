@@ -1,5 +1,6 @@
 export interface TaskStepComponentViewConfiguration {
-	paddingX: number;
+	paddingLeft: number;
+	paddingRight: number;
 	paddingY: number;
 	textMarginLeft: number;
 	minTextWidth: number;

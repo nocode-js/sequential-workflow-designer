@@ -27,6 +27,9 @@ export class EditorApi {
 	}
 
 	public createStepEditorContext(stepId: string): StepEditorContext {
+		if (!stepId) {
+			throw new Error('Step id is empty');
+		}
 		return {
 			notifyPropertiesChanged: () => {
 				this.state.notifyDefinitionChanged(DefinitionChangeType.stepPropertyChanged, stepId);

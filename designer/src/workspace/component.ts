@@ -1,6 +1,6 @@
 import { Vector } from '../core/vector';
 import { Sequence, Step } from '../definition';
-import { SequenceComponent } from './sequence';
+import { CustomAction } from '../designer-configuration';
 import { StepComponent } from './step-component';
 
 export interface Component {
@@ -11,42 +11,6 @@ export interface Component {
 	getPlaceholders(result: Placeholder[]): void;
 	setIsDragging(isDragging: boolean): void;
 	updateBadges(result: BadgesResult): void;
-}
-
-export interface ClickDetails {
-	element: Element;
-	position: Vector;
-	scale: number;
-}
-
-export type ClickCommand = SelectStepClickCommand | OpenFolderClickCommand | TriggerCustomActionClickCommand;
-
-export interface BaseClickCommand {
-	type: ClickCommandType;
-}
-
-export interface SelectStepClickCommand extends BaseClickCommand {
-	type: ClickCommandType.selectStep;
-	component: StepComponent;
-}
-
-export interface OpenFolderClickCommand extends BaseClickCommand {
-	type: ClickCommandType.openFolder;
-	step: Step;
-}
-
-export interface TriggerCustomActionClickCommand extends BaseClickCommand {
-	type: ClickCommandType.triggerCustomAction;
-	step: Step | null;
-	sequence: Sequence;
-	action: string;
-	payload?: unknown;
-}
-
-export enum ClickCommandType {
-	selectStep = 1,
-	openFolder = 2,
-	triggerCustomAction = 3
 }
 
 export interface ComponentView {
@@ -72,6 +36,55 @@ export interface StepComponentView extends ComponentView {
 	getClientPosition(): Vector;
 }
 
+export interface SequenceComponent extends Component {
+	hasOutput: boolean;
+}
+
+// Click
+
+export interface ClickDetails {
+	element: Element;
+	position: Vector;
+	scale: number;
+}
+
+export type ClickCommand = SelectStepClickCommand | RerenderStepClickCommand | OpenFolderClickCommand | TriggerCustomActionClickCommand;
+
+export interface BaseClickCommand {
+	type: ClickCommandType;
+}
+
+export interface SelectStepClickCommand extends BaseClickCommand {
+	type: ClickCommandType.selectStep;
+	component: StepComponent;
+}
+
+export interface RerenderStepClickCommand extends BaseClickCommand {
+	type: ClickCommandType.rerenderStep;
+	step: Step;
+}
+
+export interface OpenFolderClickCommand extends BaseClickCommand {
+	type: ClickCommandType.openFolder;
+	step: Step;
+}
+
+export interface TriggerCustomActionClickCommand extends BaseClickCommand {
+	type: ClickCommandType.triggerCustomAction;
+	step: Step | null;
+	sequence: Sequence;
+	action: CustomAction;
+}
+
+export enum ClickCommandType {
+	selectStep = 1,
+	rerenderStep = 2,
+	openFolder = 3,
+	triggerCustomAction = 4
+}
+
+// Badges
+
 export interface BadgeView {
 	g: SVGGElement;
 	width: number;
@@ -86,11 +99,7 @@ export interface Badge {
 
 export type BadgesResult = unknown[];
 
-export enum PlaceholderDirection {
-	none = 0,
-	in = 1,
-	out = 2
-}
+// Placeholder
 
 export interface Placeholder {
 	view: PlaceholderView;
@@ -101,6 +110,12 @@ export interface Placeholder {
 	setIsHover(isHover: boolean): void;
 	setIsVisible(isVisible: boolean): void;
 	resolveClick(click: ClickDetails): ClickCommand | null;
+}
+
+export enum PlaceholderDirection {
+	none = 0,
+	in = 1,
+	out = 2
 }
 
 export interface PlaceholderView {

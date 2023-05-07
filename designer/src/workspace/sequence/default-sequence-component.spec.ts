@@ -1,9 +1,9 @@
 import { Dom } from '../../core/dom';
+import { SequenceContext } from '../../designer-extension';
 import { createComponentContextStub, createStepStub } from '../../test-tools/stubs';
-import { SequenceComponent } from './sequence-component';
-import { SequenceContext } from './sequence-context';
+import { DefaultSequenceComponent } from './default-sequence-component';
 
-describe('SequenceComponent', () => {
+describe('DefaultSequenceComponent', () => {
 	it('create() creates component', () => {
 		const parent = Dom.svg('svg');
 		const sequenceContext: SequenceContext = {
@@ -13,7 +13,7 @@ describe('SequenceComponent', () => {
 			sequence: [createStepStub()]
 		};
 		const componentContext = createComponentContextStub();
-		const component = SequenceComponent.create(parent, sequenceContext, componentContext);
+		const component = DefaultSequenceComponent.create(parent, sequenceContext, componentContext);
 
 		expect(component).toBeDefined();
 	});

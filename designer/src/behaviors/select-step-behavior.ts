@@ -7,18 +7,18 @@ import { DragStepBehavior } from './drag-step-behavior';
 import { MoveViewportBehavior } from './move-viewport-behavior';
 
 export class SelectStepBehavior implements Behavior {
-	public static create(
-		pressedStepComponent: StepComponent,
-		isDragDisabled: boolean,
-		designerContext: DesignerContext
-	): SelectStepBehavior {
-		return new SelectStepBehavior(pressedStepComponent, isDragDisabled, designerContext, designerContext.state);
+	public static create(pressedStepComponent: StepComponent, forceDisableDrag: boolean, context: DesignerContext): SelectStepBehavior {
+		const isDragDisabled =
+			forceDisableDrag ||
+			context.state.isDragDisabled ||
+			!context.definitionModifier.isDraggable(pressedStepComponent.step, pressedStepComponent.parentSequence);
+		return new SelectStepBehavior(pressedStepComponent, isDragDisabled, context, context.state);
 	}
 
 	private constructor(
 		private readonly pressedStepComponent: StepComponent,
 		private readonly isDragDisabled: boolean,
-		private readonly designerContext: DesignerContext,
+		private readonly context: DesignerContext,
 		private readonly state: DesignerState
 	) {}
 
@@ -31,7 +31,7 @@ export class SelectStepBehavior implements Behavior {
 			const canDrag = !this.state.isReadonly && !this.isDragDisabled;
 			if (canDrag) {
 				this.state.setSelectedStepId(null);
-				return DragStepBehavior.create(this.designerContext, this.pressedStepComponent.step, this.pressedStepComponent);
+				return DragStepBehavior.create(this.context, this.pressedStepComponent.step, this.pressedStepComponent);
 			} else {
 				return MoveViewportBehavior.create(this.state, false);
 			}

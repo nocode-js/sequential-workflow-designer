@@ -6,19 +6,12 @@ import { LabelView } from '../common-views/label-view';
 import { RegionView } from '../common-views//region-view';
 import { InputView } from '../common-views/input-view';
 import { ClickDetails, StepComponentView } from '../component';
-import { ComponentContext } from '../../component-context';
-import { SequenceComponent } from '../sequence/sequence-component';
-import { StepContext } from '../../designer-extension';
-import { SequenceContext } from '../sequence/sequence-context';
+import { StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
 import { SwitchStepComponentViewConfiguration } from './switch-step-component-view-configuration';
 
-export class SwitchStepComponentView implements StepComponentView {
-	public static create(
-		parent: SVGElement,
-		stepContext: StepContext<BranchedStep>,
-		context: ComponentContext,
-		cfg: SwitchStepComponentViewConfiguration
-	): SwitchStepComponentView {
+export const createSwitchStepComponentViewFactory =
+	(cfg: SwitchStepComponentViewConfiguration): StepComponentViewFactory =>
+	(parent: SVGElement, stepContext: StepContext<BranchedStep>, viewContext: StepComponentViewContext): StepComponentView => {
 		const { step } = stepContext;
 		const g = Dom.svg('g', {
 			class: `sqd-step-switch sqd-type-${step.type}`
@@ -27,39 +20,15 @@ export class SwitchStepComponentView implements StepComponentView {
 
 		const branchNames = Object.keys(step.branches);
 		const branchComponents = branchNames.map(branchName => {
-			const sequenceContext: SequenceContext = {
-				sequence: step.branches[branchName],
-				depth: stepContext.depth + 1,
-				isInputConnected: true,
-				isOutputConnected: stepContext.isOutputConnected
-			};
-			return SequenceComponent.create(g, sequenceContext, context);
+			return viewContext.createSequenceComponent(g, step.branches[branchName]);
 		});
 
 		const branchLabelViews = branchNames.map(branchName => {
-			const labelY = cfg.paddingTop + cfg.labelHeight + cfg.connectionHeight;
-			return LabelView.create(
-				g,
-				labelY,
-				cfg.labelMinWidth,
-				cfg.labelHeight,
-				cfg.labelPaddingX,
-				cfg.labelRadius,
-				branchName,
-				'secondary'
-			);
+			const labelY = cfg.paddingTop + cfg.nameLabel.height + cfg.connectionHeight;
+			return LabelView.create(g, labelY, cfg.branchNameLabel, branchName, 'secondary');
 		});
 
-		const nameLabelView = LabelView.create(
-			g,
-			cfg.paddingTop,
-			cfg.labelMinWidth,
-			cfg.labelHeight,
-			cfg.labelPaddingX,
-			cfg.labelRadius,
-			step.name,
-			'primary'
-		);
+		const nameLabelView = LabelView.create(g, cfg.paddingTop, cfg.nameLabel, step.name, 'primary');
 
 		let prevOffsetX = 0;
 		const branchSizes = branchComponents.map((component, i) => {
@@ -68,7 +37,7 @@ export class SwitchStepComponentView implements StepComponentView {
 			const branchOffsetLeft = Math.max(halfOfWidestBranchElement - component.view.joinX, 0) + cfg.paddingX;
 			const branchOffsetRight = Math.max(halfOfWidestBranchElement - (component.view.width - component.view.joinX), 0) + cfg.paddingX;
 
-			const width = component.view.width + branchOffsetLeft + branchOffsetRight;
+			const width: number = component.view.width + branchOffsetLeft + branchOffsetRight;
 			const joinX = component.view.joinX + branchOffsetLeft;
 
 			const offsetX = prevOffsetX;
@@ -91,12 +60,13 @@ export class SwitchStepComponentView implements StepComponentView {
 		const switchOffsetRight = Math.max(halfOfWidestSwitchElement - (totalBranchesWidth - joinX), 0);
 
 		const viewWidth = switchOffsetLeft + totalBranchesWidth + switchOffsetRight;
-		const viewHeight = maxBranchesHeight + cfg.paddingTop + cfg.labelHeight * 2 + cfg.connectionHeight * 2;
+		const viewHeight =
+			maxBranchesHeight + cfg.paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight * 2;
 
 		const shiftedJoinX = switchOffsetLeft + joinX;
 		Dom.translate(nameLabelView.g, shiftedJoinX, 0);
 
-		const branchOffsetTop = cfg.paddingTop + cfg.labelHeight * 2 + cfg.connectionHeight;
+		const branchOffsetTop = cfg.paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight;
 
 		branchComponents.forEach((component, i) => {
 			const branchSize = branchSizes[i];
@@ -106,7 +76,8 @@ export class SwitchStepComponentView implements StepComponentView {
 			Dom.translate(component.view.g, branchOffsetLeft, branchOffsetTop);
 
 			if (component.hasOutput && stepContext.isOutputConnected) {
-				const endOffsetTopOfComponent = cfg.paddingTop + cfg.labelHeight * 2 + cfg.connectionHeight + component.view.height;
+				const endOffsetTopOfComponent =
+					cfg.paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight + component.view.height;
 				const missingHeight = viewHeight - endOffsetTopOfComponent - cfg.connectionHeight;
 				if (missingHeight > 0) {
 					JoinView.createStraightJoin(
@@ -118,16 +89,19 @@ export class SwitchStepComponentView implements StepComponentView {
 			}
 		});
 
-		const iconUrl = context.configuration.iconUrlProvider ? context.configuration.iconUrlProvider(step.componentType, step.type) : null;
-		const inputView = InputView.createRectInput(g, shiftedJoinX, 0, cfg.inputSize, cfg.inputIconSize, iconUrl);
+		let inputView: InputView | null = null;
+		if (cfg.inputSize > 0) {
+			const iconUrl = viewContext.getStepIconUrl();
+			inputView = InputView.createRectInput(g, shiftedJoinX, 0, cfg.inputSize, cfg.inputIconSize, iconUrl);
+		}
 
 		JoinView.createStraightJoin(g, new Vector(shiftedJoinX, 0), cfg.paddingTop);
 
 		JoinView.createJoins(
 			g,
-			new Vector(shiftedJoinX, cfg.paddingTop + cfg.labelHeight),
+			new Vector(shiftedJoinX, cfg.paddingTop + cfg.nameLabel.height),
 			branchSizes.map(
-				o => new Vector(switchOffsetLeft + o.offsetX + o.joinX, cfg.paddingTop + cfg.labelHeight + cfg.connectionHeight)
+				o => new Vector(switchOffsetLeft + o.offsetX + o.joinX, cfg.paddingTop + cfg.nameLabel.height + cfg.connectionHeight)
 			)
 		);
 
@@ -139,7 +113,7 @@ export class SwitchStepComponentView implements StepComponentView {
 				(i: number) =>
 					new Vector(
 						switchOffsetLeft + branchSizes[i].offsetX + branchSizes[i].joinX,
-						cfg.paddingTop + cfg.connectionHeight + cfg.labelHeight * 2 + maxBranchesHeight
+						cfg.paddingTop + cfg.connectionHeight + cfg.nameLabel.height + cfg.branchNameLabel.height + maxBranchesHeight
 					)
 			);
 			if (ongoingJoinTargets.length > 0) {
@@ -152,42 +126,36 @@ export class SwitchStepComponentView implements StepComponentView {
 		regions[regions.length - 1] += switchOffsetRight;
 		const regionView = RegionView.create(g, regions, viewHeight);
 
-		return new SwitchStepComponentView(g, viewWidth, viewHeight, shiftedJoinX, branchComponents, regionView, inputView);
-	}
+		return {
+			g,
+			width: viewWidth,
+			height: viewHeight,
+			joinX: shiftedJoinX,
+			placeholders: null,
+			sequenceComponents: branchComponents,
 
-	public readonly placeholders = null;
+			getClientPosition(): Vector {
+				return regionView.getClientPosition();
+			},
 
-	private constructor(
-		public readonly g: SVGGElement,
-		public readonly width: number,
-		public readonly height: number,
-		public readonly joinX: number,
-		public readonly sequenceComponents: SequenceComponent[],
-		private readonly regionView: RegionView,
-		private readonly inputView: InputView
-	) {}
+			resolveClick(click: ClickDetails): true | null {
+				return regionView.resolveClick(click) || g.contains(click.element) ? true : null;
+			},
 
-	public getClientPosition(): Vector {
-		return this.regionView.getClientPosition();
-	}
+			setIsDragging(isDragging: boolean) {
+				inputView?.setIsHidden(isDragging);
+			},
 
-	public resolveClick(click: ClickDetails): true | null {
-		return this.regionView.resolveClick(click) || this.g.contains(click.element) ? true : null;
-	}
+			setIsSelected(isSelected: boolean) {
+				regionView.setIsSelected(isSelected);
+			},
 
-	public setIsDragging(isDragging: boolean) {
-		this.inputView?.setIsHidden(isDragging);
-	}
+			setIsDisabled(isDisabled: boolean) {
+				Dom.toggleClass(g, isDisabled, 'sqd-disabled');
+			},
 
-	public setIsSelected(isSelected: boolean) {
-		this.regionView.setIsSelected(isSelected);
-	}
-
-	public setIsDisabled(isDisabled: boolean) {
-		Dom.toggleClass(this.g, isDisabled, 'sqd-disabled');
-	}
-
-	public hasOutput(): boolean {
-		return this.sequenceComponents.some(c => c.hasOutput);
-	}
-}
+			hasOutput(): boolean {
+				return branchComponents.some(c => c.hasOutput);
+			}
+		};
+	};

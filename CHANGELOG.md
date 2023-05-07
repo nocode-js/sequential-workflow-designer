@@ -1,3 +1,13 @@
+## 0.11.0
+
+### Breaking Changes
+
+* This version introduces a few changes in the `customActionHandler` handler:
+  * the first parameter is an object now, previously it was a string. To read action type you need to read the `type` property from the object.
+  * the `step` parameter is nullable now,
+  * we added a `context` parameter that allows to notify about changes in the definition.
+* Added new classes for label components: `sqd-label-primary`, `sqd-label-secondary`.
+
 ## 0.10.0
 
 Refactored the step component interface. Extracted the logic of the step validation to a separated layer called badges. This allowed to create a new type of badge: `counter`. The counter badge is available in the pro version.
