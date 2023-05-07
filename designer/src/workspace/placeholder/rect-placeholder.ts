@@ -23,7 +23,7 @@ export class RectPlaceholder implements Placeholder {
 		public readonly index: number
 	) {}
 
-	public getRect(): DOMRect {
+	public getClientRect(): DOMRect {
 		return this.view.rect.getBoundingClientRect();
 	}
 

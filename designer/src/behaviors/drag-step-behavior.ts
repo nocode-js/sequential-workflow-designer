@@ -49,9 +49,10 @@ export class DragStepBehavior implements Behavior {
 				this.draggedStepComponent.view.width === this.view.component.width &&
 				this.draggedStepComponent.view.height === this.view.component.height;
 			if (hasSameSize) {
+				const scroll = new Vector(window.scrollX, window.scrollY);
 				// Mouse cursor will be positioned on the same place as the source component.
-				const clientPosition = this.draggedStepComponent.view.getClientPosition();
-				offset = position.subtract(clientPosition);
+				const pagePosition = this.draggedStepComponent.view.getClientPosition().add(scroll);
+				offset = position.subtract(pagePosition);
 			}
 		}
 		if (!offset) {

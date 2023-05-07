@@ -7,11 +7,11 @@ import { EditorsConfiguration } from '../designer-configuration';
 export class SmartEditor implements UiComponent {
 	public static create(parent: HTMLElement, api: DesignerApi, configuration: EditorsConfiguration): SmartEditor {
 		const view = SmartEditorView.create(parent, api, configuration);
-		view.setIsCollapsed(api.editor.isVisibleAtStart());
 
 		const editor = new SmartEditor(view, api.workspace);
 		view.bindToggleIsCollapsedClick(() => editor.toggleIsCollapsedClick());
 
+		editor.setIsCollapsed(api.editor.isVisibleAtStart());
 		return editor;
 	}
 

@@ -103,9 +103,30 @@ const containerLabelsDefinition = {
 	]
 };
 
+const sequenceSizeDefinition = {
+	properties: {},
+	sequence: [
+		createSwitchStep('$', {
+			'true': [
+				createTaskStep('Lorem Ipsum is simply dummy text of the printing and typesetting industry'),
+				createSwitchStep('$', {
+					'true': [
+						createTaskStep('Lorem Ipsum is simply dummy text of the printing and typesetting industry')
+					],
+					'false': []
+				})
+			],
+			'false': [
+				createTaskStep('@')
+			]
+		}),
+	]
+};
+
 const testCases = {
 	'Switch labels': switchLabelsDefinition,
-	'Container labels': containerLabelsDefinition
+	'Container labels': containerLabelsDefinition,
+	'Sequence size': sequenceSizeDefinition,
 };
 let designer;
 

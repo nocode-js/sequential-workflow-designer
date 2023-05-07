@@ -255,4 +255,5 @@
 .sqd-placeholder .sqd-placeholder-rect {
 	stroke-width: 1;
 	stroke-dasharray: 3;
+	transition: fill 100ms;
 }

@@ -106,7 +106,7 @@ export interface Placeholder {
 	parentSequence: Sequence;
 	index: number;
 
-	getRect(): DOMRect;
+	getClientRect(): DOMRect;
 	setIsHover(isHover: boolean): void;
 	setIsVisible(isVisible: boolean): void;
 	resolveClick(click: ClickDetails): ClickCommand | null;
