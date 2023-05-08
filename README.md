@@ -45,6 +45,7 @@ Pro:
 * [👋 Custom Dragged Component](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/custom-dragged-component.html)
 * [🔰 Badges](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/badges.html)
 * [🎩 Custom Viewport](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/custom-viewport.html)
+* [🛎 Clickable Placeholder](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/clickable-placeholder.html)
 
 ## 👩‍💻 Integrations
 
