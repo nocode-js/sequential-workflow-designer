@@ -27,6 +27,13 @@ export class SequentialWorkflowDesignerController {
 	};
 
 	/**
+	 * @description Rerender the root component and all its children.
+	 */
+	public readonly updateRootComponent = () => {
+		this.getDesigner().updateRootComponent();
+	};
+
+	/**
 	 * @returns `true` if the controller is ready to be used, `false` otherwise.
 	 */
 	public isReady(): boolean {

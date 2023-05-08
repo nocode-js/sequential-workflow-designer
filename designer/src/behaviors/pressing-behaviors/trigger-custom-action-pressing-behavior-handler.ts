@@ -10,7 +10,7 @@ export class TriggerCustomActionPressingBehaviorHandler implements PressingBehav
 	public handle() {
 		const customActionHandler = this.designerContext.configuration.customActionHandler;
 		if (!customActionHandler) {
-			console.warn(`Custom action handler is not defined (${this.command.action})`);
+			console.warn(`Custom action handler is not defined (action type: ${this.command.action.type})`);
 			return;
 		}
 
