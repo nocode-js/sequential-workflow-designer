@@ -2,7 +2,7 @@ import { ComponentContext } from '../component-context';
 import { Sequence, Step } from '../definition';
 import { StepContext } from '../designer-extension';
 import { Badges } from './badges/badges';
-import { BadgesResult, ClickDetails, ResolvedClick, Component, Placeholder, StepComponentView } from './component';
+import { BadgesResult, ClickDetails, ClickCommand, Component, Placeholder, StepComponentView, ClickCommandType } from './component';
 
 export class StepComponent implements Component {
 	public static create(view: StepComponentView, stepContext: StepContext, componentContext: ComponentContext) {
@@ -35,7 +35,7 @@ export class StepComponent implements Component {
 		return null;
 	}
 
-	public resolveClick(click: ClickDetails): ResolvedClick | null {
+	public resolveClick(click: ClickDetails): ClickCommand | null {
 		if (this.view.sequenceComponents) {
 			for (const component of this.view.sequenceComponents) {
 				const result = component.resolveClick(click);
@@ -44,12 +44,18 @@ export class StepComponent implements Component {
 				}
 			}
 		}
-		const command = this.badges.resolveClick(click) || this.view.resolveClick(click);
-		if (command) {
-			return {
-				component: this,
-				command
-			};
+		const badgeResult = this.badges.resolveClick(click);
+		if (badgeResult) {
+			return badgeResult;
+		}
+		const viewResult = this.view.resolveClick(click);
+		if (viewResult) {
+			return viewResult === true
+				? {
+						type: ClickCommandType.selectStep,
+						component: this
+				  }
+				: viewResult;
 		}
 		return null;
 	}
@@ -66,8 +72,13 @@ export class StepComponent implements Component {
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		if (!this.isDisabled && this.view.sequenceComponents) {
-			this.view.sequenceComponents.forEach(component => component.setIsDragging(isDragging));
+		if (!this.isDisabled) {
+			if (this.view.sequenceComponents) {
+				this.view.sequenceComponents.forEach(component => component.setIsDragging(isDragging));
+			}
+			if (this.view.placeholders) {
+				this.view.placeholders.forEach(ph => ph.setIsVisible(isDragging));
+			}
 		}
 		this.view.setIsDragging(isDragging);
 	}

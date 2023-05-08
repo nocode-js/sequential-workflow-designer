@@ -7,8 +7,20 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	 * @default `light`
 	 */
 	theme?: string;
+
+	/**
+	 * @description The readonly mode of the designer.
+	 */
 	isReadonly?: boolean;
+
+	/**
+	 * @description The depth of the undo stack. If not set, undo/redo feature will be disabled.
+	 */
 	undoStackSize?: number;
+
+	/**
+	 * @description The common configuration of the steps.
+	 */
 	steps: StepsConfiguration;
 
 	/**
@@ -26,12 +38,55 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	 */
 	controlBar: boolean;
 
+	/**
+	 * @description The handler that handles custom actions.
+	 */
 	customActionHandler?: CustomActionHandler;
 
+	/**
+	 * @description The extensions of the designer.
+	 */
 	extensions?: DesignerExtension[];
 }
 
-export type CustomActionHandler = (action: string, step: Step) => void;
+export type CustomActionHandler = (
+	action: CustomAction,
+	step: Step | null,
+	sequence: Sequence,
+	context: CustomActionHandlerContext
+) => void;
+
+export interface CustomAction {
+	type: string;
+}
+
+export interface CustomActionHandlerContext {
+	/**
+	 * @description Notifies the designer that the name of the step has changed.
+	 * @param stepId The id of the step whose name has changed.
+	 */
+	notifyStepNameChanged(stepId: string): void;
+	/**
+	 * @description Notifies the designer that the properties of the step have changed.
+	 * @param stepId The id of the step whose properties have changed.
+	 */
+	notifyStepPropertiesChanged(stepId: string): void;
+	/**
+	 * @description Notifies the designer that the step has been inserted.
+	 * @param stepId The id of the inserted step.
+	 */
+	notifyStepInserted(stepId: string): void;
+	/**
+	 * @description Notifies the designer that the step has been moved.
+	 * @param stepId The id of the moved step.
+	 */
+	notifyStepMoved(stepId: string): void;
+	/**
+	 * @description Notifies the designer that the step has been deleted.
+	 * @param stepId The id of the deleted step.
+	 */
+	notifyStepDeleted(stepId: string): void;
+}
 
 export interface ToolboxConfiguration {
 	groups: ToolboxGroupConfiguration[];

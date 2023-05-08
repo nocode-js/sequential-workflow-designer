@@ -1,50 +1,42 @@
 import { Dom } from '../../core';
 import { Icons } from '../../core/icons';
+import { PlaceholderDirection, PlaceholderView } from '../component';
 
-const ICON_SIZE = 16;
-
-export enum RectPlaceholderDirection {
-	none = 0,
-	in = 1,
-	out = 2
-}
-
-export class RectPlaceholderView {
+export class RectPlaceholderView implements PlaceholderView {
 	public static create(
 		parent: SVGElement,
-		x: number,
-		y: number,
 		width: number,
 		height: number,
-		direction: RectPlaceholderDirection
+		radius: number,
+		iconSize: number,
+		direction: PlaceholderDirection
 	): RectPlaceholderView {
 		const g = Dom.svg('g', {
 			visibility: 'hidden',
 			class: 'sqd-placeholder'
 		});
-		Dom.translate(g, x, y);
 		parent.appendChild(g);
 
 		const rect = Dom.svg('rect', {
 			class: 'sqd-placeholder-rect',
 			width,
 			height,
-			rx: 6,
-			ry: 6
+			rx: radius,
+			ry: radius
 		});
 		g.appendChild(rect);
 
 		if (direction) {
-			const iconD = direction === RectPlaceholderDirection.in ? Icons.folderIn : Icons.folderOut;
-			const icon = Icons.appendPath(g, 'sqd-placeholder-icon-path', iconD, ICON_SIZE);
-			Dom.translate(icon, (width - ICON_SIZE) / 2, (height - ICON_SIZE) / 2);
+			const iconD = direction === PlaceholderDirection.in ? Icons.folderIn : Icons.folderOut;
+			const icon = Icons.appendPath(g, 'sqd-placeholder-icon-path', iconD, iconSize);
+			Dom.translate(icon, (width - iconSize) / 2, (height - iconSize) / 2);
 		}
 
 		parent.appendChild(g);
 		return new RectPlaceholderView(rect, g);
 	}
 
-	private constructor(public readonly rect: SVGElement, public readonly g: SVGElement) {}
+	private constructor(public readonly rect: SVGElement, public readonly g: SVGGElement) {}
 
 	public setIsHover(isHover: boolean) {
 		Dom.toggleClass(this.g, isHover, 'sqd-hover');

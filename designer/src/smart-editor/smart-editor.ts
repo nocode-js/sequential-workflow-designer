@@ -26,7 +26,7 @@ export class SmartEditor implements UiComponent {
 
 	private toggleIsCollapsedClick() {
 		this.setIsCollapsed(!this.isCollapsed);
-		this.workspaceApi.updateSize();
+		this.workspaceApi.updateCanvasSize();
 	}
 
 	public destroy() {

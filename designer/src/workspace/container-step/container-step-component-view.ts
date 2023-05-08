@@ -1,103 +1,69 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { SequentialStep } from '../../definition';
-import { ClickCommand, ClickCommandType, ClickDetails, StepComponentView } from '../component';
-import { SequenceComponent } from '../sequence/sequence-component';
+import { ClickDetails, StepComponentView } from '../component';
 import { InputView } from '../common-views/input-view';
 import { JoinView } from '../common-views/join-view';
-import { LabelView, LABEL_HEIGHT } from '../common-views/label-view';
+import { LabelView } from '../common-views/label-view';
 import { RegionView } from '../common-views/region-view';
-import { ComponentContext } from '../../component-context';
-import { StepContext } from '../../designer-extension';
-import { SequenceContext } from '../sequence/sequence-context';
+import { StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
+import { ContainerStepComponentViewConfiguration } from './container-step-component-view-configuration';
 
-const PADDING_TOP = 20;
-const PADDING_X = 20;
-
-export class ContainerStepComponentView implements StepComponentView {
-	public static create(
-		parentElement: SVGElement,
-		stepContext: StepContext<SequentialStep>,
-		componentContext: ComponentContext
-	): ContainerStepComponentView {
+export const createContainerStepComponentViewFactory =
+	(cfg: ContainerStepComponentViewConfiguration): StepComponentViewFactory =>
+	(parentElement: SVGElement, stepContext: StepContext<SequentialStep>, viewContext: StepComponentViewContext): StepComponentView => {
 		const { step } = stepContext;
 		const g = Dom.svg('g', {
 			class: `sqd-step-container sqd-type-${step.type}`
 		});
 		parentElement.appendChild(g);
 
-		const labelView = LabelView.create(g, PADDING_TOP, step.name, 'primary');
-		const sequenceContext: SequenceContext = {
-			sequence: step.sequence,
-			depth: stepContext.depth + 1,
-			isInputConnected: true,
-			isOutputConnected: stepContext.isOutputConnected
-		};
-		const component = SequenceComponent.create(g, sequenceContext, componentContext);
+		const labelView = LabelView.create(g, cfg.paddingTop, cfg.label, step.name, 'primary');
+		const sequenceComponent = viewContext.createSequenceComponent(g, step.sequence);
 
 		const halfOfWidestElement = labelView.width / 2;
-		const offsetLeft = Math.max(halfOfWidestElement - component.view.joinX, 0) + PADDING_X;
-		const offsetRight = Math.max(halfOfWidestElement - (component.view.width - component.view.joinX), 0) + PADDING_X;
+		const offsetLeft = Math.max(halfOfWidestElement - sequenceComponent.view.joinX, 0) + cfg.paddingX;
+		const offsetRight = Math.max(halfOfWidestElement - (sequenceComponent.view.width - sequenceComponent.view.joinX), 0) + cfg.paddingX;
 
-		const viewWidth = offsetLeft + component.view.width + offsetRight;
-		const viewHeight = PADDING_TOP + LABEL_HEIGHT + component.view.height;
-		const joinX = component.view.joinX + offsetLeft;
+		const width = offsetLeft + sequenceComponent.view.width + offsetRight;
+		const height = cfg.paddingTop + cfg.label.height + sequenceComponent.view.height;
+		const joinX = sequenceComponent.view.joinX + offsetLeft;
 
 		Dom.translate(labelView.g, joinX, 0);
-		Dom.translate(component.view.g, offsetLeft, PADDING_TOP + LABEL_HEIGHT);
+		Dom.translate(sequenceComponent.view.g, offsetLeft, cfg.paddingTop + cfg.label.height);
 
-		const iconUrl = componentContext.configuration.iconUrlProvider
-			? componentContext.configuration.iconUrlProvider(step.componentType, step.type)
-			: null;
-		const inputView = InputView.createRectInput(g, joinX, 0, iconUrl);
+		const iconUrl = viewContext.getStepIconUrl();
+		const inputView = InputView.createRectInput(g, joinX, 0, cfg.inputSize, cfg.inputIconSize, iconUrl);
 
-		JoinView.createStraightJoin(g, new Vector(joinX, 0), PADDING_TOP);
+		JoinView.createStraightJoin(g, new Vector(joinX, 0), cfg.paddingTop);
 
-		const regionView = RegionView.create(g, [viewWidth], viewHeight);
+		const regionView = RegionView.create(g, [width], height);
 
-		return new ContainerStepComponentView(g, viewWidth, viewHeight, joinX, component, inputView, regionView);
-	}
+		return {
+			g,
+			width,
+			height,
+			joinX,
+			placeholders: null,
+			sequenceComponents: [sequenceComponent],
 
-	public readonly sequenceComponents = [this.sequenceComponent];
-	public readonly placeholders = null;
-
-	private constructor(
-		public readonly g: SVGGElement,
-		public readonly width: number,
-		public readonly height: number,
-		public readonly joinX: number,
-		private readonly sequenceComponent: SequenceComponent,
-		private readonly inputView: InputView,
-		private readonly regionView: RegionView
-	) {}
-
-	public getClientPosition(): Vector {
-		return this.regionView.getClientPosition();
-	}
-
-	public resolveClick(click: ClickDetails): ClickCommand | null {
-		if (this.regionView.resolveClick(click) || this.g.contains(click.element)) {
-			return {
-				type: ClickCommandType.selectStep
-			};
-		}
-		return null;
-	}
-
-	public setIsDragging(isDragging: boolean) {
-		this.inputView.setIsHidden(isDragging);
-		this.sequenceComponent.setIsDragging(isDragging);
-	}
-
-	public setIsSelected(isSelected: boolean) {
-		this.regionView.setIsSelected(isSelected);
-	}
-
-	public setIsDisabled(isDisabled: boolean) {
-		Dom.toggleClass(this.g, isDisabled, 'sqd-disabled');
-	}
-
-	public hasOutput(): boolean {
-		return this.sequenceComponent.hasOutput;
-	}
-}
+			getClientPosition(): Vector {
+				return regionView.getClientPosition();
+			},
+			resolveClick(click: ClickDetails): true | null {
+				return regionView.resolveClick(click) || g.contains(click.element) ? true : null;
+			},
+			setIsDragging(isDragging: boolean) {
+				inputView.setIsHidden(isDragging);
+			},
+			setIsSelected(isSelected: boolean) {
+				regionView.setIsSelected(isSelected);
+			},
+			setIsDisabled(isDisabled: boolean) {
+				Dom.toggleClass(g, isDisabled, 'sqd-disabled');
+			},
+			hasOutput(): boolean {
+				return sequenceComponent.hasOutput;
+			}
+		};
+	};

@@ -1,35 +1,38 @@
 import { Dom } from '../../core/dom';
-
-export const LABEL_HEIGHT = 22;
-const LABEL_PADDING_X = 10;
-const MIN_LABEL_WIDTH = 50;
+import { LabelViewConfiguration } from './label-view-configuration';
 
 export class LabelView {
-	public static create(parent: SVGElement, y: number, text: string, theme: 'primary' | 'secondary'): LabelView {
+	public static create(
+		parent: SVGElement,
+		y: number,
+		cfg: LabelViewConfiguration,
+		text: string,
+		theme: 'primary' | 'secondary'
+	): LabelView {
 		const g = Dom.svg('g', {
-			class: 'sqd-label'
+			class: `sqd-label sqd-label-${theme}`
 		});
 		parent.appendChild(g);
 
 		const nameText = Dom.svg('text', {
 			class: 'sqd-label-text',
-			y: y + LABEL_HEIGHT / 2
+			y: y + cfg.height / 2
 		});
 		nameText.textContent = text;
 		g.appendChild(nameText);
-		const width = Math.max(nameText.getBBox().width + LABEL_PADDING_X * 2, MIN_LABEL_WIDTH);
+		const width = Math.max(nameText.getBBox().width + cfg.paddingX * 2, cfg.minWidth);
 
 		const nameRect = Dom.svg('rect', {
-			class: `sqd-label-rect sqd-label-${theme}`,
+			class: 'sqd-label-rect',
 			width: width,
-			height: LABEL_HEIGHT,
-			x: -width / 2,
-			y,
-			rx: 10,
-			ry: 10
+			height: cfg.height,
+			x: -width / 2 + 0.5,
+			y: y + 0.5,
+			rx: cfg.radius,
+			ry: cfg.radius
 		});
 		g.insertBefore(nameRect, nameText);
-		return new LabelView(g, width, LABEL_HEIGHT);
+		return new LabelView(g, width, cfg.height);
 	}
 
 	public constructor(public readonly g: SVGGElement, public readonly width: number, public readonly height: number) {}

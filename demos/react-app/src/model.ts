@@ -16,8 +16,8 @@ export interface TaskStep extends Step {
 }
 
 export interface SwitchStep extends BranchedStep {
+	componentType: 'switch';
 	type: 'switch';
-	name: 'switch';
 	properties: {
 		x?: string;
 		y?: string;

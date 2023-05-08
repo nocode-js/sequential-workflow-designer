@@ -1,18 +1,32 @@
-import { ComponentContext } from '../../component-context';
 import { Step } from '../../definition';
-import { StepChildren, StepExtension, StepContext } from '../../designer-extension';
-import { TaskStepComponentView } from './task-step-component-view';
+import { StepChildren, StepExtension } from '../../designer-extension';
+import { createTaskStepComponentViewFactory } from './task-step-component-view';
+import { TaskStepExtensionConfiguration } from './task-step-extension-configuration';
+
+const defaultConfiguration: TaskStepExtensionConfiguration = {
+	view: {
+		paddingLeft: 12,
+		paddingRight: 12,
+		paddingY: 10,
+		textMarginLeft: 12,
+		minTextWidth: 70,
+		iconSize: 22,
+		radius: 5,
+		inputSize: 14,
+		outputSize: 10
+	}
+};
 
 export class TaskStepExtension implements StepExtension<Step> {
+	public static create(configuration?: TaskStepExtensionConfiguration): TaskStepExtension {
+		return new TaskStepExtension(configuration ?? defaultConfiguration);
+	}
+
 	public readonly componentType = 'task';
 
-	public createComponentView(
-		parentElement: SVGElement,
-		stepContext: StepContext<Step>,
-		componentContext: ComponentContext
-	): TaskStepComponentView {
-		return TaskStepComponentView.create(parentElement, stepContext, componentContext.configuration, false);
-	}
+	private constructor(private readonly configuration: TaskStepExtensionConfiguration) {}
+
+	public readonly createComponentView = createTaskStepComponentViewFactory(false, this.configuration.view);
 
 	public getChildren(): StepChildren | null {
 		return null;
