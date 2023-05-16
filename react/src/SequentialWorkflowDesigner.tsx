@@ -12,7 +12,8 @@ import {
 	CustomActionHandler,
 	CustomActionHandlerContext,
 	CustomAction,
-	Sequence
+	Sequence,
+	ValidatorConfiguration
 } from 'sequential-workflow-designer';
 import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -35,6 +36,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	theme?: string;
 	undoStackSize?: number;
 	stepsConfiguration: StepsConfiguration;
+	validatorConfiguration?: ValidatorConfiguration;
 	toolboxConfiguration: false | ToolboxConfiguration;
 	/**
 	 * @description If true, the control bar will be displayed.
@@ -64,6 +66,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const theme = props.theme;
 	const undoStackSize = props.undoStackSize;
 	const steps = props.stepsConfiguration;
+	const validator = props.validatorConfiguration;
 	const toolbox = props.toolboxConfiguration;
 	const controlBar = props.controlBar;
 	const extensions = props.extensions;
@@ -176,6 +179,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 			undoStackSize,
 			toolbox,
 			steps,
+			validator,
 			controlBar,
 			editors:
 				globalEditorRef.current && stepEditorRef.current
@@ -208,7 +212,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		});
 
 		designerRef.current = designer;
-	}, [placeholder, definition, selectedStepId, isReadonly, theme, undoStackSize, toolbox, controlBar, steps, extensions]);
+	}, [placeholder, definition, selectedStepId, isReadonly, theme, undoStackSize, toolbox, controlBar, steps, validator, extensions]);
 
 	useEffect(() => {
 		return tryDestroy;

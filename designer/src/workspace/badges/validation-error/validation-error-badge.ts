@@ -1,31 +1,39 @@
 import { ComponentContext } from '../../../component-context';
-import { StepValidator } from '../../../designer-configuration';
 import { StepContext } from '../../../designer-extension';
 import { Badge } from '../../component';
 import { ValidationErrorBadgeView } from './validation-error-badge-view';
 import { ValidationErrorBadgeViewConfiguration } from './validation-error-badge-view-configuration';
 
 export class ValidationErrorBadge implements Badge {
-	public static create(
+	public static createForStep(
 		parentElement: SVGElement,
 		stepContext: StepContext,
 		componentContext: ComponentContext,
 		configuration: ValidationErrorBadgeViewConfiguration
 	): ValidationErrorBadge {
-		return new ValidationErrorBadge(parentElement, stepContext, componentContext.configuration.validator, configuration);
+		const validator = () => componentContext.validator.validateStep(stepContext.step, stepContext.parentSequence);
+		return new ValidationErrorBadge(parentElement, validator, configuration);
+	}
+
+	public static createForRoot(
+		parentElement: SVGElement,
+		componentContext: ComponentContext,
+		configuration: ValidationErrorBadgeViewConfiguration
+	) {
+		const validator = () => componentContext.validator.validateRoot();
+		return new ValidationErrorBadge(parentElement, validator, configuration);
 	}
 
 	public view: ValidationErrorBadgeView | null = null;
 
 	private constructor(
 		private readonly parentElement: SVGElement,
-		private readonly stepContext: StepContext,
-		private readonly validator: StepValidator | undefined,
+		private readonly validator: () => boolean,
 		private readonly configuration: ValidationErrorBadgeViewConfiguration
 	) {}
 
 	public update(result: unknown): unknown {
-		const isValid = this.validator ? this.validator(this.stepContext.step, this.stepContext.parentSequence) : true;
+		const isValid = this.validator();
 
 		if (isValid) {
 			if (this.view) {

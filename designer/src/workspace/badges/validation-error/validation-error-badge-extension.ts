@@ -21,8 +21,12 @@ export class ValidationErrorBadgeExtension implements BadgeExtension {
 
 	private constructor(private readonly configuration: ValidationErrorBadgeExtensionConfiguration) {}
 
-	public createBadge(parentElement: SVGElement, stepContext: StepContext<Step>, componentContext: ComponentContext): Badge {
-		return ValidationErrorBadge.create(parentElement, stepContext, componentContext, this.configuration.view);
+	public createForStep(parentElement: SVGElement, stepContext: StepContext<Step>, componentContext: ComponentContext): Badge {
+		return ValidationErrorBadge.createForStep(parentElement, stepContext, componentContext, this.configuration.view);
+	}
+
+	public createForRoot(parentElement: SVGElement, componentContext: ComponentContext): Badge {
+		return ValidationErrorBadge.createForRoot(parentElement, componentContext, this.configuration.view);
 	}
 
 	public readonly createStartValue = () => true;

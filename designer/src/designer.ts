@@ -7,7 +7,7 @@ import { DesignerView } from './designer-view';
 import { DesignerState } from './designer-state';
 import { StepOrName, StepsTraverser } from './core/steps-traverser';
 import { ServicesResolver } from './services';
-import { validateConfiguration } from './designer-configuration-validator';
+import { validateConfiguration } from './core/designer-configuration-validator';
 import { DesignerApi } from './api';
 
 export class Designer<TDefinition extends Definition = Definition> {

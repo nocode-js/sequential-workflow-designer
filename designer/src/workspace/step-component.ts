@@ -6,7 +6,7 @@ import { BadgesResult, ClickDetails, ClickCommand, Component, Placeholder, StepC
 
 export class StepComponent implements Component {
 	public static create(view: StepComponentView, stepContext: StepContext, componentContext: ComponentContext) {
-		const badges = Badges.create(stepContext, view, componentContext);
+		const badges = Badges.createForStep(stepContext, view, componentContext);
 		return new StepComponent(view, stepContext.step, stepContext.parentSequence, view.hasOutput(), badges);
 	}
 

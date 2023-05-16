@@ -36,7 +36,13 @@ export class DesignerContext {
 			historyController = HistoryController.create(state, definitionModifier, configuration);
 		}
 
-		const componentContext = ComponentContext.create(configuration.steps, stepExtensionResolver, services);
+		const componentContext = ComponentContext.create(
+			configuration.steps,
+			configuration.validator,
+			state,
+			stepExtensionResolver,
+			services
+		);
 
 		return new DesignerContext(
 			state,

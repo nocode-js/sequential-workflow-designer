@@ -140,8 +140,7 @@ function initDesigner(testCaseName) {
 		toolbox: false,
 
 		steps: {
-			iconUrlProvider: () => './assets/icon-task.svg',
-			validator: () => true
+			iconUrlProvider: () => './assets/icon-task.svg'
 		},
 
 		editors: {

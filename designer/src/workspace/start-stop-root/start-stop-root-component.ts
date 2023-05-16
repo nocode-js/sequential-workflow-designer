@@ -45,6 +45,7 @@ export class StartStopRootComponent implements Component {
 	}
 
 	public updateBadges(result: BadgesResult) {
+		this.view.badges.update(result);
 		this.view.component.updateBadges(result);
 	}
 }

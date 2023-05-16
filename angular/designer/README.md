@@ -57,6 +57,7 @@ export class AppComponent {
   public definition: Definition = { /* ... */ };
   public toolboxConfiguration: ToolboxConfiguration = { /* ... */ };
   public stepsConfiguration: StepsConfiguration = { /* ... */ };
+  public validatorConfiguration: ValidatorConfiguration = { /* ... */ };
   // ...
 }
 ```
@@ -147,6 +148,7 @@ At the end attach the designer:
   [definition]="startDefinition"
   [toolboxConfiguration]="toolboxConfiguration"
   [stepsConfiguration]="stepsConfiguration"
+  [validatorConfiguration]="validatorConfiguration"
   [controlBar]="true"
   [areEditorsHidden]="false"
   [globalEditor]="globalEditor"

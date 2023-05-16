@@ -39,6 +39,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	controlBar: boolean;
 
 	/**
+	 * @description The configuration of validators.
+	 */
+	validator?: ValidatorConfiguration;
+
+	/**
 	 * @description The handler that handles custom actions.
 	 */
 	customActionHandler?: CustomActionHandler;
@@ -107,12 +112,17 @@ export interface StepsConfiguration {
 	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
 
 	iconUrlProvider?: StepIconUrlProvider;
-	validator?: StepValidator;
 }
 
 export type StepIconUrlProvider = (componentType: ComponentType, type: string) => string | null;
 
-export type StepValidator = (step: Step, parentSequence: Sequence) => boolean;
+export interface ValidatorConfiguration {
+	step?: StepValidator;
+	root?: RootValidator;
+}
+
+export type StepValidator = (step: Step, parentSequence: Sequence, definition: Definition) => boolean;
+export type RootValidator = (definition: Definition) => boolean;
 
 export interface EditorsConfiguration<TDefinition extends Definition = Definition> {
 	stepEditorProvider: StepEditorProvider;

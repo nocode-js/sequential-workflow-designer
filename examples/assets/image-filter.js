@@ -111,8 +111,6 @@ const configuration = {
 		iconUrlProvider: () => {
 			return `./assets/icon-filter.svg`
 		},
-
-		validator: () => true
 	},
 
 	controlBar: true,

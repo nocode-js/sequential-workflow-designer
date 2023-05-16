@@ -4,10 +4,8 @@ import { SequenceContext, StepComponentViewContext, StepContext } from '../desig
 
 export class StepComponentViewContextFactory {
 	public static create<S extends Step>(stepContext: StepContext<S>, componentContext: ComponentContext): StepComponentViewContext {
-		const iconUrlProvider = componentContext.configuration.iconUrlProvider;
-
 		return {
-			getStepIconUrl: iconUrlProvider ? () => iconUrlProvider(stepContext.step.componentType, stepContext.step.type) : () => null,
+			getStepIconUrl: () => componentContext.iconProvider.getIconUrl(stepContext.step),
 			createSequenceComponent: (parentElement: SVGElement, sequence: Sequence) => {
 				const sequenceContext: SequenceContext = {
 					sequence,
