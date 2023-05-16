@@ -21,7 +21,8 @@ import {
 	Step,
 	StepEditorContext,
 	StepsConfiguration,
-	ToolboxConfiguration
+	ToolboxConfiguration,
+	ValidatorConfiguration
 } from 'sequential-workflow-designer';
 
 export interface GlobalEditorWrapper {
@@ -53,6 +54,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public definition?: Definition;
 	@Input('stepsConfiguration')
 	public stepsConfiguration?: StepsConfiguration;
+	@Input('validatorConfiguration')
+	public validatorConfiguration?: ValidatorConfiguration;
 	@Input('toolboxConfiguration')
 	public toolboxConfiguration?: ToolboxConfiguration | false;
 	@Input('controlBar')
@@ -129,6 +132,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 							stepEditorProvider: this.stepEditorProvider
 					  },
 				steps: this.stepsConfiguration,
+				validator: this.validatorConfiguration,
 				toolbox: this.toolboxConfiguration,
 				controlBar: this.controlBar,
 				extensions: this.extensions

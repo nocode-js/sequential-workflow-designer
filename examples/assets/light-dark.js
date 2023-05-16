@@ -39,8 +39,11 @@ function install(placeholder, theme) {
 		steps: {
 			iconUrlProvider: () => {
 				return './assets/icon-task.svg';
-			},
-			validator: () => {
+			}
+		},
+
+		validator: {
+			step: () => {
 				return Math.random() > 0.5;
 			}
 		},

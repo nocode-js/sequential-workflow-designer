@@ -7,7 +7,8 @@ import {
 	Step,
 	StepEditorContext,
 	StepsConfiguration,
-	ToolboxConfiguration
+	ToolboxConfiguration,
+	ValidatorConfiguration
 } from 'sequential-workflow-designer';
 
 function createDefinition() {
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit {
 
 	public definition: Definition = createDefinition();
 	public definitionJSON?: string;
+	public isValid?: boolean;
 
 	public readonly toolboxConfiguration: ToolboxConfiguration = {
 		groups: [
@@ -45,8 +47,11 @@ export class AppComponent implements OnInit {
 		]
 	};
 	public readonly stepsConfiguration: StepsConfiguration = {
-		iconUrlProvider: () => './assets/angular-icon.svg',
-		validator: () => true
+		iconUrlProvider: () => './assets/angular-icon.svg'
+	};
+	public readonly validatorConfiguration: ValidatorConfiguration = {
+		step: (step: Step) => !!step.name && Number(step.properties['velocity']) >= 0,
+		root: (definition: Definition) => Number(definition.properties['velocity']) >= 0
 	};
 
 	public ngOnInit() {
@@ -55,11 +60,13 @@ export class AppComponent implements OnInit {
 
 	public onDesignerReady(designer: Designer) {
 		this.designer = designer;
+		this.updateIsValid();
 		console.log('designer ready', this.designer);
 	}
 
 	public onDefinitionChanged(definition: Definition) {
 		this.definition = definition;
+		this.updateIsValid();
 		this.updateDefinitionJSON();
 		console.log('definition changed');
 	}
@@ -81,5 +88,9 @@ export class AppComponent implements OnInit {
 
 	private updateDefinitionJSON() {
 		this.definitionJSON = JSON.stringify(this.definition, null, 2);
+	}
+
+	private updateIsValid() {
+		this.isValid = this.designer?.isValid();
 	}
 }

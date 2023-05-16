@@ -5,6 +5,7 @@ import { ComponentView, Placeholder, PlaceholderDirection, SequenceComponent } f
 import { ComponentContext } from '../../component-context';
 import { DefaultSequenceComponent } from '../sequence/default-sequence-component';
 import { SequencePlaceIndicator } from '../../designer-extension';
+import { Badges } from '../badges/badges';
 
 const SIZE = 30;
 const DEFAULT_ICON_SIZE = 22;
@@ -71,6 +72,8 @@ export class StartStopRootComponentView implements ComponentView {
 			Dom.translate(endPlaceholder.view.g, x, endY);
 		}
 
+		const badges = Badges.createForRoot(g, new Vector(x + SIZE, 0), context);
+
 		return new StartStopRootComponentView(
 			g,
 			view.width,
@@ -78,7 +81,8 @@ export class StartStopRootComponentView implements ComponentView {
 			view.joinX,
 			sequenceComponent,
 			startPlaceholder,
-			endPlaceholder
+			endPlaceholder,
+			badges
 		);
 	}
 
@@ -89,7 +93,8 @@ export class StartStopRootComponentView implements ComponentView {
 		public readonly joinX: number,
 		public readonly component: SequenceComponent,
 		public readonly startPlaceholder: Placeholder | null,
-		public readonly endPlaceholder: Placeholder | null
+		public readonly endPlaceholder: Placeholder | null,
+		public readonly badges: Badges
 	) {}
 
 	public destroy() {

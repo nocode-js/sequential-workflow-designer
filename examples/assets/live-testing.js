@@ -42,6 +42,10 @@ function onRunClicked() {
 	if (designer.isReadonly()) {
 		return;
 	}
+	if (!designer.isValid()) {
+		window.alert('The definition is invalid');
+		return;
+	}
 
 	designer.setIsReadonly(true);
 
@@ -194,8 +198,14 @@ const configuration = {
 			const fileName = supportedIcons.includes(type) ? type : 'task';
 			return `./assets/icon-${fileName}.svg`;
 		},
-		validator: (step) => {
+	},
+
+	validator: {
+		step: (step) => {
 			return Object.keys(step.properties).every(n => !!step.properties[n]);
+		},
+		root: (definition) => {
+			return definition.properties['speed'] > 0;
 		}
 	},
 

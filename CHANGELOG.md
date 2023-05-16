@@ -1,3 +1,26 @@
+## 0.12.0
+
+The designer has allowed only the validation of the steps so far. The root of the definition could be edited by the global editor, but the validation was not possible. This version adds a new type of the validator: the root validator. The new validator affects on the result of the definition validation (`designer.isValid()`).
+
+### Breaking Changes
+
+* The `validator` property in the `steps` group of the configuration is deleted. Use the `step` property in the `validator` group instead. 
+* The step validator has a new parameter: `definition`.
+* Added the root validator.
+
+```js
+const configuration = {
+  steps: {
+    validator: /* DEPRECIATED */,
+  },
+  validator: {
+    step: (step, parentSequence, definition) => { /* ... */ },
+    root: (definition) => { /* ... */ }
+  },
+  // ...
+};
+```
+
 ## 0.11.0
 
 ### Breaking Changes

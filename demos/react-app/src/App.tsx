@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration } from 'sequential-workflow-designer';
+import { ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration, ValidatorConfiguration } from 'sequential-workflow-designer';
 import { SequentialWorkflowDesigner, wrapDefinition } from 'sequential-workflow-designer-react';
 import { GlobalEditor } from './GlobalEditor';
 import { StepEditor } from './StepEditor';
@@ -8,7 +8,9 @@ import { WorkflowDefinition } from './model';
 import { useSequentialWorkflowDesignerController } from 'sequential-workflow-designer-react';
 
 const startDefinition: WorkflowDefinition = {
-	properties: {},
+	properties: {
+		alfa: 'bravo'
+	},
 	sequence: [createTaskStep(), createSwitchStep()]
 };
 
@@ -17,7 +19,12 @@ const toolboxConfiguration: ToolboxConfiguration = {
 };
 
 const stepsConfiguration: StepsConfiguration = {
-	validator: (step: Step) => Boolean(step.name)
+	iconUrlProvider: () => null
+};
+
+const validatorConfiguration: ValidatorConfiguration = {
+	step: (step: Step) => Boolean(step.name),
+	root: (definition: WorkflowDefinition) => Boolean(definition.properties.alfa)
 };
 
 export function App() {
@@ -69,6 +76,7 @@ export function App() {
 					onSelectedStepIdChanged={setSelectedStepId}
 					toolboxConfiguration={toolboxConfiguration}
 					stepsConfiguration={stepsConfiguration}
+					validatorConfiguration={validatorConfiguration}
 					controlBar={true}
 					globalEditor={<GlobalEditor />}
 					stepEditor={<StepEditor />}

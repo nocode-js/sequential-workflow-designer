@@ -90,10 +90,12 @@ const configuration = {
 		iconUrlProvider: (componentType, type) => {
 			return `./assets/icon-${type}.svg`
 		},
+	},
 
-		validator: (step) => {
+	validator: {
+		step: (step) => {
 			return !step.properties['isInvalid'];
-		},
+		}
 	},
 
 	editors: {

@@ -14,7 +14,13 @@ export class DesignerApi {
 
 		return new DesignerApi(
 			new ControlBarApi(context.state, context.historyController, context.definitionModifier, viewport),
-			new ToolboxApi(context.state, context, context.behaviorController, context.layoutController, context.configuration.steps),
+			new ToolboxApi(
+				context.state,
+				context,
+				context.behaviorController,
+				context.layoutController,
+				context.componentContext.iconProvider
+			),
 			new EditorApi(context.state, context.stepsTraverser, context.layoutController, context.definitionModifier),
 			workspace,
 			viewport,

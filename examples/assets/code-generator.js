@@ -199,9 +199,6 @@ const configuration = {
 			const fileName = supportedIcons.includes(type) ? type : 'task';
 			return `./assets/icon-${fileName}.svg`;
 		},
-		validator: () => {
-			return true;
-		},
 		canInsertStep: (step, targetSequence) => {
 			return canPlaceStep(step, targetSequence);
 		},
@@ -210,6 +207,18 @@ const configuration = {
 		},
 		canDeleteStep: (step) => {
 			return confirm(`Are you sure? (${step.name})`);
+		}
+	},
+
+	validator: {
+		step: (step) => {
+			return Object.keys(step.properties).every(name => {
+				const value = step.properties[name];
+				return value === 0 || Boolean(value);
+			});
+		},
+		root: () => {
+			return true;
 		}
 	},
 

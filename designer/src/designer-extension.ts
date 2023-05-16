@@ -76,7 +76,8 @@ export interface StepComponentViewWrapperExtension {
 
 export interface BadgeExtension {
 	id: string;
-	createBadge(parentElement: SVGElement, stepContext: StepContext, componentContext: ComponentContext): Badge;
+	createForStep(parentElement: SVGElement, stepContext: StepContext, componentContext: ComponentContext): Badge;
+	createForRoot?: (parentElement: SVGElement, componentContext: ComponentContext) => Badge;
 	createStartValue(): unknown;
 }
 

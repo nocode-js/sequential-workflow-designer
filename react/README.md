@@ -28,7 +28,8 @@ Import types:
 import {
   Definition,
   ToolboxConfiguration,
-  StepsConfiguration
+  StepsConfiguration,
+  ValidatorConfiguration
 } from 'sequential-workflow-designer';
 import {
   SequentialWorkflowDesigner,
@@ -55,6 +56,7 @@ Configure the designer.
 ```ts
 const toolboxConfiguration: ToolboxConfiguration = { /* ... */ };
 const stepsConfiguration: StepsConfiguration = { /* ... */ };
+const validatorConfiguration: ValidatorConfiguration = { /* ... */ };
 ```
 
 Create the global editor component:
@@ -102,6 +104,7 @@ At the end attach the designer.
   definition={definition}
   onDefinitionChange={setDefinition}
   stepsConfiguration={stepsConfiguration}
+  validatorConfiguration={validatorConfiguration}
   toolboxConfiguration={toolboxConfiguration}
   controlBar={true}
   globalEditor={<GlobalEditor />}

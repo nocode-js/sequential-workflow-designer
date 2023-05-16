@@ -32,8 +32,6 @@ const configuration = {
 		iconUrlProvider: () => {
 			return `./assets/icon-task.svg`
 		},
-
-		validator: () => true
 	},
 
 	editors: {

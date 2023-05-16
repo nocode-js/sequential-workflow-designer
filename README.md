@@ -89,10 +89,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.11.0/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.11.0/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.11.0/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.11.0/dist/index.umd.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.12.0/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.12.0/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.12.0/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.12.0/dist/index.umd.js"></script>
 ```
 
 Call the designer by:
@@ -131,9 +131,7 @@ const configuration = {
     iconUrlProvider: (componentType, type) => {
       return `icon-${componentType}-${type}.svg`;
     },
-    validator: (step, sourceSequence) => {
-      return /^[a-z]+$/.test(step.name);
-    },
+
     isDraggable: (step, parentSequence) => {
       return step.name !== 'y';
     },
@@ -148,6 +146,17 @@ const configuration = {
     },
     canDeleteStep: (step, parentSequence) => {
       return step.name !== 'x';
+    }
+  },
+
+  validator: {
+    // all validators are optional
+
+    step: (step, parentSequence, definition) => {
+      return /^[a-z]+$/.test(step.name);
+    },
+    root: (definition) => {
+      return definition.properties['memory'] > 256;
     }
   },
 
