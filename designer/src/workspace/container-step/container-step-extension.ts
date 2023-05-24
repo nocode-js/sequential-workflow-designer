@@ -1,5 +1,5 @@
 import { SequentialStep } from '../../definition';
-import { StepChildren, StepChildrenType, StepExtension } from '../../designer-extension';
+import { StepExtension } from '../../designer-extension';
 import { createContainerStepComponentViewFactory } from './container-step-component-view';
 import { ContainerStepExtensionConfiguration } from './container-step-extension-configuration';
 
@@ -28,11 +28,4 @@ export class ContainerStepExtension implements StepExtension<SequentialStep> {
 	private constructor(private readonly configuration: ContainerStepExtensionConfiguration) {}
 
 	public readonly createComponentView = createContainerStepComponentViewFactory(this.configuration.view);
-
-	public getChildren(step: SequentialStep): StepChildren {
-		return {
-			type: StepChildrenType.singleSequence,
-			sequences: step.sequence
-		};
-	}
 }

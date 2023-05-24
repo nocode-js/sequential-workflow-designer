@@ -1,6 +1,6 @@
 import { race } from '../core/simple-event-race';
 import { Vector } from '../core/vector';
-import { Sequence } from '../definition';
+import { DefinitionWalker, Sequence, StepChildrenType } from '../definition';
 import { DesignerContext } from '../designer-context';
 import { Component, Placeholder } from './component';
 import { WorkspaceView } from './workspace-view';
@@ -8,7 +8,6 @@ import { DefinitionChangedEvent, DefinitionChangeType, DesignerState } from '../
 import { WorkspaceController } from './workspace-controller';
 import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
-import { StepsTraverser } from '../core/steps-traverser';
 import { SimpleEvent } from '../core/simple-event';
 import { SequencePlaceIndicator, Viewport, WheelController } from '../designer-extension';
 import { DesignerApi } from '../api/designer-api';
@@ -26,7 +25,7 @@ export class Workspace implements WorkspaceController {
 		const wheelController = designerContext.services.wheelController.create(api.workspace);
 		const workspace = new Workspace(
 			view,
-			designerContext.stepsTraverser,
+			designerContext.definitionWalker,
 			designerContext.state,
 			designerContext.behaviorController,
 			wheelController,
@@ -67,7 +66,7 @@ export class Workspace implements WorkspaceController {
 
 	private constructor(
 		private readonly view: WorkspaceView,
-		private readonly stepsTraverser: StepsTraverser,
+		private readonly definitionWalker: DefinitionWalker,
 		private readonly state: DesignerState,
 		private readonly behaviorController: BehaviorController,
 		private readonly wheelController: WheelController,
@@ -84,11 +83,16 @@ export class Workspace implements WorkspaceController {
 
 		const stepId = this.state.tryGetLastStepIdFromFolderPath();
 		if (stepId) {
-			const result = this.stepsTraverser.getChildAndParentSequences(this.state.definition, stepId);
-			sequence = result.childSequence;
+			const parentSequence = this.definitionWalker.getParentSequence(this.state.definition, stepId);
+			const children = this.definitionWalker.getChildren(parentSequence.step);
+			if (!children || children.type !== StepChildrenType.sequence) {
+				throw new Error('Cannot find single sequence in folder step');
+			}
+			sequence = children.items as Sequence;
+
 			parentSequencePlaceIndicator = {
-				sequence: result.parentSequence,
-				index: result.index
+				sequence: parentSequence.parentSequence,
+				index: parentSequence.index
 			};
 		} else {
 			sequence = this.state.definition.sequence;

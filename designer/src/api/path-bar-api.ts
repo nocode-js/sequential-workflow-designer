@@ -1,8 +1,9 @@
-import { race, StepsTraverser } from '../core';
+import { race } from '../core';
+import { DefinitionWalker } from '../definition';
 import { DesignerState } from '../designer-state';
 
 export class PathBarApi {
-	public constructor(private readonly state: DesignerState, private readonly stepsTraverser: StepsTraverser) {}
+	public constructor(private readonly state: DesignerState, private readonly definitionWalker: DefinitionWalker) {}
 
 	/**
 	 * @deprecated Don't use this method
@@ -23,7 +24,7 @@ export class PathBarApi {
 
 	public getFolderPathStepNames(): string[] {
 		return this.state.folderPath.map(stepId => {
-			return this.stepsTraverser.getById(this.state.definition, stepId).name;
+			return this.definitionWalker.getById(this.state.definition, stepId).name;
 		});
 	}
 }

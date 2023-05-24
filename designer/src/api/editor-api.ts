@@ -1,15 +1,14 @@
-import { StepsTraverser } from '../core';
 import { DefinitionChangeType, DesignerState } from '../designer-state';
 import { DefinitionModifier } from '../definition-modifier';
 import { GlobalEditorContext, StepEditorContext } from '../designer-configuration';
 import { EditorRenderer, EditorRendererHandler } from './editor-renderer';
 import { LayoutController } from '../layout-controller';
-import { Definition } from '../definition';
+import { Definition, DefinitionWalker } from '../definition';
 
 export class EditorApi {
 	public constructor(
 		private readonly state: DesignerState,
-		private readonly stepsTraverser: StepsTraverser,
+		private readonly definitionWalker: DefinitionWalker,
 		private readonly layoutController: LayoutController,
 		private readonly definitionModifier: DefinitionModifier
 	) {}
@@ -23,7 +22,7 @@ export class EditorApi {
 	}
 
 	public runRenderer(rendererHandler: EditorRendererHandler): EditorRenderer {
-		return EditorRenderer.create(this.state, this.stepsTraverser, rendererHandler);
+		return EditorRenderer.create(this.state, this.definitionWalker, rendererHandler);
 	}
 
 	public createStepEditorContext(stepId: string): StepEditorContext {

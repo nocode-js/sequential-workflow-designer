@@ -1,10 +1,6 @@
-import { StepsTraverser } from '../core';
 import { DefinitionChangeType, DesignerState } from '../designer-state';
-import { createDesignerConfigurationStub } from '../test-tools/stubs';
 import { EditorRenderer } from './editor-renderer';
-import { ServicesResolver } from '../services';
-import { StepExtensionResolver } from '../workspace';
-import { Definition, Step } from '../definition';
+import { Definition, DefinitionWalker, Step } from '../definition';
 
 const step: Step = {
 	componentType: 'task',
@@ -20,21 +16,18 @@ const definition: Definition = {
 };
 
 describe('EditorRenderer', () => {
-	let traverser: StepsTraverser;
+	let walker: DefinitionWalker;
 	let state: DesignerState;
 	let callback: jasmine.Spy;
 
 	beforeEach(() => {
-		const configuration = createDesignerConfigurationStub();
-		const services = ServicesResolver.resolve([], configuration);
-		const extensionResolver = StepExtensionResolver.create(services);
-		traverser = new StepsTraverser(extensionResolver);
+		walker = new DefinitionWalker();
 		state = new DesignerState(definition, false);
 		callback = jasmine.createSpy('callback');
 	});
 
 	function createRenderer() {
-		return EditorRenderer.create(state, traverser, callback);
+		return EditorRenderer.create(state, walker, callback);
 	}
 
 	it('calls callbacks with null if any step is not selected at start', () => {

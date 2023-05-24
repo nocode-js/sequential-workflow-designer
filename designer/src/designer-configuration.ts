@@ -1,4 +1,4 @@
-import { ComponentType, Definition, Sequence, Step } from './definition';
+import { ComponentType, Definition, DefinitionWalker, Sequence, Step } from './definition';
 import { DesignerExtension } from './designer-extension';
 
 export interface DesignerConfiguration<TDefinition extends Definition = Definition> {
@@ -52,6 +52,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	 * @description The extensions of the designer.
 	 */
 	extensions?: DesignerExtension[];
+
+	/**
+	 * @description Custom definition walker.
+	 */
+	definitionWalker?: DefinitionWalker;
 }
 
 export type CustomActionHandler = (
