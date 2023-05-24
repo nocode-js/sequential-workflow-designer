@@ -1,11 +1,10 @@
 import { SimpleEvent } from './core/simple-event';
 import { isElementAttached } from './core/is-element-attached';
-import { Definition, Sequence, Step } from './definition';
+import { Definition, DefinitionWalker, Sequence, Step, StepOrName } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
 import { DesignerState } from './designer-state';
-import { StepOrName, StepsTraverser } from './core/steps-traverser';
 import { ServicesResolver } from './services';
 import { validateConfiguration } from './core/designer-configuration-validator';
 import { DesignerApi } from './api';
@@ -44,7 +43,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 		const designerApi = DesignerApi.create(designerContext);
 
 		const view = DesignerView.create(placeholder, designerContext, config, designerApi);
-		const designer = new Designer<TDef>(view, designerContext.state, designerContext.stepsTraverser, designerApi);
+		const designer = new Designer<TDef>(view, designerContext.state, designerContext.definitionWalker, designerApi);
 		view.workspace.onReady.subscribe(() => designer.onReady.forward());
 
 		designerContext.state.onDefinitionChanged.subscribe(() => {
@@ -59,7 +58,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	private constructor(
 		private readonly view: DesignerView,
 		private readonly state: DesignerState,
-		private readonly stepsTraverser: StepsTraverser,
+		private readonly walker: DefinitionWalker,
 		private readonly api: DesignerApi
 	) {}
 
@@ -159,7 +158,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @returns parent steps and branch names of the passed step or the passed sequence.
 	 */
 	public getStepParents(needle: Sequence | Step): StepOrName[] {
-		return this.stepsTraverser.getParents(this.state.definition, needle);
+		return this.walker.getParents(this.state.definition, needle);
 	}
 
 	/**

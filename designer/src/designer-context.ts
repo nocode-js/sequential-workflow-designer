@@ -1,8 +1,7 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { ComponentContext } from './component-context';
 import { ObjectCloner } from './core/object-cloner';
-import { StepsTraverser } from './core/steps-traverser';
-import { Definition } from './definition';
+import { Definition, DefinitionWalker } from './definition';
 import { DefinitionModifier } from './definition-modifier';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerState } from './designer-state';
@@ -28,8 +27,8 @@ export class DesignerContext {
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = new BehaviorController();
 		const stepExtensionResolver = StepExtensionResolver.create(services);
-		const stepsTraverser = new StepsTraverser(stepExtensionResolver);
-		const definitionModifier = new DefinitionModifier(stepsTraverser, state, configuration);
+		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
+		const definitionModifier = new DefinitionModifier(definitionWalker, state, configuration);
 
 		let historyController: HistoryController | undefined = undefined;
 		if (configuration.undoStackSize) {
@@ -49,7 +48,7 @@ export class DesignerContext {
 			configuration,
 			services,
 			componentContext,
-			stepsTraverser,
+			definitionWalker,
 			definitionModifier,
 			layoutController,
 			workspaceController,
@@ -63,7 +62,7 @@ export class DesignerContext {
 		public readonly configuration: DesignerConfiguration,
 		public readonly services: Services,
 		public readonly componentContext: ComponentContext,
-		public readonly stepsTraverser: StepsTraverser,
+		public readonly definitionWalker: DefinitionWalker,
 		public readonly definitionModifier: DefinitionModifier,
 		public readonly layoutController: LayoutController,
 		public readonly workspaceController: WorkspaceControllerWrapper,

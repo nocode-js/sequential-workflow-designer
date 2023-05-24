@@ -1,26 +1,25 @@
 import { SequenceModifier } from './core/sequence-modifier';
-import { StepsTraverser } from './core/steps-traverser';
-import { Definition, Sequence, Step } from './definition';
+import { Definition, DefinitionWalker, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DefinitionChangeType, DesignerState } from './designer-state';
 
 export class DefinitionModifier {
 	public constructor(
-		private readonly stepsTraverser: StepsTraverser,
+		private readonly definitionWalker: DefinitionWalker,
 		private readonly state: DesignerState,
 		private readonly configuration: DesignerConfiguration
 	) {}
 
 	public isDeletable(stepId: string): boolean {
 		if (this.configuration.steps.isDeletable) {
-			const result = this.stepsTraverser.getParentSequence(this.state.definition, stepId);
+			const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
 			return this.configuration.steps.isDeletable(result.step, result.parentSequence);
 		}
 		return true;
 	}
 
 	public tryDelete(stepId: string): boolean {
-		const result = this.stepsTraverser.getParentSequence(this.state.definition, stepId);
+		const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
 
 		const canDeleteStep = this.configuration.steps.canDeleteStep
 			? this.configuration.steps.canDeleteStep(result.step, result.parentSequence)
@@ -79,7 +78,7 @@ export class DefinitionModifier {
 
 	public updateDependantFields() {
 		if (this.state.selectedStepId) {
-			const found = this.stepsTraverser.findById(this.state.definition, this.state.selectedStepId);
+			const found = this.definitionWalker.findById(this.state.definition, this.state.selectedStepId);
 			if (!found) {
 				// We need to unselect step when it's deleted.
 				this.state.setSelectedStepId(null);
@@ -88,7 +87,7 @@ export class DefinitionModifier {
 
 		for (let index = 0; index < this.state.folderPath.length; index++) {
 			const stepId = this.state.folderPath[index];
-			const found = this.stepsTraverser.findById(this.state.definition, stepId);
+			const found = this.definitionWalker.findById(this.state.definition, stepId);
 			if (!found) {
 				// We need to update path if any folder is deleted.
 				const newPath = this.state.folderPath.slice(0, index);

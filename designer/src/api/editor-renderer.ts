@@ -1,12 +1,12 @@
-import { Step } from '../definition';
-import { race, StepsTraverser } from '../core';
+import { DefinitionWalker, Step } from '../definition';
+import { race } from '../core';
 import { DefinitionChangedEvent, DefinitionChangeType, DesignerState } from '../designer-state';
 
 export type EditorRendererHandler = (step: Step | null) => void;
 
 export class EditorRenderer {
-	public static create(state: DesignerState, stepsTraverser: StepsTraverser, handler: EditorRendererHandler): EditorRenderer {
-		const listener = new EditorRenderer(state, stepsTraverser, handler);
+	public static create(state: DesignerState, definitionWalker: DefinitionWalker, handler: EditorRendererHandler): EditorRenderer {
+		const listener = new EditorRenderer(state, definitionWalker, handler);
 
 		race(0, state.onDefinitionChanged, state.onSelectedStepIdChanged).subscribe(r => {
 			const [definitionChanged, selectedStepId] = r;
@@ -25,7 +25,7 @@ export class EditorRenderer {
 
 	private constructor(
 		private readonly state: DesignerState,
-		private readonly stepsTraverser: StepsTraverser,
+		private readonly definitionWalker: DefinitionWalker,
 		private readonly handler: EditorRendererHandler
 	) {}
 
@@ -34,7 +34,7 @@ export class EditorRenderer {
 	}
 
 	private render(stepId: string | null) {
-		const step = stepId ? this.stepsTraverser.getById(this.state.definition, stepId) : null;
+		const step = stepId ? this.definitionWalker.getById(this.state.definition, stepId) : null;
 		this.currentStepId = stepId;
 		this.handler(step);
 	}

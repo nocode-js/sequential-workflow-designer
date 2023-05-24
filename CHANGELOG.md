@@ -1,3 +1,7 @@
+## 0.13.0
+
+The `StepTraverser` is not a part of the designer package anymore. This class is moved into the model package and it's called `DefinitionWalker` now. The responsibility of determining children of a step is not part of the `StepExtension` interface anymore.
+
 ## 0.12.0
 
 The designer has allowed only the validation of the steps so far. The root of the definition could be edited by the global editor, but the validation was not possible. This version adds a new type of the validator: the root validator. The new validator affects on the result of the definition validation (`designer.isValid()`).

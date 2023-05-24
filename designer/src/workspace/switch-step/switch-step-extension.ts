@@ -1,5 +1,5 @@
 import { BranchedStep } from '../../definition';
-import { StepChildren, StepChildrenType, StepExtension } from '../../designer-extension';
+import { StepExtension } from '../../designer-extension';
 import { createSwitchStepComponentViewFactory } from './switch-step-component-view';
 import { SwitchStepExtensionConfiguration } from './switch-step-extension-configuration';
 
@@ -36,11 +36,4 @@ export class SwitchStepExtension implements StepExtension<BranchedStep> {
 	private constructor(private readonly configuration: SwitchStepExtensionConfiguration) {}
 
 	public readonly createComponentView = createSwitchStepComponentViewFactory(this.configuration.view);
-
-	public getChildren(step: BranchedStep): StepChildren {
-		return {
-			type: StepChildrenType.branches,
-			sequences: step.branches
-		};
-	}
 }

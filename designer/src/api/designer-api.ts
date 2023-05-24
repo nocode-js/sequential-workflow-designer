@@ -21,10 +21,10 @@ export class DesignerApi {
 				context.layoutController,
 				context.componentContext.iconProvider
 			),
-			new EditorApi(context.state, context.stepsTraverser, context.layoutController, context.definitionModifier),
+			new EditorApi(context.state, context.definitionWalker, context.layoutController, context.definitionModifier),
 			workspace,
 			viewport,
-			new PathBarApi(context.state, context.stepsTraverser)
+			new PathBarApi(context.state, context.definitionWalker)
 		);
 	}
 

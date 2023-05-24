@@ -1,5 +1,5 @@
 import { Step } from '../../definition';
-import { StepChildren, StepExtension } from '../../designer-extension';
+import { StepExtension } from '../../designer-extension';
 import { createTaskStepComponentViewFactory } from './task-step-component-view';
 import { TaskStepExtensionConfiguration } from './task-step-extension-configuration';
 
@@ -27,8 +27,4 @@ export class TaskStepExtension implements StepExtension<Step> {
 	private constructor(private readonly configuration: TaskStepExtensionConfiguration) {}
 
 	public readonly createComponentView = createTaskStepComponentViewFactory(false, this.configuration.view);
-
-	public getChildren(): StepChildren | null {
-		return null;
-	}
 }
