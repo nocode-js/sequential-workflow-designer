@@ -31,39 +31,69 @@ describe('SequenceModifier', () => {
 		properties: {}
 	};
 
-	function flatABC(): Sequence {
-		return [A, B, C];
-	}
+	let seq: Sequence;
 
-	it('moveStep() does nothing when the change is for the same index', () => {
-		const seq = flatABC();
-		SequenceModifier.moveStep(seq, A, seq, 0);
-
-		expect(seq[0]).toEqual(A);
-		expect(seq[1]).toEqual(B);
-		expect(seq[2]).toEqual(C);
+	beforeEach(() => {
+		seq = [A, B, C];
 	});
 
-	it('moveStep() moves the first node to the last position', () => {
-		const seq = flatABC();
-		SequenceModifier.moveStep(seq, A, seq, 3);
+	describe('tryMoveStep()', () => {
+		it('returns null when the change is for the same index', () => {
+			const apply = SequenceModifier.tryMoveStep(seq, A, seq, 0) as () => void;
 
-		expect(seq[0]).toEqual(B);
-		expect(seq[1]).toEqual(C);
-		expect(seq[2]).toEqual(A);
-	});
+			expect(apply).toBeNull();
+			expect(seq[0]).toEqual(A);
+			expect(seq[1]).toEqual(B);
+			expect(seq[2]).toEqual(C);
+		});
 
-	it('moveStep() moves the first node to one before the last position', () => {
-		const seq = flatABC();
-		SequenceModifier.moveStep(seq, A, seq, 2);
+		it('returns null when the change for the same index + 1', () => {
+			const apply = SequenceModifier.tryMoveStep(seq, A, seq, 1) as () => void;
 
-		expect(seq[0]).toEqual(B);
-		expect(seq[1]).toEqual(A);
-		expect(seq[2]).toEqual(C);
+			expect(apply).toBeNull();
+			expect(seq[0]).toEqual(A);
+			expect(seq[1]).toEqual(B);
+			expect(seq[2]).toEqual(C);
+		});
+
+		it('moves A node to 2nd position', () => {
+			const apply = SequenceModifier.tryMoveStep(seq, A, seq, 2) as () => void;
+			apply();
+
+			expect(seq[0]).toEqual(B);
+			expect(seq[1]).toEqual(A);
+			expect(seq[2]).toEqual(C);
+		});
+
+		it('moves A node to 3rd position', () => {
+			const apply = SequenceModifier.tryMoveStep(seq, A, seq, 3) as () => void;
+			apply();
+
+			expect(seq[0]).toEqual(B);
+			expect(seq[1]).toEqual(C);
+			expect(seq[2]).toEqual(A);
+		});
+
+		it('moves B node to first position', () => {
+			const apply = SequenceModifier.tryMoveStep(seq, B, seq, 0) as () => void;
+			apply();
+
+			expect(seq[0]).toEqual(B);
+			expect(seq[1]).toEqual(A);
+			expect(seq[2]).toEqual(C);
+		});
+
+		it('moves B node to 3rd position', () => {
+			const apply = SequenceModifier.tryMoveStep(seq, B, seq, 3) as () => void;
+			apply();
+
+			expect(seq[0]).toEqual(A);
+			expect(seq[1]).toEqual(C);
+			expect(seq[2]).toEqual(B);
+		});
 	});
 
 	it('insertStep() adds at the beginning', () => {
-		const seq = flatABC();
 		SequenceModifier.insertStep(D, seq, 0);
 
 		expect(seq[0]).toEqual(D);
@@ -73,7 +103,6 @@ describe('SequenceModifier', () => {
 	});
 
 	it('deleteStep() deletes a step', () => {
-		const seq = flatABC();
 		SequenceModifier.deleteStep(B, seq);
 
 		expect(seq.length).toEqual(2);
