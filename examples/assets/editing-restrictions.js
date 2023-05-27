@@ -13,6 +13,20 @@ function createStep(name, properties) {
 	};
 }
 
+function createLoopStep() {
+	return {
+		id: sequentialWorkflowDesigner.Uid.next(),
+		componentType: 'container',
+		type: 'loop',
+		name: 'Loop',
+		properties: {
+			draggable: true,
+			deletable: true
+		},
+		sequence: []
+	}
+}
+
 function createEditor(text) {
 	const editor = document.createElement('div');
 	editor.innerText = text;
@@ -20,7 +34,7 @@ function createEditor(text) {
 }
 
 function serializeStepParents(parents) {
-	return parents.map(s => Array.isArray(s) ? 'sequence' : s.name).join('/');
+	return '/' + parents.map(s => Array.isArray(s) ? 'sequence' : s.name).join('/');
 }
 
 function load() {
@@ -36,11 +50,20 @@ function load() {
 	};
 	let designer;
 	const configuration = {
-		toolbox: false,
+		toolbox: {
+			groups: [
+				{
+					name: 'Steps',
+					steps: [
+						createLoopStep()
+					]
+				}
+			]
+		},
 
 		steps: {
-			canInsertStep: (step) => {
-				return window.confirm(`Can insert "${step.name}"?`);
+			canInsertStep: (step, _, targetIndex) => {
+				return window.confirm(`Can insert "${step.name}" (${targetIndex})?`);
 			},
 			isDraggable: (step) => {
 				return step.properties.draggable;

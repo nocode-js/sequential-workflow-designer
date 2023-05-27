@@ -1,3 +1,9 @@
+## 0.13.1
+
+The `canMoveStep` callback is not called when the step is moved to the same position.
+
+🤩 We launched a new project: [Sequential Workflow Editor](https://github.com/nocode-js/sequential-workflow-editor). Don't write step editors manually, build them.
+
 ## 0.13.0
 
 The `StepTraverser` is not a part of the designer package anymore. This class is moved into the model package and it's called `DefinitionWalker` now. The responsibility of determining children of a step is not part of the `StepExtension` interface anymore.

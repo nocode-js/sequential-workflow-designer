@@ -54,6 +54,11 @@ export class DefinitionModifier {
 	}
 
 	public tryMove(sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number): boolean {
+		const apply = SequenceModifier.tryMoveStep(sourceSequence, step, targetSequence, targetIndex);
+		if (!apply) {
+			return false;
+		}
+
 		const canMoveStep = this.configuration.steps.canMoveStep
 			? this.configuration.steps.canMoveStep(sourceSequence, step, targetSequence, targetIndex)
 			: true;
@@ -61,7 +66,7 @@ export class DefinitionModifier {
 			return false;
 		}
 
-		SequenceModifier.moveStep(sourceSequence, step, targetSequence, targetIndex);
+		apply();
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepMoved, step.id);
 		this.state.setSelectedStepId(step.id);
 		return true;
