@@ -1,9 +1,36 @@
-body {
+body,
+h1 {
 	font: 13px/1.3em Arial, Verdana, Serif;
 }
 body {
 	margin: 0;
 	padding: 0;
+}
+
+nav {
+	padding: 10px 5px 0;
+	background: #333;
+}
+nav h1 {
+	display: inline-block;
+	margin: 0 15px;
+	padding: 0;
+	color: #fff;
+}
+nav button {
+	background: #999;
+	border: 0;
+	padding: 10px 15px;
+	margin: 0 5px;
+	cursor: pointer;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+}
+nav button.selected {
+	background: #f9f9f9;
+}
+nav button:hover {
+	opacity: 0.8;
 }
 
 .sqd-designer-react {

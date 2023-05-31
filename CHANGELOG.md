@@ -1,3 +1,19 @@
+## 0.13.2
+
+The react package supports two types of editor providers. Now it's possible to use a provider that returns native DOM elements. We don't want to depreciate the previous approach, this change increases flexibility of the react package.
+
+```tsx
+// 1. custom react component
+<SequentialWorkflowDesigner stepEditor={<StepEditor />} ... />
+
+// 2. native editor provider
+function stepEditorProvider(step) {
+  const editor = document.createElement('div'); /* ... */
+  return editor;
+}
+<SequentialWorkflowDesigner stepEditor={stepEditorProvider}> ... />
+```
+
 ## 0.13.1
 
 The `canMoveStep` callback is not called when the step is moved to the same position.
