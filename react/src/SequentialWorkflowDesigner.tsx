@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	Definition,
 	ToolboxConfiguration,
@@ -13,7 +13,9 @@ import {
 	CustomActionHandlerContext,
 	CustomAction,
 	Sequence,
-	ValidatorConfiguration
+	ValidatorConfiguration,
+	GlobalEditorProvider,
+	StepEditorProvider
 } from 'sequential-workflow-designer';
 import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -30,8 +32,8 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	onSelectedStepIdChanged?: (stepId: string | null) => void;
 	isReadonly?: boolean;
 
-	globalEditor: false | JSX.Element;
-	stepEditor: false | JSX.Element;
+	globalEditor: false | JSX.Element | GlobalEditorProvider;
+	stepEditor: false | JSX.Element | StepEditorProvider;
 
 	theme?: string;
 	undoStackSize?: number;
@@ -86,26 +88,32 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		if (!globalEditorRef.current) {
 			throw new Error('Global editor is not provided');
 		}
-		return Presenter.render(
-			externalEditorClassName,
-			editorRootRef,
-			<GlobalEditorWrapperContext definition={def} context={context}>
-				{globalEditorRef.current}
-			</GlobalEditorWrapperContext>
-		);
+		if (React.isValidElement(globalEditorRef.current)) {
+			return Presenter.render(
+				externalEditorClassName,
+				editorRootRef,
+				<GlobalEditorWrapperContext definition={def} context={context}>
+					{globalEditorRef.current}
+				</GlobalEditorWrapperContext>
+			);
+		}
+		return (globalEditorRef.current as GlobalEditorProvider)(def, context);
 	}
 
 	function stepEditorProvider(step: Step, context: StepEditorContext) {
 		if (!stepEditorRef.current) {
 			throw new Error('Step editor is not provided');
 		}
-		return Presenter.render(
-			externalEditorClassName,
-			editorRootRef,
-			<StepEditorWrapperContext step={step} context={context}>
-				{stepEditorRef.current}
-			</StepEditorWrapperContext>
-		);
+		if (React.isValidElement(stepEditorRef.current)) {
+			return Presenter.render(
+				externalEditorClassName,
+				editorRootRef,
+				<StepEditorWrapperContext step={step} context={context}>
+					{stepEditorRef.current}
+				</StepEditorWrapperContext>
+			);
+		}
+		return (stepEditorRef.current as StepEditorProvider)(step, context);
 	}
 
 	function customActionHandler(action: CustomAction, step: Step | null, sequence: Sequence, context: CustomActionHandlerContext) {
