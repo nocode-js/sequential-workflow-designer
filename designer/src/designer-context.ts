@@ -23,7 +23,10 @@ export class DesignerContext {
 		const layoutController = new LayoutController(parent);
 		const isReadonly = !!configuration.isReadonly;
 
-		const state = new DesignerState(definition, isReadonly);
+		const isToolboxCollapsed = configuration.toolbox ? configuration.toolbox.isCollapsed ?? layoutController.isMobile() : false;
+		const isEditorCollapsed = configuration.editors ? configuration.editors.isCollapsed ?? layoutController.isMobile() : false;
+
+		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = new BehaviorController();
 		const stepExtensionResolver = StepExtensionResolver.create(services);

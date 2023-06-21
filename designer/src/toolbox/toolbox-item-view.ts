@@ -28,7 +28,7 @@ export class ToolboxItemView {
 		const text = Dom.element('div', {
 			class: 'sqd-toolbox-item-text'
 		});
-		text.textContent = step.name;
+		text.textContent = api.getLabel(step);
 
 		root.appendChild(icon);
 		root.appendChild(text);

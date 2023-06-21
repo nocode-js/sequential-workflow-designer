@@ -49,7 +49,7 @@ export class ToolboxView {
 		private readonly api: ToolboxApi
 	) {}
 
-	public bindToggleIsCollapsedClick(handler: () => void) {
+	public bindToggleClick(handler: () => void) {
 		function forward(e: Event) {
 			e.preventDefault();
 			handler();

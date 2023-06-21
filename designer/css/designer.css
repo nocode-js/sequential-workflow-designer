@@ -130,11 +130,12 @@
 }
 .sqd-control-bar-button {
 	display: inline-block;
-	width: 30px;
-	height: 30px;
+	width: 32px;
+	height: 32px;
 	border-radius: 5px;
 	margin-right: 8px;
 	cursor: pointer;
+	box-sizing: border-box;
 }
 .sqd-control-bar-button-icon {
 	width: 24px;

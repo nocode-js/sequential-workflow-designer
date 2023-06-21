@@ -27,6 +27,8 @@ export class DesignerState {
 	public readonly onIsDraggingChanged = new SimpleEvent<boolean>();
 	public readonly onIsDragDisabledChanged = new SimpleEvent<boolean>();
 	public readonly onDefinitionChanged = new SimpleEvent<DefinitionChangedEvent>();
+	public readonly onIsToolboxCollapsedChanged = new SimpleEvent<boolean>();
+	public readonly onIsEditorCollapsedChanged = new SimpleEvent<boolean>();
 
 	public viewport: Viewport = {
 		position: new Vector(0, 0),
@@ -37,7 +39,12 @@ export class DesignerState {
 	public isDragging = false;
 	public isDragDisabled = false;
 
-	public constructor(public definition: Definition, public isReadonly: boolean) {}
+	public constructor(
+		public definition: Definition,
+		public isReadonly: boolean,
+		public isToolboxCollapsed: boolean,
+		public isEditorCollapsed: boolean
+	) {}
 
 	public setSelectedStepId(stepId: string | null) {
 		if (this.selectedStepId !== stepId) {
@@ -91,5 +98,19 @@ export class DesignerState {
 	public toggleIsDragDisabled() {
 		this.isDragDisabled = !this.isDragDisabled;
 		this.onIsDragDisabledChanged.forward(this.isDragDisabled);
+	}
+
+	public setIsToolboxCollapsed(isCollapsed: boolean) {
+		if (this.isToolboxCollapsed !== isCollapsed) {
+			this.isToolboxCollapsed = isCollapsed;
+			this.onIsToolboxCollapsedChanged.forward(isCollapsed);
+		}
+	}
+
+	public setIsEditorCollapsed(isCollapsed: boolean) {
+		if (this.isEditorCollapsed !== isCollapsed) {
+			this.isEditorCollapsed = isCollapsed;
+			this.onIsEditorCollapsedChanged.forward(isCollapsed);
+		}
 	}
 }

@@ -57,7 +57,14 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	 * @description Custom definition walker.
 	 */
 	definitionWalker?: DefinitionWalker;
+
+	/**
+	 * @description Custom generator of unique identifiers.
+	 */
+	uidGenerator?: UidGenerator;
 }
+
+export type UidGenerator = () => string;
 
 export type CustomActionHandler = (
 	action: CustomAction,
@@ -99,10 +106,14 @@ export interface CustomActionHandlerContext {
 }
 
 export interface ToolboxConfiguration {
+	labelProvider?: StepLabelProvider;
+	isCollapsed?: boolean;
 	groups: ToolboxGroupConfiguration[];
 }
 
 export type StepDefinition = Omit<Step, 'id'>;
+
+export type StepLabelProvider = (step: StepDefinition) => string;
 
 export interface ToolboxGroupConfiguration {
 	name: string;
@@ -130,6 +141,7 @@ export type StepValidator = (step: Step, parentSequence: Sequence, definition: D
 export type RootValidator = (definition: Definition) => boolean;
 
 export interface EditorsConfiguration<TDefinition extends Definition = Definition> {
+	isCollapsed?: boolean;
 	stepEditorProvider: StepEditorProvider;
 	globalEditorProvider: GlobalEditorProvider<TDefinition>;
 }

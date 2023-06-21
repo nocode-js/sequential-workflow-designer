@@ -102,7 +102,7 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 		services.uiComponents.push(new SmartEditorExtension(configuration.editors));
 	}
 	if (configuration.toolbox) {
-		services.uiComponents.push(new ToolboxExtension(configuration.toolbox));
+		services.uiComponents.push(new ToolboxExtension());
 	}
 
 	if (!services.wheelController) {

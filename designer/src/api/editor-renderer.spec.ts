@@ -22,7 +22,7 @@ describe('EditorRenderer', () => {
 
 	beforeEach(() => {
 		walker = new DefinitionWalker();
-		state = new DesignerState(definition, false);
+		state = new DesignerState(definition, false, false, false);
 		callback = jasmine.createSpy('callback');
 	});
 

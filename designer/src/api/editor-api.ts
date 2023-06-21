@@ -2,19 +2,26 @@ import { DefinitionChangeType, DesignerState } from '../designer-state';
 import { DefinitionModifier } from '../definition-modifier';
 import { GlobalEditorContext, StepEditorContext } from '../designer-configuration';
 import { EditorRenderer, EditorRendererHandler } from './editor-renderer';
-import { LayoutController } from '../layout-controller';
 import { Definition, DefinitionWalker } from '../definition';
+import { SimpleEventListener } from '../core';
 
 export class EditorApi {
 	public constructor(
 		private readonly state: DesignerState,
 		private readonly definitionWalker: DefinitionWalker,
-		private readonly layoutController: LayoutController,
 		private readonly definitionModifier: DefinitionModifier
 	) {}
 
-	public isVisibleAtStart(): boolean {
-		return this.layoutController.isMobile();
+	public isCollapsed(): boolean {
+		return this.state.isEditorCollapsed;
+	}
+
+	public toggleIsCollapsed() {
+		this.state.setIsEditorCollapsed(!this.state.isEditorCollapsed);
+	}
+
+	public subscribeIsCollapsed(listener: SimpleEventListener<boolean>) {
+		this.state.onIsEditorCollapsedChanged.subscribe(listener);
 	}
 
 	public getDefinition(): Definition {

@@ -35,6 +35,8 @@ export interface StepEditorWrapper {
 	context: StepEditorContext;
 }
 
+export type AngularToolboxConfiguration = Omit<ToolboxConfiguration, 'isCollapsed'>;
+
 @Component({
 	selector: 'sqd-designer',
 	templateUrl: './designer.component.html'
@@ -57,7 +59,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Input('validatorConfiguration')
 	public validatorConfiguration?: ValidatorConfiguration;
 	@Input('toolboxConfiguration')
-	public toolboxConfiguration?: ToolboxConfiguration | false;
+	public toolboxConfiguration?: AngularToolboxConfiguration | false;
 	@Input('controlBar')
 	public controlBar?: boolean;
 	@Input('extensions')

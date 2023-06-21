@@ -52,6 +52,12 @@ export class Designer<TDefinition extends Definition = Definition> {
 		designerContext.state.onSelectedStepIdChanged.subscribe(() =>
 			designer.onSelectedStepIdChanged.forward(designerContext.state.selectedStepId)
 		);
+		designer.state.onIsToolboxCollapsedChanged.subscribe(isCollapsed => {
+			designer.onIsToolboxCollapsedChanged.forward(isCollapsed);
+		});
+		designer.state.onIsEditorCollapsedChanged.subscribe(isCollapsed => {
+			designer.onIsEditorCollapsedChanged.forward(isCollapsed);
+		});
 		return designer;
 	}
 
@@ -76,6 +82,16 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Fires when the selected step has changed.
 	 */
 	public readonly onSelectedStepIdChanged = new SimpleEvent<string | null>();
+
+	/**
+	 * @description Fires when the toolbox is collapsed or expanded.
+	 */
+	public readonly onIsToolboxCollapsedChanged = new SimpleEvent<boolean>();
+
+	/**
+	 * @description Fires when the editor is collapsed or expanded.
+	 */
+	public readonly onIsEditorCollapsedChanged = new SimpleEvent<boolean>();
 
 	/**
 	 * @returns the current definition of the workflow.
@@ -152,6 +168,34 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 */
 	public updateBadges() {
 		this.api.workspace.updateBadges();
+	}
+
+	/**
+	 * @returns a flag that indicates whether the toolbox is collapsed.
+	 */
+	public isToolboxCollapsed(): boolean {
+		return this.state.isToolboxCollapsed;
+	}
+
+	/**
+	 * @description Sets a flag that indicates whether the toolbox is collapsed.
+	 */
+	public setIsToolboxCollapsed(isCollapsed: boolean) {
+		this.state.setIsToolboxCollapsed(isCollapsed);
+	}
+
+	/**
+	 * @returns a flag that indicates whether the editor is collapsed.
+	 */
+	public isEditorCollapsed(): boolean {
+		return this.state.isEditorCollapsed;
+	}
+
+	/**
+	 * @description Sets a flag that indicates whether the editor is collapsed.
+	 */
+	public setIsEditorCollapsed(isCollapsed: boolean) {
+		this.state.setIsEditorCollapsed(isCollapsed);
 	}
 
 	/**

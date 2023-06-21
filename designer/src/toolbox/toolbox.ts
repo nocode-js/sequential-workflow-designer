@@ -1,50 +1,39 @@
-import { DesignerApi } from '../api/designer-api';
-import { ToolboxConfiguration, ToolboxGroupConfiguration } from '../designer-configuration';
+import { ToolboxApi } from '../api';
 import { UiComponent } from '../designer-extension';
 import { ToolboxView } from './toolbox-view';
 
 export class Toolbox implements UiComponent {
-	public static create(root: HTMLElement, api: DesignerApi, configuration: ToolboxConfiguration): Toolbox {
-		const view = ToolboxView.create(root, api.toolbox);
+	public static create(root: HTMLElement, api: ToolboxApi): Toolbox {
+		const view = ToolboxView.create(root, api);
 
-		const toolbox = new Toolbox(view, configuration);
+		const toolbox = new Toolbox(view, api);
 		toolbox.render();
-		toolbox.setIsCollapsed(api.toolbox.isVisibleAtStart());
-		view.bindToggleIsCollapsedClick(() => toolbox.toggleIsCollapsedClick());
+		toolbox.onIsCollapsedChanged();
+		view.bindToggleClick(() => toolbox.onToggleClicked());
 		view.bindFilterInputChange(v => toolbox.onFilterInputChanged(v));
+		api.subscribeIsCollapsed(() => toolbox.onIsCollapsedChanged());
 		return toolbox;
 	}
 
-	private isCollapsed?: boolean;
 	private filter?: string;
 
-	private constructor(private readonly view: ToolboxView, private readonly configuration: ToolboxConfiguration) {}
+	private constructor(private readonly view: ToolboxView, private readonly api: ToolboxApi) {}
 
 	public destroy() {
 		this.view.destroy();
 	}
 
 	private render() {
-		const groups: ToolboxGroupConfiguration[] = this.configuration.groups
-			.map(group => {
-				return {
-					name: group.name,
-					steps: group.steps.filter(s => {
-						return this.filter ? s.name.toLowerCase().includes(this.filter) : true;
-					})
-				};
-			})
-			.filter(group => group.steps.length > 0);
+		const groups = this.api.filterGroups(this.filter);
 		this.view.setGroups(groups);
 	}
 
-	private setIsCollapsed(isCollapsed: boolean) {
-		this.isCollapsed = isCollapsed;
-		this.view.setIsCollapsed(isCollapsed);
+	private onIsCollapsedChanged() {
+		this.view.setIsCollapsed(this.api.isCollapsed());
 	}
 
-	private toggleIsCollapsedClick() {
-		this.setIsCollapsed(!this.isCollapsed);
+	private onToggleClicked() {
+		this.api.toggleIsCollapsed();
 	}
 
 	private onFilterInputChanged(value: string) {
