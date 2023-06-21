@@ -33,7 +33,7 @@ export class SmartEditorView {
 
 	private constructor(private readonly root: HTMLElement, private readonly toggle: HTMLElement, private readonly editor: Editor) {}
 
-	public bindToggleIsCollapsedClick(handler: () => void) {
+	public bindToggleClick(handler: () => void) {
 		this.toggle.addEventListener(
 			'click',
 			e => {

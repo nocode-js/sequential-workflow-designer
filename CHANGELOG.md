@@ -1,3 +1,58 @@
+## 0.13.3
+
+This version introduces 4 new features:
+
+* The custom label provider for the toolbox. By default, the toolbox displays a label of a step from the `name` field. You may override this behaviour and pass own label provider now.
+
+```js
+const configuration = {
+  toolbox: {
+    labelProvider: (step) => `** ${step.name} **`,
+    // ...
+  },
+  // ...
+};
+```
+
+* Control the collapse of the toolbox.
+
+```js
+const configuration = {
+  toolbox: {
+    isCollapsed: true, // or false
+    // ...
+  },
+  // ...
+};
+
+designer.isToolboxCollapsed(); // returns true or false
+designer.setIsToolboxCollapsed(true);
+```
+
+* Control the collapse of the editor.
+
+```js
+const configuration = {
+  editors: {
+    isCollapsed: true, // or false
+    // ...
+  },
+  // ...
+};
+
+designer.isEditorCollapsed(); // returns true or false
+designer.setIsEditorCollapsed(true);
+```
+
+* It's possible now to replace the default unique identifier generator by a custom one.
+
+```js
+const configuration = {
+  uidGenerator: () => Math.random().toString(),
+  // ...
+};
+```
+
 ## 0.13.2
 
 The react package supports two types of editor providers. Now it's possible to use a provider that returns native DOM elements. We don't want to depreciate the previous approach, this change increases flexibility of the react package.

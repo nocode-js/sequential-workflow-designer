@@ -51,6 +51,8 @@ function load() {
 	let designer;
 	const configuration = {
 		toolbox: {
+			isCollapsed: true,
+			labelProvider: (step) => `** ${step.name} **`,
 			groups: [
 				{
 					name: 'Steps',
@@ -91,6 +93,7 @@ function load() {
 		},
 
 		editors: {
+			isCollapsed: true,
 			globalEditorProvider: () => {
 				return createEditor('Please select any step.');
 			},
@@ -101,6 +104,8 @@ function load() {
 		controlBar: true,
 	};
 	designer = sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
+	designer.onIsToolboxCollapsedChanged.subscribe(is => console.log(`isToolboxCollapsed = ${is}`));
+	designer.onIsEditorCollapsedChanged.subscribe(is => console.log(`isEditorCollapsed = ${is}`));
 }
 
 window.addEventListener('load', load);

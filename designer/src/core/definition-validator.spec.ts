@@ -11,7 +11,7 @@ describe('DefinitionValidator', () => {
 	let state: DesignerState;
 
 	beforeEach(() => {
-		state = new DesignerState(testDefinition, false);
+		state = new DesignerState(testDefinition, false, false, false);
 	});
 
 	it('returns true if providers are not set in configuration', () => {
