@@ -54,15 +54,25 @@ function reloadChangeReadonlyButtonText() {
 
 function appendCheckbox(root, label, isChecked, onClick) {
 	const item = document.createElement('div');
-	item.innerHTML = '<div><h5></h5> <input type="checkbox" /></div>';
-	const h5 = item.getElementsByTagName('h5')[0];
-	h5.innerText = label;
+	item.innerHTML = '<div><h3></h3> <input type="checkbox" /></div>';
+	const h3 = item.getElementsByTagName('h3')[0];
+	h3.innerText = label;
 	const input = item.getElementsByTagName('input')[0];
 	input.checked = isChecked;
 	input.addEventListener('click', () => {
 		onClick(input.checked);
 	});
 	root.appendChild(item);
+}
+
+function appendPath(root, step) {
+	const parents = designer.getStepParents(step);
+	const path = document.createElement('div');
+	path.className = 'step-path';
+	path.innerText = 'Step path: ' + parents.map((parent) => {
+		return typeof parent === 'string' ? parent : parent.name;
+	}).join('/');
+	root.appendChild(path);
 }
 
 let designer;
@@ -101,6 +111,7 @@ const configuration = {
 	editors: {
 		globalEditorProvider: (definition) => {
 			const root = document.createElement('div');
+			root.className = 'definition-json';
 			root.innerHTML = '<textarea style="width: 100%; border: 0;" rows="50"></textarea>';
 			const textarea = root.getElementsByTagName('textarea')[0];
 			textarea.value = JSON.stringify(definition, null, 2);
@@ -125,6 +136,8 @@ const configuration = {
 					editorContext.notifyChildrenChanged();
 				});
 			}
+
+			appendPath(root, step);
 			return root;
 		}
 	}
