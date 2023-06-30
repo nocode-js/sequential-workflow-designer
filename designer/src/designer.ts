@@ -199,9 +199,10 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
-	 * @returns parent steps and branch names of the passed step or the passed sequence.
+	 * @param needle A step, a sequence or a step id.
+	 * @returns parent steps and branch names.
 	 */
-	public getStepParents(needle: Sequence | Step): StepOrName[] {
+	public getStepParents(needle: Sequence | Step | string): StepOrName[] {
 		return this.walker.getParents(this.state.definition, needle);
 	}
 

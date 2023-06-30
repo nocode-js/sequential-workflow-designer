@@ -1,3 +1,11 @@
+## 0.13.4
+
+The `getStepParents` method of the `Designer` class supports now a step id as an argument. It is possible to get parents of a step by its id. The method still supports a step object or a sequence as an argument.
+
+```js
+designer.getStepParents('eb4f481ee1b90c6e3fc9b42dd010d2a5');
+```
+
 ## 0.13.3
 
 This version introduces 4 new features:

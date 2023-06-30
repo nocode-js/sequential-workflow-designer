@@ -11871,10 +11871,10 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sequential-workflow-model@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-model/-/sequential-workflow-model-0.1.3.tgz#c957f73a22d105e1154636cf8247772f53ed0d03"
-  integrity sha512-Z8aIDHMKurjHK5CIoUW+eE0tthcvf2yvxERsODMMYl7MbyL14ONYvDUzH2G3bVUge1HDgKVa2w2CYEEdilz0AA==
+sequential-workflow-model@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-model/-/sequential-workflow-model-0.1.4.tgz#fcda9b0d802c00668ff1cd4860bf5c9141cfe788"
+  integrity sha512-z44I8CQqP51sO7gHqH0/7GjmBOt2yczmmEGdRdJaczogDtZ1E6kucLkcvA4LugXFFuxTilYldY7NKFFTK+XWDA==
 
 serialize-javascript@^4.0.0:
   version "4.0.0"
