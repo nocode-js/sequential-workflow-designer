@@ -142,7 +142,7 @@ export type RootValidator = (definition: Definition) => boolean;
 
 export interface EditorsConfiguration<TDefinition extends Definition = Definition> {
 	isCollapsed?: boolean;
-	stepEditorProvider: StepEditorProvider;
+	stepEditorProvider: StepEditorProvider<TDefinition>;
 	globalEditorProvider: GlobalEditorProvider<TDefinition>;
 }
 
@@ -152,7 +152,11 @@ export interface StepEditorContext {
 	notifyChildrenChanged(): void;
 }
 
-export type StepEditorProvider = (step: Step, context: StepEditorContext) => HTMLElement;
+export type StepEditorProvider<TDefinition extends Definition = Definition> = (
+	step: Step,
+	context: StepEditorContext,
+	definition: TDefinition
+) => HTMLElement;
 
 export interface GlobalEditorContext {
 	notifyPropertiesChanged(): void;

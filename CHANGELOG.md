@@ -1,3 +1,11 @@
+## 0.13.5
+
+We have added a third parameter, `definition`, to the step editor provider.
+
+```js
+function stepEditorProvider(step, stepContext, definition) { /* ... */ }
+```
+
 ## 0.13.4
 
 The `getStepParents` method of the `Designer` class supports now a step id as an argument. It is possible to get parents of a step by its id. The method still supports a step object or a sequence as an argument.

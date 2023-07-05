@@ -32,6 +32,7 @@ export interface GlobalEditorWrapper {
 
 export interface StepEditorWrapper {
 	step: Step;
+	definition: Definition;
 	context: StepEditorContext;
 }
 
@@ -163,12 +164,13 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 		});
 	};
 
-	private readonly stepEditorProvider = (step: Step, context: StepEditorContext) => {
+	private readonly stepEditorProvider = (step: Step, context: StepEditorContext, definition: Definition) => {
 		if (!this.stepEditor) {
 			throw new Error('Input "stepEditor" is not set');
 		}
 		return this.editorProvider<StepEditorWrapper>(this.stepEditor, {
 			step,
+			definition,
 			context
 		});
 	};

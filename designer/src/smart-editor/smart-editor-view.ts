@@ -1,11 +1,11 @@
-import { DesignerApi } from '../api/designer-api';
+import { EditorApi } from '../api';
 import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
 import { EditorsConfiguration } from '../designer-configuration';
 import { Editor } from './editor';
 
 export class SmartEditorView {
-	public static create(parent: HTMLElement, api: DesignerApi, configuration: EditorsConfiguration): SmartEditorView {
+	public static create(parent: HTMLElement, api: EditorApi, configuration: EditorsConfiguration): SmartEditorView {
 		const root = Dom.element('div', {
 			class: 'sqd-smart-editor'
 		});

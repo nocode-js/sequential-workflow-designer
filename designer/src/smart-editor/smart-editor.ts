@@ -7,7 +7,7 @@ import { EditorApi } from '../api';
 
 export class SmartEditor implements UiComponent {
 	public static create(parent: HTMLElement, api: DesignerApi, configuration: EditorsConfiguration): SmartEditor {
-		const view = SmartEditorView.create(parent, api, configuration);
+		const view = SmartEditorView.create(parent, api.editor, configuration);
 
 		const editor = new SmartEditor(view, api.editor, api.workspace);
 		editor.updateVisibility();

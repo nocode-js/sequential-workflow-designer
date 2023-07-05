@@ -135,6 +135,7 @@ Create a template for the step editor. The value of the `editor` variable implem
 ```ts
 interface StepEditorWrapper {
   step: Step;
+  definition: Definition;
   context: StepEditorContext;
 }
 ```

@@ -4,9 +4,10 @@ import { StepDefinition } from '../designer-configuration';
 
 export class ToolboxItemView {
 	public static create(parent: HTMLElement, step: StepDefinition, api: ToolboxApi): ToolboxItemView {
+		const label = api.getLabel(step);
 		const root = Dom.element('div', {
 			class: `sqd-toolbox-item sqd-type-${step.type}`,
-			title: step.name
+			title: label
 		});
 
 		const iconUrl = api.tryGetIconUrl(step);
@@ -28,7 +29,7 @@ export class ToolboxItemView {
 		const text = Dom.element('div', {
 			class: 'sqd-toolbox-item-text'
 		});
-		text.textContent = api.getLabel(step);
+		text.textContent = label;
 
 		root.appendChild(icon);
 		root.appendChild(text);
