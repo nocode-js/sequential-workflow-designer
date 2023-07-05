@@ -8,7 +8,7 @@ describe('SmartEditorView', () => {
 		const api = createDesignerApiStub();
 		const configuration = getEditorsConfigurationStub();
 
-		const view = SmartEditorView.create(parent, api, configuration);
+		const view = SmartEditorView.create(parent, api.editor, configuration);
 
 		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);

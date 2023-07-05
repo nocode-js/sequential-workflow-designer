@@ -63,7 +63,7 @@ Create the global editor component:
 
 ```tsx
 function GlobalEditor() {
-  const { properties, setProperty } = useGlobalEditor();
+  const { properties, setProperty, definition } = useGlobalEditor();
 
   function onSpeedChanged(e) {
     setProperty('speed', e.target.value);
@@ -82,7 +82,7 @@ Create the step editor component:
 
 ```tsx
 function StepEditor() {
-  const { type, componentType, name, setName, properties, setProperty } = useStepEditor();
+  const { type, componentType, name, setName, properties, setProperty, definition } = useStepEditor();
 
   function onNameChanged(e) {
     setName(e.target.value);

@@ -110,7 +110,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		return (globalEditorRef.current as GlobalEditorProvider)(def, context);
 	}
 
-	function stepEditorProvider(step: Step, context: StepEditorContext) {
+	function stepEditorProvider(step: Step, context: StepEditorContext, def: Definition) {
 		if (!stepEditorRef.current) {
 			throw new Error('Step editor is not provided');
 		}
@@ -118,12 +118,12 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 			return Presenter.render(
 				externalEditorClassName,
 				editorRootRef,
-				<StepEditorWrapperContext step={step} context={context}>
+				<StepEditorWrapperContext step={step} definition={def} context={context}>
 					{stepEditorRef.current}
 				</StepEditorWrapperContext>
 			);
 		}
-		return (stepEditorRef.current as StepEditorProvider)(step, context);
+		return (stepEditorRef.current as StepEditorProvider)(step, context, def);
 	}
 
 	function customActionHandler(action: CustomAction, step: Step | null, sequence: Sequence, context: CustomActionHandlerContext) {

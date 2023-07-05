@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Definition, GlobalEditorContext } from 'sequential-workflow-designer';
-import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
+import { GlobalEditorWrapperContext, useGlobalEditor } from './GlobalEditorWrapper';
 
 describe('GlobalEditorWrapper', () => {
 	const definition: Definition = {
@@ -15,12 +15,23 @@ describe('GlobalEditorWrapper', () => {
 	};
 
 	it('renders child correctly', () => {
+		function TestHook() {
+			const editor = useGlobalEditor();
+
+			expect(editor.properties).toBe(definition.properties);
+			expect(editor.definition).toBe(definition);
+
+			return <hr data-testid="hook" />;
+		}
+
 		render(
 			<GlobalEditorWrapperContext definition={definition} context={context}>
 				<div data-testid="child" />
+				<TestHook />
 			</GlobalEditorWrapperContext>
 		);
-		const element = screen.getByTestId('child');
-		expect(element.tagName).toBe('DIV');
+
+		expect(screen.getByTestId('child').tagName).toBe('DIV');
+		expect(screen.getByTestId('hook').tagName).toBe('HR');
 	});
 });

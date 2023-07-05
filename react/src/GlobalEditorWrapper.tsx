@@ -1,5 +1,5 @@
-import { Context, createContext, useContext, useState } from 'react';
-import { Definition, GlobalEditorContext, Properties, PropertyValue } from 'sequential-workflow-designer';
+import { Context, createContext, useContext, useState, ReactNode } from 'react';
+import { Definition, GlobalEditorContext, PropertyValue } from 'sequential-workflow-designer';
 
 declare global {
 	interface Window {
@@ -14,6 +14,7 @@ const globalEditorContext = window.sqdGlobalEditorContext;
 
 export interface GlobalEditorWrapper<TDefinition extends Definition> {
 	readonly properties: TDefinition['properties'];
+	readonly definition: TDefinition;
 
 	setProperty(name: keyof TDefinition['properties'], value: TDefinition['properties'][typeof name]): void;
 }
@@ -26,12 +27,19 @@ export function useGlobalEditor<TDefinition extends Definition = Definition>(): 
 	return wrapper as unknown as GlobalEditorWrapper<TDefinition>;
 }
 
-export function GlobalEditorWrapperContext(props: { children: JSX.Element; definition: Definition; context: GlobalEditorContext }) {
+export interface GlobalEditorWrapperContextProps {
+	children: ReactNode;
+	definition: Definition;
+	context: GlobalEditorContext;
+}
+
+export function GlobalEditorWrapperContext(props: GlobalEditorWrapperContextProps) {
 	const [wrapper, setWrapper] = useState(() => createWrapper());
 
 	function createWrapper() {
 		return {
-			properties: props.definition.properties as Properties,
+			properties: props.definition.properties,
+			definition: props.definition,
 			setProperty
 		};
 	}
