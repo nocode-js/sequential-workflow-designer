@@ -1,4 +1,4 @@
-import { Sequence, Step } from 'sequential-workflow-model';
+import { Sequence, Step } from '../definition';
 import { ComponentContext } from '../component-context';
 import { SequenceContext, StepComponentViewContext, StepContext } from '../designer-extension';
 

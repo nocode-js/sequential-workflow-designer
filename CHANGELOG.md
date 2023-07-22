@@ -1,3 +1,9 @@
+## 0.13.6
+
+Now it's possible to configure the size of grid cells. The default size is `48` as before.
+
+🌟 In the pro version you can change the pattern of the grid from now. The pro version supports two new patterns: `dot` and `cross`.
+
 ## 0.13.5
 
 We have added a third parameter, `definition`, to the step editor provider.

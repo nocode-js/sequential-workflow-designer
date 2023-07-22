@@ -9,5 +9,6 @@ export * from './designer-context';
 export * from './designer-extension';
 export * from './designer-state';
 export * from './designer';
+export * from './line-grid-designer-extension';
 export * from './services';
-export * from './steps-extension';
+export * from './steps-designer-extension';
