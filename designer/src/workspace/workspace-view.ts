@@ -2,29 +2,24 @@ import { Dom } from '../core/dom';
 import { readMousePosition, readTouchClientPosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
-import { SequencePlaceIndicator } from '../designer-extension';
+import { Grid, SequencePlaceIndicator } from '../designer-extension';
 import { ComponentContext } from '../component-context';
 import { Component } from './component';
-
-const GRID_SIZE = 48;
 
 let lastGridPatternId = 0;
 
 export class WorkspaceView {
 	public static create(parent: HTMLElement, componentContext: ComponentContext): WorkspaceView {
-		const defs = Dom.svg('defs');
-		const gridPatternId = 'sqd-grid-pattern-' + lastGridPatternId++;
-		const gridPattern = Dom.svg('pattern', {
-			id: gridPatternId,
+		const patternId = 'sqd-grid-pattern-' + lastGridPatternId++;
+		const pattern = Dom.svg('pattern', {
+			id: patternId,
 			patternUnits: 'userSpaceOnUse'
 		});
-		const gridPatternPath = Dom.svg('path', {
-			class: 'sqd-grid-path',
-			fill: 'none'
-		});
+		const gridPattern = componentContext.services.grid.create();
 
-		defs.appendChild(gridPattern);
-		gridPattern.appendChild(gridPatternPath);
+		const defs = Dom.svg('defs');
+		pattern.appendChild(gridPattern.element);
+		defs.appendChild(pattern);
 
 		const foreground = Dom.svg('g');
 
@@ -39,14 +34,14 @@ export class WorkspaceView {
 			Dom.svg('rect', {
 				width: '100%',
 				height: '100%',
-				fill: `url(#${gridPatternId})`
+				fill: `url(#${patternId})`
 			})
 		);
 		canvas.appendChild(foreground);
 		workspace.appendChild(canvas);
 		parent.appendChild(workspace);
 
-		const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, componentContext);
+		const view = new WorkspaceView(workspace, canvas, pattern, gridPattern, foreground, componentContext);
 		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;
 	}
@@ -57,8 +52,8 @@ export class WorkspaceView {
 	private constructor(
 		private readonly workspace: HTMLElement,
 		private readonly canvas: SVGElement,
-		private readonly gridPattern: SVGPatternElement,
-		private readonly gridPatternPath: SVGPathElement,
+		private readonly pattern: SVGPatternElement,
+		private readonly gridPattern: Grid,
 		private readonly foreground: SVGGElement,
 		private readonly context: ComponentContext
 	) {}
@@ -77,16 +72,14 @@ export class WorkspaceView {
 	}
 
 	public setPositionAndScale(position: Vector, scale: number) {
-		const gridSize = GRID_SIZE * scale;
-		Dom.attrs(this.gridPattern, {
+		const scaledSize = this.gridPattern.size.multiplyByScalar(scale);
+		Dom.attrs(this.pattern, {
 			x: position.x,
 			y: position.y,
-			width: gridSize,
-			height: gridSize
+			width: scaledSize.x,
+			height: scaledSize.y
 		});
-		Dom.attrs(this.gridPatternPath, {
-			d: `M ${gridSize} 0 L 0 0 0 ${gridSize}`
-		});
+		this.gridPattern.setScale(scale, scaledSize);
 		Dom.attrs(this.foreground, {
 			transform: `translate(${position.x}, ${position.y}) scale(${scale})`
 		});

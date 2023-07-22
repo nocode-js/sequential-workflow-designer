@@ -15,6 +15,7 @@ export interface DesignerExtension {
 	viewportController?: ViewportControllerExtension;
 	placeholderController?: PlaceholderControllerExtension;
 	placeholder?: PlaceholderExtension;
+	grid?: GridExtension;
 	rootComponent?: RootComponentExtension;
 	sequenceComponent?: SequenceComponentExtension;
 	daemons?: DaemonExtension[];
@@ -100,6 +101,18 @@ export interface DraggedComponent {
 	width: number;
 	height: number;
 	destroy(): void;
+}
+
+// GridExtension
+
+export interface GridExtension {
+	create(): Grid;
+}
+
+export interface Grid {
+	size: Vector;
+	element: SVGElement;
+	setScale(scale: number, scaledSize: Vector): void;
 }
 
 // RootComponentExtension

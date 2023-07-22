@@ -1,4 +1,4 @@
-import { Sequence } from 'sequential-workflow-model';
+import { Sequence } from '../../definition';
 import { Vector } from '../../core';
 import { PlaceholderExtension } from '../../designer-extension';
 import { PlaceholderDirection, Placeholder } from '../component';

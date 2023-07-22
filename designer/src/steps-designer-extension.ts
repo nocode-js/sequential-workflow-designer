@@ -1,4 +1,4 @@
-import { Step } from 'sequential-workflow-model';
+import { Step } from './definition';
 import { DesignerExtension, StepExtension } from './designer-extension';
 import { ContainerStepExtension } from './workspace/container-step/container-step-extension';
 import { ContainerStepExtensionConfiguration } from './workspace/container-step/container-step-extension-configuration';
@@ -7,14 +7,14 @@ import { SwitchStepExtension } from './workspace/switch-step/switch-step-extensi
 import { TaskStepExtensionConfiguration } from './workspace/task-step/task-step-extension-configuration';
 import { TaskStepExtension } from './workspace/task-step/task-step-extension';
 
-export interface StepsExtensionConfiguration {
+export interface StepsDesignerExtensionConfiguration {
 	container?: ContainerStepExtensionConfiguration;
 	switch?: SwitchStepExtensionConfiguration;
 	task?: TaskStepExtensionConfiguration;
 }
 
-export class StepsExtension implements DesignerExtension {
-	public static create(configuration: StepsExtensionConfiguration): StepsExtension {
+export class StepsDesignerExtension implements DesignerExtension {
+	public static create(configuration: StepsDesignerExtensionConfiguration): StepsDesignerExtension {
 		const steps: StepExtension<Step>[] = [];
 		if (configuration.container) {
 			steps.push(ContainerStepExtension.create(configuration.container));
@@ -25,8 +25,19 @@ export class StepsExtension implements DesignerExtension {
 		if (configuration.task) {
 			steps.push(TaskStepExtension.create(configuration.task));
 		}
-		return new StepsExtension(steps);
+		return new StepsDesignerExtension(steps);
 	}
 
-	private constructor(public readonly steps: StepExtension<Step>[]) {}
+	protected constructor(public readonly steps: StepExtension<Step>[]) {}
 }
+
+/**
+ * @deprecated Use `StepsDesignerExtension` instead.
+ */
+export class StepsExtension extends StepsDesignerExtension {}
+
+/**
+ * @deprecated Use `StepsDesignerExtensionConfiguration` instead.
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface StepsExtensionConfiguration extends StepsDesignerExtensionConfiguration {}

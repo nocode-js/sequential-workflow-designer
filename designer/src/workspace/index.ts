@@ -2,6 +2,7 @@ export * from './badges';
 export * from './common-views';
 export * from './sequence';
 export * from './container-step';
+export * from './grid';
 export * from './switch-step';
 export * from './task-step';
 export * from './viewport';

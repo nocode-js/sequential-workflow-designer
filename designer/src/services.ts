@@ -17,6 +17,7 @@ import { DefaultViewportControllerExtension } from './workspace/viewport/default
 import { findValidationBadgeIndex } from './workspace/badges/find-validation-badge-index';
 import { DefaultSequenceComponentExtension } from './workspace/sequence/default-sequence-component-extension';
 import { DefaultStepComponentViewWrapperExtension } from './workspace/default-step-component-view-wrapper-extension';
+import { LineGridExtension } from './workspace/grid/line-grid-extension';
 
 export type Services = Required<DesignerExtension>;
 
@@ -57,6 +58,9 @@ function merge(services: Partial<Services>, extensions: DesignerExtension[]) {
 		}
 		if (ext.viewportController) {
 			services.viewportController = ext.viewportController;
+		}
+		if (ext.grid) {
+			services.grid = ext.grid;
 		}
 		if (ext.rootComponent) {
 			services.rootComponent = ext.rootComponent;
@@ -116,6 +120,9 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 	}
 	if (!services.viewportController) {
 		services.viewportController = new DefaultViewportControllerExtension();
+	}
+	if (!services.grid) {
+		services.grid = LineGridExtension.create();
 	}
 	if (!services.rootComponent) {
 		services.rootComponent = new StartStopRootComponentExtension();
