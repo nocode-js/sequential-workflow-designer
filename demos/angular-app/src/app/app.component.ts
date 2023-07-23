@@ -4,6 +4,7 @@ import {
 	Designer,
 	GlobalEditorContext,
 	Properties,
+	Uid,
 	Step,
 	StepEditorContext,
 	StepsConfiguration,
@@ -11,12 +12,22 @@ import {
 	ValidatorConfiguration
 } from 'sequential-workflow-designer';
 
-function createDefinition() {
+function createStep(): Step {
+	return {
+		id: Uid.next(),
+		componentType: 'task',
+		name: 'Step',
+		properties: { velocity: 0 },
+		type: 'task'
+	};
+}
+
+function createDefinition(): Definition {
 	return {
 		properties: {
 			velocity: 0
 		},
-		sequence: []
+		sequence: [createStep()]
 	};
 }
 
@@ -35,14 +46,7 @@ export class AppComponent implements OnInit {
 		groups: [
 			{
 				name: 'Step',
-				steps: [
-					{
-						componentType: 'task',
-						name: 'Step',
-						properties: { velocity: 0 },
-						type: 'task'
-					}
-				]
+				steps: [createStep()]
 			}
 		]
 	};
@@ -68,7 +72,7 @@ export class AppComponent implements OnInit {
 		this.definition = definition;
 		this.updateIsValid();
 		this.updateDefinitionJSON();
-		console.log('definition changed');
+		console.log('definition has changed');
 	}
 
 	public updateName(step: Step, event: Event, context: StepEditorContext) {

@@ -2,11 +2,12 @@
 	"name": "sequential-workflow-designer-react-app-demo",
 	"version": "0.0.0",
 	"private": true,
+	"homepage": "./",
 	"dependencies": {
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"sequential-workflow-designer": "^0.13.6",
-		"sequential-workflow-designer-react": "^0.13.6"
+		"sequential-workflow-designer": "^0.13.7",
+		"sequential-workflow-designer-react": "^0.13.7"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.2.5",

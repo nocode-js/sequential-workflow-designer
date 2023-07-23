@@ -18,35 +18,54 @@
 	<h2>Global Editor</h2>
 
 	<h3>Velocity</h3>
-	<input
-		type="number"
-		[value]="editor.definition.properties.velocity"
-		(input)="updateProperty(editor.definition.properties, 'velocity', $event, editor.context)"
-	/>
+	<mat-form-field class="full-width">
+		<input
+			matInput
+			type="number"
+			[value]="editor.definition.properties.velocity"
+			(input)="updateProperty(editor.definition.properties, 'velocity', $event, editor.context)"
+		/>
+	</mat-form-field>
 </ng-template>
 
 <ng-template #stepEditor let-editor>
 	<h2>Step Editor</h2>
 
-	<h3>Name</h3>
-	<input type="text" [value]="editor.step.name" (input)="updateName(editor.step, $event, editor.context)" />
-
-	<h3>Velocity</h3>
-	<input
-		type="number"
-		[value]="editor.step.properties.velocity"
-		(input)="updateProperty(editor.step.properties, 'velocity', $event, editor.context)"
-	/>
+	<mat-tab-group>
+		<mat-tab label="Basic">
+			<h3>Name</h3>
+			<mat-form-field class="full-width">
+				<input matInput type="text" [value]="editor.step.name" (input)="updateName(editor.step, $event, editor.context)" />
+			</mat-form-field>
+		</mat-tab>
+		<mat-tab label="Details">
+			<h3>Velocity</h3>
+			<mat-form-field class="full-width">
+				<input
+					matInput
+					type="number"
+					[value]="editor.step.properties.velocity"
+					(input)="updateProperty(editor.step.properties, 'velocity', $event, editor.context)"
+				/>
+			</mat-form-field>
+		</mat-tab>
+	</mat-tab-group>
 </ng-template>
 
-<br />
+<div class="block">
+	<button mat-raised-button color="primary" (click)="reloadDefinitionClicked()">Reload definition</button>
+	&nbsp; Is valid: <strong>{{ isValid }}</strong>
+</div>
 
-<button (click)="reloadDefinitionClicked()">Reload definition</button>
+<div class="block">
+	<mat-form-field class="full-width flex-1s">
+		<textarea matInput cols="120" rows="16" readonly>{{ definitionJSON }}</textarea>
+	</mat-form-field>
+</div>
 
-<br />
-
-<textarea cols="60" rows="18">{{ definitionJSON }}</textarea>
-
-<br />
-
-Is valid: {{ isValid }}
+<div class="block">
+	This demo uses Angular, Material UI and
+	<a href="https://github.com/nocode-js/sequential-workflow-designer/tree/main/angular/designer" target="_blank"
+		>Sequential Workflow Designer for Angular</a
+	>.
+</div>

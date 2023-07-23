@@ -1,0 +1,42 @@
+name: examples
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Node 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+      - name: main.sh
+        run: bash .github/workflows/main.sh
+      - name: Prepare
+        run: |
+            mkdir _deploy
+            cp -R examples _deploy
+            cp -R demos/angular-app/dist/angular-app _deploy/angular-app
+            cp -R demos/react-app/build _deploy/react-app
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: _deploy
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v1

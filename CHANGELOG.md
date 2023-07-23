@@ -1,3 +1,7 @@
+## 0.13.7
+
+This version fixes change detections in the Angular package. Thanks @wildercarrot!
+
 ## 0.13.6
 
 Now it's possible to configure the size of grid cells. The default size is `48` as before.
