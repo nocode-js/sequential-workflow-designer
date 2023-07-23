@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - feat/v-0-13-7
 jobs:
   build:
     name: Build

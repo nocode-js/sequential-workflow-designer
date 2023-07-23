@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer-react",
 	"description": "React wrapper for Sequential Workflow Designer component.",
-	"version": "0.13.6",
+	"version": "0.13.7",
 	"type": "module",
 	"main": "./lib/esm/index.js",
 	"types": "./lib/index.d.ts",
@@ -47,7 +47,7 @@
 	"peerDependencies": {
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"sequential-workflow-designer": "^0.13.6"
+		"sequential-workflow-designer": "^0.13.7"
 	},
 	"devDependencies": {
 		"@rollup/plugin-node-resolve": "^15.0.1",
@@ -63,7 +63,7 @@
 		"prettier": "^2.8.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"sequential-workflow-designer": "^0.13.6",
+		"sequential-workflow-designer": "^0.13.7",
 		"rollup": "^3.18.0",
 		"rollup-plugin-dts": "^5.2.0",
 		"rollup-plugin-typescript2": "^0.34.1",
