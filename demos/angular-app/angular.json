@@ -24,6 +24,7 @@
 							"src/assets"
 						],
 						"styles": [
+							"@angular/material/prebuilt-themes/indigo-pink.css",
 							"src/styles.css",
 							"./node_modules/sequential-workflow-designer/css/designer.css",
 							"./node_modules/sequential-workflow-designer/css/designer-light.css",
@@ -89,6 +90,7 @@
 							"src/assets"
 						],
 						"styles": [
+							"@angular/material/prebuilt-themes/indigo-pink.css",
 							"src/styles.css"
 						],
 						"scripts": []

@@ -1,12 +1,38 @@
-body {
+body,
+input,
+textarea,
+button {
 	font: 13px/1.3em Arial, Verdana, Serif;
 }
 body {
 	margin: 0;
 	padding: 0;
 }
+a {
+	color: #2c18df;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+.full-width {
+	width: 100%;
+}
+textarea {
+	font-size: 9pt !important;
+	line-height: 1.2em !important;
+}
 
 .sqd-designer-angular {
 	width: 100vw;
 	height: 50vh;
+}
+.sqd-editor {
+	padding: 10px;
+}
+
+.block {
+	text-align: center;
+	margin: 10px;
 }

@@ -1,5 +1,6 @@
 import {
 	AfterViewInit,
+	ApplicationRef,
 	Component,
 	ElementRef,
 	EmbeddedViewRef,
@@ -77,7 +78,9 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Output()
 	public readonly onDefinitionChanged = new EventEmitter<Definition>();
 
-	public constructor(private readonly ngZone: NgZone) {}
+	public constructor(
+		private readonly ngZone: NgZone,
+		private readonly applicationRef: ApplicationRef) {}
 
 	public ngAfterViewInit() {
 		this.attach();
@@ -98,6 +101,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 
 	public ngOnDestroy(): void {
 		if (this.lastEmbeddedView) {
+			this.applicationRef.detachView(this.lastEmbeddedView);
 			this.lastEmbeddedView.destroy();
 		}
 	}
@@ -178,6 +182,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	private editorProvider<E>(templateRef: TemplateRef<unknown>, editor: E) {
 		return this.ngZone.run(() => {
 			if (this.lastEmbeddedView) {
+				this.applicationRef.detachView(this.lastEmbeddedView);
 				this.lastEmbeddedView.destroy();
 				this.lastEmbeddedView = undefined;
 			}
@@ -185,7 +190,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 			this.lastEmbeddedView = templateRef.createEmbeddedView({
 				$implicit: editor
 			});
-			this.lastEmbeddedView.detectChanges();
+			this.applicationRef.attachView(this.lastEmbeddedView);
 
 			const container = document.createElement('div');
 			container.className = 'sqd-editor-angular';
