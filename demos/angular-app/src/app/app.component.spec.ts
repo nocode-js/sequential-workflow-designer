@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { SequentialWorkflowDesignerModule } from 'sequential-workflow-designer-angular';
 import { AppComponent } from './app.component';
+import { AppModule } from './app.module';
 
 describe('AppComponent', () => {
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			declarations: [AppComponent],
-			imports: [SequentialWorkflowDesignerModule]
+			imports: [AppModule]
 		}).compileComponents();
 	});
 
