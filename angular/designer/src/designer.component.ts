@@ -78,9 +78,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Output()
 	public readonly onDefinitionChanged = new EventEmitter<Definition>();
 
-	public constructor(
-		private readonly ngZone: NgZone,
-		private readonly applicationRef: ApplicationRef) {}
+	public constructor(private readonly ngZone: NgZone, private readonly applicationRef: ApplicationRef) {}
 
 	public ngAfterViewInit() {
 		this.attach();
