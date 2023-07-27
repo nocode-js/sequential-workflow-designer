@@ -119,8 +119,15 @@ export class WorkspaceView {
 		);
 	}
 
-	public bindContextMenu(handler: (e: MouseEvent) => void) {
-		this.canvas.addEventListener('contextmenu', handler, false);
+	public bindContextMenu(handler: (position: Vector, target: Element) => void) {
+		this.canvas.addEventListener(
+			'contextmenu',
+			e => {
+				e.preventDefault();
+				handler(readMousePosition(e), e.target as Element);
+			},
+			false
+		);
 	}
 
 	public bindWheel(handler: (e: WheelEvent) => void) {

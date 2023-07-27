@@ -1,3 +1,27 @@
+## 0.14.0
+
+This version introduces the context menu, providing a new and interactive way to engage with the designer. If you want, you can disable this feature using the `contextMenu` property in the configuration.
+
+```ts
+const configuration = {
+  contextMenu: false,
+  // ...
+};
+```
+
+Introducing a new feature: step duplication! Now, you have the ability to duplicate any step in your definition along with its children. This convenient option can be accessed from the context menu. Please note that the feature is disabled by default. To enable it, you must set your own callback for the isDuplicable property.
+
+```ts
+const configuration = {
+  steps: {
+    isDuplicable: (step, parentSequence) => {
+      return true;
+    },
+  },
+  // ...
+};
+```
+
 ## 0.13.7
 
 This version fixes change detections in the Angular package. Thanks @wildercarrot!

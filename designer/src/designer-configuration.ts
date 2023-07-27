@@ -39,6 +39,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	controlBar: boolean;
 
 	/**
+	 * @description If false, the context menu will be disabled. By default, the context menu is enabled.
+	 */
+	contextMenu?: boolean;
+
+	/**
 	 * @description The configuration of validators.
 	 */
 	validator?: ValidatorConfiguration;
@@ -126,6 +131,7 @@ export interface StepsConfiguration {
 	canMoveStep?: (sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
 	isDeletable?: (step: Step, parentSequence: Sequence) => boolean;
 	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
+	isDuplicable?: (step: Step, parentSequence: Sequence) => boolean;
 
 	iconUrlProvider?: StepIconUrlProvider;
 }

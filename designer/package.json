@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer",
 	"description": "Customizable no-code component for building flow-based programming applications.",
-	"version": "0.13.7",
+	"version": "0.14.0",
 	"type": "module",
 	"main": "./lib/esm/index.js",
 	"types": "./lib/index.d.ts",
@@ -57,10 +57,10 @@
 		"prettier:fix": "prettier --write ./src"
 	},
 	"dependencies": {
-		"sequential-workflow-model": "^0.1.4"
+		"sequential-workflow-model": "^0.2.0"
 	},
 	"peerDependencies": {
-		"sequential-workflow-model": "^0.1.4"
+		"sequential-workflow-model": "^0.2.0"
 	},
 	"devDependencies": {
 		"@rollup/plugin-node-resolve": "^15.0.1",

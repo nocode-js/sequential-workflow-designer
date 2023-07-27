@@ -97,6 +97,7 @@ const configuration = {
 	controlBar: true,
 
 	steps: {
+		isDuplicable: () => true,
 		iconUrlProvider: (componentType, type) => {
 			return `./assets/icon-${type}.svg`
 		},

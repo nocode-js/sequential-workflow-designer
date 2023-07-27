@@ -1,22 +1,14 @@
 import { DesignerApi } from './api/designer-api';
 import { Dom } from './core/dom';
-import { DesignerConfiguration } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { Daemon, UiComponent } from './designer-extension';
 import { LayoutController } from './layout-controller';
 import { Workspace } from './workspace/workspace';
 
 export class DesignerView {
-	public static create(
-		parent: HTMLElement,
-		designerContext: DesignerContext,
-		configuration: DesignerConfiguration,
-		api: DesignerApi
-	): DesignerView {
-		const theme = configuration.theme || 'light';
-
+	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): DesignerView {
 		const root = Dom.element('div', {
-			class: `sqd-designer sqd-theme-${theme}`
+			class: `sqd-designer sqd-theme-${designerContext.theme}`
 		});
 		parent.appendChild(root);
 

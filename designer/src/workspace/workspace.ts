@@ -2,7 +2,7 @@ import { race } from '../core/simple-event-race';
 import { Vector } from '../core/vector';
 import { DefinitionWalker, Sequence, StepChildrenType } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { Component, Placeholder } from './component';
+import { ClickCommand, ClickDetails, Component, Placeholder } from './component';
 import { WorkspaceView } from './workspace-view';
 import { DefinitionChangedEvent, DefinitionChangeType, DesignerState } from '../designer-state';
 import { WorkspaceController } from './workspace-controller';
@@ -11,11 +11,12 @@ import { BehaviorController } from '../behaviors/behavior-controller';
 import { SimpleEvent } from '../core/simple-event';
 import { SequencePlaceIndicator, Viewport, WheelController } from '../designer-extension';
 import { DesignerApi } from '../api/designer-api';
-import { ViewportApi } from '../api/viewport-api';
 import { StepComponent } from './step-component';
 import { BadgesResultFactory } from './badges/badges-result-factory';
 import { Services } from '../services';
 import { findValidationBadgeIndex } from './badges/find-validation-badge-index';
+import { ContextMenuController } from './context-menu/context-menu-controller';
+import { ViewportApi } from '../api/viewport-api';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {
@@ -23,12 +24,21 @@ export class Workspace implements WorkspaceController {
 
 		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext, designerContext.state);
 		const wheelController = designerContext.services.wheelController.create(api.workspace);
+		const contextMenuController = new ContextMenuController(
+			designerContext.theme,
+			api.viewport,
+			designerContext.definitionModifier,
+			designerContext.state,
+			designerContext.configuration
+		);
+
 		const workspace = new Workspace(
 			view,
 			designerContext.definitionWalker,
 			designerContext.state,
 			designerContext.behaviorController,
 			wheelController,
+			contextMenuController,
 			clickBehaviorResolver,
 			api.viewport,
 			designerContext.services
@@ -54,7 +64,7 @@ export class Workspace implements WorkspaceController {
 
 		view.bindClick((p, t, b) => workspace.onClick(p, t, b));
 		view.bindWheel(e => workspace.onWheel(e));
-		view.bindContextMenu(e => workspace.onContextMenu(e));
+		view.bindContextMenu((p, t) => workspace.onContextMenu(p, t));
 		return workspace;
 	}
 
@@ -70,6 +80,7 @@ export class Workspace implements WorkspaceController {
 		private readonly state: DesignerState,
 		private readonly behaviorController: BehaviorController,
 		private readonly wheelController: WheelController,
+		private readonly contextMenuController: ContextMenuController,
 		private readonly clickBehaviorResolver: ClickBehaviorResolver,
 		private readonly viewportApi: ViewportApi,
 		private readonly services: Services
@@ -146,6 +157,7 @@ export class Workspace implements WorkspaceController {
 	}
 
 	public destroy() {
+		this.contextMenuController.destroy();
 		this.view.destroy();
 	}
 
@@ -154,9 +166,9 @@ export class Workspace implements WorkspaceController {
 		const isMiddleButton = buttonIndex === 1;
 
 		if (isPrimaryButton || isMiddleButton) {
-			const rootComponent = this.getRootComponent();
+			const commandOrNull = this.resolveClick(target, position);
 			const forceDisableDrag = isMiddleButton;
-			const behavior = this.clickBehaviorResolver.resolve(rootComponent, target, position, forceDisableDrag);
+			const behavior = this.clickBehaviorResolver.resolve(commandOrNull, target, forceDisableDrag);
 			this.behaviorController.start(position, behavior);
 		}
 	}
@@ -168,8 +180,9 @@ export class Workspace implements WorkspaceController {
 		this.wheelController.onWheel(e);
 	}
 
-	private onContextMenu(e: MouseEvent) {
-		e.preventDefault();
+	private onContextMenu(position: Vector, target: Element) {
+		const commandOrNull = this.resolveClick(target, position);
+		this.contextMenuController.tryOpen(position, commandOrNull);
 	}
 
 	private onIsDraggingChanged(isDragging: boolean) {
@@ -210,6 +223,15 @@ export class Workspace implements WorkspaceController {
 				this.selectedStepComponent.setIsSelected(true);
 			}
 		}
+	}
+
+	private resolveClick(element: Element, position: Vector): ClickCommand | null {
+		const click: ClickDetails = {
+			element,
+			position,
+			scale: this.state.viewport.scale
+		};
+		return this.getRootComponent().resolveClick(click);
 	}
 
 	private getRootComponent(): Component {

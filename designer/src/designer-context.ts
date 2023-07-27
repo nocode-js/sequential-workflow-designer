@@ -26,6 +26,7 @@ export class DesignerContext {
 		const isToolboxCollapsed = configuration.toolbox ? configuration.toolbox.isCollapsed ?? layoutController.isMobile() : false;
 		const isEditorCollapsed = configuration.editors ? configuration.editors.isCollapsed ?? layoutController.isMobile() : false;
 
+		const theme = configuration.theme || 'light';
 		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = new BehaviorController();
@@ -47,6 +48,7 @@ export class DesignerContext {
 		);
 
 		return new DesignerContext(
+			theme,
 			state,
 			configuration,
 			services,
@@ -61,6 +63,7 @@ export class DesignerContext {
 	}
 
 	public constructor(
+		public readonly theme: string,
 		public readonly state: DesignerState,
 		public readonly configuration: DesignerConfiguration,
 		public readonly services: Services,

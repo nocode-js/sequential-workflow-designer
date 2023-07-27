@@ -93,10 +93,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.13.7/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.13.7/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.13.7/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.13.7/dist/index.umd.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.14.0/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.14.0/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.14.0/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.14.0/dist/index.umd.js"></script>
 ```
 
 Call the designer by:
@@ -141,6 +141,9 @@ const configuration = {
     },
     isDeletable: (step, parentSequence) => {
       return step.properties['isDeletable'];
+    },
+    isDuplicable: (step, parentSequence) => {
+        return true;
     },
     canInsertStep: (step, targetSequence, targetIndex) => {
       return targetSequence.length < 5;
@@ -197,6 +200,7 @@ const configuration = {
   },
 
   controlBar: true,
+  contextMenu: true,
 };
 
 const designer = Designer.create(placeholder, definition, configuration);
@@ -212,6 +216,7 @@ const configuration = {
   toolbox: false,
   editors: false,
   controlBar: false,
+  contextMenu: false,
   // ...
 }
 ```
