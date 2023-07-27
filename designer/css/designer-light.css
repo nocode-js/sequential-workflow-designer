@@ -56,6 +56,19 @@
 	stroke: #000;
 }
 
+/* light > .sqd-context-menu */
+
+.sqd-theme-light.sqd-context-menu {
+	box-shadow: 0 0 8px rgba(0, 0, 0, .2);
+	background: #FFF;
+}
+.sqd-theme-light .sqd-context-menu-group {
+	color: #888;
+}
+.sqd-theme-light .sqd-context-menu-item:hover {
+	background: #EEE;
+}
+
 /* light > .sqd-smart-editor */
 
 .sqd-theme-light .sqd-smart-editor {

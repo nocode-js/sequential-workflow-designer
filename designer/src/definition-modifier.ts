@@ -1,4 +1,6 @@
+import { Uid } from './core';
 import { SequenceModifier } from './core/sequence-modifier';
+import { StepDuplicator } from './core/step-duplicator';
 import { Definition, DefinitionWalker, Sequence, Step } from './definition';
 import { DesignerConfiguration } from './designer-configuration';
 import { DefinitionChangeType, DesignerState } from './designer-state';
@@ -70,6 +72,20 @@ export class DefinitionModifier {
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepMoved, step.id);
 		this.state.setSelectedStepId(step.id);
 		return true;
+	}
+
+	public isDuplicable(step: Step, parentSequence: Sequence): boolean {
+		return this.configuration.steps.isDuplicable ? this.configuration.steps.isDuplicable(step, parentSequence) : false;
+	}
+
+	public tryDuplicate(step: Step, parentSequence: Sequence): boolean {
+		const uidGenerator = this.configuration.uidGenerator ? this.configuration.uidGenerator : Uid.next;
+		const duplicator = new StepDuplicator(uidGenerator, this.definitionWalker);
+
+		const index = parentSequence.indexOf(step);
+		const newStep = duplicator.duplicate(step);
+
+		return this.tryInsert(newStep, parentSequence, index + 1);
 	}
 
 	public replaceDefinition(definition: Definition) {

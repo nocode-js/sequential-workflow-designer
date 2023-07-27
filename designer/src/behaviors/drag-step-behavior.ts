@@ -12,7 +12,7 @@ import { StepComponent } from '../workspace/step-component';
 
 export class DragStepBehavior implements Behavior {
 	public static create(designerContext: DesignerContext, step: Step, draggedStepComponent?: StepComponent): DragStepBehavior {
-		const view = DragStepView.create(step, designerContext.configuration, designerContext.componentContext);
+		const view = DragStepView.create(step, designerContext.theme, designerContext.componentContext);
 		return new DragStepBehavior(
 			view,
 			designerContext.workspaceController,

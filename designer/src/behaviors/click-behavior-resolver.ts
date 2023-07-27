@@ -1,7 +1,6 @@
-import { Vector } from '../core';
 import { DesignerContext } from '../designer-context';
 import { DesignerState } from '../designer-state';
-import { ClickCommandType, ClickDetails, Component } from '../workspace';
+import { ClickCommand, ClickCommandType } from '../workspace';
 import { Behavior } from './behavior';
 import { MoveViewportBehavior } from './move-viewport-behavior';
 import { SelectStepBehavior } from './select-step-behavior';
@@ -13,30 +12,26 @@ import { TriggerCustomActionPressingBehaviorHandler } from './pressing-behaviors
 export class ClickBehaviorResolver {
 	public constructor(private readonly designerContext: DesignerContext, private readonly state: DesignerState) {}
 
-	public resolve(rootComponent: Component, element: Element, position: Vector, forceDisableDrag: boolean): Behavior {
-		const click: ClickDetails = {
-			element,
-			position,
-			scale: this.state.viewport.scale
-		};
-
-		const command = rootComponent.resolveClick(click);
-		if (!command) {
+	public resolve(commandOrNull: ClickCommand | null, element: Element, forceDisableDrag: boolean): Behavior {
+		if (!commandOrNull) {
 			return MoveViewportBehavior.create(this.state, true);
 		}
 
-		switch (command.type) {
+		switch (commandOrNull.type) {
 			case ClickCommandType.selectStep:
-				return SelectStepBehavior.create(command.component, forceDisableDrag, this.designerContext);
+				return SelectStepBehavior.create(commandOrNull.component, forceDisableDrag, this.designerContext);
 
 			case ClickCommandType.rerenderStep:
 				return PressingBehavior.create(element, new RerenderStepPressingBehaviorHandler(this.designerContext));
 
 			case ClickCommandType.openFolder:
-				return PressingBehavior.create(element, new OpenFolderPressingBehaviorHandler(command, this.designerContext));
+				return PressingBehavior.create(element, new OpenFolderPressingBehaviorHandler(commandOrNull, this.designerContext));
 
 			case ClickCommandType.triggerCustomAction:
-				return PressingBehavior.create(element, new TriggerCustomActionPressingBehaviorHandler(command, this.designerContext));
+				return PressingBehavior.create(
+					element,
+					new TriggerCustomActionPressingBehaviorHandler(commandOrNull, this.designerContext)
+				);
 
 			default:
 				throw new Error('Not supported behavior type');

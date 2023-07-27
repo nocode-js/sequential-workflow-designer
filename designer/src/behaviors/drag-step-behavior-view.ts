@@ -1,13 +1,11 @@
 import { Dom } from '../core/dom';
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
-import { DesignerConfiguration } from '../designer-configuration';
 import { ComponentContext } from '../component-context';
 import { DraggedComponent } from '../designer-extension';
 
 export class DragStepView {
-	public static create(step: Step, configuration: DesignerConfiguration, componentContext: ComponentContext): DragStepView {
-		const theme = configuration.theme || 'light';
+	public static create(step: Step, theme: string, componentContext: ComponentContext): DragStepView {
 		const layer = Dom.element('div', {
 			class: `sqd-drag sqd-theme-${theme}`
 		});

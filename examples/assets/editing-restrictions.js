@@ -1,4 +1,4 @@
-/* global window, document, sequentialWorkflowDesigner */
+/* global window, document, sequentialWorkflowDesigner, console */
 
 function createStep(name, properties) {
 	return {
@@ -82,6 +82,9 @@ function load() {
 				return window.confirm(message.join('\n'));
 			},
 			isDeletable: (step) => {
+				return step.properties.deletable;
+			},
+			isDuplicable: (step) => {
 				return step.properties.deletable;
 			},
 			canDeleteStep: (step) => {

@@ -42,7 +42,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 		const designerContext = DesignerContext.create(placeholder, startDefinition, config, services);
 		const designerApi = DesignerApi.create(designerContext);
 
-		const view = DesignerView.create(placeholder, designerContext, config, designerApi);
+		const view = DesignerView.create(placeholder, designerContext, designerApi);
 		const designer = new Designer<TDef>(view, designerContext.state, designerContext.definitionWalker, designerApi);
 		view.workspace.onReady.subscribe(() => designer.onReady.forward());
 
