@@ -1,3 +1,19 @@
+## 0.14.1
+
+This version includes the ability to hide the context menu for Angular and React packages.
+
+```tsx
+// React
+<SequentialWorkflowDesigner contextMenu={false} ... />
+```
+
+```html
+<!-- Angular -->
+<sqd-designer [contextMenu]="false" ...></sqd-designer>
+```
+
+🌟 The pro version introduces the loading badge. Check the [badges example](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/badges.html).
+
 ## 0.14.0
 
 This version introduces the context menu, providing a new and interactive way to engage with the designer. If you want, you can disable this feature using the `contextMenu` property in the configuration.

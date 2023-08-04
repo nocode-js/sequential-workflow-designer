@@ -2,7 +2,7 @@
 
 # Sequential Workflow Designer for Angular
 
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fb4rtaz%2Fsequential-workflow-designer%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/b4rtaz/sequential-workflow-designer/goto?ref=main) [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](/LICENSE) [![View this project on NPM](https://img.shields.io/npm/v/sequential-workflow-designer-angular.svg?style=flat-square)](https://npmjs.org/package/sequential-workflow-designer-angular)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fb4rtaz%2Fsequential-workflow-designer%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/b4rtaz/sequential-workflow-designer/goto?ref=main) [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](/LICENSE) [![View this project on NPM](https://img.shields.io/npm/v/sequential-workflow-designer-angular.svg?style=flat-square)](https://npmjs.org/package/sequential-workflow-designer-angular)
 
 Angular wrapper for the [Sequential Workflow Designer](https://github.com/nocode-js/sequential-workflow-designer) component.
 
@@ -151,6 +151,7 @@ At the end attach the designer:
   [stepsConfiguration]="stepsConfiguration"
   [validatorConfiguration]="validatorConfiguration"
   [controlBar]="true"
+  [contextMenu]="true"
   [areEditorsHidden]="false"
   [globalEditor]="globalEditor"
   [stepEditor]="stepEditor"

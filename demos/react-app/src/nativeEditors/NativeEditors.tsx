@@ -47,6 +47,7 @@ export function NativeEditors() {
 				toolboxConfiguration={false}
 				stepsConfiguration={{}}
 				controlBar={true}
+				contextMenu={true}
 				globalEditor={globalEditorProvider}
 				stepEditor={stepEditorProvider}
 			/>

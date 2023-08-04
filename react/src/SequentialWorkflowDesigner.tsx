@@ -50,6 +50,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	 * @description If true, the control bar will be displayed.
 	 */
 	controlBar: boolean;
+	contextMenu?: boolean;
 	controller?: SequentialWorkflowDesignerController;
 	customActionHandler?: CustomActionHandler;
 	extensions?: DesignerExtension[];
@@ -81,6 +82,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const isEditorCollapsed = props.isEditorCollapsed;
 	const isToolboxCollapsed = props.isToolboxCollapsed;
 	const controlBar = props.controlBar;
+	const contextMenu = props.contextMenu;
 	const extensions = props.extensions;
 
 	if (props.controlBar === undefined) {
@@ -220,6 +222,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 			steps,
 			validator,
 			controlBar,
+			contextMenu,
 			editors:
 				globalEditorRef.current && stepEditorRef.current
 					? {
@@ -272,6 +275,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		toolbox,
 		isToolboxCollapsed,
 		isEditorCollapsed,
+		contextMenu,
 		controlBar,
 		steps,
 		validator,

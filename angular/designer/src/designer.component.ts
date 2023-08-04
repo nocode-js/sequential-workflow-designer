@@ -19,8 +19,10 @@ import {
 	Designer,
 	DesignerExtension,
 	GlobalEditorContext,
+	GlobalEditorProvider,
 	Step,
 	StepEditorContext,
+	StepEditorProvider,
 	StepsConfiguration,
 	ToolboxConfiguration,
 	ValidatorConfiguration
@@ -64,14 +66,16 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public toolboxConfiguration?: AngularToolboxConfiguration | false;
 	@Input('controlBar')
 	public controlBar?: boolean;
+	@Input('contextMenu')
+	public contextMenu?: boolean;
 	@Input('extensions')
 	public extensions?: DesignerExtension[];
 	@Input('areEditorsHidden')
 	public areEditorsHidden?: boolean;
 	@Input('globalEditor')
-	public globalEditor?: TemplateRef<unknown>;
+	public globalEditor?: TemplateRef<unknown> | GlobalEditorProvider;
 	@Input('stepEditor')
-	public stepEditor?: TemplateRef<unknown>;
+	public stepEditor?: TemplateRef<unknown> | StepEditorProvider;
 
 	@Output()
 	public readonly onReady = new EventEmitter<Designer>();
@@ -140,6 +144,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 				validator: this.validatorConfiguration,
 				toolbox: this.toolboxConfiguration,
 				controlBar: this.controlBar,
+				contextMenu: this.contextMenu,
 				extensions: this.extensions
 			});
 			designer.onReady.subscribe(() => {
@@ -160,6 +165,9 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 		if (!this.globalEditor) {
 			throw new Error('Input "globalEditor" is not set');
 		}
+		if (typeof this.globalEditor === 'function') {
+			return this.globalEditor(definition, context);
+		}
 		return this.editorProvider<GlobalEditorWrapper>(this.globalEditor, {
 			definition,
 			context
@@ -169,6 +177,9 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	private readonly stepEditorProvider = (step: Step, context: StepEditorContext, definition: Definition) => {
 		if (!this.stepEditor) {
 			throw new Error('Input "stepEditor" is not set');
+		}
+		if (typeof this.stepEditor === 'function') {
+			return this.stepEditor(step, context, definition);
 		}
 		return this.editorProvider<StepEditorWrapper>(this.stepEditor, {
 			step,
