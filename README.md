@@ -33,6 +33,7 @@ Features:
 * [🚄 Stress Test](https://nocode-js.github.io/sequential-workflow-designer/examples/stress-test.html)
 * [🚪 Editing Restrictions](https://nocode-js.github.io/sequential-workflow-designer/examples/editing-restrictions.html)
 * [📜 Scrollable Page](https://nocode-js.github.io/sequential-workflow-designer/examples/scrollable-page.html)
+* [🌵 Multi-Conditional Switch](https://nocode-js.github.io/sequential-workflow-designer/examples/multi-conditional-switch.html)
 * [React Demo](https://nocode-js.github.io/sequential-workflow-designer/react-app/)
 * [Angular Demo](https://nocode-js.github.io/sequential-workflow-designer/angular-app/)
 
