@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>🌵 Multi-Conditional Switch - Sequential Workflow Designer</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<link rel="icon" href="./assets/favicon.ico" />
+
+		<link rel="stylesheet" href="./assets/common.css" />
+		<style>
+			html,
+			body {
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden;
+			}
+			body {
+				display: flex;
+				flex-direction: column;
+			}
+			.main {
+				flex: 1;
+				position: relative;
+			}
+			#designer {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+			}
+
+			.sqd-editor {
+				padding: 10px;
+			}
+			.sqd-editor h2 {
+				margin: 10px 0 20px;
+				padding: 0;
+				line-height: 1.1em;
+			}
+			.sqd-editor p {
+				line-height: 1.3em;
+			}
+			.sqd-editor button {
+				border: 0;
+				padding: 5px 8px;
+				background: #222;
+				color: #fff;
+				cursor: pointer;
+				border-radius: 5px;
+			}
+			.sqd-editor button:hover {
+				background: #444;
+			}
+			.sqd-editor input[type='text'] {
+				width: 100%;
+				margin: 0 0 5px;
+				box-sizing: border-box;
+				padding: 5px;
+				border: 1px solid #ddd;
+				border-radius: 5px;
+			}
+			.sqd-editor .switch-branch {
+				padding: 10px;
+				border: 1px solid #ddd;
+				margin: 10px 0;
+				border-radius: 5px;
+			}
+			.sqd-editor .switch-branch h4 {
+				margin: 0;
+				font-size: 14px;
+				background: #ddd;
+				padding: 5px;
+				border-radius: 5px;
+			}
+			.sqd-editor .switch-branch label {
+				display: block;
+				padding: 5px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="title-bar">
+			<div class="column">
+				<h1>🌵 Multi-Conditional Switch Example</h1>
+			</div>
+			<div class="column text-end flex-1">
+				<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+			</div>
+		</header>
+
+		<div class="main">
+			<div id="designer"></div>
+		</div>
+
+		<script src="./assets/lib.js"></script>
+		<script src="./assets/multi-conditional-switch.js"></script>
+	</body>
+</html>
