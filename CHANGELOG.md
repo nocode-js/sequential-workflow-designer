@@ -1,3 +1,16 @@
+## 0.15.0
+
+This version introduces a new approach to customizing the designer. Prior to this version, customization was challenging and required numerous CSS overrides. Now, the designer provides SCSS files with mixins, simplifying the customization process.
+
+We have prepared a [tutorial on creating a custom theme](https://nocode-js.com/docs/sequential-workflow-designer/features/custom-theme), which is exclusively available for pro version clients.
+
+Please note that the `designer.css`, `designer-light.css`, and `designer-dark.css` files are still available as they were before. If you have been using these files without any overrides, you don't need to make any changes.
+
+### Breaking Changes
+
+* The `sqd-grid-path` class of the line grid is renamed to `sqd-line-grid-path`.
+* Selectors in the `designer.css`, `designer-light.css` and `designer-dark.css` files have been changed.
+
 ## 0.14.1
 
 This version includes the ability to hide the context menu for Angular and React packages.

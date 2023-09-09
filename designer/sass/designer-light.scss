@@ -1,0 +1,20 @@
+@import './designer-theme.scss';
+
+@include sqd-theme-ui-toolbox('light');
+@include sqd-theme-ui-toolbox-item('light');
+@include sqd-theme-ui-control-bar('light');
+@include sqd-theme-ui-editor('light');
+@include sqd-theme-ui-context-menu('light');
+
+@include sqd-theme-workspace('light');
+@include sqd-theme-line-grid('light');
+@include sqd-theme-join('light');
+@include sqd-theme-region('light');
+@include sqd-theme-placeholder('light');
+@include sqd-theme-validation-error-badge('light');
+
+@include sqd-theme-start-stop-root-component('light');
+
+@include sqd-theme-task-step-component('light');
+@include sqd-theme-switch-step-component('light');
+@include sqd-theme-container-step-component('light');

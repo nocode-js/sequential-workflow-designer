@@ -4,7 +4,7 @@ import { Grid } from '../../designer-extension';
 export class LineGrid implements Grid {
 	public static create(size: Vector): LineGrid {
 		const path = Dom.svg('path', {
-			class: 'sqd-grid-path',
+			class: 'sqd-line-grid-path',
 			fill: 'none'
 		});
 		return new LineGrid(size, path);

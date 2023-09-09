@@ -1,0 +1,378 @@
+@mixin sqd-theme-ui-toolbox(
+	$theme,
+	$panelBackgroundColor: #fff,
+	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.15)),
+	$headerTextColor: #000,
+	$filterBackground: #fff,
+	$filterTextColor: #000,
+	$filterBorder: (1px solid #c3c3c3),
+	$filterBorderColorFocused: #939393,
+	$groupTextColor: #000,
+	$groupBackgroundColor: #e5e5e5
+) {
+	.sqd-theme-#{$theme} {
+		.sqd-toolbox {
+			background: $panelBackgroundColor;
+			box-shadow: $panelBoxShadow;
+		}
+		.sqd-toolbox-header-title {
+			color: $headerTextColor;
+		}
+		.sqd-toolbox-filter {
+			background: $filterBackground;
+			color: $filterTextColor;
+			border: $filterBorder;
+		}
+		.sqd-toolbox-filter:focus {
+			border-color: $filterBorderColorFocused;
+		}
+		.sqd-toolbox-group-title {
+			color: $groupTextColor;
+			background: $groupBackgroundColor;
+		}
+	}
+}
+@mixin sqd-theme-ui-toolbox-item(
+	$theme,
+	$stepType: '',
+	$itemTextColor: #000,
+	$itemBackgroundColor: #fff,
+	$itemBorder: (1px solid #c3c3c3),
+	$itemBoxShadow: (0 2px 2px rgba(0, 0, 0, 0.15)),
+	$itemBorderHovered: #939393,
+	$itemBackgroundColorHovered: #fff,
+	$noIconBackgroundColor: #c6c6c6
+) {
+	.sqd-theme-#{$theme} .sqd-toolbox-item#{if($stepType != '', '.sqd-type-' + $stepType, '')} {
+		& {
+			color: $itemTextColor;
+			border: $itemBorder;
+			box-shadow: $itemBoxShadow;
+			background: $itemBackgroundColor;
+		}
+		&:hover {
+			border-color: $itemBorderHovered;
+			background: $itemBackgroundColorHovered;
+		}
+		& .sqd-toolbox-item-icon.sqd-no-icon {
+			background: $noIconBackgroundColor;
+		}
+	}
+}
+
+@mixin sqd-theme-ui-control-bar(
+	$theme,
+	$panelBackgroundColor: #fff,
+	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.15)),
+	$buttonBackground: #fff,
+	$buttonBackgroundHovered: #fff,
+	$buttonBorder: (1px solid #c3c3c3),
+	$buttonBorderColorHovered: #939393,
+	$buttonIconPathFillColor: #000,
+	$buttonDeleteIconPathFillColor: #e01a24
+) {
+	.sqd-theme-#{$theme} {
+		.sqd-control-bar {
+			background: $panelBackgroundColor;
+			box-shadow: $panelBoxShadow;
+		}
+		.sqd-control-bar-button {
+			border: $buttonBorder;
+			background: $buttonBackground;
+		}
+		.sqd-control-bar-button:hover {
+			border-color: $buttonBorderColorHovered;
+			background: $buttonBackgroundHovered;
+		}
+		.sqd-control-bar-button .sqd-icon-path {
+			fill: $buttonIconPathFillColor;
+		}
+		.sqd-control-bar-button.sqd-delete .sqd-icon-path {
+			fill: $buttonDeleteIconPathFillColor;
+		}
+	}
+}
+
+@mixin sqd-theme-ui-editor(
+	$theme,
+	$panelBackgroundColor: #fff,
+	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.15)),
+	$toggleBackgroundColor: #fff,
+	$toggleBoxShadow: (0 0 8px rgba(0, 0, 0, 0.15))
+) {
+	.sqd-theme-#{$theme} {
+		.sqd-smart-editor {
+			background: $panelBackgroundColor;
+			box-shadow: $panelBoxShadow;
+		}
+		.sqd-smart-editor-toggle {
+			background: $toggleBackgroundColor;
+			box-shadow: $toggleBoxShadow;
+		}
+	}
+}
+
+@mixin sqd-theme-ui-context-menu(
+	$theme,
+	$panelBackgroundColor: #fff,
+	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.2)),
+	$groupTextColor: #888,
+	$itemTextColor: #000,
+	$itemBackgroundColorHovered: #eee
+) {
+	.sqd-theme-#{$theme}.sqd-context-menu {
+		background: $panelBackgroundColor;
+		box-shadow: $panelBoxShadow;
+	}
+	.sqd-theme-#{$theme} .sqd-context-menu-group {
+		color: $groupTextColor;
+	}
+	.sqd-theme-#{$theme} .sqd-context-menu-item {
+		color: $itemTextColor;
+	}
+	.sqd-theme-#{$theme} .sqd-context-menu-item:hover {
+		background: $itemBackgroundColorHovered;
+	}
+}
+
+@mixin sqd-theme-workspace($theme, $backgroundColor: #f9f9f9) {
+	.sqd-theme-#{$theme}.sqd-designer {
+		background: $backgroundColor;
+	}
+}
+
+@mixin sqd-theme-line-grid($theme, $strokeColor: #e3e3e3, $strokeWidth: 1) {
+	.sqd-theme-#{$theme} .sqd-line-grid-path {
+		stroke: $strokeColor;
+		stroke-width: $strokeWidth;
+	}
+}
+
+@mixin sqd-theme-join($theme, $joinStrokeColor: #000, $joinStrokeWidth: 2) {
+	.sqd-theme-#{$theme} {
+		.sqd-join {
+			stroke-width: $joinStrokeWidth;
+			stroke: $joinStrokeColor;
+		}
+	}
+}
+
+@mixin sqd-theme-placeholder(
+	$theme,
+	$rectFillColor: #d8d8d8,
+	$rectStrokeColor: #6a6a6a,
+	$rectStrokeWidth: 1,
+	$rectStrokeDasharray: 3,
+	$rectFillHovered: #ed4800,
+	$iconPathFillColor: #2b2b2b,
+	$iconPathFillColorHovered: #fff
+) {
+	.sqd-theme-#{$theme} {
+		.sqd-placeholder .sqd-placeholder-rect {
+			fill: $rectFillColor;
+			stroke: $rectStrokeColor;
+			stroke-width: $rectStrokeWidth;
+			stroke-dasharray: $rectStrokeDasharray;
+		}
+		.sqd-placeholder.sqd-hover .sqd-placeholder-rect {
+			fill: $rectFillHovered;
+		}
+		.sqd-placeholder-icon-path {
+			fill: $iconPathFillColor;
+		}
+		.sqd-placeholder.sqd-hover .sqd-placeholder-icon-path {
+			fill: $iconPathFillColorHovered;
+		}
+	}
+}
+
+@mixin sqd-theme-region(
+	$theme,
+	$strokeColor: #cecece,
+	$strokeColorSelected: #ed4800,
+	$strokeWidth: 2,
+	$strokeWidthSelected: 2,
+	$strokeDasharray: 3,
+	$strokeDasharraySelected: 0
+) {
+	.sqd-theme-#{$theme} {
+		.sqd-region {
+			stroke: $strokeColor;
+			stroke-width: $strokeWidth;
+			stroke-dasharray: $strokeDasharray;
+		}
+		.sqd-region.sqd-selected {
+			stroke: $strokeColorSelected;
+			stroke-width: $strokeWidthSelected;
+			stroke-dasharray: $strokeDasharraySelected;
+		}
+	}
+}
+
+@mixin sqd-theme-validation-error-badge($theme, $triangleFillColor: #ffa200, $iconFillColor: #000) {
+	.sqd-theme-#{$theme} {
+		.sqd-validation-error {
+			fill: $triangleFillColor;
+		}
+		.sqd-validation-error-icon-path {
+			fill: $iconFillColor;
+		}
+	}
+}
+
+@mixin sqd-theme-start-stop-root-component($theme, $circleFillColor: #2c18df, $iconFillColor: #fff) {
+	.sqd-theme-#{$theme} {
+		.sqd-root-start-stop-circle {
+			fill: $circleFillColor;
+		}
+		.sqd-root-start-stop-icon {
+			fill: $iconFillColor;
+		}
+	}
+}
+
+@mixin sqd-theme-task-step-component(
+	$theme,
+	$stepType: '',
+	$rectFillColor: #fff,
+	$rectStrokeColor: #c3c3c3,
+	$rectStrokeColorSelected: #ed4800,
+	$rectStrokeWidth: 1,
+	$rectStrokeWidthSelected: 2,
+	$rectShadow: (0 1.5px 1.5px rgba(0, 0, 0, 0.15)),
+	$textColor: #000,
+	$emptyIconColor: #c6c6c6,
+	$inputStrokeWidth: 2,
+	$inputStrokeColor: #000,
+	$inputFillColor: #fff,
+	$outputFillColor: #000,
+	$outputStrokeWidth: 0,
+	$outputStrokeColor: #000
+) {
+	.sqd-theme-#{$theme} .sqd-step-task#{if($stepType != '', '.sqd-type-' + $stepType, '')} {
+		.sqd-step-task-rect {
+			fill: $rectFillColor;
+			stroke-width: $rectStrokeWidth;
+			stroke: $rectStrokeColor;
+			filter: drop-shadow($rectShadow);
+		}
+		.sqd-step-task-rect.sqd-selected {
+			stroke: $rectStrokeColorSelected;
+			stroke-width: $rectStrokeWidthSelected;
+		}
+		.sqd-step-task-text {
+			fill: $textColor;
+		}
+		.sqd-step-task-empty-icon {
+			fill: $emptyIconColor;
+		}
+		@include _sqd-input($inputFillColor: $inputFillColor, $inputStrokeWidth: $inputStrokeWidth, $inputStrokeColor: $inputStrokeColor);
+		@include _sqd-output(
+			$outputFillColor: $outputFillColor,
+			$outputStrokeWidth: $outputStrokeWidth,
+			$outputStrokeColor: $outputStrokeColor
+		);
+	}
+}
+
+@mixin sqd-theme-switch-step-component(
+	$theme,
+	$stepType: '',
+	$labelPrimaryTextColor: #fff,
+	$labelPrimaryFillColor: #2411db,
+	$labelPrimaryStrokeColor: #fff,
+	$labelPrimaryStrokeWidth: 0,
+	$labelPrimaryShadow: '',
+	$labelSecondaryTextColor: #fff,
+	$labelSecondaryFillColor: #000,
+	$labelSecondaryStrokeColor: #000,
+	$labelSecondaryStrokeWidth: 0,
+	$labelSecondaryShadow: '',
+	$inputStrokeWidth: 2,
+	$inputStrokeColor: #000,
+	$inputFillColor: #fff
+) {
+	.sqd-theme-#{$theme} .sqd-step-switch#{if($stepType != '', '.sqd-type-' + $stepType, '')} {
+		& > .sqd-label-primary > .sqd-label-text {
+			fill: $labelPrimaryTextColor;
+		}
+		& > .sqd-label-primary > .sqd-label-rect {
+			fill: $labelPrimaryFillColor;
+			stroke-width: $labelPrimaryStrokeWidth;
+			@if $labelPrimaryStrokeWidth > 0 {
+				stroke: $labelPrimaryStrokeColor;
+			}
+			@if $labelPrimaryShadow != '' {
+				filter: drop-shadow($labelPrimaryShadow);
+			}
+		}
+		& > .sqd-label-secondary > .sqd-label-rect {
+			fill: $labelSecondaryFillColor;
+			stroke-width: $labelSecondaryStrokeWidth;
+			@if $labelSecondaryStrokeWidth > 0 {
+				stroke: $labelSecondaryStrokeColor;
+			}
+			@if $labelSecondaryShadow != '' {
+				filter: drop-shadow($labelSecondaryShadow);
+			}
+		}
+		& > .sqd-label-secondary > .sqd-label-text {
+			fill: $labelSecondaryTextColor;
+		}
+		& > g > {
+			@include _sqd-input(
+				$inputFillColor: $inputFillColor,
+				$inputStrokeWidth: $inputStrokeWidth,
+				$inputStrokeColor: $inputStrokeColor
+			);
+		}
+	}
+}
+
+@mixin sqd-theme-container-step-component(
+	$theme,
+	$stepType: '',
+	$labelTextColor: #fff,
+	$labelFillColor: #2411db,
+	$inputStrokeWidth: 2,
+	$inputStrokeColor: #000,
+	$inputFillColor: #fff
+) {
+	.sqd-theme-#{$theme} .sqd-step-container#{if($stepType != '', '.sqd-type-' + $stepType, '')} {
+		& > .sqd-label > .sqd-label-text {
+			fill: $labelTextColor;
+		}
+		& > .sqd-label > .sqd-label-rect {
+			fill: $labelFillColor;
+		}
+		& > g > {
+			@include _sqd-input(
+				$inputFillColor: $inputFillColor,
+				$inputStrokeWidth: $inputStrokeWidth,
+				$inputStrokeColor: $inputStrokeColor
+			);
+		}
+	}
+}
+
+/* internal */
+
+@mixin _sqd-input($inputFillColor, $inputStrokeWidth, $inputStrokeColor) {
+	.sqd-input {
+		fill: $inputFillColor;
+		stroke-width: $inputStrokeWidth;
+		@if $inputStrokeWidth > 0 {
+			stroke: $inputStrokeColor;
+		}
+	}
+}
+
+@mixin _sqd-output($outputFillColor, $outputStrokeWidth, $outputStrokeColor) {
+	.sqd-output {
+		fill: $outputFillColor;
+		stroke-width: $outputStrokeWidth;
+		@if $outputStrokeWidth > 0 {
+			stroke: $outputStrokeColor;
+		}
+	}
+}
