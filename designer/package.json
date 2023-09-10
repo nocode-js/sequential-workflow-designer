@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer",
 	"description": "Customizable no-code component for building flow-based programming applications.",
-	"version": "0.14.2",
+	"version": "0.15.2",
 	"type": "module",
 	"main": "./lib/esm/index.js",
 	"types": "./lib/index.d.ts",
@@ -24,6 +24,18 @@
 		},
 		"./css/designer-dark.css": {
 			"default": "./css/designer-dark.css"
+		},
+		"./sass/designer.scss": {
+			"default": "./sass/designer.scss"
+		},
+		"./sass/designer-theme.scss": {
+			"default": "./sass/designer-theme.scss"
+		},
+		"./sass/designer-light.scss": {
+			"default": "./sass/designer-light.scss"
+		},
+		"./sass/designer-dark.scss": {
+			"default": "./sass/designer-dark.scss"
 		}
 	},
 	"author": {
@@ -39,7 +51,8 @@
 	"files": [
 		"lib/",
 		"dist/",
-		"css/"
+		"css/",
+		"sass/"
 	],
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/"
@@ -49,12 +62,14 @@
 		"clean": "rm -rf lib && rm -rf build && rm -rf dist && rm -rf node_modules/.cache/rollup-plugin-typescript2",
 		"start": "rollup -c --watch",
 		"start:clean": "yarn clean && npm run start",
-		"build": "yarn clean && rollup -c",
+		"start:sass": "sass --no-source-map --watch ./sass:./css",
+		"build": "yarn clean && yarn build:sass && rollup -c",
+		"build:sass": "sass --no-source-map ./sass:./css",
 		"test": "karma start karma.conf.cjs",
 		"test:single": "karma start karma.conf.cjs --single-run",
 		"eslint": "eslint ./src --ext .ts",
-		"prettier": "prettier --check ./src",
-		"prettier:fix": "prettier --write ./src"
+		"prettier": "prettier --check ./src ./sass",
+		"prettier:fix": "prettier --write ./src ./sass"
 	},
 	"dependencies": {
 		"sequential-workflow-model": "^0.2.0"
@@ -78,7 +93,8 @@
 		"rollup": "^3.18.0",
 		"rollup-plugin-dts": "^5.2.0",
 		"rollup-plugin-typescript2": "^0.34.1",
-		"typescript": "^4.9.5"
+		"typescript": "^4.9.5",
+		"sass": "^1.66.1"
 	},
 	"keywords": [
 		"workflow",

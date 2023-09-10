@@ -1,0 +1,68 @@
+@import './designer-theme.scss';
+
+@include sqd-theme-ui-toolbox(
+	'dark',
+	$panelBackgroundColor: #3f3f3f,
+	$panelBoxShadow: none,
+	$headerTextColor: #fff,
+	$filterBackground: #242424,
+	$filterTextColor: #fff,
+	$filterBorder: none,
+	$groupTextColor: #fff,
+	$groupBackgroundColor: #242424
+);
+@include sqd-theme-ui-toolbox-item(
+	'dark',
+	$itemTextColor: #000,
+	$itemBackgroundColor: #c6c6c6,
+	$itemBorder: none,
+	$itemBoxShadow: none,
+	$itemBorderHovered: none,
+	$itemBackgroundColorHovered: #d3d3d3
+);
+@include sqd-theme-ui-control-bar(
+	'dark',
+	$panelBackgroundColor: #3f3f3f,
+	$panelBoxShadow: none,
+	$buttonBorder: none,
+	$buttonBackground: #c6c6c6,
+	$buttonBackgroundHovered: #d3d3d3
+);
+@include sqd-theme-ui-editor(
+	'dark',
+	$panelBackgroundColor: #3f3f3f,
+	$panelBoxShadow: none,
+	$toggleBackgroundColor: #6f6f6f,
+	$toggleBoxShadow: none
+);
+@include sqd-theme-ui-context-menu(
+	'dark',
+	$panelBackgroundColor: #3f3f3f,
+	$groupTextColor: #ccc,
+	$itemTextColor: #fff,
+	$itemBackgroundColorHovered: #525252
+);
+
+@include sqd-theme-workspace('dark', $backgroundColor: #1f1f1f);
+@include sqd-theme-line-grid('dark', $strokeColor: #2a2a2a);
+@include sqd-theme-join('dark', $joinStrokeColor: #707070);
+@include sqd-theme-region('dark', $strokeColor: #434343, $strokeColorSelected: #fff);
+@include sqd-theme-placeholder('dark', $rectFillColor: #0e0e0e, $rectStrokeColor: #6a6a6a, $rectFillHovered: #ed4800);
+@include sqd-theme-validation-error-badge('dark', $triangleFillColor: #ffa200, $iconFillColor: #000);
+
+@include sqd-theme-start-stop-root-component('dark', $circleFillColor: #2c18df, $iconFillColor: #fff);
+
+@include sqd-theme-task-step-component(
+	'dark',
+	$rectFillColor: #c6c6c6,
+	$rectStrokeColor: none,
+	$rectStrokeColorSelected: #fff,
+	$rectShadow: 0 1.5px 1.5px rgba(0, 0, 0, 0.15),
+	$textColor: #000,
+	$emptyIconColor: #c6c6c6,
+	$inputStrokeColor: #707070,
+	$inputFillColor: #c6c6c6,
+	$outputFillColor: #707070
+);
+@include sqd-theme-switch-step-component('dark', $inputStrokeColor: #707070, $inputFillColor: #c6c6c6);
+@include sqd-theme-container-step-component('dark', $inputStrokeColor: #707070, $inputFillColor: #c6c6c6);
