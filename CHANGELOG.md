@@ -1,3 +1,7 @@
+## 0.15.3
+
+This is a re-release of the 0.15.2 version.
+
 ## 0.15.2
 
 This version introduces a new approach to customizing the designer. Prior to this version, customization was challenging and required numerous CSS overrides. Now, the designer provides SCSS files with mixins, simplifying the customization process.
@@ -10,6 +14,10 @@ Please note that the `designer.css`, `designer-light.css`, and `designer-dark.cs
 
 * The `sqd-grid-path` class of the line grid is renamed to `sqd-line-grid-path`.
 * Selectors in the `designer.css`, `designer-light.css` and `designer-dark.css` files have been changed.
+
+## 0.14.2
+
+This is a re-release of the 0.14.1 version.
 
 ## 0.14.1
 
