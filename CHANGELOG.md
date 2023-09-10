@@ -1,4 +1,4 @@
-## 0.15.0
+## 0.15.2
 
 This version introduces a new approach to customizing the designer. Prior to this version, customization was challenging and required numerous CSS overrides. Now, the designer provides SCSS files with mixins, simplifying the customization process.
 
