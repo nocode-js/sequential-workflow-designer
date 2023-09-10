@@ -6,3 +6,4 @@ coverage/
 lib/
 dist/
 yarn-*.log
+designer/css/*.css

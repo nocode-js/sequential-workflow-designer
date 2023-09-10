@@ -51,7 +51,8 @@
 	"files": [
 		"lib/",
 		"dist/",
-		"css/"
+		"css/",
+		"sass/"
 	],
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/"
