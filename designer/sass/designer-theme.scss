@@ -2,18 +2,22 @@
 	$theme,
 	$panelBackgroundColor: #fff,
 	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.15)),
+	$panelBorderRadius: 10px,
 	$headerTextColor: #000,
 	$filterBackground: #fff,
 	$filterTextColor: #000,
 	$filterBorder: (1px solid #c3c3c3),
 	$filterBorderColorFocused: #939393,
+	$filterBorderRadius: 10px,
 	$groupTextColor: #000,
-	$groupBackgroundColor: #e5e5e5
+	$groupBackgroundColor: #e5e5e5,
+	$groupBorderRadius: 10px
 ) {
 	.sqd-theme-#{$theme} {
 		.sqd-toolbox {
 			background: $panelBackgroundColor;
 			box-shadow: $panelBoxShadow;
+			border-radius: $panelBorderRadius;
 		}
 		.sqd-toolbox-header-title {
 			color: $headerTextColor;
@@ -22,6 +26,7 @@
 			background: $filterBackground;
 			color: $filterTextColor;
 			border: $filterBorder;
+			border-radius: $filterBorderRadius;
 		}
 		.sqd-toolbox-filter:focus {
 			border-color: $filterBorderColorFocused;
@@ -29,6 +34,7 @@
 		.sqd-toolbox-group-title {
 			color: $groupTextColor;
 			background: $groupBackgroundColor;
+			border-radius: $groupBorderRadius;
 		}
 	}
 }
@@ -41,7 +47,9 @@
 	$itemBoxShadow: (0 2px 2px rgba(0, 0, 0, 0.15)),
 	$itemBorderHovered: #939393,
 	$itemBackgroundColorHovered: #fff,
-	$noIconBackgroundColor: #c6c6c6
+	$itemBorderRadius: 5px,
+	$noIconBackgroundColor: #c6c6c6,
+	$noIconBorderRadius: 4px
 ) {
 	.sqd-theme-#{$theme} .sqd-toolbox-item#{if($stepType != '', '.sqd-type-' + $stepType, '')} {
 		& {
@@ -49,6 +57,7 @@
 			border: $itemBorder;
 			box-shadow: $itemBoxShadow;
 			background: $itemBackgroundColor;
+			border-radius: $itemBorderRadius;
 		}
 		&:hover {
 			border-color: $itemBorderHovered;
@@ -56,6 +65,7 @@
 		}
 		& .sqd-toolbox-item-icon.sqd-no-icon {
 			background: $noIconBackgroundColor;
+			border-radius: $noIconBorderRadius;
 		}
 	}
 }
@@ -64,10 +74,12 @@
 	$theme,
 	$panelBackgroundColor: #fff,
 	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.15)),
+	$panelBorderRadius: 10px,
 	$buttonBackground: #fff,
 	$buttonBackgroundHovered: #fff,
 	$buttonBorder: (1px solid #c3c3c3),
 	$buttonBorderColorHovered: #939393,
+	$buttonBorderRadius: 5px,
 	$buttonIconPathFillColor: #000,
 	$buttonDeleteIconPathFillColor: #e01a24
 ) {
@@ -75,10 +87,12 @@
 		.sqd-control-bar {
 			background: $panelBackgroundColor;
 			box-shadow: $panelBoxShadow;
+			border-radius: $panelBorderRadius;
 		}
 		.sqd-control-bar-button {
 			border: $buttonBorder;
 			background: $buttonBackground;
+			border-radius: $buttonBorderRadius;
 		}
 		.sqd-control-bar-button:hover {
 			border-color: $buttonBorderColorHovered;
@@ -116,19 +130,23 @@
 	$theme,
 	$panelBackgroundColor: #fff,
 	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.2)),
+	$panelBorderRadius: 4px,
 	$groupTextColor: #888,
 	$itemTextColor: #000,
-	$itemBackgroundColorHovered: #eee
+	$itemBackgroundColorHovered: #eee,
+	$itemBorderRadius: 4px
 ) {
 	.sqd-theme-#{$theme}.sqd-context-menu {
 		background: $panelBackgroundColor;
 		box-shadow: $panelBoxShadow;
+		border-radius: $panelBorderRadius;
 	}
 	.sqd-theme-#{$theme} .sqd-context-menu-group {
 		color: $groupTextColor;
 	}
 	.sqd-theme-#{$theme} .sqd-context-menu-item {
 		color: $itemTextColor;
+		border-radius: $itemBorderRadius;
 	}
 	.sqd-theme-#{$theme} .sqd-context-menu-item:hover {
 		background: $itemBackgroundColorHovered;
@@ -188,6 +206,7 @@
 
 @mixin sqd-theme-region(
 	$theme,
+	$componentType: '',
 	$strokeColor: #cecece,
 	$strokeColorSelected: #ed4800,
 	$strokeWidth: 2,
@@ -195,7 +214,7 @@
 	$strokeDasharray: 3,
 	$strokeDasharraySelected: 0
 ) {
-	.sqd-theme-#{$theme} {
+	.sqd-theme-#{$theme}#{if($componentType != '', ' .sqd-step-' + $componentType + ' >', '')} {
 		.sqd-region {
 			stroke: $strokeColor;
 			stroke-width: $strokeWidth;
