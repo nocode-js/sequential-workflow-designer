@@ -35,11 +35,7 @@ const configuration = {
 			}
 		]
 	},
-	steps: {
-		iconUrlProvider: () => {
-			return './assets/icon-task.svg';
-		},
-	},
+	steps: {},
 
 	editors: {
 		globalEditorProvider: () => {

@@ -1,3 +1,7 @@
+## 0.15.4
+
+This version adds rounding configuration to the `designer-theme.scss` file.
+
 ## 0.15.3
 
 This is a re-release of the 0.15.2 version.
