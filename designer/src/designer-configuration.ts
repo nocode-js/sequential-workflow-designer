@@ -112,6 +112,7 @@ export interface CustomActionHandlerContext {
 
 export interface ToolboxConfiguration {
 	labelProvider?: StepLabelProvider;
+	descriptionProvider?: StepDescriptionProvider;
 	isCollapsed?: boolean;
 	groups: ToolboxGroupConfiguration[];
 }
@@ -119,6 +120,7 @@ export interface ToolboxConfiguration {
 export type StepDefinition = Omit<Step, 'id'>;
 
 export type StepLabelProvider = (step: StepDefinition) => string;
+export type StepDescriptionProvider = (step: StepDefinition) => string;
 
 export interface ToolboxGroupConfiguration {
 	name: string;

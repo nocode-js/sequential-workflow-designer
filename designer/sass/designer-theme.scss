@@ -353,6 +353,9 @@
 	$stepType: '',
 	$labelTextColor: #fff,
 	$labelFillColor: #2411db,
+	$labelStrokeColor: #2411db,
+	$labelStrokeWidth: 0,
+	$labelShadow: '',
 	$inputStrokeWidth: 2,
 	$inputStrokeColor: #000,
 	$inputFillColor: #fff
@@ -363,6 +366,13 @@
 		}
 		& > .sqd-label > .sqd-label-rect {
 			fill: $labelFillColor;
+			stroke-width: $labelStrokeWidth;
+			@if $labelStrokeWidth > 0 {
+				stroke: $labelStrokeColor;
+			}
+			@if $labelShadow != '' {
+				filter: drop-shadow($labelShadow);
+			}
 		}
 		& > g > {
 			@include _sqd-input(

@@ -1,16 +1,14 @@
 import { ToolboxApi } from '../api/toolbox-api';
+import { ToolboxItemData } from './toolbox-data-provider';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
-import { StepTypeValidator } from '../core/step-type-validator';
 import { Vector } from '../core/vector';
 import { StepDefinition } from '../designer-configuration';
 import { ToolboxItemView } from './toolbox-item-view';
 
 export class ToolboxItem {
-	public static create(parent: HTMLElement, step: StepDefinition, api: ToolboxApi): ToolboxItem {
-		StepTypeValidator.validate(step.type);
-
-		const view = ToolboxItemView.create(parent, step, api);
-		const item = new ToolboxItem(step, api);
+	public static create(parent: HTMLElement, data: ToolboxItemData, api: ToolboxApi): ToolboxItem {
+		const view = ToolboxItemView.create(parent, data);
+		const item = new ToolboxItem(data.step, api);
 		view.bindMousedown(e => item.onMousedown(e));
 		view.bindTouchstart(e => item.onTouchstart(e));
 		view.bindContextMenu(e => item.onContextMenu(e));

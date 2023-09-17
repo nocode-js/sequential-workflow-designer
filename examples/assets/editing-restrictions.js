@@ -53,6 +53,7 @@ function load() {
 		toolbox: {
 			isCollapsed: true,
 			labelProvider: (step) => `** ${step.name} **`,
+			descriptionProvider: (step) => `This is a description for ${step.name}`,
 			groups: [
 				{
 					name: 'Steps',

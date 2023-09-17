@@ -1,25 +1,21 @@
-import { ToolboxApi } from '../api/toolbox-api';
+import { ToolboxItemData } from './toolbox-data-provider';
 import { Dom } from '../core/dom';
-import { StepDefinition } from '../designer-configuration';
 
 export class ToolboxItemView {
-	public static create(parent: HTMLElement, step: StepDefinition, api: ToolboxApi): ToolboxItemView {
-		const label = api.getLabel(step);
+	public static create(parent: HTMLElement, data: ToolboxItemData): ToolboxItemView {
 		const root = Dom.element('div', {
-			class: `sqd-toolbox-item sqd-type-${step.type}`,
-			title: label
+			class: `sqd-toolbox-item sqd-type-${data.step.type}`,
+			title: data.description
 		});
-
-		const iconUrl = api.tryGetIconUrl(step);
 
 		const icon = Dom.element('div', {
 			class: 'sqd-toolbox-item-icon'
 		});
 
-		if (iconUrl) {
+		if (data.iconUrl) {
 			const iconImage = Dom.element('img', {
 				class: 'sqd-toolbox-item-icon-image',
-				src: iconUrl
+				src: data.iconUrl
 			});
 			icon.appendChild(iconImage);
 		} else {
@@ -29,7 +25,7 @@ export class ToolboxItemView {
 		const text = Dom.element('div', {
 			class: 'sqd-toolbox-item-text'
 		});
-		text.textContent = label;
+		text.textContent = data.label;
 
 		root.appendChild(icon);
 		root.appendChild(text);

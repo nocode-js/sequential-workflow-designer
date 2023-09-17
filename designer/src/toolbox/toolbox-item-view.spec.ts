@@ -1,6 +1,6 @@
+import { ToolboxItemData } from './toolbox-data-provider';
 import { Dom } from '../core/dom';
 import { Step } from '../definition';
-import { createDesignerApiStub } from '../test-tools/stubs';
 import { ToolboxItemView } from './toolbox-item-view';
 
 describe('ToolboxItemView', () => {
@@ -13,9 +13,15 @@ describe('ToolboxItemView', () => {
 			properties: {},
 			type: 'y'
 		};
-		const api = createDesignerApiStub();
+		const data: ToolboxItemData = {
+			iconUrl: null,
+			label: step.name,
+			lowerCaseLabel: step.name.toLowerCase(),
+			description: 'Some description',
+			step
+		};
 
-		const view = ToolboxItemView.create(parent, step, api.toolbox);
+		const view = ToolboxItemView.create(parent, data);
 
 		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);
