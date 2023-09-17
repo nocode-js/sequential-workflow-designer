@@ -1,7 +1,7 @@
 import { ToolboxApi } from '../api/toolbox-api';
+import { ToolboxGroupData } from './toolbox-data-provider';
 import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
-import { ToolboxGroupConfiguration } from '../designer-configuration';
 import { ScrollBoxView } from './scrollbox-view';
 import { ToolboxItem } from './toolbox-item';
 
@@ -79,7 +79,7 @@ export class ToolboxView {
 		}
 	}
 
-	public setGroups(groups: ToolboxGroupConfiguration[]) {
+	public setGroups(groups: ToolboxGroupData[]) {
 		const list = Dom.element('div');
 
 		groups.forEach(group => {
@@ -89,7 +89,7 @@ export class ToolboxView {
 			groupTitle.innerText = group.name;
 			list.appendChild(groupTitle);
 
-			group.steps.forEach(s => ToolboxItem.create(list, s, this.api));
+			group.items.forEach(item => ToolboxItem.create(list, item, this.api));
 		});
 		this.scrollBoxView.setContent(list);
 	}

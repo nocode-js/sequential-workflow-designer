@@ -1,19 +1,18 @@
 import { Step } from '../definition';
 import { BehaviorController } from '../behaviors/behavior-controller';
 import { ObjectCloner, SimpleEventListener, Uid, Vector } from '../core';
-import { StepDefinition, ToolboxConfiguration, ToolboxGroupConfiguration, UidGenerator } from '../designer-configuration';
+import { StepDefinition, UidGenerator } from '../designer-configuration';
 import { DesignerState } from '../designer-state';
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
 import { DesignerContext } from '../designer-context';
-import { IconProvider } from '../core/icon-provider';
+import { ToolboxDataProvider, ToolboxGroupData } from '../toolbox/toolbox-data-provider';
 
 export class ToolboxApi {
 	public constructor(
 		private readonly state: DesignerState,
 		private readonly designerContext: DesignerContext,
 		private readonly behaviorController: BehaviorController,
-		private readonly iconProvider: IconProvider,
-		private readonly configuration: ToolboxConfiguration | false,
+		private readonly toolboxDataProvider: ToolboxDataProvider,
 		private readonly uidGenerator: UidGenerator | undefined
 	) {}
 
@@ -29,26 +28,12 @@ export class ToolboxApi {
 		this.state.onIsToolboxCollapsedChanged.subscribe(listener);
 	}
 
-	public tryGetIconUrl(step: StepDefinition): string | null {
-		return this.iconProvider.getIconUrl(step);
+	public getAllGroups(): ToolboxGroupData[] {
+		return this.toolboxDataProvider.getAllGroups();
 	}
 
-	public getLabel(step: StepDefinition): string {
-		const labelProvider = this.getConfiguration().labelProvider;
-		return labelProvider ? labelProvider(step) : step.name;
-	}
-
-	public filterGroups(filter: string | undefined): ToolboxGroupConfiguration[] {
-		return this.getConfiguration()
-			.groups.map(group => {
-				return {
-					name: group.name,
-					steps: group.steps.filter(s => {
-						return filter ? s.name.toLowerCase().includes(filter) : true;
-					})
-				};
-			})
-			.filter(group => group.steps.length > 0);
+	public applyFilter(allGroups: ToolboxGroupData[], filter: string | undefined): ToolboxGroupData[] {
+		return this.toolboxDataProvider.applyFilter(allGroups, filter);
 	}
 
 	/**
@@ -69,12 +54,5 @@ export class ToolboxApi {
 		const newStep = ObjectCloner.deepClone(step) as Step;
 		newStep.id = this.uidGenerator ? this.uidGenerator() : Uid.next();
 		return newStep;
-	}
-
-	private getConfiguration(): ToolboxConfiguration {
-		if (!this.configuration) {
-			throw new Error('Toolbox is disabled');
-		}
-		return this.configuration;
 	}
 }

@@ -1,3 +1,4 @@
+import { ToolboxItemData } from './toolbox-data-provider';
 import { Dom } from '../core/dom';
 import { Step } from '../definition';
 import { createDesignerApiStub } from '../test-tools/stubs';
@@ -9,13 +10,21 @@ describe('ToolboxItem', () => {
 		const step: Step = {
 			id: '0x0',
 			componentType: 'task',
-			name: 'x',
+			name: 'Send email',
 			properties: {},
-			type: 'foo'
+			type: 'sendEmail'
 		};
+		const data: ToolboxItemData = {
+			iconUrl: null,
+			label: 'Send email',
+			lowerCaseLabel: 'send email',
+			description: 'Some description',
+			step
+		};
+
 		const api = createDesignerApiStub();
 
-		const item = ToolboxItem.create(parent, step, api.toolbox);
+		const item = ToolboxItem.create(parent, data, api.toolbox);
 
 		expect(item).toBeDefined();
 	});

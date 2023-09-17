@@ -1,3 +1,9 @@
+## 0.16.0
+
+This version fixes the bug with search in the toolbox. The search now includes custom labels provided by the `labelProvider` callback.
+
+Additionally, this version adds the `descriptionProvider` to the configuration of the toolbox. The description is visible when you put a mouse cursor on a step in the toolbox for a while.
+
 ## 0.15.4
 
 This version adds rounding configuration to the `designer-theme.scss` file.
