@@ -58,6 +58,14 @@ function onRunClicked() {
 				return;
 			}
 
+			let register = '1';
+
+			if (step.type === 'sendEmail') {
+				if (step.properties['ifReqisterEquals'] === register) {
+					alert(`E-mail sent to ${step.properties['email']}`);
+				}
+			}
+
 			const varName = step.properties['var'];
 			const value = step.properties['val'];
 			createVariableIfNeeded(varName, data);
@@ -97,7 +105,8 @@ function onRunClicked() {
 		onStepExecuted: (step, data) => {
 			document.getElementById('variables').innerText = JSON.stringify(data, null, 2) + '\r\n';
 			designer.selectStepById(step.id);
-			designer.moveViewportToStep(step.id);
+			debugger;
+			//designer.moveViewportToStep(step.id);
 		},
 
 		onFinished: () => {
@@ -143,6 +152,23 @@ function stepEditorProvider(step, editorContext) {
 			step.name = v;
 			editorContext.notifyNameChanged();
 		});
+
+	if (step.type === 'sendEmail') {
+		const propNames = ['ifReqisterEquals', 'email'];
+		for (let propName of propNames) {
+			const label = document.createElement('label');
+			label.innerText = propName;
+			const input = document.createElement('input');
+			input.setAttribute('type', 'text');
+			input.value = step.properties[propName];
+			input.addEventListener('input', () => {
+				step.properties[propName] = input.value;
+			});
+
+			container.appendChild(label);
+			container.appendChild(input);
+		}
+	}
 	if (step.properties['var'] !== undefined) {
 		appendTextField(container, 'Variable', step.properties['var'],
 			v => {
@@ -173,17 +199,34 @@ const configuration = {
 	toolbox: {
 		groups: [
 			{
-				name: 'Tasks',
+				name: 'Comunicaciones',
 				steps: [
-					Steps.createMathStep('add', 'Add', 'x', 10),
-					Steps.createMathStep('sub', 'Subtract', 'x', 10),
-					Steps.createMathStep('mul', 'Multiply', 'x', 10),
-					Steps.createMathStep('div', 'Divide', 'x', 10),
-					Steps.createTextStep('Message!')
+					//Steps.createMathStep('add', 'Add', 'x', 10),
+					// Steps.createMathStep('sub', 'Subtract', 'x', 10),
+					// Steps.createMathStep('mul', 'Multiply', 'x', 10),
+					// Steps.createMathStep('div', 'Divide', 'x', 10),
+					{
+						componentType: 'task',
+						type: 'readUserInput',
+						name: 'Asignar una tarea',
+						properties: {
+							question: 'Ask me'
+						}
+					},
+					{
+						componentType: 'task',
+						type: 'sendEmail',
+						name: 'Enviar E-mail',
+						properties: {
+							ifReqisterEquals: '1',
+							email: 'x@example.com'
+						}
+					},
+					Steps.createTextStep('Agregar Mensaje!'),
 				]
 			},
 			{
-				name: 'Logic',
+				name: 'Lógica y flujos',
 				steps: [
 					Steps.createIfStep('x', 10, 'If'),
 					Steps.createLoopStep('index', 3, 'Loop')
@@ -222,7 +265,9 @@ const startDefinition = {
 		speed: 300
 	},
 	sequence: [
-		Steps.createTextStep('start!'),
+		Steps.createTextStep('comenzar!'),
+		// StateMachineSteps.createTaskStep('Assing', 'Assing', 'Asignar una tarea'),
+		// Steps.createTaskStep('Asignar una tarea!'),
 		Steps.createLoopStep('index', 4, 'Loop', [
 			Steps.createMathStep('add', 'x += 3', 'x', 3),
 			Steps.createMathStep('mul', 'x *= 2', 'x', 2),

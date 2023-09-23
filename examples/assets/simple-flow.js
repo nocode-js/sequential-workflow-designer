@@ -94,7 +94,7 @@ function runWorkflow() {
 	let register = null;
 
 	if (definition.sequence.length < 1) {
-		alert('Please add any step...');
+		alert('Please add any stepp...');
 		return;
 	}
 
