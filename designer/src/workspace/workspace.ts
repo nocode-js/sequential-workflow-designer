@@ -167,8 +167,7 @@ export class Workspace implements WorkspaceController {
 
 		if (isPrimaryButton || isMiddleButton) {
 			const commandOrNull = this.resolveClick(target, position);
-			const forceDisableDrag = isMiddleButton;
-			const behavior = this.clickBehaviorResolver.resolve(commandOrNull, target, forceDisableDrag);
+			const behavior = this.clickBehaviorResolver.resolve(commandOrNull, target, isMiddleButton);
 			this.behaviorController.start(position, behavior);
 		}
 	}

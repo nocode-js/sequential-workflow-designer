@@ -1,3 +1,7 @@
+## 0.16.1
+
+This version addresses the bug related to deselecting a step when a click is made using the middle mouse button.
+
 ## 0.16.0
 
 This version fixes the bug with search in the toolbox. The search now includes custom labels provided by the `labelProvider` callback.
