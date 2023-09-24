@@ -7,9 +7,9 @@ import { DragStepBehavior } from './drag-step-behavior';
 import { MoveViewportBehavior } from './move-viewport-behavior';
 
 export class SelectStepBehavior implements Behavior {
-	public static create(pressedStepComponent: StepComponent, forceDisableDrag: boolean, context: DesignerContext): SelectStepBehavior {
+	public static create(pressedStepComponent: StepComponent, isMiddleButton: boolean, context: DesignerContext): SelectStepBehavior {
 		const isDragDisabled =
-			forceDisableDrag ||
+			isMiddleButton ||
 			context.state.isDragDisabled ||
 			!context.definitionModifier.isDraggable(pressedStepComponent.step, pressedStepComponent.parentSequence);
 		return new SelectStepBehavior(pressedStepComponent, isDragDisabled, context, context.state);

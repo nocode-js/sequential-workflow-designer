@@ -12,14 +12,14 @@ import { TriggerCustomActionPressingBehaviorHandler } from './pressing-behaviors
 export class ClickBehaviorResolver {
 	public constructor(private readonly designerContext: DesignerContext, private readonly state: DesignerState) {}
 
-	public resolve(commandOrNull: ClickCommand | null, element: Element, forceDisableDrag: boolean): Behavior {
+	public resolve(commandOrNull: ClickCommand | null, element: Element, isMiddleButton: boolean): Behavior {
 		if (!commandOrNull) {
-			return MoveViewportBehavior.create(this.state, true);
+			return MoveViewportBehavior.create(this.state, !isMiddleButton);
 		}
 
 		switch (commandOrNull.type) {
 			case ClickCommandType.selectStep:
-				return SelectStepBehavior.create(commandOrNull.component, forceDisableDrag, this.designerContext);
+				return SelectStepBehavior.create(commandOrNull.component, isMiddleButton, this.designerContext);
 
 			case ClickCommandType.rerenderStep:
 				return PressingBehavior.create(element, new RerenderStepPressingBehaviorHandler(this.designerContext));
