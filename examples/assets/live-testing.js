@@ -30,6 +30,12 @@ class Steps {
 			val
 		}, steps);
 	}
+
+	static createParallelStep() {
+		return StateMachineSteps.createParallelStep('Parallel', 
+			[StateMachineSteps.createWriteStep('null'), StateMachineSteps.createWriteStep('checksum'), StateMachineSteps.createWriteStep('buffer')]);
+			// );
+	}
 }
 
 function createVariableIfNeeded(varName, data) {
@@ -37,6 +43,8 @@ function createVariableIfNeeded(varName, data) {
 		data[varName] = 0;
 	}
 }
+
+
 
 function onRunClicked() {
 	if (designer.isReadonly()) {
@@ -198,6 +206,10 @@ const configuration = {
 
 	toolbox: {
 		groups: [
+			// {
+			// 	name: 'Steps',
+			// 	steps: [createWriteStep('_'), createIfStep('If'), createParallelStep('Parallel')]
+			// },
 			{
 				name: 'Comunicaciones',
 				steps: [
@@ -229,7 +241,10 @@ const configuration = {
 				name: 'Lógica y flujos',
 				steps: [
 					Steps.createIfStep('x', 10, 'If'),
-					Steps.createLoopStep('index', 3, 'Loop')
+					Steps.createIfStep('x', 10, 'Case'),
+					Steps.createLoopStep('index', 3, 'While Loop'),
+					Steps.createLoopStep('index', 5, 'While foreach'),
+					Steps.createParallelStep()
 				]
 			}
 		]

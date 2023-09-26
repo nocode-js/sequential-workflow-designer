@@ -152,6 +152,46 @@ class StateMachineSteps {
 		};
 	}
 
+	static createParallelStep(name, children) {
+		// return createParallelStep(name, children);
+		return {
+			id: uid(),
+			// componentType: 'switch',
+			type: 'parallel',
+			name,
+			properties: {
+				conditions: {
+					'Condition A': this.randomCondition(),
+					'Condition B': this.randomCondition(),
+					'Condition C': this.randomCondition()
+				}
+			},
+			branches: {
+				'Condition A': children ? [children[0]] : [],
+				'Condition B': children ? [children[1]] : [],
+				'Condition C': children ? [children[2]] : []
+			}
+		};
+	}
+
+	static createWriteStep(value) {
+		return {
+			// id: uid(),
+			id: sequentialWorkflowDesigner.Uid.next(),
+			componentType: 'switch',
+			type: 'write',
+			name: `Write ${value}`,
+			properties: {}
+		};
+	}
+
+	static randomCondition() {
+		const a = Math.random() > 0.5 ? 'alfa' : 'beta';
+		const b = Math.random() > 0.5 ? '>' : '<';
+		const c = Math.round(Math.random() * 100);
+		return `${a} ${b} ${c}`;
+	}
+
 	static createTaskStep(name, type, properties) {
 		return {
 			id: uid(),
