@@ -11,6 +11,7 @@
 	[stepEditor]="stepEditor"
 	(onReady)="onDesignerReady($event)"
 	(onDefinitionChanged)="onDefinitionChanged($event)"
+	(onSelectedStepIdChanged)="onSelectedStepIdChanged($event)"
 >
 </sqd-designer>
 
@@ -55,6 +56,7 @@
 <div class="block">
 	<button mat-raised-button color="primary" (click)="reloadDefinitionClicked()">Reload definition</button>
 	&nbsp; Is valid: <strong>{{ isValid }}</strong>
+	&nbsp; Selected step: <strong>{{ selectedStepId }}</strong>
 </div>
 
 <div class="block">

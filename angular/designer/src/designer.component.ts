@@ -81,6 +81,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public readonly onReady = new EventEmitter<Designer>();
 	@Output()
 	public readonly onDefinitionChanged = new EventEmitter<Definition>();
+	@Output()
+	public readonly onSelectedStepIdChanged = new EventEmitter<string | null>();
 
 	public constructor(private readonly ngZone: NgZone, private readonly applicationRef: ApplicationRef) {}
 
@@ -148,14 +150,13 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 				extensions: this.extensions
 			});
 			designer.onReady.subscribe(() => {
-				this.ngZone.run(() => {
-					this.onReady.emit(designer);
-				});
+				this.ngZone.run(() => this.onReady.emit(designer));
 			});
-			designer.onDefinitionChanged.subscribe(() => {
-				this.ngZone.run(() => {
-					this.onDefinitionChanged.emit(designer.getDefinition());
-				});
+			designer.onDefinitionChanged.subscribe(definition => {
+				this.ngZone.run(() => this.onDefinitionChanged.emit(definition));
+			});
+			designer.onSelectedStepIdChanged.subscribe(stepId => {
+				this.ngZone.run(() => this.onSelectedStepIdChanged.emit(stepId));
 			});
 			this.designer = designer;
 		});
