@@ -1,3 +1,13 @@
+## 0.16.2
+
+This version adds the `onSelectedStepIdChanged` event to the Angular package.
+
+```html
+<sqd-designer ...
+  (onSelectedStepIdChanged)="onSelectedStepIdChanged($event)">
+</sqd-designer>
+```
+
 ## 0.16.1
 
 This version addresses the bug related to deselecting a step when a click is made using the middle mouse button.

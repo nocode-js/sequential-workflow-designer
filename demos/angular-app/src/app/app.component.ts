@@ -40,6 +40,7 @@ export class AppComponent implements OnInit {
 
 	public definition: Definition = createDefinition();
 	public definitionJSON?: string;
+	public selectedStepId = '-';
 	public isValid?: boolean;
 
 	public readonly toolboxConfiguration: ToolboxConfiguration = {
@@ -73,6 +74,10 @@ export class AppComponent implements OnInit {
 		this.updateIsValid();
 		this.updateDefinitionJSON();
 		console.log('definition has changed');
+	}
+
+	public onSelectedStepIdChanged(stepId: string | null) {
+		this.selectedStepId = stepId || '-';
 	}
 
 	public updateName(step: Step, event: Event, context: StepEditorContext) {

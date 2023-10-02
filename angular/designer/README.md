@@ -74,6 +74,10 @@ export class AppComponent {
   public onDefinitionChanged(definition: Definition) {
     this.definition = definition;
   }
+
+  public onSelectedStepIdChanged(stepId: string | null) {
+    // ...
+  }
 }
 ```
 
@@ -156,7 +160,8 @@ At the end attach the designer:
   [globalEditor]="globalEditor"
   [stepEditor]="stepEditor"
   (onReady)="onDesignerReady($event)"
-  (onDefinitionChanged)="onDefinitionChanged($event)">
+  (onDefinitionChanged)="onDefinitionChanged($event)"
+  (onSelectedStepIdChanged)="onSelectedStepIdChanged($event)">
 </sqd-designer>
 ```
 
