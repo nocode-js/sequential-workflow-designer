@@ -15,6 +15,7 @@ import {
 	ViewChild
 } from '@angular/core';
 import {
+	CustomActionHandler,
 	Definition,
 	Designer,
 	DesignerExtension,
@@ -25,6 +26,7 @@ import {
 	StepEditorProvider,
 	StepsConfiguration,
 	ToolboxConfiguration,
+	UidGenerator,
 	ValidatorConfiguration
 } from 'sequential-workflow-designer';
 
@@ -70,6 +72,19 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public contextMenu?: boolean;
 	@Input('extensions')
 	public extensions?: DesignerExtension[];
+	@Input('customActionHandler')
+	public customActionHandler?: CustomActionHandler;
+	@Input('isReadonly')
+	public isReadonly?: boolean;
+	@Input('selectedStepId')
+	public selectedStepId?: string | null;
+	@Input('uidGenerator')
+	public uidGenerator?: UidGenerator;
+	@Input('isToolboxCollapsed')
+	public isToolboxCollapsed?: boolean;
+	@Input('isEditorCollapsed')
+	public isEditorCollapsed?: boolean;
+
 	@Input('areEditorsHidden')
 	public areEditorsHidden?: boolean;
 	@Input('globalEditor')
@@ -83,6 +98,10 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public readonly onDefinitionChanged = new EventEmitter<Definition>();
 	@Output()
 	public readonly onSelectedStepIdChanged = new EventEmitter<string | null>();
+	@Output()
+	public readonly onIsToolboxCollapsedChanged = new EventEmitter<boolean>();
+	@Output()
+	public readonly onIsEditorCollapsedChanged = new EventEmitter<boolean>();
 
 	public constructor(private readonly ngZone: NgZone, private readonly applicationRef: ApplicationRef) {}
 
@@ -95,9 +114,37 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 		if (isFirstChange) {
 			return;
 		}
-		if (this.designer && changes['definition'] && changes['definition'].currentValue === this.designer.getDefinition()) {
-			// The same reference = no change.
-			return;
+
+		if (this.designer) {
+			const isSameDefinition = !changes['definition'] || changes['definition'].currentValue === this.designer.getDefinition();
+			if (isSameDefinition) {
+				const isReadonlyChange = changes['isReadonly'];
+				if (isReadonlyChange && isReadonlyChange.currentValue !== this.designer.isReadonly()) {
+					this.designer.setIsReadonly(isReadonlyChange.currentValue);
+				}
+
+				const selectedStepIdChange = changes['selectedStepId'];
+				if (selectedStepIdChange && selectedStepIdChange.currentValue !== this.designer.getSelectedStepId()) {
+					if (selectedStepIdChange.currentValue) {
+						this.designer.selectStepById(selectedStepIdChange.currentValue);
+					} else {
+						this.designer.clearSelectedStep();
+					}
+				}
+
+				const isToolboxCollapsedChange = changes['isToolboxCollapsed'];
+				if (isToolboxCollapsedChange && isToolboxCollapsedChange.currentValue !== this.designer.isToolboxCollapsed()) {
+					this.designer.setIsToolboxCollapsed(isToolboxCollapsedChange.currentValue);
+				}
+
+				const isEditorCollapsedChange = changes['isEditorCollapsed'];
+				if (isEditorCollapsedChange && isEditorCollapsedChange.currentValue !== this.designer.isEditorCollapsed()) {
+					this.designer.setIsEditorCollapsed(isEditorCollapsedChange.currentValue);
+				}
+
+				// The same reference of the definition = no change.
+				return;
+			}
 		}
 
 		this.attach();
@@ -133,21 +180,38 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 				this.designer = undefined;
 			}
 
+			let customActionHandler = this.customActionHandler;
+			if (customActionHandler) {
+				const cah = customActionHandler;
+				customActionHandler = (action, step, sequence, context) => {
+					this.ngZone.run(() => cah(action, step, sequence, context));
+				};
+			}
+
 			const designer = Designer.create(this.placeholder.nativeElement, this.definition, {
 				theme: this.theme,
 				undoStackSize: this.undoStackSize,
 				editors: this.areEditorsHidden
 					? false
 					: {
+							isCollapsed: this.isEditorCollapsed,
 							globalEditorProvider: this.globalEditorProvider,
 							stepEditorProvider: this.stepEditorProvider
 					  },
 				steps: this.stepsConfiguration,
 				validator: this.validatorConfiguration,
-				toolbox: this.toolboxConfiguration,
+				toolbox: this.toolboxConfiguration
+					? {
+							isCollapsed: this.isToolboxCollapsed,
+							...this.toolboxConfiguration
+					  }
+					: false,
 				controlBar: this.controlBar,
 				contextMenu: this.contextMenu,
-				extensions: this.extensions
+				extensions: this.extensions,
+				isReadonly: this.isReadonly,
+				uidGenerator: this.uidGenerator,
+				customActionHandler
 			});
 			designer.onReady.subscribe(() => {
 				this.ngZone.run(() => this.onReady.emit(designer));
@@ -158,7 +222,17 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 			designer.onSelectedStepIdChanged.subscribe(stepId => {
 				this.ngZone.run(() => this.onSelectedStepIdChanged.emit(stepId));
 			});
+			designer.onIsToolboxCollapsedChanged.subscribe(isCollapsed => {
+				this.ngZone.run(() => this.onIsToolboxCollapsedChanged.emit(isCollapsed));
+			});
+			designer.onIsEditorCollapsedChanged.subscribe(isCollapsed => {
+				this.ngZone.run(() => this.onIsEditorCollapsedChanged.emit(isCollapsed));
+			});
 			this.designer = designer;
+
+			if (this.selectedStepId) {
+				this.designer.selectStepById(this.selectedStepId);
+			}
 		});
 	}
 

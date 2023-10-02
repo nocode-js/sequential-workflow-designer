@@ -232,16 +232,14 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 					  }
 					: false,
 			customActionHandler: customActionHandlerRef.current && customActionHandler,
-			extensions
+			extensions,
+			isReadonly
 		});
 		if (controllerRef.current) {
 			controllerRef.current.setDesigner(designer);
 		}
 		if (selectedStepId) {
 			designer.selectStepById(selectedStepId);
-		}
-		if (isReadonly) {
-			designer.setIsReadonly(isReadonly);
 		}
 		// console.log('sqd: designer rendered');
 

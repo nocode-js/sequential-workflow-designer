@@ -1,3 +1,7 @@
+## 0.16.3
+
+This version adds: `isReadonly`, `selectedStepId`, `uidGenerator`, `isToolboxCollapsed` and `isEditorCollapsed` properties and `onIsToolboxCollapsedChanged` and `onIsEditorCollapsedChanged` events to the Angular package.
+
 ## 0.16.2
 
 This version adds the `onSelectedStepIdChanged` event to the Angular package.

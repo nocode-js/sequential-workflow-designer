@@ -6,12 +6,18 @@
 	[stepsConfiguration]="stepsConfiguration"
 	[validatorConfiguration]="validatorConfiguration"
 	[controlBar]="true"
+	[selectedStepId]="selectedStepId"
+	[isReadonly]="isReadonly"
+	[isToolboxCollapsed]="isToolboxCollapsed"
+	[isEditorCollapsed]="isEditorCollapsed"
 	[areEditorsHidden]="false"
 	[globalEditor]="globalEditor"
 	[stepEditor]="stepEditor"
 	(onReady)="onDesignerReady($event)"
 	(onDefinitionChanged)="onDefinitionChanged($event)"
 	(onSelectedStepIdChanged)="onSelectedStepIdChanged($event)"
+	(onIsToolboxCollapsedChanged)="onIsToolboxCollapsedChanged($event)"
+	(onIsEditorCollapsedChanged)="onIsEditorCollapsedChanged($event)"
 >
 </sqd-designer>
 
@@ -55,7 +61,23 @@
 
 <div class="block">
 	<button mat-raised-button color="primary" (click)="reloadDefinitionClicked()">Reload definition</button>
-	&nbsp; Is valid: <strong>{{ isValid }}</strong> &nbsp; Selected step: <strong>{{ selectedStepId }}</strong>
+	&nbsp;
+	<button mat-raised-button color="primary" (click)="toggleReadonlyClicked()">
+		{{ isReadonly ? 'Enable editing' : 'Disable editing' }}
+	</button>
+	&nbsp;
+	<button mat-raised-button color="primary" (click)="toggleSelectedStepClicked()">
+		{{ selectedStepId ? 'Unselect' : 'Select first' }}
+	</button>
+	&nbsp;
+	<button mat-raised-button color="primary" (click)="toggleToolboxClicked()">
+		{{ isToolboxCollapsed ? 'Show toolbox' : 'Hide toolbox' }}
+	</button>
+	&nbsp;
+	<button mat-raised-button color="primary" (click)="toggleEditorClicked()">
+		{{ isEditorCollapsed ? 'Show editor' : 'Hide editor' }}
+	</button>
+	&nbsp; Is valid: <strong>{{ isValid }}</strong>
 </div>
 
 <div class="block">

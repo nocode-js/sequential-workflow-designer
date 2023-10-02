@@ -40,7 +40,10 @@ export class AppComponent implements OnInit {
 
 	public definition: Definition = createDefinition();
 	public definitionJSON?: string;
-	public selectedStepId = '-';
+	public selectedStepId: string | null = null;
+	public isReadonly = false;
+	public isToolboxCollapsed = false;
+	public isEditorCollapsed = false;
 	public isValid?: boolean;
 
 	public readonly toolboxConfiguration: ToolboxConfiguration = {
@@ -77,7 +80,15 @@ export class AppComponent implements OnInit {
 	}
 
 	public onSelectedStepIdChanged(stepId: string | null) {
-		this.selectedStepId = stepId || '-';
+		this.selectedStepId = stepId;
+	}
+
+	public onIsToolboxCollapsedChanged(isCollapsed: boolean) {
+		this.isToolboxCollapsed = isCollapsed;
+	}
+
+	public onIsEditorCollapsedChanged(isCollapsed: boolean) {
+		this.isEditorCollapsed = isCollapsed;
 	}
 
 	public updateName(step: Step, event: Event, context: StepEditorContext) {
@@ -93,6 +104,26 @@ export class AppComponent implements OnInit {
 	public reloadDefinitionClicked() {
 		this.definition = createDefinition();
 		this.updateDefinitionJSON();
+	}
+
+	public toggleReadonlyClicked() {
+		this.isReadonly = !this.isReadonly;
+	}
+
+	public toggleSelectedStepClicked() {
+		if (this.selectedStepId) {
+			this.selectedStepId = null;
+		} else if (this.definition.sequence.length > 0) {
+			this.selectedStepId = this.definition.sequence[0].id;
+		}
+	}
+
+	public toggleToolboxClicked() {
+		this.isToolboxCollapsed = !this.isToolboxCollapsed;
+	}
+
+	public toggleEditorClicked() {
+		this.isEditorCollapsed = !this.isEditorCollapsed;
 	}
 
 	private updateDefinitionJSON() {
