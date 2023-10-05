@@ -2,8 +2,8 @@ import { Uid } from './core';
 import { SequenceModifier } from './core/sequence-modifier';
 import { StepDuplicator } from './core/step-duplicator';
 import { Definition, DefinitionWalker, Sequence, Step } from './definition';
-import { DesignerConfiguration } from './designer-configuration';
-import { DefinitionChangeType, DesignerState } from './designer-state';
+import { DefinitionChangeType, DesignerConfiguration } from './designer-configuration';
+import { DesignerState } from './designer-state';
 
 export class DefinitionModifier {
 	public constructor(
@@ -47,7 +47,10 @@ export class DefinitionModifier {
 
 		SequenceModifier.insertStep(step, targetSequence, targetIndex);
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepInserted, step.id);
-		this.state.setSelectedStepId(step.id);
+
+		if (!this.configuration.steps.isAutoSelectDisabled) {
+			this.state.setSelectedStepId(step.id);
+		}
 		return true;
 	}
 
@@ -70,7 +73,10 @@ export class DefinitionModifier {
 
 		apply();
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepMoved, step.id);
-		this.state.setSelectedStepId(step.id);
+
+		if (!this.configuration.steps.isAutoSelectDisabled) {
+			this.state.setSelectedStepId(step.id);
+		}
 		return true;
 	}
 

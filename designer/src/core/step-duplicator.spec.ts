@@ -1,4 +1,4 @@
-import { BranchedStep, DefinitionWalker, SequentialStep, Step } from 'sequential-workflow-model';
+import { BranchedStep, DefinitionWalker, SequentialStep, Step } from '../definition';
 import { StepDuplicator } from './step-duplicator';
 import { Uid } from './uid';
 

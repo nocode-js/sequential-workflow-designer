@@ -1,22 +1,12 @@
 import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
 import { Definition } from './definition';
+import { DefinitionChangeType } from './designer-configuration';
 import { Viewport } from './designer-extension';
 
 export interface DefinitionChangedEvent {
 	changeType: DefinitionChangeType;
 	stepId: string | null;
-}
-
-export enum DefinitionChangeType {
-	stepNameChanged = 1,
-	stepPropertyChanged,
-	stepChildrenChanged,
-	stepDeleted,
-	stepMoved,
-	stepInserted,
-	globalPropertyChanged,
-	rootReplaced
 }
 
 export class DesignerState {
