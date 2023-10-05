@@ -1,6 +1,5 @@
-import { CustomActionHandlerContext } from '../../designer-configuration';
+import { CustomActionHandlerContext, DefinitionChangeType } from '../../designer-configuration';
 import { DesignerContext } from '../../designer-context';
-import { DefinitionChangeType } from '../../designer-state';
 import { TriggerCustomActionClickCommand } from '../../workspace';
 import { PressingBehaviorHandler } from './pressing-behavior';
 

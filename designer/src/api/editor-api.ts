@@ -1,6 +1,6 @@
-import { DefinitionChangeType, DesignerState } from '../designer-state';
+import { DesignerState } from '../designer-state';
 import { DefinitionModifier } from '../definition-modifier';
-import { GlobalEditorContext, StepEditorContext } from '../designer-configuration';
+import { DefinitionChangeType, GlobalEditorContext, StepEditorContext } from '../designer-configuration';
 import { EditorRenderer, EditorRendererHandler } from './editor-renderer';
 import { Definition, DefinitionWalker } from '../definition';
 import { SimpleEventListener } from '../core';

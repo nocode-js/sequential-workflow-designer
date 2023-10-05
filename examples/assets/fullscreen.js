@@ -1,4 +1,4 @@
-/* global document, sequentialWorkflowDesigner, console */
+/* global document, sequentialWorkflowDesigner, console, localStorage */
 
 function createTaskStep(id, type, name, properties) {
 	return {
@@ -78,13 +78,34 @@ function appendPath(root, step) {
 let designer;
 let changeReadonlyButton;
 let validationStatusText;
+const localStorageKey = 'sqdFullscreen';
 
 function refreshValidationStatus() {
 	validationStatusText.innerText = designer.isValid() ? 'Definition is valid' : 'Definition is invalid';
 }
 
+function loadState() {
+	const state = localStorage[localStorageKey];
+	if (state) {
+		return JSON.parse(state);
+	}
+	return {
+		definition: getStartDefinition()
+	}
+}
+
+function saveState() {
+	localStorage[localStorageKey] = JSON.stringify({
+		definition: designer.getDefinition(),
+		undoStack: designer.dumpUndoStack()
+	});
+}
+
+const initialState = loadState();
+
 const configuration = {
 	undoStackSize: 20,
+	undoStack: initialState.undoStack,
 
 	toolbox: {
 		groups: [
@@ -98,7 +119,7 @@ const configuration = {
 
 	steps: {
 		isDuplicable: () => true,
-		iconUrlProvider: (componentType, type) => {
+		iconUrlProvider: (_, type) => {
 			return `./assets/icon-${type}.svg`
 		},
 	},
@@ -144,23 +165,26 @@ const configuration = {
 	}
 };
 
-const startDefinition = {
-	properties: {},
-	sequence: [
-		createIfStep('00000000000000000000000000000001',
-			[ createTaskStep('00000000000000000000000000000002', 'save', 'Save file', { isInvalid: true }) ],
-			[ createTaskStep('00000000000000000000000000000003', 'text', 'Send email') ]
-		),
-		createContainerStep('00000000000000000000000000000004', [
-			createTaskStep('00000000000000000000000000000005', 'task', 'Create task')
-		])
-	]
-};
+function getStartDefinition() {
+	return {
+		properties: {},
+		sequence: [
+			createIfStep('00000000000000000000000000000001',
+				[ createTaskStep('00000000000000000000000000000002', 'save', 'Save file', { isInvalid: true }) ],
+				[ createTaskStep('00000000000000000000000000000003', 'text', 'Send email') ]
+			),
+			createContainerStep('00000000000000000000000000000004', [
+				createTaskStep('00000000000000000000000000000005', 'task', 'Create task')
+			])
+		]
+	};
+}
 
 const placeholder = document.getElementById('designer');
-designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
+designer = sequentialWorkflowDesigner.Designer.create(placeholder, initialState.definition, configuration);
 designer.onDefinitionChanged.subscribe((newDefinition) => {
 	refreshValidationStatus();
+	saveState();
 	console.log('the definition has changed', newDefinition);
 });
 

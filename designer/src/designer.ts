@@ -1,13 +1,14 @@
 import { SimpleEvent } from './core/simple-event';
 import { isElementAttached } from './core/is-element-attached';
 import { Definition, DefinitionWalker, Sequence, Step, StepOrName } from './definition';
-import { DesignerConfiguration } from './designer-configuration';
+import { DesignerConfiguration, UndoStack } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
 import { DesignerState } from './designer-state';
 import { ServicesResolver } from './services';
 import { validateConfiguration } from './core/designer-configuration-validator';
 import { DesignerApi } from './api';
+import { HistoryController } from './history-controller';
 
 export class Designer<TDefinition extends Definition = Definition> {
 	/**
@@ -43,7 +44,13 @@ export class Designer<TDefinition extends Definition = Definition> {
 		const designerApi = DesignerApi.create(designerContext);
 
 		const view = DesignerView.create(placeholder, designerContext, designerApi);
-		const designer = new Designer<TDef>(view, designerContext.state, designerContext.definitionWalker, designerApi);
+		const designer = new Designer<TDef>(
+			view,
+			designerContext.state,
+			designerContext.definitionWalker,
+			designerContext.historyController,
+			designerApi
+		);
 		view.workspace.onReady.subscribe(() => designer.onReady.forward());
 
 		designerContext.state.onDefinitionChanged.subscribe(() => {
@@ -52,10 +59,10 @@ export class Designer<TDefinition extends Definition = Definition> {
 		designerContext.state.onSelectedStepIdChanged.subscribe(() =>
 			designer.onSelectedStepIdChanged.forward(designerContext.state.selectedStepId)
 		);
-		designer.state.onIsToolboxCollapsedChanged.subscribe(isCollapsed => {
+		designerContext.state.onIsToolboxCollapsedChanged.subscribe(isCollapsed => {
 			designer.onIsToolboxCollapsedChanged.forward(isCollapsed);
 		});
-		designer.state.onIsEditorCollapsedChanged.subscribe(isCollapsed => {
+		designerContext.state.onIsEditorCollapsedChanged.subscribe(isCollapsed => {
 			designer.onIsEditorCollapsedChanged.forward(isCollapsed);
 		});
 		return designer;
@@ -65,6 +72,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 		private readonly view: DesignerView,
 		private readonly state: DesignerState,
 		private readonly walker: DefinitionWalker,
+		private readonly historyController: HistoryController | undefined,
 		private readonly api: DesignerApi
 	) {}
 
@@ -196,6 +204,16 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 */
 	public setIsEditorCollapsed(isCollapsed: boolean) {
 		this.state.setIsEditorCollapsed(isCollapsed);
+	}
+
+	/**
+	 * @description Dump the undo stack.
+	 */
+	public dumpUndoStack(): UndoStack {
+		if (!this.historyController) {
+			throw new Error('Undo feature is not activated');
+		}
+		return this.historyController.dump();
 	}
 
 	/**

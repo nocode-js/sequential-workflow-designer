@@ -1,6 +1,7 @@
-import { DefinitionChangeType, DesignerState } from '../designer-state';
+import { DesignerState } from '../designer-state';
 import { EditorRenderer } from './editor-renderer';
 import { Definition, DefinitionWalker, Step } from '../definition';
+import { DefinitionChangeType } from '../designer-configuration';
 
 const step: Step = {
 	componentType: 'task',

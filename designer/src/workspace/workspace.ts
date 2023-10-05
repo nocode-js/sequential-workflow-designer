@@ -4,7 +4,7 @@ import { DefinitionWalker, Sequence, StepChildrenType } from '../definition';
 import { DesignerContext } from '../designer-context';
 import { ClickCommand, ClickDetails, Component, Placeholder } from './component';
 import { WorkspaceView } from './workspace-view';
-import { DefinitionChangedEvent, DefinitionChangeType, DesignerState } from '../designer-state';
+import { DefinitionChangedEvent, DesignerState } from '../designer-state';
 import { WorkspaceController } from './workspace-controller';
 import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
@@ -17,6 +17,7 @@ import { Services } from '../services';
 import { findValidationBadgeIndex } from './badges/find-validation-badge-index';
 import { ContextMenuController } from './context-menu/context-menu-controller';
 import { ViewportApi } from '../api/viewport-api';
+import { DefinitionChangeType } from '../designer-configuration';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {

@@ -19,6 +19,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	undoStackSize?: number;
 
 	/**
+	 * @description The initial undo stack. If not set, the undo stack will be empty.
+	 */
+	undoStack?: UndoStack;
+
+	/**
 	 * @description The common configuration of the steps.
 	 */
 	steps: StepsConfiguration;
@@ -135,6 +140,11 @@ export interface StepsConfiguration {
 	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
 	isDuplicable?: (step: Step, parentSequence: Sequence) => boolean;
 
+	/**
+	 * @description The designer automatically selects the step after it is dropped. If true, the step will not be selected.
+	 */
+	isAutoSelectDisabled?: boolean;
+
 	iconUrlProvider?: StepIconUrlProvider;
 }
 
@@ -174,3 +184,25 @@ export type GlobalEditorProvider<TDefinition extends Definition = Definition> = 
 	definition: TDefinition,
 	context: GlobalEditorContext
 ) => HTMLElement;
+
+export interface UndoStack {
+	index: number;
+	items: UndoStackItem[];
+}
+
+export interface UndoStackItem {
+	definition: Definition;
+	changeType: DefinitionChangeType;
+	stepId: string | null;
+}
+
+export enum DefinitionChangeType {
+	stepNameChanged = 1,
+	stepPropertyChanged,
+	stepChildrenChanged,
+	stepDeleted,
+	stepMoved,
+	stepInserted,
+	globalPropertyChanged,
+	rootReplaced
+}

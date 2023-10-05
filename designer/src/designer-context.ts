@@ -36,7 +36,7 @@ export class DesignerContext {
 
 		let historyController: HistoryController | undefined = undefined;
 		if (configuration.undoStackSize) {
-			historyController = HistoryController.create(state, definitionModifier, configuration);
+			historyController = HistoryController.create(configuration.undoStack, state, definitionModifier, configuration);
 		}
 
 		const componentContext = ComponentContext.create(

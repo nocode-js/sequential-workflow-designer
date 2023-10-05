@@ -1,3 +1,32 @@
+## 0.16.4
+
+This version introduces the `isAutoSelectDisabled` option. Now it's possible to disable the auto-select feature.
+
+```js
+const configuration = {
+  steps: {
+    isAutoSelectDisabled: true,
+    // ...
+  }
+};
+```
+
+Additionally, this version introduces possibility to initialize the designer with the undo stack from the previous session.
+
+```js
+const configuration = {
+  undoStackSize: 10,
+  undoStack: myUndoStack,
+  // ...
+};
+```
+
+To read the current stack you should use the `dumpUndoStack()` method.
+
+```js
+const myUndoStack = designer.dumpUndoStack();
+```
+
 ## 0.16.3
 
 This version adds: `isReadonly`, `selectedStepId`, `uidGenerator`, `isToolboxCollapsed` and `isEditorCollapsed` properties and `onIsToolboxCollapsedChanged` and `onIsEditorCollapsedChanged` events to the Angular package.
