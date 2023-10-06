@@ -29,9 +29,7 @@ const configuration = {
 		groups: [
 			{
 				name: 'Test',
-				steps: [
-					createStep('Task')
-				]
+				steps: Array(20).fill(null).map((_, i) => createStep(`Task ${i}`))
 			}
 		]
 	},

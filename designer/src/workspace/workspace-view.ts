@@ -8,6 +8,10 @@ import { Component } from './component';
 
 let lastGridPatternId = 0;
 
+const listenerOptions: AddEventListenerOptions & EventListenerOptions = {
+	passive: false
+};
+
 export class WorkspaceView {
 	public static create(parent: HTMLElement, componentContext: ComponentContext): WorkspaceView {
 		const patternId = 'sqd-grid-pattern-' + lastGridPatternId++;
@@ -115,7 +119,7 @@ export class WorkspaceView {
 					handler(position, element, 0);
 				}
 			},
-			{ passive: false }
+			listenerOptions
 		);
 	}
 
@@ -131,7 +135,7 @@ export class WorkspaceView {
 	}
 
 	public bindWheel(handler: (e: WheelEvent) => void) {
-		this.canvas.addEventListener('wheel', handler, false);
+		this.canvas.addEventListener('wheel', handler, listenerOptions);
 	}
 
 	public destroy() {

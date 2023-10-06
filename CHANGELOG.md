@@ -1,3 +1,7 @@
+## 0.16.5
+
+This version fixes the bug with scrolling in the toolbox [#92](https://github.com/nocode-js/sequential-workflow-designer/issues/92).
+
 ## 0.16.4
 
 This version introduces the `isAutoSelectDisabled` option. Now it's possible to disable the auto-select feature.
