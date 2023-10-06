@@ -16,7 +16,7 @@ export class ValidationErrorBadgeView implements BadgeView {
 		g.appendChild(circle);
 
 		const icon = Icons.appendPath(g, 'sqd-validation-error-icon-path', Icons.alert, cfg.iconSize);
-		const offsetX = (cfg.size - cfg.iconSize) * 0.5;
+		const offsetX = (cfg.size - cfg.iconSize) / 2;
 		const offsetY = offsetX * 1.5;
 		Dom.translate(icon, offsetX, offsetY);
 

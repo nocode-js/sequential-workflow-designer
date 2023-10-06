@@ -15,7 +15,7 @@ export class ScrollBoxView {
 
 		const view = new ScrollBoxView(root, viewport);
 		window.addEventListener('resize', view.onResize, false);
-		root.addEventListener('wheel', e => view.onWheel(e), false);
+		root.addEventListener('wheel', e => view.onWheel(e), listenerOptions);
 		root.addEventListener('touchstart', e => view.onTouchStart(e), listenerOptions);
 		root.addEventListener('mousedown', e => view.onMouseDown(e), false);
 		return view;
@@ -72,6 +72,7 @@ export class ScrollBoxView {
 	};
 
 	private onWheel(e: WheelEvent) {
+		e.preventDefault();
 		e.stopPropagation();
 
 		if (this.content) {
