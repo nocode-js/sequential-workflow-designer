@@ -1,7 +1,7 @@
 {
 	"name": "sequential-workflow-designer-svelte",
 	"description": "Svelte wrapper for Sequential Workflow Designer component.",
-	"version": "0.16.6",
+	"version": "0.16.7",
 	"license": "MIT",
 	"scripts": {
 		"prepare": "cp ../LICENSE LICENSE",
@@ -28,10 +28,10 @@
 	],
 	"peerDependencies": {
 		"svelte": "^4.0.0",
-		"sequential-workflow-designer": "^0.16.6"
+		"sequential-workflow-designer": "^0.16.7"
 	},
 	"devDependencies": {
-		"sequential-workflow-designer": "^0.16.6",
+		"sequential-workflow-designer": "^0.16.7",
 		"@sveltejs/adapter-static": "^2.0.3",
 		"@sveltejs/kit": "^1.20.4",
 		"@sveltejs/package": "^2.0.0",
@@ -47,5 +47,15 @@
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"type": "module"
+	"type": "module",
+	"keywords": [
+		"workflow",
+		"designer",
+		"builder",
+		"nocode",
+		"lowcode",
+		"flow",
+		"svelte",
+		"sveltejs"
+	]
 }
