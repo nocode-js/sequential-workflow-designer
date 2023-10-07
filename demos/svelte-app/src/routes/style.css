@@ -1,0 +1,43 @@
+@import 'sequential-workflow-designer/css/designer.css';
+@import 'sequential-workflow-designer/css/designer-light.css';
+
+html,
+body {
+	margin: 0;
+	padding: 10px;
+	font: 14px/1.5em Arial, sans-serif;
+	background: #333;
+	color: #fff;
+}
+.sqd-designer {
+	width: 100%;
+	height: 50vh;
+	border-radius: 5px;
+	overflow: hidden;
+	color: #000;
+}
+.sqd-editor {
+	padding: 10px;
+}
+.block {
+	margin: 10px;
+	text-align: center;
+}
+.block button {
+	padding: 10px 15px;
+	background: #c30;
+	color: #fff;
+	border: 0;
+	cursor: pointer;
+	border-radius: 5px;
+}
+.block button:hover {
+	opacity: 0.8;
+}
+.block a {
+	color: #fff;
+	text-decoration: underline;
+}
+.block a:hover {
+	text-decoration: none;
+}

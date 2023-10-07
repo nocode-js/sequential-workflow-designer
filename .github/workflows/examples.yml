@@ -33,11 +33,13 @@ jobs:
             cp -R examples _deploy
             cp -R demos/angular-app/dist/angular-app _deploy/angular-app
             cp -R demos/react-app/build _deploy/react-app
+            cp -R demos/svelte-app/build _deploy/svelte-app
       - name: Append Analytics
         run: |
             node scripts/append-ga.cjs _deploy/examples
             node scripts/append-ga.cjs _deploy/react-app
             node scripts/append-ga.cjs _deploy/angular-app
+            node scripts/append-ga.cjs _deploy/svelte-app
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:

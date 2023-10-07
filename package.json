@@ -13,7 +13,9 @@
 		"designer",
 		"react",
 		"angular",
-		"demos/react-app"
+		"svelte",
+		"demos/react-app",
+		"demos/svelte-app"
 	],
 	"devDependencies": {
 		"http-server": "^14.1.1"

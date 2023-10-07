@@ -1,0 +1,35 @@
+{
+	"name": "sequential-workflow-designer-svelte-app-demo",
+	"version": "0.0.0",
+	"license": "MIT",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"start": "svelte-kit sync && vite dev",
+		"build": "svelte-kit sync && vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"test:single": "echo \"No tests yet\"",
+		"prettier": "prettier --check ./src",
+		"prettier:fix": "prettier --write ./src",
+		"eslint": "eslint ./src --ext .ts"
+	},
+	"dependencies": {
+		"sequential-workflow-designer": "^0.16.6",
+		"sequential-workflow-designer-svelte": "^0.16.6"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-static": "^2.0.3",
+		"@sveltejs/kit": "^1.20.4",
+		"svelte": "^4.0.5",
+		"svelte-check": "^3.4.3",
+		"tslib": "^2.4.1",
+		"typescript": "^5.0.0",
+		"vite": "^4.4.2",
+		"prettier": "^2.8.2",
+		"@typescript-eslint/eslint-plugin": "^5.47.0",
+		"@typescript-eslint/parser": "^5.47.0",
+		"eslint": "^8.30.0"
+	}
+}
