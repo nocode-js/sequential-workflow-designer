@@ -5534,10 +5534,10 @@ postcss@8.4.21, postcss@^8.2.14, postcss@^8.3.7, postcss@^8.4.19:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-prettier@^2.8.4:
-  version "2.8.4"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.4.tgz#34dd2595629bfbb79d344ac4a91ff948694463c3"
-  integrity sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==
+prettier@^2.8.2:
+  version "2.8.8"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.8.tgz#e8c5d7e98a4305ffe3de2e1fc4aca1a71c28b1da"
+  integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
 
 pretty-bytes@^5.3.0:
   version "5.6.0"
@@ -5956,17 +5956,17 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sequential-workflow-designer-angular@^0.16.5:
-  version "0.16.5"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-designer-angular/-/sequential-workflow-designer-angular-0.16.5.tgz#7d2a7be9af8e26c75423219442218e729ce4dce2"
-  integrity sha512-t+q89aRg/Syu9w8Uk1Z85RNn2RIDEfJ4nTsgiXogr4Vdz6KXZkhgO5GWIsP0qSSzWM68dsLjT7CXchK47BplGQ==
+sequential-workflow-designer-angular@^0.16.7:
+  version "0.16.7"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-designer-angular/-/sequential-workflow-designer-angular-0.16.7.tgz#e9adb618d59db25d59ea2b53fcb4c395245fde61"
+  integrity sha512-sZ6r6picLJbsRvGrZ/vLzpvSCrlCpahLaum7iJB/0u4+1yq329EnhGgg2avgZ+ykQTSpPp7ODnPFpkyJRpbRxw==
   dependencies:
     tslib "^2.3.0"
 
-sequential-workflow-designer@^0.16.5:
-  version "0.16.5"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-designer/-/sequential-workflow-designer-0.16.5.tgz#c64d11da01b602814d1660b47a6c7cb42d8810e9"
-  integrity sha512-9BVrPBeQ2LRP6gKiiL2PVAiRZCEkAaiO4DWGv9KqYq4S8eB3k5HTzsSy/Y0yF5z4zPjstwHE7TqQzdOc6KHeGA==
+sequential-workflow-designer@^0.16.7:
+  version "0.16.7"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-designer/-/sequential-workflow-designer-0.16.7.tgz#dd3d4f812682d97c3b3a472d99ac04d1a7ddf844"
+  integrity sha512-xY2YD4r0CHVZrzzC7wjUHwSSeSDtWt49v7k+Y/wzesYZN1Fdd2i0cLxHBFCQBaMSvwD1EIft4zC7OB/eGi9sNQ==
   dependencies:
     sequential-workflow-model "^0.2.0"
 

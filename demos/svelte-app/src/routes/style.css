@@ -25,6 +25,7 @@ body {
 }
 .block button {
 	padding: 10px 15px;
+	margin: 3px;
 	background: #c30;
 	color: #fff;
 	border: 0;

@@ -61,6 +61,14 @@
 		selectedStepId = detail.stepId;
 	}
 
+	function onIsToolboxCollapsedChanged({ detail }: { detail: { isCollapsed: boolean } }) {
+		isToolboxCollapsed = detail.isCollapsed;
+	}
+
+	function onIsEditorCollapsedChanged({ detail }: { detail: { isCollapsed: boolean } }) {
+		isEditorCollapsed = detail.isCollapsed;
+	}
+
 	function toggleReadonly() {
 		isReadonly = !isReadonly;
 	}
@@ -97,11 +105,13 @@
 	selectedStepId={selectedStepId}
 	on:selectedStepIdChanged={onSelectedStepIdChanged}
 	isToolboxCollapsed={isToolboxCollapsed}
+	on:isToolboxCollapsedChanged={onIsToolboxCollapsedChanged}
 	isEditorCollapsed={isEditorCollapsed}
+	on:isEditorCollapsedChanged={onIsEditorCollapsedChanged}
 	isReadonly={isReadonly} />
 
 <div class="block">
-	<button on:click={toggleReadonly}>Toggle readonly</button>
+	<button on:click={toggleReadonly}>{isReadonly ? 'Enable editing' : 'Disable editing'}</button>
 
 	<button on:click={toggleSelection}>Toggle selection</button>
 

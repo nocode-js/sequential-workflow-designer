@@ -1,3 +1,7 @@
+## 0.16.7
+
+Added two events to the Svelte package: `on:isToolboxCollapsedChanged` and `on:isEditorCollapsedChanged`.
+
 ## 0.16.6
 
 This version introduces a wrapper for Svelte framework! 🎉

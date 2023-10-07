@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -24,8 +24,8 @@
 		.sqd-editor input[type=text] {width: 100%; box-sizing: border-box; border: 1px solid silver; padding: 6px; border-radius: 5px;}
 
 		#result {position: absolute; right: 0; bottom: 0; width: 30vw; height: 100vh; padding: 10px; box-sizing: border-box; color: #FFF; background: #2C18DF;}
-		#result a {color: #FFF;}
-		#result a:hover {text-decoration: none;}
+		#result a.github {color: #FFF; display: inline-block; margin: 6px 8px;}
+		#result a.github:hover {text-decoration: none;}
 		#result button {padding: 10px; color: #000; background: #FFF; border: 0; border-radius: 5px; cursor: pointer;}
 		#result button:hover {opacity: 0.8;}
 	</style>
@@ -36,8 +36,7 @@
 	<div id="result">
 		<p>
 			<button id="run">Run 🚀</button>
-			&nbsp;
-			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank" class="github">GitHub</a>
 		</p>
 
 		<h5>Variables</h5>

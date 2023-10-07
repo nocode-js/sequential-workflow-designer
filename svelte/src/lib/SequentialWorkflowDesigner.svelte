@@ -13,7 +13,8 @@
 		type ValidatorConfiguration,
 		type UidGenerator,
 		type DesignerExtension,
-		type EditorsConfiguration
+		type EditorsConfiguration,
+		type CustomActionHandler
 	} from 'sequential-workflow-designer';
 
 	const dispatch = createEventDispatcher()
@@ -31,6 +32,7 @@
 	export let uidGenerator: UidGenerator | undefined = undefined;
 	export let definitionWalker: DefinitionWalker | undefined = undefined;
 	export let extensions: DesignerExtension[] | undefined = undefined;
+	export let customActionHandler: CustomActionHandler | undefined = undefined;
 	export let stepEditor: ConstructorOfATypedSvelteComponent | null = null;
 	export let rootEditor: ConstructorOfATypedSvelteComponent | null = null;
 	export let isEditorCollapsed = false;
@@ -88,10 +90,11 @@
 			undoStackSize,
 			undoStack,
 			validator,
-			uidGenerator,
 			definitionWalker,
 			extensions,
 			isReadonly,
+			uidGenerator,
+			customActionHandler,
 		});
 		d.onReady.subscribe(() => dispatch('definitionChanged', {
 			definition: d.getDefinition(),
@@ -102,6 +105,8 @@
 			isValid: d.isValid()
 		}));
 		d.onSelectedStepIdChanged.subscribe((stepId) => dispatch('selectedStepIdChanged', { stepId }));
+		d.onIsToolboxCollapsedChanged.subscribe((isCollapsed) => dispatch('isToolboxCollapsedChanged', { isCollapsed }));
+		d.onIsEditorCollapsedChanged.subscribe((isCollapsed) => dispatch('isEditorCollapsedChanged', { isCollapsed }));
 
 		if (selectedStepId) {
 			d.selectStepById(selectedStepId);
