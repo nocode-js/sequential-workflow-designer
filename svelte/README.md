@@ -79,17 +79,17 @@ The global editor:
 
 ```svelte
 <script lang="ts">
-	import type { GlobalEditorContext, Definition } from 'sequential-workflow-designer';
+  import type { GlobalEditorContext, Definition } from 'sequential-workflow-designer';
 
-	export let context: GlobalEditorContext;
-	export let definition: Definition;
-	let velocity = definition.properties.velocity;
+  export let context: GlobalEditorContext;
+  export let definition: Definition;
+  let velocity = definition.properties.velocity;
 
-	function onVelocityChanged(event: Event) {
-		velocity = parseInt((event.target as HTMLInputElement).value);
-		definition.properties.velocity = velocity;
-		context.notifyPropertiesChanged();
-	}
+  function onVelocityChanged(event: Event) {
+    velocity = parseInt((event.target as HTMLInputElement).value);
+    definition.properties.velocity = velocity;
+    context.notifyPropertiesChanged();
+  }
 </script>
 
 <input type="number" value={String(velocity)} on:input={onVelocityChanged} />
@@ -99,19 +99,19 @@ The step editor:
 
 ```svelte
 <script lang="ts">
-	import type { StepEditorContext, Definition, Step } from 'sequential-workflow-designer';
+  import type { StepEditorContext, Definition, Step } from 'sequential-workflow-designer';
 
-	export let context: StepEditorContext;
-	export let definition: Definition;
-	export let step: Step;
+  export let context: StepEditorContext;
+  export let definition: Definition;
+  export let step: Step;
 
-	let name = step.name;
+  let name = step.name;
 
-	function onNameChanged(event: Event) {
-		name = (event.target as HTMLInputElement).value;
-		step.name = name;
-		context.notifyNameChanged();
-	}
+  function onNameChanged(event: Event) {
+    name = (event.target as HTMLInputElement).value;
+    step.name = name;
+    context.notifyNameChanged();
+  }
 </script>
 
 <input value={name} on:input={onNameChanged} />
