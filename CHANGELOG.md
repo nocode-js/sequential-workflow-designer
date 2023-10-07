@@ -1,3 +1,7 @@
+## 0.16.6
+
+This version introduces a wrapper for Svelte framework! 🎉
+
 ## 0.16.5
 
 This version fixes the bug with scrolling in the toolbox [#92](https://github.com/nocode-js/sequential-workflow-designer/issues/92).

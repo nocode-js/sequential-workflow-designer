@@ -10,7 +10,8 @@ if (!version || !(/^\d+\.\d+\.\d+$/.test(version))) {
 const dependencies = [
 	'sequential-workflow-designer',
 	'sequential-workflow-designer-react',
-	'sequential-workflow-designer-angular'
+	'sequential-workflow-designer-angular',
+	'sequential-workflow-designer-svelte'
 ];
 
 function resolvePath(filePath) {
@@ -56,8 +57,10 @@ function updateJsdelivrUrl(filePath) {
 
 updatePackage('designer/package.json', true);
 updatePackage('react/package.json', true);
+updatePackage('svelte/package.json', true);
 updatePackage('angular/designer/package.json', true);
 updatePackage('demos/react-app/package.json', false);
 updatePackage('demos/angular-app/package.json', false);
+updatePackage('demos/svelte-app/package.json', false);
 updateJsdelivrUrl('README.md');
 updateJsdelivrUrl('examples/assets/lib.js');

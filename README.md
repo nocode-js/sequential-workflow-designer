@@ -13,7 +13,7 @@ Features:
 * use light/dark themes or customize easily,
 * compatible with modern browsers and mobile devices,
 * the definition is stored as JSON,
-* supports [React](./react/) and [Angular](./angular/designer/).
+* supports [Angular](./angular/designer/), [React](./react/) and [Svelte](./svelte/).
 
 📝 Check the [documentation](https://nocode-js.com/docs/category/sequential-workflow-designer) for more details.
 
@@ -33,8 +33,9 @@ Features:
 * [📜 Scrollable Page](https://nocode-js.github.io/sequential-workflow-designer/examples/scrollable-page.html)
 * [🌵 Multi-Conditional Switch](https://nocode-js.github.io/sequential-workflow-designer/examples/multi-conditional-switch.html)
 * [🌀 Auto-Select](https://nocode-js.github.io/sequential-workflow-designer/examples/auto-select.html)
-* [React Demo](https://nocode-js.github.io/sequential-workflow-designer/react-app/)
 * [Angular Demo](https://nocode-js.github.io/sequential-workflow-designer/angular-app/)
+* [React Demo](https://nocode-js.github.io/sequential-workflow-designer/react-app/)
+* [Svelte Demo](https://nocode-js.github.io/sequential-workflow-designer/svelte-app/)
 
 Pro:
 
@@ -95,10 +96,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.5/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.5/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.5/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.5/dist/index.umd.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.6/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.6/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.6/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.6/dist/index.umd.js"></script>
 ```
 
 Call the designer by:
