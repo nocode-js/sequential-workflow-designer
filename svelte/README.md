@@ -79,9 +79,9 @@ The global editor:
 
 ```svelte
 <script lang="ts">
-  import type { GlobalEditorContext, Definition } from 'sequential-workflow-designer';
+  import type { RootEditorContext, Definition } from 'sequential-workflow-designer';
 
-  export let context: GlobalEditorContext;
+  export let context: RootEditorContext;
   export let definition: Definition;
   let velocity = definition.properties.velocity;
 

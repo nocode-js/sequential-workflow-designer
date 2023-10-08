@@ -1,3 +1,17 @@
+## 0.16.8
+
+Svelte package supports now native editors. If you want to use JavaScript/TypeScript code to create editors, you can do it now. Of course, you can still use Svelte components as editors.
+
+```svelte
+<SequentialWorkflowDesigner ...
+  stepEditor={StepEditor}
+  rootEditor={RootEditor} />
+
+<SequentialWorkflowDesigner ...
+  nativeStepEditor={nativeStepEditor}
+  nativeRootEditor={nativeRootEditor} />
+```
+
 ## 0.16.7
 
 Added two events to the Svelte package: `on:isToolboxCollapsedChanged` and `on:isEditorCollapsedChanged`.
