@@ -11,13 +11,13 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:single": "echo \"No tests yet\"",
-		"prettier": "prettier --check ./src",
-		"prettier:fix": "prettier --write ./src",
+		"prettier": "prettier --plugin prettier-plugin-svelte --check ./src",
+		"prettier:fix": "prettier --plugin prettier-plugin-svelte --write ./src",
 		"eslint": "eslint ./src --ext .ts"
 	},
 	"dependencies": {
-		"sequential-workflow-designer": "^0.16.7",
-		"sequential-workflow-designer-svelte": "^0.16.7"
+		"sequential-workflow-designer": "^0.16.8",
+		"sequential-workflow-designer-svelte": "^0.16.8"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^2.0.3",
@@ -28,6 +28,7 @@
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2",
 		"prettier": "^2.8.2",
+		"prettier-plugin-svelte": "^2.8.0",
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
 		"@typescript-eslint/parser": "^5.47.0",
 		"eslint": "^8.30.0"

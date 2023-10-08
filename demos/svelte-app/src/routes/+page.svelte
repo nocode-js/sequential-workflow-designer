@@ -13,7 +13,7 @@
 	let isValid: boolean | null = null;
 	const steps: StepsConfiguration = {};
 	const validator: ValidatorConfiguration = {
-		step: (step) => step.name.length > 0
+		step: step => step.name.length > 0
 	};
 	const toolbox: ToolboxConfiguration = {
 		groups: [
@@ -25,7 +25,7 @@
 	};
 
 	function randId() {
-		return Math.round((Math.random() * 1000000)).toString(16);
+		return Math.round(Math.random() * 1000000).toString(16);
 	}
 
 	function createStep() {
@@ -37,7 +37,7 @@
 			properties: {
 				comment: 'Some comment'
 			}
-		}
+		};
 	}
 
 	function createDefinition(): Definition {
@@ -45,14 +45,11 @@
 			properties: {
 				velocity: 20
 			},
-			sequence: [
-				createStep(),
-				createStep()
-			]
+			sequence: [createStep(), createStep()]
 		};
 	}
 
-	function onDefinitionChanged({ detail }: { detail: { definition: Definition, isValid: boolean } }) {
+	function onDefinitionChanged({ detail }: { detail: { definition: Definition; isValid: boolean } }) {
 		definition = detail.definition;
 		isValid = detail.isValid;
 	}
@@ -95,20 +92,21 @@
 </script>
 
 <SequentialWorkflowDesigner
-	definition={definition}
+	{definition}
 	on:definitionChanged={onDefinitionChanged}
-	steps={steps}
-	validator={validator}
-	toolbox={toolbox}
+	{steps}
+	{validator}
+	{toolbox}
 	stepEditor={StepEditor}
 	rootEditor={RootEditor}
-	selectedStepId={selectedStepId}
+	{selectedStepId}
 	on:selectedStepIdChanged={onSelectedStepIdChanged}
-	isToolboxCollapsed={isToolboxCollapsed}
+	{isToolboxCollapsed}
 	on:isToolboxCollapsedChanged={onIsToolboxCollapsedChanged}
-	isEditorCollapsed={isEditorCollapsed}
+	{isEditorCollapsed}
 	on:isEditorCollapsedChanged={onIsEditorCollapsedChanged}
-	isReadonly={isReadonly} />
+	{isReadonly}
+/>
 
 <div class="block">
 	<button on:click={toggleReadonly}>{isReadonly ? 'Enable editing' : 'Disable editing'}</button>
@@ -123,10 +121,11 @@
 </div>
 
 <div class="block">
-	Is valid: <strong>{isValid}</strong> &nbsp;
-	Selected step: <strong>{selectedStepId}</strong>
+	Is valid: <strong>{isValid}</strong> &nbsp; Selected step: <strong>{selectedStepId}</strong>
 </div>
 
 <div class="block">
-	This demo uses Svelte and <a href="https://github.com/nocode-js/sequential-workflow-designer/tree/main/svelte">Sequential Workflow Designer for Svelte</a>.
+	This demo uses Svelte and <a href="https://github.com/nocode-js/sequential-workflow-designer/tree/main/svelte"
+		>Sequential Workflow Designer for Svelte</a
+	>.
 </div>

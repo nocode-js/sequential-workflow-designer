@@ -176,14 +176,20 @@ export type StepEditorProvider<TDefinition extends Definition = Definition> = (
 	definition: TDefinition
 ) => HTMLElement;
 
+// TODO: GlobalEditorContext should be renamed to RootEditorContext.
 export interface GlobalEditorContext {
 	notifyPropertiesChanged(): void;
 }
 
+export type RootEditorContext = GlobalEditorContext;
+
+// TODO: GlobalEditorProvider should be renamed to RootEditorProvider.
 export type GlobalEditorProvider<TDefinition extends Definition = Definition> = (
 	definition: TDefinition,
 	context: GlobalEditorContext
 ) => HTMLElement;
+
+export type RootEditorProvider = GlobalEditorProvider;
 
 export interface UndoStack {
 	index: number;
