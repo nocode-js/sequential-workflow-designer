@@ -10,7 +10,8 @@
 		body, input, button {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
 		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden;}
 
-		#designer {position: absolute; left: 0; top: 0; width: 70vw; height: 100vh;}
+		#designer1 {position: absolute; left: 0; top: 0; width: 70vw; height: 100vh;}
+		#designer {left: 50; top: 50; width: 70vw; height: 100vh;}
 		.sqd-editor {padding: 10px;}
 		.sqd-editor p {margin: 0; padding: 0 0 10px;}
 		.sqd-editor label {display: block; padding: 0 0 10px;}
@@ -28,6 +29,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.6.0/dist/index.umd.js"></script>
 </head>
 <body>
+	<div id="designer1"></div>
 	<div id="designer"></div>
 
 	<div id="result">
@@ -49,5 +51,6 @@
 	<!-- <script src="./assets/lib.js"></script> -->
 	<script src="./assets/state-machine.js"></script>
 	<script src="./assets/live-testing.js"></script>
+	<!-- <script src="./assets/multi-conditional-switch.js"></script> -->
 </body>
 </html>

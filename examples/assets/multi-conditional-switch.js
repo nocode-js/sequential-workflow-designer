@@ -212,7 +212,7 @@ function stepEditorProvider(step, editorContext) {
 function load() {
 	const definition = {
 		sequence: [
-			createIfStep('If', [createWriteStep('header')]),
+			// createIfStep('If', [createWriteStep('header')]),
 			createParallelStep('Parallel', [createWriteStep('null'), createWriteStep('checksum'), createWriteStep('buffer')])
 		],
 		properties: {}
@@ -237,7 +237,7 @@ function load() {
 		},
 		controlBar: true
 	};
-	const placeholder = document.getElementById('designer');
+	const placeholder = document.getElementById('designer1');
 	sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
 }
 

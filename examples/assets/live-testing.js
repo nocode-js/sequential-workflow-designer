@@ -44,8 +44,6 @@ function createVariableIfNeeded(varName, data) {
 	}
 }
 
-
-
 function onRunClicked() {
 	if (designer.isReadonly()) {
 		return;
@@ -70,6 +68,7 @@ function onRunClicked() {
 
 			if (step.type === 'sendEmail') {
 				if (step.properties['ifReqisterEquals'] === register) {
+					// Call api to send emails
 					alert(`E-mail sent to ${step.properties['email']}`);
 				}
 			}
@@ -201,14 +200,71 @@ function stepEditorProvider(step, editorContext) {
 	return container;
 }
 
+function randomCondition() {
+	const a = Math.random() > 0.5 ? 'alfa' : 'beta';
+	const b = Math.random() > 0.5 ? '>' : '<';
+	const c = Math.round(Math.random() * 100);
+	return `${a} ${b} ${c}`;
+}
+
+function createIfStep2(name, trueSteps, falseSteps) {
+	return {
+		id: sequentialWorkflowDesigner.Uid.next(),
+		componentType: 'switch',
+		type: 'if',
+		name,
+		properties: {
+			condition: randomCondition()
+		},
+		branches: {
+			true: trueSteps || [],
+			false: falseSteps || []
+		}
+	};
+}
+
+function createWriteStep2(value) {
+	return {
+		id: sequentialWorkflowDesigner.Uid.next(),
+		componentType: 'task',
+		type: 'write',
+		name: `Write ${value}`,
+		properties: {}
+	};
+}
+
+function createParallelStep2(name, children) {
+	return {
+		id: sequentialWorkflowDesigner.Uid.next(),
+		componentType: 'switch',
+		type: 'parallel',
+		name,
+		properties: {
+			conditions: {
+				'Condition A': randomCondition(),
+				'Condition B': randomCondition(),
+				'Condition C': randomCondition()
+			}
+		},
+		branches: {
+			'Condition A': children ? [children[0]] : [],
+			'Condition B': children ? [children[1]] : [],
+			'Condition C': children ? [children[2]] : []
+		}
+	};
+}
+
 const configuration = {
 	undoStackSize: 5,
 
 	toolbox: {
 		groups: [
 			// {
-			// 	name: 'Steps',
-			// 	steps: [createWriteStep('_'), createIfStep('If'), createParallelStep('Parallel')]
+			// 	name: 'Steps Test',
+			// 	steps: [
+			// 		createIfStep2('If'),
+			// 		// createParallelStep2('Parallel')					
+			// 	]
 			// },
 			{
 				name: 'Comunicaciones',
@@ -244,7 +300,8 @@ const configuration = {
 					Steps.createIfStep('x', 10, 'Case'),
 					Steps.createLoopStep('index', 3, 'While Loop'),
 					Steps.createLoopStep('index', 5, 'While foreach'),
-					Steps.createParallelStep()
+					createParallelStep2('Parallel')					
+					// Steps.createParallelStep()
 				]
 			}
 		]
@@ -252,9 +309,14 @@ const configuration = {
 
 	steps: {
 		iconUrlProvider: (componentType, type) => {
-			const supportedIcons = ['if', 'loop', 'text'];
-			const fileName = supportedIcons.includes(type) ? type : 'task';
-			return `./assets/icon-${fileName}.svg`;
+			if (type == 'parallel'){
+				return `./assets/icon-if.svg`;
+			}
+			else{
+				const supportedIcons = ['if', 'loop', 'text'];
+				const fileName = supportedIcons.includes(type) ? type : 'task';
+				return `./assets/icon-${fileName}.svg`;
+			}
 		},
 	},
 
@@ -281,6 +343,7 @@ const startDefinition = {
 	},
 	sequence: [
 		Steps.createTextStep('comenzar!'),
+		createParallelStep2('Parallel', [createWriteStep2('null'), createWriteStep2('checksum'), createWriteStep2('buffer')]),
 		// StateMachineSteps.createTaskStep('Assing', 'Assing', 'Asignar una tarea'),
 		// Steps.createTaskStep('Asignar una tarea!'),
 		Steps.createLoopStep('index', 4, 'Loop', [
