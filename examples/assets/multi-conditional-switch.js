@@ -212,7 +212,7 @@ function stepEditorProvider(step, editorContext) {
 function load() {
 	const definition = {
 		sequence: [
-			// createIfStep('If', [createWriteStep('header')]),
+			createIfStep('If', [createWriteStep('header')]),
 			createParallelStep('Parallel', [createWriteStep('null'), createWriteStep('checksum'), createWriteStep('buffer')])
 		],
 		properties: {}

@@ -144,7 +144,6 @@ function onRunClicked() {
 		onStepExecuted: (step, data) => {
 			document.getElementById('variables').innerText = JSON.stringify(data, null, 2) + '\r\n';
 			designer.selectStepById(step.id);
-			debugger;
 			//designer.moveViewportToStep(step.id);
 		},
 
@@ -216,8 +215,6 @@ function stepEditorProvider(step, editorContext) {
 	return container;
 }
 
-
-
 const configuration = {
 	undoStackSize: 5,
 
@@ -254,10 +251,10 @@ const configuration = {
 				name: 'Lógica y flujos',
 				steps: [
 					Steps.createIfStep('x', 10, 'If'),
-					Steps.createIfStep('x', 10, 'Case'),
+					// Todo: Pass switch parallel  to state-machine.
+					createSwitchParallelStep('Case'),
 					Steps.createLoopStep('index', 3, 'While Loop'),
 					Steps.createLoopStep('index', 5, 'While foreach'),
-					createSwitchParallelStep('Switch Parallel')					
 				]
 			}
 		]

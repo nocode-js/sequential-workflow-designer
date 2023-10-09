@@ -129,7 +129,7 @@ class StateMachineSteps {
 
 	static createIfStep(name, properties, trueSteps, falseSteps) {
 		return {
-			id: uid().next,
+			id: uid(),
 			componentType: 'switch',
 			type: 'if',
 			name,
