@@ -30,12 +30,44 @@ class Steps {
 			val
 		}, steps);
 	}
+}
 
-	static createParallelStep() {
-		return StateMachineSteps.createParallelStep('Parallel', 
-			[StateMachineSteps.createWriteStep('null'), StateMachineSteps.createWriteStep('checksum'), StateMachineSteps.createWriteStep('buffer')]);
-			// );
-	}
+function createSwitchParallelStep(name, children) {
+	return {
+		id: sequentialWorkflowDesigner.Uid.next(),
+		componentType: 'switch',
+		type: 'parallel',
+		name,
+		properties: {
+			conditions: {
+				'Condition A': randomCondition(),
+				'Condition B': randomCondition(),
+				'Condition C': randomCondition()
+			}
+		},
+		branches: {
+			'Condition A': children ? [children[0]] : [],
+			'Condition B': children ? [children[1]] : [],
+			'Condition C': children ? [children[2]] : []
+		}
+	};
+}
+
+function randomCondition() {
+	const a = Math.random() > 0.5 ? 'alfa' : 'beta';
+	const b = Math.random() > 0.5 ? '>' : '<';
+	const c = Math.round(Math.random() * 100);
+	return `${a} ${b} ${c}`;
+}
+
+function createWriteStep(value) {
+	return {
+		id: sequentialWorkflowDesigner.Uid.next(),
+		componentType: 'task',
+		type: 'write',
+		name: `Write ${value}`,
+		properties: {}
+	};
 }
 
 function createVariableIfNeeded(varName, data) {
@@ -160,22 +192,6 @@ function stepEditorProvider(step, editorContext) {
 			editorContext.notifyNameChanged();
 		});
 
-	if (step.type === 'sendEmail') {
-		const propNames = ['ifReqisterEquals', 'email'];
-		for (let propName of propNames) {
-			const label = document.createElement('label');
-			label.innerText = propName;
-			const input = document.createElement('input');
-			input.setAttribute('type', 'text');
-			input.value = step.properties[propName];
-			input.addEventListener('input', () => {
-				step.properties[propName] = input.value;
-			});
-
-			container.appendChild(label);
-			container.appendChild(input);
-		}
-	}
 	if (step.properties['var'] !== undefined) {
 		appendTextField(container, 'Variable', step.properties['var'],
 			v => {
@@ -200,72 +216,13 @@ function stepEditorProvider(step, editorContext) {
 	return container;
 }
 
-function randomCondition() {
-	const a = Math.random() > 0.5 ? 'alfa' : 'beta';
-	const b = Math.random() > 0.5 ? '>' : '<';
-	const c = Math.round(Math.random() * 100);
-	return `${a} ${b} ${c}`;
-}
 
-function createIfStep2(name, trueSteps, falseSteps) {
-	return {
-		id: sequentialWorkflowDesigner.Uid.next(),
-		componentType: 'switch',
-		type: 'if',
-		name,
-		properties: {
-			condition: randomCondition()
-		},
-		branches: {
-			true: trueSteps || [],
-			false: falseSteps || []
-		}
-	};
-}
-
-function createWriteStep2(value) {
-	return {
-		id: sequentialWorkflowDesigner.Uid.next(),
-		componentType: 'task',
-		type: 'write',
-		name: `Write ${value}`,
-		properties: {}
-	};
-}
-
-function createParallelStep2(name, children) {
-	return {
-		id: sequentialWorkflowDesigner.Uid.next(),
-		componentType: 'switch',
-		type: 'parallel',
-		name,
-		properties: {
-			conditions: {
-				'Condition A': randomCondition(),
-				'Condition B': randomCondition(),
-				'Condition C': randomCondition()
-			}
-		},
-		branches: {
-			'Condition A': children ? [children[0]] : [],
-			'Condition B': children ? [children[1]] : [],
-			'Condition C': children ? [children[2]] : []
-		}
-	};
-}
 
 const configuration = {
 	undoStackSize: 5,
 
 	toolbox: {
 		groups: [
-			// {
-			// 	name: 'Steps Test',
-			// 	steps: [
-			// 		createIfStep2('If'),
-			// 		// createParallelStep2('Parallel')					
-			// 	]
-			// },
 			{
 				name: 'Comunicaciones',
 				steps: [
@@ -300,8 +257,7 @@ const configuration = {
 					Steps.createIfStep('x', 10, 'Case'),
 					Steps.createLoopStep('index', 3, 'While Loop'),
 					Steps.createLoopStep('index', 5, 'While foreach'),
-					createParallelStep2('Parallel')					
-					// Steps.createParallelStep()
+					createSwitchParallelStep('Switch Parallel')					
 				]
 			}
 		]
@@ -339,13 +295,16 @@ const configuration = {
 
 const startDefinition = {
 	properties: {
-		speed: 300
+		speed: 800
 	},
 	sequence: [
 		Steps.createTextStep('comenzar!'),
-		createParallelStep2('Parallel', [createWriteStep2('null'), createWriteStep2('checksum'), createWriteStep2('buffer')]),
-		// StateMachineSteps.createTaskStep('Assing', 'Assing', 'Asignar una tarea'),
-		// Steps.createTaskStep('Asignar una tarea!'),
+		createSwitchParallelStep('Parallel', 
+		[
+			createWriteStep('null'), 
+			createWriteStep('checksum'), 
+			createWriteStep('buffer')
+		]),
 		Steps.createLoopStep('index', 4, 'Loop', [
 			Steps.createMathStep('add', 'x += 3', 'x', 3),
 			Steps.createMathStep('mul', 'x *= 2', 'x', 2),
