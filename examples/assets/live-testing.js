@@ -96,8 +96,8 @@ function onRunClicked() {
 				return;
 			}
 
+			// Example how to apply custom logic for a step
 			let register = '1';
-
 			if (step.type === 'sendEmail') {
 				if (step.properties['ifReqisterEquals'] === register) {
 					// Call api to send emails
@@ -144,6 +144,7 @@ function onRunClicked() {
 		onStepExecuted: (step, data) => {
 			document.getElementById('variables').innerText = JSON.stringify(data, null, 2) + '\r\n';
 			designer.selectStepById(step.id);
+			// Todo: Evaluate why locally this doesn´t work
 			//designer.moveViewportToStep(step.id);
 		},
 
