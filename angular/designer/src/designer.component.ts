@@ -21,6 +21,7 @@ import {
 	DesignerExtension,
 	GlobalEditorContext,
 	GlobalEditorProvider,
+	KeyboardConfiguration,
 	Step,
 	StepEditorContext,
 	StepEditorProvider,
@@ -70,6 +71,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public controlBar?: boolean;
 	@Input('contextMenu')
 	public contextMenu?: boolean;
+	@Input('keyboard')
+	public keyboard?: boolean | KeyboardConfiguration;
 	@Input('extensions')
 	public extensions?: DesignerExtension[];
 	@Input('customActionHandler')
@@ -208,6 +211,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 					: false,
 				controlBar: this.controlBar,
 				contextMenu: this.contextMenu,
+				keyboard: this.keyboard,
 				extensions: this.extensions,
 				isReadonly: this.isReadonly,
 				uidGenerator: this.uidGenerator,

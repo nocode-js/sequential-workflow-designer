@@ -16,7 +16,8 @@
 		type EditorsConfiguration,
 		type CustomActionHandler,
 		type StepEditorProvider,
-		type RootEditorProvider
+		type RootEditorProvider,
+		type KeyboardConfiguration
 	} from 'sequential-workflow-designer';
 
 	const dispatch = createEventDispatcher<{
@@ -42,6 +43,7 @@
 	export let controlBar = true;
 	export let theme = 'light';
 	export let contextMenu = true;
+	export let keyboard: boolean | KeyboardConfiguration | undefined = undefined;
 	export let undoStackSize: number | undefined = undefined;
 	export let undoStack: UndoStack | undefined = undefined;
 	export let validator: ValidatorConfiguration | undefined = undefined;
@@ -124,6 +126,7 @@
 			editors,
 			theme,
 			contextMenu,
+			keyboard,
 			undoStackSize,
 			undoStack,
 			validator,

@@ -54,6 +54,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	validator?: ValidatorConfiguration;
 
 	/**
+	 * @description The configuration of the keyboard shortcuts. By default, the keyboard shortcuts are enabled (`true`). If `false`, the keyboard shortcuts are disabled.
+	 */
+	keyboard?: boolean | KeyboardConfiguration;
+
+	/**
 	 * @description The handler that handles custom actions.
 	 */
 	customActionHandler?: CustomActionHandler;
@@ -157,6 +162,14 @@ export interface ValidatorConfiguration {
 
 export type StepValidator = (step: Step, parentSequence: Sequence, definition: Definition) => boolean;
 export type RootValidator = (definition: Definition) => boolean;
+
+export interface KeyboardConfiguration {
+	canHandleKey?: (action: KeyboardAction, event: KeyboardEvent) => boolean;
+}
+
+export enum KeyboardAction {
+	delete = 'delete'
+}
 
 export interface EditorsConfiguration<TDefinition extends Definition = Definition> {
 	isCollapsed?: boolean;

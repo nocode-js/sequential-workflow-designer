@@ -134,5 +134,7 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 	if (!services.daemons) {
 		services.daemons = [];
 	}
-	services.daemons.push(new KeyboardDaemonExtension());
+	if (configuration.keyboard === undefined || configuration.keyboard) {
+		services.daemons.push(KeyboardDaemonExtension.create(configuration.keyboard));
+	}
 }
