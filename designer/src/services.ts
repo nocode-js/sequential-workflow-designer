@@ -1,6 +1,6 @@
 import { DefaultDraggedComponentExtension } from './behaviors/default-dragged-component-extension';
 import { ControlBarExtension } from './control-bar/control-bar-extension';
-import { DesignerConfiguration } from './designer-configuration';
+import { DesignerConfiguration, KeyboardConfiguration } from './designer-configuration';
 import { DesignerExtension } from './designer-extension';
 import { KeyboardDaemonExtension } from './keyboard/keyboard-daemon-extension';
 import { SmartEditorExtension } from './smart-editor/smart-editor-extension';
@@ -135,6 +135,6 @@ function setDefault(services: Partial<Services>, configuration: DesignerConfigur
 		services.daemons = [];
 	}
 	if (configuration.keyboard === undefined || configuration.keyboard) {
-		services.daemons.push(KeyboardDaemonExtension.create(configuration.keyboard));
+		services.daemons.push(KeyboardDaemonExtension.create(configuration.keyboard as true | undefined | KeyboardConfiguration));
 	}
 }
