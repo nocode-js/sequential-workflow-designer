@@ -1,24 +1,28 @@
 import { DesignerApi } from '../api/designer-api';
 import { ControlBarApi } from '../api/control-bar-api';
 import { Daemon } from '../designer-extension';
+import { KeyboardAction, KeyboardConfiguration } from '../designer-configuration';
 
-const supportedKeys = ['Backspace', 'Delete'];
-const ignoreTagNames = ['INPUT', 'TEXTAREA'];
+const ignoreTagNames = ['INPUT', 'TEXTAREA', 'SELECT'];
 
 export class KeyboardDaemon implements Daemon {
-	public static create(api: DesignerApi): KeyboardDaemon {
-		const controller = new KeyboardDaemon(api.controlBar);
+	public static create(api: DesignerApi, configuration: KeyboardConfiguration): KeyboardDaemon {
+		const controller = new KeyboardDaemon(api.controlBar, configuration);
 		document.addEventListener('keyup', controller.onKeyUp, false);
 		return controller;
 	}
 
-	private constructor(private readonly controlBarApi: ControlBarApi) {}
+	private constructor(private readonly controlBarApi: ControlBarApi, private readonly configuration: KeyboardConfiguration) {}
 
 	private readonly onKeyUp = (e: KeyboardEvent) => {
-		if (!supportedKeys.includes(e.key)) {
+		const action = detectAction(e);
+		if (!action) {
 			return;
 		}
 		if (document.activeElement && ignoreTagNames.includes(document.activeElement.tagName)) {
+			return;
+		}
+		if (this.configuration.canHandleKey && !this.configuration.canHandleKey(action, e)) {
 			return;
 		}
 
@@ -34,4 +38,11 @@ export class KeyboardDaemon implements Daemon {
 	public destroy() {
 		document.removeEventListener('keyup', this.onKeyUp, false);
 	}
+}
+
+function detectAction(e: KeyboardEvent): KeyboardAction | null {
+	if (e.key === 'Backspace' || e.key === 'Delete') {
+		return KeyboardAction.delete;
+	}
+	return null;
 }

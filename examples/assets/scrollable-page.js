@@ -44,6 +44,7 @@ const configuration = {
 		}
 	},
 	controlBar: true,
+	keyboard: false,
 };
 
 function init(placeholder) {

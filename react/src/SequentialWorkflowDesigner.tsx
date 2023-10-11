@@ -15,7 +15,8 @@ import {
 	Sequence,
 	ValidatorConfiguration,
 	GlobalEditorProvider,
-	StepEditorProvider
+	StepEditorProvider,
+	KeyboardConfiguration
 } from 'sequential-workflow-designer';
 import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -51,6 +52,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	 */
 	controlBar: boolean;
 	contextMenu?: boolean;
+	keyboard?: boolean | KeyboardConfiguration;
 	controller?: SequentialWorkflowDesignerController;
 	customActionHandler?: CustomActionHandler;
 	extensions?: DesignerExtension[];
@@ -83,6 +85,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const isToolboxCollapsed = props.isToolboxCollapsed;
 	const controlBar = props.controlBar;
 	const contextMenu = props.contextMenu;
+	const keyboard = props.keyboard;
 	const extensions = props.extensions;
 
 	if (props.controlBar === undefined) {
@@ -223,6 +226,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 			validator,
 			controlBar,
 			contextMenu,
+			keyboard,
 			editors:
 				globalEditorRef.current && stepEditorRef.current
 					? {
@@ -274,6 +278,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		isToolboxCollapsed,
 		isEditorCollapsed,
 		contextMenu,
+		keyboard,
 		controlBar,
 		steps,
 		validator,

@@ -1,3 +1,15 @@
+## 0.16.9
+
+This version adds a possibility to disable keyboard shortcuts. Additionally you may filter keyboard events handled by the designer.
+
+```js
+// Disabled shortcuts
+const configuration = {
+  keyboard: false,
+  // ...
+};
+```
+
 ## 0.16.8
 
 Svelte package supports now native editors. If you want to use JavaScript/TypeScript code to create editors, you can do it now. Of course, you can still use Svelte components as editors.

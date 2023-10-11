@@ -2,7 +2,7 @@
 
 This project contains a simple demo of using the `sequential-workflow-designer-svelte` package.
 
-## 🚀 How to Run?
+## 🚀 How to Run Locally
 
 1. Clone this repository.
 2. Install dependencies: `yarn install`

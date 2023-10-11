@@ -75,7 +75,7 @@ Now you can use the component:
 
 Next you may need to create editors for your definition. You need to create a new component for the root editor and the step editor. Each editor has predefined props.
 
-The global editor:
+The root editor:
 
 ```svelte
 <script lang="ts">
