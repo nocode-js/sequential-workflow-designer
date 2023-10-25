@@ -9,6 +9,8 @@ import { ServicesResolver } from './services';
 import { validateConfiguration } from './core/designer-configuration-validator';
 import { DesignerApi } from './api';
 import { HistoryController } from './history-controller';
+import { Viewport } from './designer-extension';
+import { race } from './core';
 
 export class Designer<TDefinition extends Definition = Definition> {
 	/**
@@ -53,12 +55,20 @@ export class Designer<TDefinition extends Definition = Definition> {
 		);
 		view.workspace.onReady.subscribe(() => designer.onReady.forward());
 
-		designerContext.state.onDefinitionChanged.subscribe(() => {
-			setTimeout(() => designer.onDefinitionChanged.forward(designerContext.state.definition as TDef));
-		});
-		designerContext.state.onSelectedStepIdChanged.subscribe(() =>
-			designer.onSelectedStepIdChanged.forward(designerContext.state.selectedStepId)
+		race(0, designerContext.state.onDefinitionChanged, designerContext.state.onSelectedStepIdChanged).subscribe(
+			([definition, selectedStepId]) => {
+				if (definition !== undefined) {
+					designer.onDefinitionChanged.forward(designerContext.state.definition as TDef);
+				}
+				if (selectedStepId !== undefined) {
+					designer.onSelectedStepIdChanged.forward(designerContext.state.selectedStepId);
+				}
+			}
 		);
+
+		designerContext.state.onViewportChanged.subscribe(viewPort => {
+			designer.onViewportChanged.forward(viewPort);
+		});
 		designerContext.state.onIsToolboxCollapsedChanged.subscribe(isCollapsed => {
 			designer.onIsToolboxCollapsedChanged.forward(isCollapsed);
 		});
@@ -85,6 +95,11 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Fires when the definition has changed.
 	 */
 	public readonly onDefinitionChanged = new SimpleEvent<TDefinition>();
+
+	/**
+	 * @description Fires when the viewport has changed.
+	 */
+	public readonly onViewportChanged = new SimpleEvent<Viewport>();
 
 	/**
 	 * @description Fires when the selected step has changed.
@@ -141,6 +156,21 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 */
 	public selectStepById(stepId: string) {
 		this.state.setSelectedStepId(stepId);
+	}
+
+	/**
+	 * @returns the current viewport.
+	 */
+	public getViewport(): Viewport {
+		return this.state.viewport;
+	}
+
+	/**
+	 * @description Sets the viewport.
+	 * @param viewport Viewport.
+	 */
+	public setViewport(viewport: Viewport) {
+		this.state.setViewport(viewport);
 	}
 
 	/**

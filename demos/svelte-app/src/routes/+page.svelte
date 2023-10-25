@@ -92,6 +92,7 @@
 </script>
 
 <SequentialWorkflowDesigner
+	undoStackSize={4}
 	{definition}
 	on:definitionChanged={onDefinitionChanged}
 	{steps}

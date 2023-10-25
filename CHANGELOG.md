@@ -1,3 +1,9 @@
+## 0.16.10
+
+This version fixes the error: `Failed to execute 'removeChild' on 'Node'` when a user uses the undo feature [#100](https://github.com/nocode-js/sequential-workflow-designer/issues/100).
+
+Additionally, this version introduces `getViewport`, `setViewport` methods and `onViewportChanged` event in the `Designer` class.
+
 ## 0.16.9
 
 This version adds a possibility to disable keyboard shortcuts. Additionally you may filter keyboard events handled by the designer.

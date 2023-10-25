@@ -1,23 +1,17 @@
 import { DefinitionWalker, Step } from '../definition';
-import { race } from '../core';
+import { SimpleEvent, race } from '../core';
 import { DefinitionChangedEvent, DesignerState } from '../designer-state';
 import { DefinitionChangeType } from '../designer-configuration';
 
 export type EditorRendererHandler = (step: Step | null) => void;
 
+type RaceEventArgs = [(DefinitionChangedEvent | undefined)?, (string | null | undefined)?, unknown?];
+
 export class EditorRenderer {
 	public static create(state: DesignerState, definitionWalker: DefinitionWalker, handler: EditorRendererHandler): EditorRenderer {
-		const listener = new EditorRenderer(state, definitionWalker, handler);
-
-		race(0, state.onDefinitionChanged, state.onSelectedStepIdChanged).subscribe(r => {
-			const [definitionChanged, selectedStepId] = r;
-			if (definitionChanged) {
-				listener.onDefinitionChanged(definitionChanged);
-			} else if (selectedStepId !== undefined) {
-				listener.onSelectedStepIdChanged(selectedStepId);
-			}
-		});
-
+		const raceEvent = race(0, state.onDefinitionChanged, state.onSelectedStepIdChanged);
+		const listener = new EditorRenderer(state, definitionWalker, handler, raceEvent);
+		raceEvent.subscribe(listener.raceEventHandler);
 		listener.tryRender(state.selectedStepId);
 		return listener;
 	}
@@ -27,11 +21,12 @@ export class EditorRenderer {
 	private constructor(
 		private readonly state: DesignerState,
 		private readonly definitionWalker: DefinitionWalker,
-		private readonly handler: EditorRendererHandler
+		private readonly handler: EditorRendererHandler,
+		private readonly raceEvent: SimpleEvent<RaceEventArgs>
 	) {}
 
 	public destroy() {
-		// TODO: unsubscribe from events
+		this.raceEvent.unsubscribe(this.raceEventHandler);
 	}
 
 	private render(stepId: string | null) {
@@ -45,6 +40,14 @@ export class EditorRenderer {
 			this.render(stepId);
 		}
 	}
+
+	private readonly raceEventHandler = ([definitionChanged, selectedStepId]: RaceEventArgs) => {
+		if (definitionChanged) {
+			this.onDefinitionChanged(definitionChanged);
+		} else if (selectedStepId !== undefined) {
+			this.onSelectedStepIdChanged(selectedStepId);
+		}
+	};
 
 	private onDefinitionChanged(event: DefinitionChangedEvent) {
 		if (event.changeType === DefinitionChangeType.rootReplaced) {

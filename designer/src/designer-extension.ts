@@ -168,8 +168,8 @@ export interface ViewportController {
 }
 
 export interface Viewport {
-	position: Vector;
-	scale: number;
+	readonly position: Vector;
+	readonly scale: number;
 }
 
 // DaemonExtension
