@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
 	Definition,
 	Designer,
-	GlobalEditorContext,
+	RootEditorContext,
 	Properties,
 	Uid,
 	Step,
@@ -96,7 +96,7 @@ export class AppComponent implements OnInit {
 		context.notifyNameChanged();
 	}
 
-	public updateProperty(properties: Properties, name: string, event: Event, context: GlobalEditorContext | StepEditorContext) {
+	public updateProperty(properties: Properties, name: string, event: Event, context: RootEditorContext | StepEditorContext) {
 		properties[name] = (event.target as HTMLInputElement).value;
 		context.notifyPropertiesChanged();
 	}

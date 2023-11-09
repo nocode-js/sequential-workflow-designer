@@ -15,9 +15,9 @@ export const startDefinition: Definition = {
 	properties: {}
 };
 
-function globalEditorProvider(): HTMLElement {
+function rootEditorProvider(): HTMLElement {
 	const editor = document.createElement('div');
-	editor.innerHTML = 'Global editor';
+	editor.innerHTML = 'Root editor';
 	return editor;
 }
 
@@ -48,7 +48,7 @@ export function NativeEditors() {
 				stepsConfiguration={{}}
 				controlBar={true}
 				contextMenu={true}
-				globalEditor={globalEditorProvider}
+				rootEditor={rootEditorProvider}
 				stepEditor={stepEditorProvider}
 			/>
 		</>

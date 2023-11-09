@@ -96,10 +96,10 @@ Add the below code to your head section in HTML document.
 ```html
 <head>
 ...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.10/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.10/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.10/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.16.10/dist/index.umd.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.17.0/css/designer.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.17.0/css/designer-light.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.17.0/css/designer-dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.17.0/dist/index.umd.js"></script>
 ```
 
 Call the designer by:
@@ -120,10 +120,10 @@ const placeholder = document.getElementById('placeholder');
 const definition = {
   properties: {
     'myProperty': 'my-value',
-    // global properties...
+    // root properties...
   },
   sequence: [
-    // root steps...
+    // steps...
   ]
 };
 
@@ -190,12 +190,12 @@ const configuration = {
 
   editors: {
     isCollapsed: false,
-    globalEditorProvider: (definition, globalContext) => {
+    rootEditorProvider: (definition, rootContext, isReadonly) => {
       const editor = document.createElement('div');
       // ...
       return editor;
     },
-    stepEditorProvider: (step, stepContext, definition) => {
+    stepEditorProvider: (step, stepContext, definition, isReadonly) => {
       const editor = document.createElement('div');
       // ...
       return editor;

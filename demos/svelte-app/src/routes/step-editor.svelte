@@ -4,6 +4,7 @@
 	export let context: StepEditorContext;
 	export let definition: Definition;
 	export let step: Step;
+	export let isReadonly: boolean;
 
 	let name = step.name;
 	let comment = step.properties.comment;
@@ -29,8 +30,8 @@
 
 <h3>Name</h3>
 
-<input value={name} on:input={onNameChanged} />
+<input value={name} readonly={isReadonly} on:input={onNameChanged} />
 
 <h3>Comment</h3>
 
-<input value={comment} on:input={onCommentChanged} />
+<input value={comment} readonly={isReadonly} on:input={onCommentChanged} />

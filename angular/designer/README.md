@@ -91,18 +91,18 @@ export class AppComponent {
     context.notifyNameChanged();
   }
 
-  public updateProperty(properties: Properties, name: string, event: Event, context: GlobalEditorContext | StepEditorContext) {
+  public updateProperty(properties: Properties, name: string, event: Event, context: RootEditorContext | StepEditorContext) {
     properties[name] = (event.target as HTMLInputElement).value;
     context.notifyPropertiesChanged();
   }
 }
 ```
 
-Create a template for the global editor. The value of the `editor` variable implements the `GlobalEditorWrapper` interface.
+Create a template for the root editor. The value of the `editor` variable implements the `RootEditorWrapper` interface.
 
 ```html
-<ng-template #globalEditor let-editor>
-  <h2>Global Editor</h2>
+<ng-template #rootEditor let-editor>
+  <h2>Root Editor</h2>
 
   <h3>Velocity</h3>
   <input type="number"
@@ -112,9 +112,10 @@ Create a template for the global editor. The value of the `editor` variable impl
 ```
 
 ```ts
-interface GlobalEditorWrapper {
+interface RootEditorWrapper {
   definition: Definition;
-  context: GlobalEditorContext;
+  context: RootEditorContext;
+  isReadonly: boolean;
 }
 ```
 
@@ -141,6 +142,7 @@ interface StepEditorWrapper {
   step: Step;
   definition: Definition;
   context: StepEditorContext;
+  isReadonly: boolean;
 }
 ```
 
@@ -157,7 +159,7 @@ At the end attach the designer:
   [controlBar]="true"
   [contextMenu]="true"
   [areEditorsHidden]="false"
-  [globalEditor]="globalEditor"
+  [rootEditor]="rootEditor"
   [stepEditor]="stepEditor"
   (onReady)="onDesignerReady($event)"
   (onDefinitionChanged)="onDefinitionChanged($event)"

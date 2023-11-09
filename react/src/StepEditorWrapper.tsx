@@ -20,6 +20,7 @@ export interface StepEditorWrapper<TStep extends Step = Step, TDefinition extend
 	readonly properties: TStep['properties'];
 	readonly step: TStep;
 	readonly definition: TDefinition;
+	readonly isReadonly: boolean;
 
 	setName(name: string): void;
 	setProperty(name: keyof TStep['properties'], value: TStep['properties'][typeof name]): void;
@@ -43,6 +44,7 @@ export interface StepEditorWrapperContextProps {
 	step: Step;
 	definition: Definition;
 	context: StepEditorContext;
+	isReadonly: boolean;
 }
 
 export function StepEditorWrapperContext(props: StepEditorWrapperContextProps) {
@@ -57,6 +59,7 @@ export function StepEditorWrapperContext(props: StepEditorWrapperContextProps) {
 			properties: props.step.properties,
 			step: props.step,
 			definition: props.definition,
+			isReadonly: props.isReadonly,
 			setName,
 			setProperty,
 			notifyPropertiesChanged,

@@ -43,7 +43,7 @@ describe('StepEditorWrapper', () => {
 		}
 
 		render(
-			<StepEditorWrapperContext step={step} definition={definition} context={context}>
+			<StepEditorWrapperContext step={step} definition={definition} context={context} isReadonly={false}>
 				<div data-testid="child" />
 				<TestHook />
 			</StepEditorWrapperContext>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration, ValidatorConfiguration } from 'sequential-workflow-designer';
 import { SequentialWorkflowDesigner, wrapDefinition } from 'sequential-workflow-designer-react';
-import { GlobalEditor } from './GlobalEditor';
+import { RootEditor } from './RootEditor';
 import { StepEditor } from './StepEditor';
 import { createSwitchStep, createTaskStep } from './StepUtils';
 import { useSequentialWorkflowDesignerController } from 'sequential-workflow-designer-react';
@@ -94,7 +94,7 @@ export function Playground() {
 					stepsConfiguration={stepsConfiguration}
 					validatorConfiguration={validatorConfiguration}
 					controlBar={true}
-					globalEditor={<GlobalEditor />}
+					rootEditor={<RootEditor />}
 					stepEditor={<StepEditor />}
 					isEditorCollapsed={isEditorCollapsed}
 					onIsEditorCollapsedChanged={setIsEditorCollapsed}

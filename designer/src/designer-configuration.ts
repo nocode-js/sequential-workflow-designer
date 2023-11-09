@@ -174,7 +174,7 @@ export enum KeyboardAction {
 export interface EditorsConfiguration<TDefinition extends Definition = Definition> {
 	isCollapsed?: boolean;
 	stepEditorProvider: StepEditorProvider<TDefinition>;
-	globalEditorProvider: GlobalEditorProvider<TDefinition>;
+	rootEditorProvider: RootEditorProvider<TDefinition>;
 }
 
 export interface StepEditorContext {
@@ -186,23 +186,19 @@ export interface StepEditorContext {
 export type StepEditorProvider<TDefinition extends Definition = Definition> = (
 	step: Step,
 	context: StepEditorContext,
-	definition: TDefinition
+	definition: TDefinition,
+	isReadonly: boolean
 ) => HTMLElement;
 
-// TODO: GlobalEditorContext should be renamed to RootEditorContext.
-export interface GlobalEditorContext {
+export interface RootEditorContext {
 	notifyPropertiesChanged(): void;
 }
 
-export type RootEditorContext = GlobalEditorContext;
-
-// TODO: GlobalEditorProvider should be renamed to RootEditorProvider.
-export type GlobalEditorProvider<TDefinition extends Definition = Definition> = (
+export type RootEditorProvider<TDefinition extends Definition = Definition> = (
 	definition: TDefinition,
-	context: GlobalEditorContext
+	context: RootEditorContext,
+	isReadonly: boolean
 ) => HTMLElement;
-
-export type RootEditorProvider = GlobalEditorProvider;
 
 export interface UndoStack {
 	index: number;
@@ -222,6 +218,6 @@ export enum DefinitionChangeType {
 	stepDeleted,
 	stepMoved,
 	stepInserted,
-	globalPropertyChanged,
+	rootPropertyChanged,
 	rootReplaced
 }

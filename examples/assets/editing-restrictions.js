@@ -98,7 +98,7 @@ function load() {
 
 		editors: {
 			isCollapsed: true,
-			globalEditorProvider: () => {
+			rootEditorProvider: () => {
 				return createEditor('Please select any step.');
 			},
 			stepEditorProvider: (step) => {

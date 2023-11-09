@@ -115,7 +115,7 @@ function canPlaceStep(step, parentSequence) {
 }
 
 class Editors {
-	static createGlobalEditor() {
+	static createRootEditor() {
 		const root = document.createElement('div');
 		root.innerText = 'Please select any step.';
 		return root;
@@ -223,7 +223,7 @@ const configuration = {
 	},
 
 	editors: {
-		globalEditorProvider: Editors.createGlobalEditor,
+		rootEditorProvider: Editors.createRootEditor,
 		stepEditorProvider: Editors.createStepEditor
 	},
 	controlBar: true,

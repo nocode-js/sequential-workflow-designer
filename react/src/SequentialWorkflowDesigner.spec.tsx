@@ -24,7 +24,7 @@ describe('SequentialWorkflowDesigner', () => {
 			<SequentialWorkflowDesigner
 				definition={wrappedDefinition}
 				onDefinitionChange={definitionChanged}
-				globalEditor={<div />}
+				rootEditor={<div />}
 				stepEditor={<div />}
 				stepsConfiguration={{}}
 				toolboxConfiguration={{ groups: [] }}
@@ -52,7 +52,7 @@ describe('SequentialWorkflowDesigner', () => {
 				onDefinitionChange={() => {
 					/* nothing */
 				}}
-				globalEditor={false}
+				rootEditor={false}
 				stepEditor={false}
 				stepsConfiguration={{}}
 				toolboxConfiguration={false}
@@ -78,7 +78,7 @@ describe('SequentialWorkflowDesigner', () => {
 				onDefinitionChange={() => {
 					/* nothing */
 				}}
-				globalEditor={false}
+				rootEditor={false}
 				stepEditor={false}
 				stepsConfiguration={{}}
 				toolboxConfiguration={false}

@@ -18,13 +18,17 @@ export class SmartEditorView {
 		parent.appendChild(toggle);
 		parent.appendChild(root);
 
+		if ((configuration as { globalEditorProvider?: object }).globalEditorProvider) {
+			throw new Error('globalEditorProvider is renamed to rootEditorProvider');
+		}
+
 		const editor = Editor.create(
 			root,
 			api,
 			'sqd-editor sqd-step-editor',
 			configuration.stepEditorProvider,
-			'sqd-editor sqd-global-editor',
-			configuration.globalEditorProvider
+			'sqd-editor sqd-root-editor',
+			configuration.rootEditorProvider
 		);
 		return new SmartEditorView(root, toggle, editor);
 	}

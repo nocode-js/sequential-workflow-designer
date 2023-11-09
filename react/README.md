@@ -34,7 +34,7 @@ import {
 import {
   SequentialWorkflowDesigner,
   wrapDefinition,
-  useGlobalEditor,
+  useRootEditor,
   useStepEditor
 } from 'sequential-workflow-designer-react';
 ```
@@ -59,11 +59,11 @@ const stepsConfiguration: StepsConfiguration = { /* ... */ };
 const validatorConfiguration: ValidatorConfiguration = { /* ... */ };
 ```
 
-Create the global editor component:
+Create the root editor component:
 
 ```tsx
-function GlobalEditor() {
-  const { properties, setProperty, definition } = useGlobalEditor();
+function RootEditor() {
+  const { properties, setProperty, definition, isReadonly } = useRootEditor();
 
   function onSpeedChanged(e) {
     setProperty('speed', e.target.value);
@@ -82,7 +82,7 @@ Create the step editor component:
 
 ```tsx
 function StepEditor() {
-  const { type, componentType, name, setName, properties, setProperty, definition } = useStepEditor();
+  const { type, componentType, name, setName, properties, setProperty, definition, isReadonly } = useStepEditor();
 
   function onNameChanged(e) {
     setName(e.target.value);
@@ -108,7 +108,7 @@ At the end attach the designer.
   toolboxConfiguration={toolboxConfiguration}
   controlBar={true}
   contextMenu={true}
-  globalEditor={<GlobalEditor />}
+  rootEditor={<RootEditor />}
   stepEditor={<StepEditor />}>
   />
 ```
@@ -121,7 +121,7 @@ You can hide any UI component.
   toolboxConfiguration={false}
   controlBar={false}
   contextMenu={false}
-  globalEditor={false}
+  rootEditor={false}
   stepEditor={false}>
   />
 ```

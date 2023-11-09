@@ -188,7 +188,7 @@ function writeStepEditorProvider(step, editorContext) {
 	return root;
 }
 
-function globalEditorProvider() {
+function rootEditorProvider() {
 	const root = document.createElement('div');
 	appendTitle(root, `Multi-Conditional Switch`);
 	const description = document.createElement('p');
@@ -232,7 +232,7 @@ function load() {
 			}
 		},
 		editors: {
-			globalEditorProvider,
+			rootEditorProvider,
 			stepEditorProvider
 		},
 		controlBar: true

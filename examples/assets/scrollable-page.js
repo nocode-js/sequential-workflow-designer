@@ -36,7 +36,7 @@ const configuration = {
 	steps: {},
 
 	editors: {
-		globalEditorProvider: () => {
+		rootEditorProvider: () => {
 			return createEditor('Please select any step.');
 		},
 		stepEditorProvider: (step) => {

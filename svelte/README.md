@@ -83,6 +83,7 @@ The root editor:
 
   export let context: RootEditorContext;
   export let definition: Definition;
+  export let isReadonly: boolean;
   let velocity = definition.properties.velocity;
 
   function onVelocityChanged(event: Event) {
@@ -104,6 +105,7 @@ The step editor:
   export let context: StepEditorContext;
   export let definition: Definition;
   export let step: Step;
+  export let isReadonly: boolean;
 
   let name = step.name;
 

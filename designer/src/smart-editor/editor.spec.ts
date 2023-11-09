@@ -14,10 +14,10 @@ describe('Editor', () => {
 	let state: DesignerState;
 	let api: EditorApi;
 	let stepEditorProvider: jasmine.Spy;
-	let globalEditorProvider: jasmine.Spy;
+	let rootEditorProvider: jasmine.Spy;
 
 	function createEditor() {
-		Editor.create(parent, api, 'test-step', stepEditorProvider, 'test-global', globalEditorProvider);
+		Editor.create(parent, api, 'test-step', stepEditorProvider, 'test-root', rootEditorProvider);
 	}
 
 	beforeEach(() => {
@@ -31,7 +31,7 @@ describe('Editor', () => {
 		api = new EditorApi(state, walker, modifier);
 
 		stepEditorProvider = jasmine.createSpy().and.returnValue(document.createElement('div'));
-		globalEditorProvider = jasmine.createSpy().and.returnValue(document.createElement('div'));
+		rootEditorProvider = jasmine.createSpy().and.returnValue(document.createElement('div'));
 	});
 
 	it('calls step editor provider when step is selected', () => {
@@ -39,16 +39,16 @@ describe('Editor', () => {
 
 		createEditor();
 
-		expect(stepEditorProvider).toHaveBeenCalledWith(step, jasmine.anything(), definition);
-		expect(globalEditorProvider).not.toHaveBeenCalled();
+		expect(stepEditorProvider).toHaveBeenCalledWith(step, jasmine.anything(), definition, false);
+		expect(rootEditorProvider).not.toHaveBeenCalled();
 	});
 
-	it('calls global editor provider when step is not selected', () => {
+	it('calls root editor provider when step is not selected', () => {
 		state.setSelectedStepId(null);
 
 		createEditor();
 
 		expect(stepEditorProvider).not.toHaveBeenCalled();
-		expect(globalEditorProvider).toHaveBeenCalledWith(definition, jasmine.anything());
+		expect(rootEditorProvider).toHaveBeenCalledWith(definition, jasmine.anything(), false);
 	});
 });

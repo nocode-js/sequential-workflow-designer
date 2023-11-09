@@ -49,7 +49,7 @@ function install(placeholder, theme) {
 		},
 
 		editors: {
-			globalEditorProvider: () => {
+			rootEditorProvider: () => {
 				return createEditor('Please select any step.');
 			},
 			stepEditorProvider: (step) => {
