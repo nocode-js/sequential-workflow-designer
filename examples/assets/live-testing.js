@@ -113,52 +113,55 @@ function appendTitle(parent, text) {
 	parent.appendChild(title);
 }
 
-function appendTextField(parent, label, startValue, set) {
+function appendTextField(parent, label, isReadonly, startValue, set) {
 	const field = document.createElement('p');
 	parent.appendChild(field);
 	field.innerHTML = `<label></label> <input type="text">`;
 	field.querySelector('label').innerText = label;
 	const input = field.querySelector('input');
 	input.value = startValue;
+	if (isReadonly) {
+		input.setAttribute('readonly', 'readonly');
+	}
 	field.addEventListener('input', () => set(input.value));
 }
 
-function globalEditorProvider(definition, globalContext) {
+function rootEditorProvider(definition, editorContext, isReadonly) {
 	const container = document.createElement('span');
 	appendTitle(container, 'State machine config');
-	appendTextField(container, 'Speed (ms)', definition.properties['speed'],
+	appendTextField(container, 'Speed (ms)', isReadonly, definition.properties['speed'],
 		v => {
 			definition.properties['speed'] = parseInt(v, 10);
-			globalContext.notifyPropertiesChanged();
+			editorContext.notifyPropertiesChanged();
 		});
 	return container;
 }
 
-function stepEditorProvider(step, editorContext) {
+function stepEditorProvider(step, editorContext, _definition, isReadonly) {
 	const container = document.createElement('div');
 	appendTitle(container, 'Step ' + step.type);
 
-	appendTextField(container, 'Name', step.name,
+	appendTextField(container, 'Name', isReadonly, step.name,
 		v => {
 			step.name = v;
 			editorContext.notifyNameChanged();
 		});
 	if (step.properties['var'] !== undefined) {
-		appendTextField(container, 'Variable', step.properties['var'],
+		appendTextField(container, 'Variable', isReadonly, step.properties['var'],
 			v => {
 				step.properties['var'] = v;
 				editorContext.notifyPropertiesChanged();
 			});
 	}
 	if (step.properties['val']) {
-		appendTextField(container, 'Value', step.properties['val'],
+		appendTextField(container, 'Value', isReadonly, step.properties['val'],
 			v => {
 				step.properties['val'] = parseInt(v, 10);
 				editorContext.notifyPropertiesChanged();
 			});
 	}
 	if (step.properties['text']) {
-		appendTextField(container, 'Text', step.properties['text'],
+		appendTextField(container, 'Text', isReadonly, step.properties['text'],
 			v => {
 				step.properties['text'] = v;
 				editorContext.notifyPropertiesChanged();
@@ -210,7 +213,7 @@ const configuration = {
 	},
 
 	editors: {
-		globalEditorProvider,
+		rootEditorProvider,
 		stepEditorProvider
 	},
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Definition, GlobalEditorContext } from 'sequential-workflow-designer';
-import { GlobalEditorWrapperContext, useGlobalEditor } from './GlobalEditorWrapper';
+import { Definition, RootEditorContext } from 'sequential-workflow-designer';
+import { RootEditorWrapperContext, useRootEditor } from './RootEditorWrapper';
 
-describe('GlobalEditorWrapper', () => {
+describe('RootEditorWrapper', () => {
 	const definition: Definition = {
 		properties: {},
 		sequence: []
 	};
-	const context: GlobalEditorContext = {
+	const context: RootEditorContext = {
 		notifyPropertiesChanged() {
 			//
 		}
@@ -16,19 +16,20 @@ describe('GlobalEditorWrapper', () => {
 
 	it('renders child correctly', () => {
 		function TestHook() {
-			const editor = useGlobalEditor();
+			const editor = useRootEditor();
 
 			expect(editor.properties).toBe(definition.properties);
 			expect(editor.definition).toBe(definition);
+			expect(editor.isReadonly).toBe(false);
 
 			return <hr data-testid="hook" />;
 		}
 
 		render(
-			<GlobalEditorWrapperContext definition={definition} context={context}>
+			<RootEditorWrapperContext definition={definition} context={context} isReadonly={false}>
 				<div data-testid="child" />
 				<TestHook />
-			</GlobalEditorWrapperContext>
+			</RootEditorWrapperContext>
 		);
 
 		expect(screen.getByTestId('child').tagName).toBe('DIV');

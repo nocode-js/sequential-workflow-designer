@@ -19,8 +19,8 @@ import {
 	Definition,
 	Designer,
 	DesignerExtension,
-	GlobalEditorContext,
-	GlobalEditorProvider,
+	RootEditorContext,
+	RootEditorProvider,
 	KeyboardConfiguration,
 	Step,
 	StepEditorContext,
@@ -31,15 +31,17 @@ import {
 	ValidatorConfiguration
 } from 'sequential-workflow-designer';
 
-export interface GlobalEditorWrapper {
+export interface RootEditorWrapper {
 	definition: Definition;
-	context: GlobalEditorContext;
+	context: RootEditorContext;
+	isReadonly: boolean;
 }
 
 export interface StepEditorWrapper {
 	step: Step;
 	definition: Definition;
 	context: StepEditorContext;
+	isReadonly: boolean;
 }
 
 export type AngularToolboxConfiguration = Omit<ToolboxConfiguration, 'isCollapsed'>;
@@ -90,8 +92,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 
 	@Input('areEditorsHidden')
 	public areEditorsHidden?: boolean;
-	@Input('globalEditor')
-	public globalEditor?: TemplateRef<unknown> | GlobalEditorProvider;
+	@Input('rootEditor')
+	public rootEditor?: TemplateRef<unknown> | RootEditorProvider;
 	@Input('stepEditor')
 	public stepEditor?: TemplateRef<unknown> | StepEditorProvider;
 
@@ -198,7 +200,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 					? false
 					: {
 							isCollapsed: this.isEditorCollapsed,
-							globalEditorProvider: this.globalEditorProvider,
+							rootEditorProvider: this.rootEditorProvider,
 							stepEditorProvider: this.stepEditorProvider
 					  },
 				steps: this.stepsConfiguration,
@@ -240,30 +242,32 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 		});
 	}
 
-	private readonly globalEditorProvider = (definition: Definition, context: GlobalEditorContext) => {
-		if (!this.globalEditor) {
-			throw new Error('Input "globalEditor" is not set');
+	private readonly rootEditorProvider = (definition: Definition, context: RootEditorContext, isReadonly: boolean) => {
+		if (!this.rootEditor) {
+			throw new Error('Input "rootEditor" is not set');
 		}
-		if (typeof this.globalEditor === 'function') {
-			return this.globalEditor(definition, context);
+		if (typeof this.rootEditor === 'function') {
+			return this.rootEditor(definition, context, isReadonly);
 		}
-		return this.editorProvider<GlobalEditorWrapper>(this.globalEditor, {
+		return this.editorProvider<RootEditorWrapper>(this.rootEditor, {
 			definition,
-			context
+			context,
+			isReadonly
 		});
 	};
 
-	private readonly stepEditorProvider = (step: Step, context: StepEditorContext, definition: Definition) => {
+	private readonly stepEditorProvider = (step: Step, context: StepEditorContext, definition: Definition, isReadonly: boolean) => {
 		if (!this.stepEditor) {
 			throw new Error('Input "stepEditor" is not set');
 		}
 		if (typeof this.stepEditor === 'function') {
-			return this.stepEditor(step, context, definition);
+			return this.stepEditor(step, context, definition, isReadonly);
 		}
 		return this.editorProvider<StepEditorWrapper>(this.stepEditor, {
 			step,
+			context,
 			definition,
-			context
+			isReadonly
 		});
 	};
 

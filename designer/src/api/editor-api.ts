@@ -1,6 +1,6 @@
 import { DesignerState } from '../designer-state';
 import { DefinitionModifier } from '../definition-modifier';
-import { DefinitionChangeType, GlobalEditorContext, StepEditorContext } from '../designer-configuration';
+import { DefinitionChangeType, RootEditorContext, StepEditorContext } from '../designer-configuration';
 import { EditorRenderer, EditorRendererHandler } from './editor-renderer';
 import { Definition, DefinitionWalker } from '../definition';
 import { SimpleEventListener } from '../core';
@@ -14,6 +14,10 @@ export class EditorApi {
 
 	public isCollapsed(): boolean {
 		return this.state.isEditorCollapsed;
+	}
+
+	public isReadonly(): boolean {
+		return this.state.isReadonly;
 	}
 
 	public toggleIsCollapsed() {
@@ -50,10 +54,10 @@ export class EditorApi {
 		};
 	}
 
-	public createGlobalEditorContext(): GlobalEditorContext {
+	public createRootEditorContext(): RootEditorContext {
 		return {
 			notifyPropertiesChanged: () => {
-				this.state.notifyDefinitionChanged(DefinitionChangeType.globalPropertyChanged, null);
+				this.state.notifyDefinitionChanged(DefinitionChangeType.rootPropertyChanged, null);
 			}
 		};
 	}

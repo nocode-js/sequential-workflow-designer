@@ -4,7 +4,7 @@ import {
 	Definition,
 	ToolboxConfiguration,
 	Designer,
-	GlobalEditorContext,
+	RootEditorContext,
 	Step,
 	StepEditorContext,
 	StepsConfiguration,
@@ -14,11 +14,11 @@ import {
 	CustomAction,
 	Sequence,
 	ValidatorConfiguration,
-	GlobalEditorProvider,
+	RootEditorProvider,
 	StepEditorProvider,
 	KeyboardConfiguration
 } from 'sequential-workflow-designer';
-import { GlobalEditorWrapperContext } from './GlobalEditorWrapper';
+import { RootEditorWrapperContext } from './RootEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
 import { wrapDefinition, WrappedDefinition } from './WrappedDefinition';
 import { Presenter } from './core/Presenter';
@@ -35,7 +35,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	onSelectedStepIdChanged?: (stepId: string | null) => void;
 	isReadonly?: boolean;
 
-	globalEditor: false | JSX.Element | GlobalEditorProvider;
+	rootEditor: false | JSX.Element | RootEditorProvider;
 	stepEditor: false | JSX.Element | StepEditorProvider;
 	isEditorCollapsed?: boolean;
 	onIsEditorCollapsedChanged?: (isCollapsed: boolean) => void;
@@ -65,7 +65,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const onSelectedStepIdChangedRef = useRef(props.onSelectedStepIdChanged);
 	const onIsEditorCollapsedChangedRef = useRef(props.onIsEditorCollapsedChanged);
 	const onIsToolboxCollapsedChangedRef = useRef(props.onIsToolboxCollapsedChanged);
-	const globalEditorRef = useRef(props.globalEditor);
+	const rootEditorRef = useRef(props.rootEditor);
 	const stepEditorRef = useRef(props.stepEditor);
 	const controllerRef = useRef(props.controller);
 	const customActionHandlerRef = useRef(props.customActionHandler);
@@ -91,6 +91,9 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	if (props.controlBar === undefined) {
 		throw new Error('The "controlBar" property is not set');
 	}
+	if ((props as { globalEditor?: object }).globalEditor) {
+		throw new Error('The "globalEditor" property is renamed to "rootEditor"');
+	}
 
 	function forwardDefinition() {
 		if (designerRef.current) {
@@ -99,23 +102,23 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		}
 	}
 
-	function globalEditorProvider(def: TDefinition, context: GlobalEditorContext) {
-		if (!globalEditorRef.current) {
-			throw new Error('Global editor is not provided');
+	function rootEditorProvider(def: TDefinition, context: RootEditorContext, isReadonly: boolean) {
+		if (!rootEditorRef.current) {
+			throw new Error('Root editor is not provided');
 		}
-		if (isValidElement(globalEditorRef.current)) {
+		if (isValidElement(rootEditorRef.current)) {
 			return Presenter.render(
 				externalEditorClassName,
 				editorRootRef,
-				<GlobalEditorWrapperContext definition={def} context={context}>
-					{globalEditorRef.current}
-				</GlobalEditorWrapperContext>
+				<RootEditorWrapperContext definition={def} context={context} isReadonly={isReadonly}>
+					{rootEditorRef.current}
+				</RootEditorWrapperContext>
 			);
 		}
-		return (globalEditorRef.current as GlobalEditorProvider)(def, context);
+		return (rootEditorRef.current as RootEditorProvider)(def, context, isReadonly);
 	}
 
-	function stepEditorProvider(step: Step, context: StepEditorContext, def: Definition) {
+	function stepEditorProvider(step: Step, context: StepEditorContext, def: Definition, isReadonly: boolean) {
 		if (!stepEditorRef.current) {
 			throw new Error('Step editor is not provided');
 		}
@@ -123,12 +126,12 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 			return Presenter.render(
 				externalEditorClassName,
 				editorRootRef,
-				<StepEditorWrapperContext step={step} definition={def} context={context}>
+				<StepEditorWrapperContext step={step} definition={def} context={context} isReadonly={isReadonly}>
 					{stepEditorRef.current}
 				</StepEditorWrapperContext>
 			);
 		}
-		return (stepEditorRef.current as StepEditorProvider)(step, context, def);
+		return (stepEditorRef.current as StepEditorProvider)(step, context, def, isReadonly);
 	}
 
 	function customActionHandler(action: CustomAction, step: Step | null, sequence: Sequence, context: CustomActionHandlerContext) {
@@ -167,8 +170,8 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	}, [props.onIsToolboxCollapsedChanged]);
 
 	useEffect(() => {
-		globalEditorRef.current = props.globalEditor;
-	}, [props.globalEditor]);
+		rootEditorRef.current = props.rootEditor;
+	}, [props.rootEditor]);
 
 	useEffect(() => {
 		stepEditorRef.current = props.stepEditor;
@@ -228,10 +231,10 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 			contextMenu,
 			keyboard,
 			editors:
-				globalEditorRef.current && stepEditorRef.current
+				rootEditorRef.current && stepEditorRef.current
 					? {
 							isCollapsed: isEditorCollapsed,
-							globalEditorProvider,
+							rootEditorProvider,
 							stepEditorProvider
 					  }
 					: false,

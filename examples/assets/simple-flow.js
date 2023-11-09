@@ -35,7 +35,7 @@ const configuration = {
 	},
 
 	editors: {
-		globalEditorProvider: () => {
+		rootEditorProvider: () => {
 			const editor = document.createElement('div');
 			editor.innerText = 'Please select any step.';
 			return editor;

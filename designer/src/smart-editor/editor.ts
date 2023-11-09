@@ -1,7 +1,7 @@
 import { Step } from '../definition';
 import { EditorRenderer } from '../api/editor-renderer';
 import { EditorView } from './editor-view';
-import { GlobalEditorProvider, StepEditorProvider } from '../designer-configuration';
+import { RootEditorProvider, StepEditorProvider } from '../designer-configuration';
 import { EditorApi } from '../api';
 
 export class Editor {
@@ -10,8 +10,8 @@ export class Editor {
 		api: EditorApi,
 		stepEditorClassName: string,
 		stepEditorProvider: StepEditorProvider,
-		globalEditorClassName: string,
-		globalEditorProvider: GlobalEditorProvider
+		rootEditorClassName: string,
+		rootEditorProvider: RootEditorProvider
 	): Editor {
 		const view = EditorView.create(parent);
 
@@ -21,12 +21,12 @@ export class Editor {
 			let className: string;
 			if (step) {
 				const stepContext = api.createStepEditorContext(step.id);
-				content = stepEditorProvider(step, stepContext, definition);
+				content = stepEditorProvider(step, stepContext, definition, api.isReadonly());
 				className = stepEditorClassName;
 			} else {
-				const globalContext = api.createGlobalEditorContext();
-				content = globalEditorProvider(definition, globalContext);
-				className = globalEditorClassName;
+				const rootContext = api.createRootEditorContext();
+				content = rootEditorProvider(definition, rootContext, api.isReadonly());
+				className = rootEditorClassName;
 			}
 			view.setContent(content, className);
 		}

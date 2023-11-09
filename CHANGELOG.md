@@ -1,3 +1,39 @@
+## 0.17.0
+
+This version introduces a new argument for editor providers: `isReadonly`. Now when the designer is in the read-only mode, the editor providers can render the read-only version of the editor.
+
+### Breaking Changes
+
+This version finally renames the "global editor" into the "root editor". This change is made in the designer package and all wrappers, except the Svelte package. The Svelte package uses a new name from the beginning.
+
+```js
+const configuration = {
+  editors: {
+    // globalEditorProvider: () => {}, is not supported anymore, use `rootEditorProvider` instead.
+    rootEditorProvider: (definition, rootContext, isReadonly) => { /* ... */ },
+    // ...
+  }
+};
+```
+
+This version also renames the `sqd-global-editor` class of the root editor into the `sqd-root-editor` class.
+
+### React
+
+```tsx
+// globalEditor={} is not supported anymore, use `rootEditor={}` instead.
+<SequentialWorkflowDesigner
+  rootEditor={<RootEditor />} ... />
+```
+
+### Angular
+
+```html
+<!-- [globalEditor]="" is not supported anymore, use [rootEditor]="" instead. -->
+<sqd-designer ...
+  [rootEditor]="rootEditor"></sqd-designer>
+```
+
 ## 0.16.10
 
 This version fixes the error: `Failed to execute 'removeChild' on 'Node'` when a user uses the undo feature [#100](https://github.com/nocode-js/sequential-workflow-designer/issues/100).

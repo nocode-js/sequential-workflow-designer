@@ -52,13 +52,16 @@ function reloadChangeReadonlyButtonText() {
 	changeReadonlyButton.innerText = 'Readonly: ' + (designer.isReadonly() ? 'ON' : 'OFF');
 }
 
-function appendCheckbox(root, label, isChecked, onClick) {
+function appendCheckbox(root, label, isReadonly, isChecked, onClick) {
 	const item = document.createElement('div');
 	item.innerHTML = '<div><h3></h3> <input type="checkbox" /></div>';
 	const h3 = item.getElementsByTagName('h3')[0];
 	h3.innerText = label;
 	const input = item.getElementsByTagName('input')[0];
 	input.checked = isChecked;
+	if (isReadonly) {
+		input.setAttribute('disabled', 'disabled');
+	}
 	input.addEventListener('click', () => {
 		onClick(input.checked);
 	});
@@ -131,25 +134,28 @@ const configuration = {
 	},
 
 	editors: {
-		globalEditorProvider: (definition) => {
+		rootEditorProvider: (definition, _context, isReadonly) => {
 			const root = document.createElement('div');
 			root.className = 'definition-json';
 			root.innerHTML = '<textarea style="width: 100%; border: 0;" rows="50"></textarea>';
 			const textarea = root.getElementsByTagName('textarea')[0];
+			if (isReadonly) {
+				textarea.setAttribute('readonly', 'readonly');
+			}
 			textarea.value = JSON.stringify(definition, null, 2);
 			return root;
 		},
 
-		stepEditorProvider: (step, editorContext) => {
+		stepEditorProvider: (step, editorContext, _definition, isReadonly) => {
 			const root = document.createElement('div');
 
-			appendCheckbox(root, 'Is invalid', !!step.properties['isInvalid'], (checked) => {
+			appendCheckbox(root, 'Is invalid', isReadonly, !!step.properties['isInvalid'], (checked) => {
 				step.properties['isInvalid'] = checked;
 				editorContext.notifyPropertiesChanged();
 			});
 
 			if (step.type === 'if') {
-				appendCheckbox(root, 'Catch branch', !!step.branches['catch'], (checked) => {
+				appendCheckbox(root, 'Catch branch', isReadonly, !!step.branches['catch'], (checked) => {
 					if (checked) {
 						step.branches['catch'] = [];
 					} else {

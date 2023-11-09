@@ -82,31 +82,31 @@
 			(stepEditor || nativeStepEditor) && (rootEditor || nativeRootEditor)
 				? {
 						isCollapsed: isEditorCollapsed,
-						stepEditorProvider: (step: Step, context: StepEditorContext, def: Definition) => {
+						stepEditorProvider: (step: Step, context: StepEditorContext, def: Definition, isReadonly: boolean) => {
 							if (stepEditor) {
 								const root = document.createElement('div');
 								new stepEditor({
 									target: root,
-									props: { step, context, definition: def }
+									props: { step, context, definition: def, isReadonly }
 								});
 								return root;
 							}
 							if (nativeStepEditor) {
-								return nativeStepEditor(step, context, def);
+								return nativeStepEditor(step, context, def, isReadonly);
 							}
 							throw new Error('No step editor provided');
 						},
-						globalEditorProvider: (def: Definition, context: RootEditorContext) => {
+						rootEditorProvider: (def: Definition, context: RootEditorContext, isReadonly: boolean) => {
 							if (rootEditor) {
 								const root = document.createElement('div');
 								new rootEditor({
 									target: root,
-									props: { definition: def, context }
+									props: { definition: def, context, isReadonly }
 								});
 								return root;
 							}
 							if (nativeRootEditor) {
-								return nativeRootEditor(def, context);
+								return nativeRootEditor(def, context, isReadonly);
 							}
 							throw new Error('No root editor provided');
 						}

@@ -11,7 +11,7 @@
 	[isToolboxCollapsed]="isToolboxCollapsed"
 	[isEditorCollapsed]="isEditorCollapsed"
 	[areEditorsHidden]="false"
-	[globalEditor]="globalEditor"
+	[rootEditor]="rootEditor"
 	[stepEditor]="stepEditor"
 	(onReady)="onDesignerReady($event)"
 	(onDefinitionChanged)="onDefinitionChanged($event)"
@@ -21,8 +21,8 @@
 >
 </sqd-designer>
 
-<ng-template #globalEditor let-editor>
-	<h2>Global Editor</h2>
+<ng-template #rootEditor let-editor>
+	<h2>Root Editor</h2>
 
 	<h3>Velocity</h3>
 	<mat-form-field class="full-width">
@@ -30,6 +30,7 @@
 			matInput
 			type="number"
 			[value]="editor.definition.properties.velocity"
+			[readonly]="editor.isReadonly"
 			(input)="updateProperty(editor.definition.properties, 'velocity', $event, editor.context)"
 		/>
 	</mat-form-field>
@@ -42,7 +43,13 @@
 		<mat-tab label="Basic">
 			<h3>Name</h3>
 			<mat-form-field class="full-width">
-				<input matInput type="text" [value]="editor.step.name" (input)="updateName(editor.step, $event, editor.context)" />
+				<input
+					matInput
+					type="text"
+					[value]="editor.step.name"
+					[readonly]="editor.isReadonly"
+					(input)="updateName(editor.step, $event, editor.context)"
+				/>
 			</mat-form-field>
 		</mat-tab>
 		<mat-tab label="Details">
@@ -52,6 +59,7 @@
 					matInput
 					type="number"
 					[value]="editor.step.properties.velocity"
+					[readonly]="editor.isReadonly"
 					(input)="updateProperty(editor.step.properties, 'velocity', $event, editor.context)"
 				/>
 			</mat-form-field>

@@ -19,6 +19,9 @@ body {
 .sqd-editor {
 	padding: 10px;
 }
+.sqd-editor input:read-only {
+	opacity: 0.4;
+}
 .block {
 	margin: 10px;
 	text-align: center;

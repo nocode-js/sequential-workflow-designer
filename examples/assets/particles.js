@@ -209,7 +209,7 @@ class Popup {
 				}
 			},
 			editors: {
-				globalEditorProvider: (definition) => {
+				rootEditorProvider: (definition) => {
 					return createEditor('Edit start state', definition.properties);
 				},
 				stepEditorProvider: (step) => {

@@ -49,3 +49,9 @@ nav .github:hover {
 	width: 100vw;
 	height: 50vh;
 }
+.sqd-editor {
+	padding: 10px;
+}
+input:read-only {
+	opacity: 0.35;
+}
