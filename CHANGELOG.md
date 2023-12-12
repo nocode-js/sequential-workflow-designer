@@ -1,3 +1,7 @@
+## 0.18.0
+
+This version fixes the problem with scrolling [#105](https://github.com/nocode-js/sequential-workflow-designer/issues/105).
+
 ## 0.17.0
 
 This version introduces a new argument for editor providers: `isReadonly`. Now when the designer is in the read-only mode, the editor providers can render the read-only version of the editor.

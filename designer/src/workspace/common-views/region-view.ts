@@ -1,4 +1,5 @@
 import { Dom } from '../../core/dom';
+import { getAbsolutePosition } from '../../core/get-absolute-position';
 import { Vector } from '../../core/vector';
 import { ClickDetails } from '../component';
 
@@ -25,8 +26,7 @@ export class RegionView {
 	public constructor(private readonly lines: SVGLineElement[], private readonly width: number, private readonly height: number) {}
 
 	public getClientPosition(): Vector {
-		const rect = this.lines[0].getBoundingClientRect();
-		return new Vector(rect.x, rect.y);
+		return getAbsolutePosition(this.lines[0]);
 	}
 
 	public resolveClick(click: ClickDetails): boolean {
