@@ -1,4 +1,5 @@
 import { Dom } from '../../core/dom';
+import { getAbsolutePosition } from '../../core/get-absolute-position';
 import { Vector } from '../../core/vector';
 import { Step } from '../../definition';
 import { StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
@@ -76,8 +77,7 @@ export const createTaskStepComponentViewFactory =
 				return !!outputView;
 			},
 			getClientPosition(): Vector {
-				const r = rect.getBoundingClientRect();
-				return new Vector(r.x, r.y);
+				return getAbsolutePosition(rect);
 			},
 			resolveClick(click: ClickDetails): true | null {
 				return g.contains(click.element) ? true : null;

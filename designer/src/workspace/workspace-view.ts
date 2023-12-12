@@ -5,6 +5,7 @@ import { Sequence } from '../definition';
 import { Grid, SequencePlaceIndicator } from '../designer-extension';
 import { ComponentContext } from '../component-context';
 import { Component } from './component';
+import { getAbsolutePosition } from '../core/get-absolute-position';
 
 let lastGridPatternId = 0;
 
@@ -90,8 +91,7 @@ export class WorkspaceView {
 	}
 
 	public getCanvasPosition(): Vector {
-		const rect = this.canvas.getBoundingClientRect();
-		return new Vector(rect.x + window.scrollX, rect.y + window.scrollY);
+		return getAbsolutePosition(this.canvas);
 	}
 
 	public getCanvasSize(): Vector {

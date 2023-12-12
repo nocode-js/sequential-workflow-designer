@@ -1,12 +1,28 @@
 /* global window, document, sequentialWorkflowDesigner */
 
-function createStep(name) {
+const uid = sequentialWorkflowDesigner.Uid.next;
+
+function createTaskStep(name) {
 	return {
-		id: sequentialWorkflowDesigner.Uid.next(),
+		id: uid(),
 		componentType: 'task',
 		type: 'task',
 		name,
 		properties: {}
+	};
+}
+
+function createSwitchStep(name) {
+	return {
+		id: uid(),
+		componentType: 'switch',
+		type: 'switch',
+		name,
+		properties: {},
+		branches: {
+			true: [],
+			false: [],
+		}
 	};
 }
 
@@ -18,9 +34,10 @@ function createEditor(text) {
 
 const definition = {
 	sequence: [
-		createStep('Save e-mail'),
-		createStep('Read file'),
-		createStep('Delete file'),
+		createTaskStep('Save e-mail'),
+		createTaskStep('Read file'),
+		createTaskStep('Delete file'),
+		createSwitchStep('Condition')
 	],
 	properties: {}
 };
@@ -29,7 +46,7 @@ const configuration = {
 		groups: [
 			{
 				name: 'Test',
-				steps: Array(20).fill(null).map((_, i) => createStep(`Task ${i}`))
+				steps: Array(20).fill(null).map((_, i) => createTaskStep(`Task ${i}`))
 			}
 		]
 	},
