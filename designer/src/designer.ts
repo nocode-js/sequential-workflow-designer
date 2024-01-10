@@ -81,7 +81,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	private constructor(
 		private readonly view: DesignerView,
 		private readonly state: DesignerState,
-		private readonly walker: DefinitionWalker,
+		public readonly walker: DefinitionWalker,
 		private readonly historyController: HistoryController | undefined,
 		private readonly api: DesignerApi
 	) {}
