@@ -255,6 +255,13 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
+	 * @returns the definition walker.
+	 */
+	public getWalker(): DefinitionWalker {
+		return this.walker;
+	}
+
+	/**
 	 * @description Destroys the designer and deletes all nodes from the placeholder.
 	 */
 	public destroy() {
