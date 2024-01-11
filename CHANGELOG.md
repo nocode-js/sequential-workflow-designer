@@ -1,3 +1,11 @@
+## 0.18.1
+
+This version exposes the definition walker from the `Designer` class [#109](https://github.com/nocode-js/sequential-workflow-designer/issues/109).
+
+```js
+const walker = designer.getWalker();
+```
+
 ## 0.18.0
 
 This version fixes the problem with scrolling [#105](https://github.com/nocode-js/sequential-workflow-designer/issues/105).
