@@ -54,9 +54,9 @@ const [definition, setDefinition] = useState(() => wrapDefinition(startDefinitio
 Configure the designer.
 
 ```ts
-const toolboxConfiguration: ToolboxConfiguration = { /* ... */ };
-const stepsConfiguration: StepsConfiguration = { /* ... */ };
-const validatorConfiguration: ValidatorConfiguration = { /* ... */ };
+const toolboxConfiguration: ToolboxConfiguration = useMemo(() => ({ /* ... */ }), []);
+const stepsConfiguration: StepsConfiguration = useMemo(() => ({ /* ... */ }), []);
+const validatorConfiguration: ValidatorConfiguration = useMemo(() => ({ /* ... */ }), []);
 ```
 
 Create the root editor component:

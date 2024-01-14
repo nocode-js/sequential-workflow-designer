@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration, ValidatorConfiguration } from 'sequential-workflow-designer';
 import { SequentialWorkflowDesigner, wrapDefinition } from 'sequential-workflow-designer-react';
 import { RootEditor } from './RootEditor';
@@ -14,21 +14,28 @@ const startDefinition: WorkflowDefinition = {
 	sequence: [createTaskStep(), createSwitchStep()]
 };
 
-const toolboxConfiguration: ToolboxConfiguration = {
-	groups: [{ name: 'Steps', steps: [createTaskStep(), createSwitchStep()] }]
-};
-
-const stepsConfiguration: StepsConfiguration = {
-	iconUrlProvider: () => null
-};
-
-const validatorConfiguration: ValidatorConfiguration = {
-	step: (step: Step) => Boolean(step.name),
-	root: (definition: WorkflowDefinition) => Boolean(definition.properties.alfa)
-};
-
 export function Playground() {
 	const controller = useSequentialWorkflowDesignerController();
+	const toolboxConfiguration: ToolboxConfiguration = useMemo(
+		() => ({
+			groups: [{ name: 'Steps', steps: [createTaskStep(), createSwitchStep()] }]
+		}),
+		[]
+	);
+	const stepsConfiguration: StepsConfiguration = useMemo(
+		() => ({
+			iconUrlProvider: () => null
+		}),
+		[]
+	);
+	const validatorConfiguration: ValidatorConfiguration = useMemo(
+		() => ({
+			step: (step: Step) => Boolean(step.name),
+			root: (definition: WorkflowDefinition) => Boolean(definition.properties.alfa)
+		}),
+		[]
+	);
+
 	const [isVisible, setIsVisible] = useState(true);
 	const [isToolboxCollapsed, setIsToolboxCollapsed] = useState(false);
 	const [isEditorCollapsed, setIsEditorCollapsed] = useState(false);
