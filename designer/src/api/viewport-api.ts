@@ -18,7 +18,11 @@ export class ViewportApi {
 
 	public moveViewportToStep(stepId: string) {
 		const component = this.workspaceController.getComponentByStepId(stepId);
-		const componentPosition = component.view.getClientPosition();
+		const canvasPosition = this.workspaceController.getCanvasPosition();
+
+		const clientPosition = component.view.getClientPosition();
+		const componentPosition = clientPosition.subtract(canvasPosition);
+
 		const componentSize = new Vector(component.view.width, component.view.height);
 		this.viewportController.focusOnComponent(componentPosition, componentSize);
 	}

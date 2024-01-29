@@ -1,3 +1,7 @@
+## 0.18.2
+
+This version corrects a bug in the `moveViewportToStep` method that caused the viewport to move to the incorrect position.
+
 ## 0.18.1
 
 This version exposes the definition walker from the `Designer` class [#109](https://github.com/nocode-js/sequential-workflow-designer/issues/109).
