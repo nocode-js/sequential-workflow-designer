@@ -72,6 +72,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 
 	const designerRef = useRef<Designer<TDefinition> | null>(null);
 	const editorRootRef = useRef<ReactDOM.Root | null>(null);
+	const wrappedDefinitionRef = useRef<WrappedDefinition | null>(null);
 
 	const definition = props.definition;
 	const selectedStepId = props.selectedStepId;
@@ -97,8 +98,9 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 
 	function forwardDefinition() {
 		if (designerRef.current) {
-			const def = wrapDefinition(designerRef.current.getDefinition(), designerRef.current.isValid());
-			onDefinitionChangeRef.current(def);
+			const wd = wrapDefinition(designerRef.current.getDefinition(), designerRef.current.isValid());
+			wrappedDefinitionRef.current = wd;
+			onDefinitionChangeRef.current(wd);
 		}
 	}
 
@@ -189,6 +191,11 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		if (designerRef.current) {
 			const isNotChanged = definition.value === designerRef.current.getDefinition();
 			if (isNotChanged) {
+				if (wrappedDefinitionRef.current !== definition) {
+					wrappedDefinitionRef.current = definition;
+					designerRef.current.updateRootComponent();
+				}
+
 				if (selectedStepId !== undefined && selectedStepId !== designerRef.current.getSelectedStepId()) {
 					if (selectedStepId) {
 						designerRef.current.selectStepById(selectedStepId);
