@@ -42,11 +42,21 @@ export function Playground() {
 	const [definition, setDefinition] = useState(() => wrapDefinition(startDefinition));
 	const [selectedStepId, setSelectedStepId] = useState<string | null>(null);
 	const [isReadonly, setIsReadonly] = useState(false);
+	const [moveViewportToStep, setMoveViewportToStep] = useState<string | null>(null);
 	const definitionJson = JSON.stringify(definition.value, null, 2);
 
 	useEffect(() => {
 		console.log(`definition updated, isValid=${definition.isValid}`);
 	}, [definition]);
+
+	useEffect(() => {
+		if (moveViewportToStep) {
+			if (controller.isReady()) {
+				controller.moveViewportToStep(moveViewportToStep);
+			}
+			setMoveViewportToStep(null);
+		}
+	}, [controller, moveViewportToStep]);
 
 	function toggleVisibilityClicked() {
 		setIsVisible(!isVisible);
@@ -72,12 +82,24 @@ export function Playground() {
 	function moveViewportToFirstStepClicked() {
 		const fistStep = definition.value.sequence[0];
 		if (fistStep) {
-			controller.moveViewportToStep(fistStep.id);
+			setMoveViewportToStep(fistStep.id);
 		}
+	}
+
+	function appendStepClicked() {
+		const newStep = createTaskStep();
+
+		// We need to keep the same reference to the definition, but the wrapped definition must be a new instance.
+		definition.value.sequence.push(newStep);
+		setDefinition({ ...definition });
+
+		setSelectedStepId(newStep.id);
+		setMoveViewportToStep(newStep.id);
 	}
 
 	function reloadDefinitionClicked() {
 		const newDefinition = ObjectCloner.deepClone(startDefinition);
+		setSelectedStepId(null);
 		setDefinition(wrapDefinition(newDefinition));
 	}
 
@@ -126,6 +148,7 @@ export function Playground() {
 				<button onClick={toggleToolboxClicked}>Toggle toolbox</button>
 				<button onClick={toggleEditorClicked}>Toggle editor</button>
 				<button onClick={moveViewportToFirstStepClicked}>Move viewport to first step</button>
+				<button onClick={appendStepClicked}>Append step</button>
 			</div>
 
 			<div>

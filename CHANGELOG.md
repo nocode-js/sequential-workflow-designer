@@ -1,3 +1,16 @@
+## 0.18.3
+
+Added a feature to the sequential-workflow-designer-react package that enables re-rendering the canvas when you pass a new instance of the wrapped definition. The instance of the definition must remain the same. This enables easy manipulation of the definition from outside the designer in your React application.
+
+```tsx
+function action() {
+  const newStep: Step = { /* ... */ };
+
+  definition.value.sequence.push(newStep);
+  setDefinition({ ...definition });
+}
+```
+
 ## 0.18.2
 
 This version corrects a bug in the `moveViewportToStep` method that caused the viewport to move to the incorrect position.
