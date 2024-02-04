@@ -39,19 +39,21 @@ Features:
 
 Pro:
 
-* [🤩 Pro Components](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/pro-components.html)
-* [🍬 Custom Theme Flat](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/custom-theme-flat.html)
-* [🌹 Custom Step Types](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/custom-step-types.html)
-* [👈 Goto](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/goto.html)
-* [📁 Folders](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/folders.html)
-* [⭕ Wheel Mode](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/wheel-mode.html)
-* [💠 Grid](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/grid.html)
-* [🐭 Minimal Root Component](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/minimal-root-component.html)
-* [🦁 External UI Components](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/external-ui-components.html)
-* [👋 Custom Dragged Component](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/custom-dragged-component.html)
-* [🔰 Badges](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/badges.html)
-* [🎩 Custom Viewport](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/custom-viewport.html)
-* [🛎 Clickable Placeholder](https://nocode-js.github.io/sequential-workflow-designer-pro-demo/demos/webpack-pro-app/public/clickable-placeholder.html)
+* [🤩 Pro Components](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/pro-components.html)
+* [🍬 Custom Theme Flat](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-theme-flat.html)
+* [🌹 Custom Step Types](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-step-types.html)
+* [👈 Goto](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/goto.html)
+* [📁 Folders](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/folders.html)
+* [⭕ Wheel Mode](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/wheel-mode.html)
+* [💠 Grid](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/grid.html)
+* [🐭 Minimal Root Component](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/minimal-root-component.html)
+* [🦁 External UI Components](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/external-ui-components.html)
+* [👋 Custom Dragged Component](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-dragged-component.html)
+* [🔰 Badges](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/badges.html)
+* [🎩 Custom Viewport](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-viewport.html)
+* [🛎 Clickable Placeholder](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/clickable-placeholder.html)
+* [React Pro Demo](https://nocode-js.com/examples/sequential-workflow-designer-pro/react-pro-app/build/index.html)
+* [Angular Pro Demo](https://nocode-js.com/examples/sequential-workflow-designer-pro/angular-pro-app/angular-app/index.html)
 
 ## 👩‍💻 Integrations
 
