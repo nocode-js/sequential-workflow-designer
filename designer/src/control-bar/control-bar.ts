@@ -14,7 +14,7 @@ export class ControlBar implements UiComponent {
 		view.bindZoomOutButtonClick(() => bar.onZoomOutButtonClicked());
 		view.bindDisableDragButtonClick(() => bar.onMoveButtonClicked());
 		view.bindDeleteButtonClick(() => bar.onDeleteButtonClicked());
-		api.controlBar.subscribe(() => bar.refreshButtons());
+		api.controlBar.onStateChanged.subscribe(() => bar.refreshButtons());
 
 		if (isUndoRedoSupported) {
 			view.bindUndoButtonClick(() => bar.onUndoButtonClicked());

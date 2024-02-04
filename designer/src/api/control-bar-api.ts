@@ -1,28 +1,40 @@
+import { SimpleEvent } from '../core';
 import { DefinitionModifier } from '../definition-modifier';
 import { DesignerState } from '../designer-state';
 import { HistoryController } from '../history-controller';
 import { ViewportApi } from './viewport-api';
 
 export class ControlBarApi {
-	public constructor(
+	public static create(
+		state: DesignerState,
+		historyController: HistoryController | undefined,
+		definitionModifier: DefinitionModifier,
+		viewportApi: ViewportApi
+	): ControlBarApi {
+		const api = new ControlBarApi(state, historyController, definitionModifier, viewportApi);
+		state.onIsReadonlyChanged.subscribe(api.onStateChanged.forward);
+		state.onSelectedStepIdChanged.subscribe(api.onStateChanged.forward);
+		state.onIsDragDisabledChanged.subscribe(api.onStateChanged.forward);
+		if (api.isUndoRedoSupported()) {
+			state.onDefinitionChanged.subscribe(api.onStateChanged.forward);
+		}
+		return api;
+	}
+
+	private constructor(
 		private readonly state: DesignerState,
 		private readonly historyController: HistoryController | undefined,
 		private readonly definitionModifier: DefinitionModifier,
 		private readonly viewportApi: ViewportApi
 	) {}
 
+	public readonly onStateChanged = new SimpleEvent<unknown>();
+
 	/**
 	 * @deprecated Don't use this method
 	 */
 	public subscribe(handler: () => void) {
-		// TODO: this should be refactored
-
-		this.state.onIsReadonlyChanged.subscribe(handler);
-		this.state.onSelectedStepIdChanged.subscribe(handler);
-		this.state.onIsDragDisabledChanged.subscribe(handler);
-		if (this.isUndoRedoSupported()) {
-			this.state.onDefinitionChanged.subscribe(handler);
-		}
+		this.onStateChanged.subscribe(handler);
 	}
 
 	public resetViewport() {

@@ -47,7 +47,6 @@ export class Workspace implements WorkspaceController {
 		setTimeout(() => {
 			workspace.updateRootComponent();
 			api.viewport.resetViewport();
-			workspace.onReady.forward();
 		});
 
 		designerContext.setWorkspaceController(workspace);
@@ -69,7 +68,7 @@ export class Workspace implements WorkspaceController {
 		return workspace;
 	}
 
-	public readonly onReady = new SimpleEvent<void>();
+	public readonly onRendered = new SimpleEvent<void>();
 	public isValid = false;
 
 	private selectedStepComponent: StepComponent | null = null;
@@ -114,6 +113,8 @@ export class Workspace implements WorkspaceController {
 		this.view.render(sequence, parentSequencePlaceIndicator);
 		this.trySelectStepComponent(this.state.selectedStepId);
 		this.updateBadges();
+
+		this.onRendered.forward();
 	}
 
 	public updateBadges() {
