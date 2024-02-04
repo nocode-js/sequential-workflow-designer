@@ -1,5 +1,5 @@
 import { DependencyList, useMemo } from 'react';
-import { Designer } from 'sequential-workflow-designer';
+import { Definition, Designer } from 'sequential-workflow-designer';
 
 export class SequentialWorkflowDesignerController {
 	public static create(): SequentialWorkflowDesignerController {
@@ -31,6 +31,14 @@ export class SequentialWorkflowDesignerController {
 	 */
 	public readonly updateRootComponent = () => {
 		this.getDesigner().updateRootComponent();
+	};
+
+	/**
+	 * Replaces the current definition with a new one and adds the previous definition to the undo stack.
+	 * @param definition A new definition.
+	 */
+	public readonly replaceDefinition = (definition: Definition): Promise<void> => {
+		return this.getDesigner().replaceDefinition(definition);
 	};
 
 	/**

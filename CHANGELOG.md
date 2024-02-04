@@ -1,15 +1,20 @@
-## 0.18.3
+## 0.18.4
 
-Added a feature to the sequential-workflow-designer-react package that enables re-rendering the canvas when you pass a new instance of the wrapped definition. The instance of the definition must remain the same. This enables easy manipulation of the definition from outside the designer in your React application.
+This version removes the features introduced in the previous release. We noticed that the proposed solution did not update the undo stack. As a result, we removed that feature in this version. Instead, we added a new method to the Designer class called `replaceDefinition`, which allows for the replacement of the entire definition and updates the undo stack.
 
-```tsx
-function action() {
+```ts
+function appendStep() {
   const newStep: Step = { /* ... */ };
 
-  definition.value.sequence.push(newStep);
-  setDefinition({ ...definition });
+  const newDefinition = ObjectCloner.deepClone(designer.getDefinition());
+  newDefinition.sequence.push(newStep);
+  await designer.replaceDefinition(newDefinition);
 }
 ```
+
+## 0.18.3
+
+Edited: changes are reverted in the 0.18.4 version.
 
 ## 0.18.2
 

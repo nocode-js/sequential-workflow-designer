@@ -53,7 +53,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 			designerContext.historyController,
 			designerApi
 		);
-		view.workspace.onReady.subscribe(() => designer.onReady.forward());
+		view.workspace.onRendered.first().then(designer.onReady.forward);
 
 		race(0, designerContext.state.onDefinitionChanged, designerContext.state.onSelectedStepIdChanged).subscribe(
 			([definition, selectedStepId]) => {
@@ -66,15 +66,9 @@ export class Designer<TDefinition extends Definition = Definition> {
 			}
 		);
 
-		designerContext.state.onViewportChanged.subscribe(viewPort => {
-			designer.onViewportChanged.forward(viewPort);
-		});
-		designerContext.state.onIsToolboxCollapsedChanged.subscribe(isCollapsed => {
-			designer.onIsToolboxCollapsedChanged.forward(isCollapsed);
-		});
-		designerContext.state.onIsEditorCollapsedChanged.subscribe(isCollapsed => {
-			designer.onIsEditorCollapsedChanged.forward(isCollapsed);
-		});
+		designerContext.state.onViewportChanged.subscribe(designer.onViewportChanged.forward);
+		designerContext.state.onIsToolboxCollapsedChanged.subscribe(designer.onIsToolboxCollapsedChanged.forward);
+		designerContext.state.onIsEditorCollapsedChanged.subscribe(designer.onIsEditorCollapsedChanged.forward);
 		return designer;
 	}
 
@@ -240,10 +234,20 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Dump the undo stack.
 	 */
 	public dumpUndoStack(): UndoStack {
-		if (!this.historyController) {
-			throw new Error('Undo feature is not activated');
-		}
-		return this.historyController.dump();
+		return this.getHistoryController().dump();
+	}
+
+	/**
+	 * Replaces the current definition with a new one and adds the previous definition to the undo stack.
+	 * @param definition A new definition.
+	 */
+	public async replaceDefinition(definition: TDefinition) {
+		this.getHistoryController().replaceDefinition(definition);
+
+		await Promise.all([
+			this.view.workspace.onRendered.first(), // This should be fired first
+			this.onDefinitionChanged.first()
+		]);
 	}
 
 	/**
@@ -266,5 +270,12 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 */
 	public destroy() {
 		this.view.destroy();
+	}
+
+	private getHistoryController(): HistoryController {
+		if (!this.historyController) {
+			throw new Error('Undo feature is not activated');
+		}
+		return this.historyController;
 	}
 }

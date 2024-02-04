@@ -15,7 +15,7 @@ export class DesignerApi {
 		const toolboxDataProvider = new ToolboxDataProvider(context.componentContext.iconProvider, context.configuration.toolbox);
 
 		return new DesignerApi(
-			new ControlBarApi(context.state, context.historyController, context.definitionModifier, viewport),
+			ControlBarApi.create(context.state, context.historyController, context.definitionModifier, viewport),
 			new ToolboxApi(context.state, context, context.behaviorController, toolboxDataProvider, context.configuration.uidGenerator),
 			new EditorApi(context.state, context.definitionWalker, context.definitionModifier),
 			workspace,

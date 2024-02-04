@@ -86,12 +86,13 @@ export function Playground() {
 		}
 	}
 
-	function appendStepClicked() {
+	async function appendStepClicked() {
 		const newStep = createTaskStep();
 
-		// We need to keep the same reference to the definition, but the wrapped definition must be a new instance.
-		definition.value.sequence.push(newStep);
-		setDefinition({ ...definition });
+		const newDefinition = ObjectCloner.deepClone(definition.value);
+		newDefinition.sequence.push(newStep);
+		// We need to wait for the controller to finish the operation before we can select the new step
+		await controller.replaceDefinition(newDefinition);
 
 		setSelectedStepId(newStep.id);
 		setMoveViewportToStep(newStep.id);
