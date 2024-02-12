@@ -33,6 +33,7 @@
 	z-index: 20;
 	box-sizing: border-box;
 	width: 130px;
+	-webkit-user-select: none;
 	user-select: none;
 }
 .sqd-toolbox-header {
@@ -222,6 +223,7 @@
 	flex: 1;
 	position: relative;
 	display: block;
+	-webkit-user-select: none;
 	user-select: none;
 }
 .sqd-workspace-canvas {

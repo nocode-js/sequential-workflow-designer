@@ -6,7 +6,7 @@
 		"eslint": "yarn workspaces run eslint",
 		"prettier": "yarn workspaces run prettier",
 		"prettier:fix": "yarn workspaces run prettier:fix",
-		"serve": "http-server -c-1 -a 127.0.0.1 ./",
+		"serve": "http-server -c-1 -a 0.0.0.0 ./",
 		"ci": "bash .github/workflows/main.sh"
 	},
 	"workspaces": [
