@@ -1,3 +1,7 @@
+## 0.18.5
+
+This version fixes a bug with unintended selection of HTML elements in Apple Vision Pro.
+
 ## 0.18.4
 
 This version removes the features introduced in the previous release. We noticed that the proposed solution did not update the undo stack. As a result, we removed that feature in this version. Instead, we added a new method to the Designer class called `replaceDefinition`, which allows for the replacement of the entire definition and updates the undo stack.
