@@ -47,7 +47,7 @@ export class ContextMenuItemsBuilder {
 				}
 				if (definitionModifier.isDuplicable(step, parentSequence)) {
 					items.push({
-						label: 'Copy',
+						label: 'Copy past',
 						callback: () => {
 							definitionModifier.tryDuplicate(step, parentSequence);
 						}
