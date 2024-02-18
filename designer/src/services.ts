@@ -25,7 +25,7 @@ export class ServicesResolver {
 	public static resolve(extensions: DesignerExtension[] | undefined, configuration: DesignerConfiguration): Services {
 		const services: Partial<Services> = {};
 		merge(services, extensions || []);
-		setDefault(services, configuration);
+		setDefaults(services, configuration);
 		return services as Services;
 	}
 }
@@ -68,13 +68,16 @@ function merge(services: Partial<Services>, extensions: DesignerExtension[]) {
 		if (ext.sequenceComponent) {
 			services.sequenceComponent = ext.sequenceComponent;
 		}
+		if (ext.contextMenu) {
+			services.contextMenu = ext.contextMenu;
+		}
 		if (ext.daemons) {
 			services.daemons = (services.daemons || []).concat(ext.daemons);
 		}
 	}
 }
 
-function setDefault(services: Partial<Services>, configuration: DesignerConfiguration) {
+function setDefaults(services: Partial<Services>, configuration: DesignerConfiguration) {
 	if (!services.steps) {
 		services.steps = [];
 	}

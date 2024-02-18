@@ -1,7 +1,8 @@
 import { Vector } from '../../core';
+import { ContextMenuItem } from '../../designer-extension';
 
 export class ContextMenu {
-	public static create(position: Vector, theme: string, items: ContextMenuItems) {
+	public static create(position: Vector, theme: string, items: ContextMenuItem[]) {
 		const menu = document.createElement('div');
 		menu.style.left = `${position.x}px`;
 		menu.style.top = `${position.y}px`;
@@ -12,11 +13,11 @@ export class ContextMenu {
 			const item = items[index];
 			const element = document.createElement('div');
 
-			if (typeof item === 'string') {
-				element.className = 'sqd-context-menu-group';
-				element.innerText = item;
-			} else {
+			if (item.callback) {
 				element.className = 'sqd-context-menu-item';
+				element.innerText = item.label;
+			} else {
+				element.className = 'sqd-context-menu-group';
 				element.innerText = item.label;
 			}
 
@@ -38,7 +39,7 @@ export class ContextMenu {
 	private constructor(
 		private readonly menu: HTMLElement,
 		private readonly elements: HTMLElement[],
-		private readonly items: ContextMenuItems,
+		private readonly items: ContextMenuItem[],
 		private readonly startTime: number
 	) {}
 
@@ -64,7 +65,7 @@ export class ContextMenu {
 			const index = this.findIndex(e.target as HTMLElement);
 			if (index !== null) {
 				const item = this.items[index];
-				if (typeof item !== 'string') {
+				if (item.callback) {
 					item.callback();
 				}
 			}
@@ -92,11 +93,4 @@ export class ContextMenu {
 			this.isAttached = false;
 		}
 	}
-}
-
-export type ContextMenuItems = (string | ContextMenuItem)[];
-
-export interface ContextMenuItem {
-	label: string;
-	callback: () => void;
 }

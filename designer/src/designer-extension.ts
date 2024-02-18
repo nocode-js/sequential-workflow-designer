@@ -2,6 +2,7 @@ import { WorkspaceApi } from './api';
 import { DesignerApi } from './api/designer-api';
 import { ComponentContext } from './component-context';
 import { Vector } from './core';
+import { CustomActionController } from './custom-action-controller';
 import { ComponentType, Sequence, Step } from './definition';
 import { Badge, Component, Placeholder, PlaceholderDirection, SequenceComponent, StepComponentView } from './workspace';
 
@@ -18,6 +19,7 @@ export interface DesignerExtension {
 	grid?: GridExtension;
 	rootComponent?: RootComponentExtension;
 	sequenceComponent?: SequenceComponentExtension;
+	contextMenu?: ContextMenuExtension;
 	daemons?: DaemonExtension[];
 }
 
@@ -135,6 +137,22 @@ export interface SequencePlaceIndicator {
 
 export interface SequenceComponentExtension {
 	create(parentElement: SVGElement, sequenceContext: SequenceContext, componentContext: ComponentContext): SequenceComponent;
+}
+
+// ContextMenuExtension
+
+export interface ContextMenuExtension {
+	createItemsProvider?: (customActionController: CustomActionController) => ContextMenuItemsProvider;
+}
+
+export interface ContextMenuItemsProvider {
+	getItems(step: Step | null, sequence: Sequence): ContextMenuItem[];
+}
+
+export interface ContextMenuItem {
+	readonly label: string;
+	readonly order: number;
+	readonly callback?: () => void;
 }
 
 // PlaceholderControllerExtension

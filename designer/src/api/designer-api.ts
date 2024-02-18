@@ -6,6 +6,7 @@ import { ToolboxApi } from './toolbox-api';
 import { ToolboxDataProvider } from '../toolbox/toolbox-data-provider';
 import { ViewportApi } from './viewport-api';
 import { WorkspaceApi } from './workspace-api';
+import { DefinitionWalker } from '../definition';
 
 export class DesignerApi {
 	public static create(context: DesignerContext): DesignerApi {
@@ -15,12 +16,13 @@ export class DesignerApi {
 		const toolboxDataProvider = new ToolboxDataProvider(context.componentContext.iconProvider, context.configuration.toolbox);
 
 		return new DesignerApi(
-			ControlBarApi.create(context.state, context.historyController, context.definitionModifier, viewport),
+			ControlBarApi.create(context.state, context.historyController, context.stateModifier, viewport),
 			new ToolboxApi(context.state, context, context.behaviorController, toolboxDataProvider, context.configuration.uidGenerator),
-			new EditorApi(context.state, context.definitionWalker, context.definitionModifier),
+			new EditorApi(context.state, context.definitionWalker, context.stateModifier),
 			workspace,
 			viewport,
-			new PathBarApi(context.state, context.definitionWalker)
+			new PathBarApi(context.state, context.definitionWalker),
+			context.definitionWalker
 		);
 	}
 
@@ -30,6 +32,7 @@ export class DesignerApi {
 		public readonly editor: EditorApi,
 		public readonly workspace: WorkspaceApi,
 		public readonly viewport: ViewportApi,
-		public readonly pathBar: PathBarApi
+		public readonly pathBar: PathBarApi,
+		public readonly definitionWalker: DefinitionWalker
 	) {}
 }

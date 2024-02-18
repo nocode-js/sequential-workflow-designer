@@ -30,14 +30,3 @@ export class StepsDesignerExtension implements DesignerExtension {
 
 	protected constructor(public readonly steps: StepExtension<Step>[]) {}
 }
-
-/**
- * @deprecated Use `StepsDesignerExtension` instead.
- */
-export class StepsExtension extends StepsDesignerExtension {}
-
-/**
- * @deprecated Use `StepsDesignerExtensionConfiguration` instead.
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface StepsExtensionConfiguration extends StepsDesignerExtensionConfiguration {}

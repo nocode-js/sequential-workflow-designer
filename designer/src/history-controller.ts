@@ -1,14 +1,14 @@
 import { ObjectCloner } from './core/object-cloner';
 import { DesignerState } from './designer-state';
 import { DefinitionChangeType, DesignerConfiguration, UndoStack, UndoStackItem } from './designer-configuration';
-import { DefinitionModifier } from './definition-modifier';
-import { Definition } from 'sequential-workflow-model';
+import { StateModifier } from './modifier/state-modifier';
+import { Definition } from './definition';
 
 export class HistoryController {
 	public static create(
 		initialStack: UndoStack | undefined,
 		state: DesignerState,
-		definitionModifier: DefinitionModifier,
+		stateModifier: StateModifier,
 		configuration: DesignerConfiguration
 	): HistoryController {
 		if (!configuration.undoStackSize || configuration.undoStackSize < 1) {
@@ -19,7 +19,7 @@ export class HistoryController {
 			index: 0,
 			items: []
 		};
-		const controller = new HistoryController(stack, state, definitionModifier, configuration.undoStackSize);
+		const controller = new HistoryController(stack, state, stateModifier, configuration.undoStackSize);
 		if (!initialStack) {
 			controller.rememberCurrent(DefinitionChangeType.rootReplaced, null);
 		}
@@ -35,7 +35,7 @@ export class HistoryController {
 	public constructor(
 		private readonly stack: UndoStack,
 		private readonly state: DesignerState,
-		private readonly definitionModifier: DefinitionModifier,
+		private readonly stateModifier: StateModifier,
 		private readonly stackSize: number
 	) {}
 
@@ -101,7 +101,7 @@ export class HistoryController {
 
 	private commit() {
 		const definition = ObjectCloner.deepClone(this.stack.items[this.stack.index - 1].definition);
-		this.definitionModifier.replaceDefinition(definition);
+		this.stateModifier.replaceDefinition(definition);
 	}
 }
 

@@ -138,6 +138,7 @@ export interface ToolboxGroupConfiguration {
 }
 
 export interface StepsConfiguration {
+	isSelectable?: (step: Step, parentSequence: Sequence) => boolean;
 	canInsertStep?: (step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
 	isDraggable?: (step: Step, parentSequence: Sequence) => boolean;
 	canMoveStep?: (sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) => boolean;

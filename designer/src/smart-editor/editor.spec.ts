@@ -2,7 +2,7 @@ import { DefinitionWalker } from '../definition';
 import { EditorApi } from '../api';
 import { DesignerState } from '../designer-state';
 import { createDefinitionStub, createDesignerConfigurationStub, createStepStub } from '../test-tools/stubs';
-import { DefinitionModifier } from '../definition-modifier';
+import { StateModifier } from '../modifier/state-modifier';
 import { Editor } from './editor';
 
 describe('Editor', () => {
@@ -17,7 +17,7 @@ describe('Editor', () => {
 	let rootEditorProvider: jasmine.Spy;
 
 	function createEditor() {
-		Editor.create(parent, api, 'test-step', stepEditorProvider, 'test-root', rootEditorProvider);
+		Editor.create(parent, api, 'test-step', stepEditorProvider, 'test-root', rootEditorProvider, null);
 	}
 
 	beforeEach(() => {
@@ -27,7 +27,7 @@ describe('Editor', () => {
 		state = new DesignerState(definition, false, false, false);
 
 		const walker = new DefinitionWalker();
-		const modifier = new DefinitionModifier(walker, state, configuration);
+		const modifier = StateModifier.create(walker, state, configuration);
 		api = new EditorApi(state, walker, modifier);
 
 		stepEditorProvider = jasmine.createSpy().and.returnValue(document.createElement('div'));

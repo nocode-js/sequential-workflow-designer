@@ -18,19 +18,27 @@ import { findValidationBadgeIndex } from './badges/find-validation-badge-index';
 import { ContextMenuController } from './context-menu/context-menu-controller';
 import { ViewportApi } from '../api/viewport-api';
 import { DefinitionChangeType } from '../designer-configuration';
+import { ContextMenuItemsBuilder } from './context-menu/context-menu-items-builder';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {
 		const view = WorkspaceView.create(parent, designerContext.componentContext);
 
-		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext, designerContext.state);
+		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext);
 		const wheelController = designerContext.services.wheelController.create(api.workspace);
+
+		const contextMenuItemsBuilder = new ContextMenuItemsBuilder(
+			api.viewport,
+			designerContext.stateModifier,
+			designerContext.state,
+			designerContext.services.contextMenu?.createItemsProvider
+				? designerContext.services.contextMenu.createItemsProvider(designerContext.customActionController)
+				: undefined
+		);
 		const contextMenuController = new ContextMenuController(
 			designerContext.theme,
-			api.viewport,
-			designerContext.definitionModifier,
-			designerContext.state,
-			designerContext.configuration
+			designerContext.configuration,
+			contextMenuItemsBuilder
 		);
 
 		const workspace = new Workspace(

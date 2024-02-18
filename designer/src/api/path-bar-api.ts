@@ -7,13 +7,6 @@ export class PathBarApi {
 
 	public readonly onStateChanged = race(0, this.state.onFolderPathChanged, this.state.onDefinitionChanged);
 
-	/**
-	 * @deprecated Don't use this method
-	 */
-	public subscribe(handler: () => void) {
-		this.onStateChanged.subscribe(handler);
-	}
-
 	public setFolderPath(path: string[]) {
 		this.state.setFolderPath(path);
 	}

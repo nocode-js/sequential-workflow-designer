@@ -17,7 +17,7 @@ describe('MoveViewportBehavior', () => {
 			scale: 1
 		});
 
-		const behavior = MoveViewportBehavior.create(context.state, true);
+		const behavior = MoveViewportBehavior.create(true, context);
 		behavior.onStart();
 
 		expect(lastViewport.position.x).toEqual(0);

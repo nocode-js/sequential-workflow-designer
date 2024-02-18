@@ -1,5 +1,5 @@
 import { SimpleEvent } from '../core';
-import { DefinitionModifier } from '../definition-modifier';
+import { StateModifier } from '../modifier/state-modifier';
 import { DesignerState } from '../designer-state';
 import { HistoryController } from '../history-controller';
 import { ViewportApi } from './viewport-api';
@@ -8,10 +8,10 @@ export class ControlBarApi {
 	public static create(
 		state: DesignerState,
 		historyController: HistoryController | undefined,
-		definitionModifier: DefinitionModifier,
+		stateModifier: StateModifier,
 		viewportApi: ViewportApi
 	): ControlBarApi {
-		const api = new ControlBarApi(state, historyController, definitionModifier, viewportApi);
+		const api = new ControlBarApi(state, historyController, stateModifier, viewportApi);
 		state.onIsReadonlyChanged.subscribe(api.onStateChanged.forward);
 		state.onSelectedStepIdChanged.subscribe(api.onStateChanged.forward);
 		state.onIsDragDisabledChanged.subscribe(api.onStateChanged.forward);
@@ -24,18 +24,11 @@ export class ControlBarApi {
 	private constructor(
 		private readonly state: DesignerState,
 		private readonly historyController: HistoryController | undefined,
-		private readonly definitionModifier: DefinitionModifier,
+		private readonly stateModifier: StateModifier,
 		private readonly viewportApi: ViewportApi
 	) {}
 
 	public readonly onStateChanged = new SimpleEvent<unknown>();
-
-	/**
-	 * @deprecated Don't use this method
-	 */
-	public subscribe(handler: () => void) {
-		this.onStateChanged.subscribe(handler);
-	}
 
 	public resetViewport() {
 		this.viewportApi.resetViewport();
@@ -87,7 +80,7 @@ export class ControlBarApi {
 
 	public tryDelete(): boolean {
 		if (this.canDelete() && this.state.selectedStepId) {
-			this.definitionModifier.tryDelete(this.state.selectedStepId);
+			this.stateModifier.tryDelete(this.state.selectedStepId);
 			return true;
 		}
 		return false;
@@ -98,7 +91,7 @@ export class ControlBarApi {
 			!!this.state.selectedStepId &&
 			!this.state.isReadonly &&
 			!this.state.isDragging &&
-			this.definitionModifier.isDeletable(this.state.selectedStepId)
+			this.stateModifier.isDeletable(this.state.selectedStepId)
 		);
 	}
 }
