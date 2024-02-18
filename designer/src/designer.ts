@@ -11,6 +11,7 @@ import { DesignerApi } from './api';
 import { HistoryController } from './history-controller';
 import { Viewport } from './designer-extension';
 import { race } from './core';
+import { StateModifier } from './modifier/state-modifier';
 
 export class Designer<TDefinition extends Definition = Definition> {
 	/**
@@ -49,6 +50,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 		const designer = new Designer<TDef>(
 			view,
 			designerContext.state,
+			designerContext.stateModifier,
 			designerContext.definitionWalker,
 			designerContext.historyController,
 			designerApi
@@ -75,6 +77,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	private constructor(
 		private readonly view: DesignerView,
 		private readonly state: DesignerState,
+		private readonly stateModifier: StateModifier,
 		private readonly walker: DefinitionWalker,
 		private readonly historyController: HistoryController | undefined,
 		private readonly api: DesignerApi
@@ -149,7 +152,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Selects a step by the id.
 	 */
 	public selectStepById(stepId: string) {
-		this.state.setSelectedStepId(stepId);
+		this.stateModifier.trySelectStepById(stepId);
 	}
 
 	/**
@@ -179,13 +182,6 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 */
 	public moveViewportToStep(stepId: string) {
 		this.api.viewport.moveViewportToStep(stepId);
-	}
-
-	/**
-	 * @deprecated Use `moveViewportToStep` instead.
-	 */
-	public moveViewPortToStep(stepId: string) {
-		this.moveViewportToStep(stepId);
 	}
 
 	/**

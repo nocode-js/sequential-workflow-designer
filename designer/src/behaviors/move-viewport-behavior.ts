@@ -1,22 +1,29 @@
 import { Vector } from '../core/vector';
+import { DesignerContext } from '../designer-context';
 import { DesignerState } from '../designer-state';
+import { StateModifier } from '../modifier/state-modifier';
 import { Behavior } from './behavior';
 
 export class MoveViewportBehavior implements Behavior {
-	public static create(state: DesignerState, resetSelectedStep: boolean): MoveViewportBehavior {
-		return new MoveViewportBehavior(state.viewport.position, resetSelectedStep, state);
+	public static create(resetSelectedStep: boolean, context: DesignerContext): MoveViewportBehavior {
+		return new MoveViewportBehavior(context.state.viewport.position, resetSelectedStep, context.state, context.stateModifier);
 	}
 
 	private constructor(
 		private readonly startPosition: Vector,
 		private readonly resetSelectedStep: boolean,
-		private readonly state: DesignerState
+		private readonly state: DesignerState,
+		private readonly stateModifier: StateModifier
 	) {}
 
 	public onStart() {
 		if (this.resetSelectedStep) {
-			const stepId = this.state.tryGetLastStepIdFromFolderPath();
-			this.state.setSelectedStepId(stepId);
+			const stepIdOrNull = this.state.tryGetLastStepIdFromFolderPath();
+			if (stepIdOrNull) {
+				this.stateModifier.trySelectStepById(stepIdOrNull);
+			} else {
+				this.state.setSelectedStepId(null);
+			}
 		}
 	}
 

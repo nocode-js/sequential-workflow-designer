@@ -1,3 +1,8 @@
+## 0.19.0
+
+* Added the `isSelectable` callback to the `StepsConfiguration` interface. Now it's possible to disable the selection of steps.
+* Deleted deprecated methods and interfaces.
+
 ## 0.18.5
 
 This version fixes a bug with unintended selection of HTML elements in Apple Vision Pro.

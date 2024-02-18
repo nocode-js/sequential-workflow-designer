@@ -1,21 +1,16 @@
-import { ViewportApi } from '../../api/viewport-api';
 import { Vector } from '../../core';
-import { DefinitionModifier } from '../../definition-modifier';
 import { DesignerConfiguration } from '../../designer-configuration';
-import { DesignerState } from '../../designer-state';
 import { ClickCommand } from '../component';
 import { ContextMenu } from './context-menu';
 import { ContextMenuItemsBuilder } from './context-menu-items-builder';
 
 export class ContextMenuController {
-	private last?: ContextMenu;
+	private current?: ContextMenu;
 
 	public constructor(
 		private readonly theme: string,
-		private readonly viewportApi: ViewportApi,
-		private readonly definitionModifier: DefinitionModifier,
-		private readonly state: DesignerState,
-		private readonly configuration: DesignerConfiguration
+		private readonly configuration: DesignerConfiguration,
+		private readonly itemsBuilder: ContextMenuItemsBuilder
 	) {}
 
 	public tryOpen(position: Vector, commandOrNull: ClickCommand | null) {
@@ -24,17 +19,17 @@ export class ContextMenuController {
 			return;
 		}
 
-		if (this.last) {
-			this.last.tryDestroy();
+		if (this.current) {
+			this.current.tryDestroy();
 		}
 
-		const items = ContextMenuItemsBuilder.build(commandOrNull, this.viewportApi, this.definitionModifier, this.state);
-		this.last = ContextMenu.create(position, this.theme, items);
+		const items = this.itemsBuilder.build(commandOrNull);
+		this.current = ContextMenu.create(position, this.theme, items);
 	}
 
 	public destroy() {
-		if (this.last) {
-			this.last.tryDestroy();
+		if (this.current) {
+			this.current.tryDestroy();
 		}
 	}
 }

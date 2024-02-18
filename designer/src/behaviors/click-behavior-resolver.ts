@@ -1,5 +1,4 @@
 import { DesignerContext } from '../designer-context';
-import { DesignerState } from '../designer-state';
 import { ClickCommand, ClickCommandType } from '../workspace';
 import { Behavior } from './behavior';
 import { MoveViewportBehavior } from './move-viewport-behavior';
@@ -10,27 +9,27 @@ import { OpenFolderPressingBehaviorHandler } from './pressing-behaviors/open-fol
 import { TriggerCustomActionPressingBehaviorHandler } from './pressing-behaviors/trigger-custom-action-pressing-behavior-handler';
 
 export class ClickBehaviorResolver {
-	public constructor(private readonly designerContext: DesignerContext, private readonly state: DesignerState) {}
+	public constructor(private readonly context: DesignerContext) {}
 
 	public resolve(commandOrNull: ClickCommand | null, element: Element, isMiddleButton: boolean): Behavior {
 		if (!commandOrNull) {
-			return MoveViewportBehavior.create(this.state, !isMiddleButton);
+			return MoveViewportBehavior.create(!isMiddleButton, this.context);
 		}
 
 		switch (commandOrNull.type) {
 			case ClickCommandType.selectStep:
-				return SelectStepBehavior.create(commandOrNull.component, isMiddleButton, this.designerContext);
+				return SelectStepBehavior.create(commandOrNull.component, isMiddleButton, this.context);
 
 			case ClickCommandType.rerenderStep:
-				return PressingBehavior.create(element, new RerenderStepPressingBehaviorHandler(this.designerContext));
+				return PressingBehavior.create(element, new RerenderStepPressingBehaviorHandler(this.context));
 
 			case ClickCommandType.openFolder:
-				return PressingBehavior.create(element, new OpenFolderPressingBehaviorHandler(commandOrNull, this.designerContext));
+				return PressingBehavior.create(element, new OpenFolderPressingBehaviorHandler(commandOrNull, this.context));
 
 			case ClickCommandType.triggerCustomAction:
 				return PressingBehavior.create(
 					element,
-					new TriggerCustomActionPressingBehaviorHandler(commandOrNull, this.designerContext)
+					new TriggerCustomActionPressingBehaviorHandler(commandOrNull, this.context.customActionController)
 				);
 
 			default:

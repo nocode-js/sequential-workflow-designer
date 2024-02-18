@@ -1,6 +1,7 @@
 import { Vector } from '../core/vector';
 import { DesignerContext } from '../designer-context';
 import { DesignerState } from '../designer-state';
+import { StateModifier } from '../modifier/state-modifier';
 import { StepComponent } from '../workspace/step-component';
 import { Behavior } from './behavior';
 import { DragStepBehavior } from './drag-step-behavior';
@@ -11,15 +12,16 @@ export class SelectStepBehavior implements Behavior {
 		const isDragDisabled =
 			isMiddleButton ||
 			context.state.isDragDisabled ||
-			!context.definitionModifier.isDraggable(pressedStepComponent.step, pressedStepComponent.parentSequence);
-		return new SelectStepBehavior(pressedStepComponent, isDragDisabled, context, context.state);
+			!context.stateModifier.isDraggable(pressedStepComponent.step, pressedStepComponent.parentSequence);
+		return new SelectStepBehavior(pressedStepComponent, isDragDisabled, context.state, context.stateModifier, context);
 	}
 
 	private constructor(
 		private readonly pressedStepComponent: StepComponent,
 		private readonly isDragDisabled: boolean,
-		private readonly context: DesignerContext,
-		private readonly state: DesignerState
+		private readonly state: DesignerState,
+		private readonly stateModifier: StateModifier,
+		private readonly context: DesignerContext
 	) {}
 
 	public onStart() {
@@ -33,14 +35,14 @@ export class SelectStepBehavior implements Behavior {
 				this.state.setSelectedStepId(null);
 				return DragStepBehavior.create(this.context, this.pressedStepComponent.step, this.pressedStepComponent);
 			} else {
-				return MoveViewportBehavior.create(this.state, false);
+				return MoveViewportBehavior.create(false, this.context);
 			}
 		}
 	}
 
 	public onEnd(interrupt: boolean) {
 		if (!interrupt) {
-			this.state.setSelectedStepId(this.pressedStepComponent.step.id);
+			this.stateModifier.trySelectStep(this.pressedStepComponent.step, this.pressedStepComponent.parentSequence);
 		}
 	}
 }

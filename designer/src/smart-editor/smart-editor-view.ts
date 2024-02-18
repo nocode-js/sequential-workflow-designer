@@ -28,7 +28,8 @@ export class SmartEditorView {
 			'sqd-editor sqd-step-editor',
 			configuration.stepEditorProvider,
 			'sqd-editor sqd-root-editor',
-			configuration.rootEditorProvider
+			configuration.rootEditorProvider,
+			null
 		);
 		return new SmartEditorView(root, toggle, editor);
 	}

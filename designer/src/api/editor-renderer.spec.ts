@@ -28,7 +28,7 @@ describe('EditorRenderer', () => {
 	});
 
 	function createRenderer() {
-		return EditorRenderer.create(state, walker, callback);
+		return EditorRenderer.create(state, state, walker, callback);
 	}
 
 	it('calls callbacks with null if any step is not selected at start', () => {

@@ -20,11 +20,6 @@ export interface RootEditorWrapper<TDefinition extends Definition> {
 	setProperty(name: keyof TDefinition['properties'], value: TDefinition['properties'][typeof name]): void;
 }
 
-/**
- * @deprecated Use `RootEditorWrapper` instead.
- */
-export type GlobalEditorWrapper<TDefinition extends Definition> = RootEditorWrapper<TDefinition>;
-
 export function useRootEditor<TDefinition extends Definition = Definition>(): RootEditorWrapper<TDefinition> {
 	const wrapper = useContext(rootEditorContext);
 	if (!wrapper) {
@@ -32,11 +27,6 @@ export function useRootEditor<TDefinition extends Definition = Definition>(): Ro
 	}
 	return wrapper as unknown as RootEditorWrapper<TDefinition>;
 }
-
-/**
- * @deprecated Use `useRootEditor` instead.
- */
-export const useGlobalEditor = useRootEditor;
 
 export interface RootEditorWrapperContextProps {
 	children: ReactNode;

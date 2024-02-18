@@ -1,16 +1,50 @@
-import { Uid } from './core';
-import { SequenceModifier } from './core/sequence-modifier';
-import { StepDuplicator } from './core/step-duplicator';
-import { Definition, DefinitionWalker, Sequence, Step } from './definition';
-import { DefinitionChangeType, DesignerConfiguration } from './designer-configuration';
-import { DesignerState } from './designer-state';
+import { Uid } from '../core';
+import { SequenceModifier } from './sequence-modifier';
+import { StepDuplicator } from '../core/step-duplicator';
+import { Definition, DefinitionWalker, Sequence, Step } from '../definition';
+import { DefinitionChangeType, DesignerConfiguration } from '../designer-configuration';
+import { DesignerState } from '../designer-state';
+import { StateModifierDependency } from './state-modifier-dependency';
+import { FolderPathDefinitionModifierDependency } from './folder-path-definition-modifier-dependency';
+import { SelectedStepIdDefinitionModifierDependency } from './selected-step-id-definition-modifier-dependency';
 
-export class DefinitionModifier {
+export class StateModifier {
+	public static create(definitionWalker: DefinitionWalker, state: DesignerState, configuration: DesignerConfiguration): StateModifier {
+		const dependencies: StateModifierDependency[] = [];
+		dependencies.push(new SelectedStepIdDefinitionModifierDependency(state, definitionWalker));
+		dependencies.push(new FolderPathDefinitionModifierDependency(state, definitionWalker));
+		return new StateModifier(definitionWalker, state, configuration, dependencies);
+	}
+
 	public constructor(
 		private readonly definitionWalker: DefinitionWalker,
 		private readonly state: DesignerState,
-		private readonly configuration: DesignerConfiguration
+		private readonly configuration: DesignerConfiguration,
+		private readonly dependencies: StateModifierDependency[]
 	) {}
+
+	public addDependency(dependency: StateModifierDependency) {
+		this.dependencies.push(dependency);
+	}
+
+	public isSelectable(step: Step, parentSequence: Sequence): boolean {
+		return this.configuration.steps.isSelectable ? this.configuration.steps.isSelectable(step, parentSequence) : true;
+	}
+
+	public trySelectStep(step: Step, parentSequence: Sequence) {
+		if (this.isSelectable(step, parentSequence)) {
+			this.state.setSelectedStepId(step.id);
+		}
+	}
+
+	public trySelectStepById(stepId: string) {
+		if (this.configuration.steps.isSelectable) {
+			const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
+			this.trySelectStep(result.step, result.parentSequence);
+		} else {
+			this.state.setSelectedStepId(stepId);
+		}
+	}
 
 	public isDeletable(stepId: string): boolean {
 		if (this.configuration.steps.isDeletable) {
@@ -33,7 +67,7 @@ export class DefinitionModifier {
 		SequenceModifier.deleteStep(result.step, result.parentSequence);
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepDeleted, result.step.id);
 
-		this.updateDependantFields();
+		this.updateDependencies();
 		return true;
 	}
 
@@ -49,7 +83,7 @@ export class DefinitionModifier {
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepInserted, step.id);
 
 		if (!this.configuration.steps.isAutoSelectDisabled) {
-			this.state.setSelectedStepId(step.id);
+			this.trySelectStepById(step.id);
 		}
 		return true;
 	}
@@ -75,7 +109,7 @@ export class DefinitionModifier {
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepMoved, step.id);
 
 		if (!this.configuration.steps.isAutoSelectDisabled) {
-			this.state.setSelectedStepId(step.id);
+			this.trySelectStep(step, targetSequence);
 		}
 		return true;
 	}
@@ -100,27 +134,10 @@ export class DefinitionModifier {
 		}
 
 		this.state.setDefinition(definition);
-		this.updateDependantFields();
+		this.updateDependencies();
 	}
 
-	public updateDependantFields() {
-		if (this.state.selectedStepId) {
-			const found = this.definitionWalker.findById(this.state.definition, this.state.selectedStepId);
-			if (!found) {
-				// We need to unselect step when it's deleted.
-				this.state.setSelectedStepId(null);
-			}
-		}
-
-		for (let index = 0; index < this.state.folderPath.length; index++) {
-			const stepId = this.state.folderPath[index];
-			const found = this.definitionWalker.findById(this.state.definition, stepId);
-			if (!found) {
-				// We need to update path if any folder is deleted.
-				const newPath = this.state.folderPath.slice(0, index);
-				this.state.setFolderPath(newPath);
-				break;
-			}
-		}
+	public updateDependencies() {
+		this.dependencies.forEach(dependency => dependency.update());
 	}
 }

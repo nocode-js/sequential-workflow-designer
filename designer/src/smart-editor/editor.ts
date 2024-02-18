@@ -2,7 +2,7 @@ import { Step } from '../definition';
 import { EditorRenderer } from '../api/editor-renderer';
 import { EditorView } from './editor-view';
 import { RootEditorProvider, StepEditorProvider } from '../designer-configuration';
-import { EditorApi } from '../api';
+import { EditorApi, SelectedStepIdProvider } from '../api';
 
 export class Editor {
 	public static create(
@@ -11,7 +11,8 @@ export class Editor {
 		stepEditorClassName: string,
 		stepEditorProvider: StepEditorProvider,
 		rootEditorClassName: string,
-		rootEditorProvider: RootEditorProvider
+		rootEditorProvider: RootEditorProvider,
+		customSelectedStepIdProvider: SelectedStepIdProvider | null
 	): Editor {
 		const view = EditorView.create(parent);
 
@@ -31,7 +32,7 @@ export class Editor {
 			view.setContent(content, className);
 		}
 
-		const renderer = api.runRenderer(step => render(step));
+		const renderer = api.runRenderer(step => render(step), customSelectedStepIdProvider);
 		return new Editor(view, renderer);
 	}
 

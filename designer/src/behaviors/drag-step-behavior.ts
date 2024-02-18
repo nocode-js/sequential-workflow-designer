@@ -6,7 +6,7 @@ import { Behavior } from './behavior';
 import { DragStepView } from './drag-step-behavior-view';
 import { PlaceholderFinder } from './placeholder-finder';
 import { DesignerState } from '../designer-state';
-import { DefinitionModifier } from '../definition-modifier';
+import { StateModifier } from '../modifier/state-modifier';
 import { WorkspaceController } from '../workspace/workspace-controller';
 import { StepComponent } from '../workspace/step-component';
 
@@ -18,7 +18,7 @@ export class DragStepBehavior implements Behavior {
 			designerContext.workspaceController,
 			designerContext.state,
 			step,
-			designerContext.definitionModifier,
+			designerContext.stateModifier,
 			draggedStepComponent
 		);
 	}
@@ -35,7 +35,7 @@ export class DragStepBehavior implements Behavior {
 		private readonly workspaceController: WorkspaceController,
 		private readonly designerState: DesignerState,
 		private readonly step: Step,
-		private readonly definitionModifier: DefinitionModifier,
+		private readonly stateModifier: StateModifier,
 		private readonly draggedStepComponent?: StepComponent
 	) {}
 
@@ -104,18 +104,14 @@ export class DragStepBehavior implements Behavior {
 
 		if (!interrupt && this.currentPlaceholder) {
 			if (this.draggedStepComponent) {
-				modified = this.definitionModifier.tryMove(
+				modified = this.stateModifier.tryMove(
 					this.draggedStepComponent.parentSequence,
 					this.draggedStepComponent.step,
 					this.currentPlaceholder.parentSequence,
 					this.currentPlaceholder.index
 				);
 			} else {
-				modified = this.definitionModifier.tryInsert(
-					this.step,
-					this.currentPlaceholder.parentSequence,
-					this.currentPlaceholder.index
-				);
+				modified = this.stateModifier.tryInsert(this.step, this.currentPlaceholder.parentSequence, this.currentPlaceholder.index);
 			}
 		}
 		if (!modified) {

@@ -1,8 +1,9 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { ComponentContext } from './component-context';
 import { ObjectCloner } from './core/object-cloner';
+import { CustomActionController } from './custom-action-controller';
 import { Definition, DefinitionWalker } from './definition';
-import { DefinitionModifier } from './definition-modifier';
+import { StateModifier } from './modifier/state-modifier';
 import { DesignerConfiguration } from './designer-configuration';
 import { DesignerState } from './designer-state';
 import { HistoryController } from './history-controller';
@@ -30,13 +31,14 @@ export class DesignerContext {
 		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = new BehaviorController();
+		const customActionController = new CustomActionController(configuration, state);
 		const stepExtensionResolver = StepExtensionResolver.create(services);
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
-		const definitionModifier = new DefinitionModifier(definitionWalker, state, configuration);
+		const stateModifier = StateModifier.create(definitionWalker, state, configuration);
 
 		let historyController: HistoryController | undefined = undefined;
 		if (configuration.undoStackSize) {
-			historyController = HistoryController.create(configuration.undoStack, state, definitionModifier, configuration);
+			historyController = HistoryController.create(configuration.undoStack, state, stateModifier, configuration);
 		}
 
 		const componentContext = ComponentContext.create(
@@ -54,10 +56,11 @@ export class DesignerContext {
 			services,
 			componentContext,
 			definitionWalker,
-			definitionModifier,
+			stateModifier,
 			layoutController,
 			workspaceController,
 			behaviorController,
+			customActionController,
 			historyController
 		);
 	}
@@ -69,10 +72,11 @@ export class DesignerContext {
 		public readonly services: Services,
 		public readonly componentContext: ComponentContext,
 		public readonly definitionWalker: DefinitionWalker,
-		public readonly definitionModifier: DefinitionModifier,
+		public readonly stateModifier: StateModifier,
 		public readonly layoutController: LayoutController,
 		public readonly workspaceController: WorkspaceControllerWrapper,
 		public readonly behaviorController: BehaviorController,
+		public readonly customActionController: CustomActionController,
 		public readonly historyController: HistoryController | undefined
 	) {}
 

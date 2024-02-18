@@ -1,15 +1,21 @@
 import { DesignerState } from '../designer-state';
-import { DefinitionModifier } from '../definition-modifier';
+import { StateModifier } from '../modifier/state-modifier';
 import { DefinitionChangeType, RootEditorContext, StepEditorContext } from '../designer-configuration';
 import { EditorRenderer, EditorRendererHandler } from './editor-renderer';
 import { Definition, DefinitionWalker } from '../definition';
-import { SimpleEventListener } from '../core';
+import { SimpleEvent, SimpleEventListener } from '../core';
+import { StateModifierDependency } from '../modifier';
+
+export interface SelectedStepIdProvider {
+	onSelectedStepIdChanged: SimpleEvent<string | null>;
+	selectedStepId: string | null;
+}
 
 export class EditorApi {
 	public constructor(
 		private readonly state: DesignerState,
 		private readonly definitionWalker: DefinitionWalker,
-		private readonly definitionModifier: DefinitionModifier
+		private readonly stateModifier: StateModifier
 	) {}
 
 	public isCollapsed(): boolean {
@@ -32,8 +38,16 @@ export class EditorApi {
 		return this.state.definition;
 	}
 
-	public runRenderer(rendererHandler: EditorRendererHandler): EditorRenderer {
-		return EditorRenderer.create(this.state, this.definitionWalker, rendererHandler);
+	public addDefinitionModifierDependency(dependency: StateModifierDependency) {
+		this.stateModifier.addDependency(dependency);
+	}
+
+	public runRenderer(
+		rendererHandler: EditorRendererHandler,
+		customSelectedStepIdProvider: SelectedStepIdProvider | null
+	): EditorRenderer {
+		const selectedStepIdProvider = customSelectedStepIdProvider || this.state;
+		return EditorRenderer.create(this.state, selectedStepIdProvider, this.definitionWalker, rendererHandler);
 	}
 
 	public createStepEditorContext(stepId: string): StepEditorContext {
@@ -49,7 +63,7 @@ export class EditorApi {
 			},
 			notifyChildrenChanged: () => {
 				this.state.notifyDefinitionChanged(DefinitionChangeType.stepChildrenChanged, stepId);
-				this.definitionModifier.updateDependantFields();
+				this.stateModifier.updateDependencies();
 			}
 		};
 	}
