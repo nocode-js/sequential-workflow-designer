@@ -1,3 +1,7 @@
+## 0.19.1
+
+Fixed the bug with refreshing the state modifier dependencies.
+
 ## 0.19.0
 
 * Added the `isSelectable` callback to the `StepsConfiguration` interface. Now it's possible to disable the selection of steps.

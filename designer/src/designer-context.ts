@@ -31,10 +31,10 @@ export class DesignerContext {
 		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = new BehaviorController();
-		const customActionController = new CustomActionController(configuration, state);
 		const stepExtensionResolver = StepExtensionResolver.create(services);
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
 		const stateModifier = StateModifier.create(definitionWalker, state, configuration);
+		const customActionController = new CustomActionController(configuration, state, stateModifier);
 
 		let historyController: HistoryController | undefined = undefined;
 		if (configuration.undoStackSize) {
