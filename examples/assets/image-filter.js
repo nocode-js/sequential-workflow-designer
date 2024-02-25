@@ -113,6 +113,7 @@ const configuration = {
 		},
 	},
 
+	editors: false,
 	controlBar: true,
 };
 

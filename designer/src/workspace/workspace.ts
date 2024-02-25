@@ -70,9 +70,9 @@ export class Workspace implements WorkspaceController {
 			workspace.onStateChanged(r[0], r[1], r[2]);
 		});
 
-		view.bindClick((p, t, b) => workspace.onClick(p, t, b));
-		view.bindWheel(e => workspace.onWheel(e));
-		view.bindContextMenu((p, t) => workspace.onContextMenu(p, t));
+		view.bindClick(workspace.onClick);
+		view.bindWheel(workspace.onWheel);
+		view.bindContextMenu(workspace.onContextMenu);
 		return workspace;
 	}
 
@@ -171,28 +171,30 @@ export class Workspace implements WorkspaceController {
 		this.view.destroy();
 	}
 
-	private onClick(position: Vector, target: Element, buttonIndex: number) {
+	private readonly onClick = (position: Vector, target: Element, buttonIndex: number, altKey: boolean) => {
 		const isPrimaryButton = buttonIndex === 0;
 		const isMiddleButton = buttonIndex === 1;
 
 		if (isPrimaryButton || isMiddleButton) {
+			const forceMove = isMiddleButton || altKey;
+
 			const commandOrNull = this.resolveClick(target, position);
-			const behavior = this.clickBehaviorResolver.resolve(commandOrNull, target, isMiddleButton);
+			const behavior = this.clickBehaviorResolver.resolve(commandOrNull, target, forceMove);
 			this.behaviorController.start(position, behavior);
 		}
-	}
+	};
 
-	private onWheel(e: WheelEvent) {
+	private readonly onWheel = (e: WheelEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
 
 		this.wheelController.onWheel(e);
-	}
+	};
 
-	private onContextMenu(position: Vector, target: Element) {
+	private readonly onContextMenu = (position: Vector, target: Element) => {
 		const commandOrNull = this.resolveClick(target, position);
 		this.contextMenuController.tryOpen(position, commandOrNull);
-	}
+	};
 
 	private onIsDraggingChanged(isDragging: boolean) {
 		this.getRootComponent().setIsDragging(isDragging);
