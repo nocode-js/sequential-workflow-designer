@@ -1,3 +1,7 @@
+## 0.19.2
+
+This version adds the `alt` key support. Now when you hold the `alt` key and click on the canvas, the drag and drop is disabled [#126](https://github.com/nocode-js/sequential-workflow-designer/issues/126).
+
 ## 0.19.1
 
 Fixed the bug with refreshing the state modifier dependencies.

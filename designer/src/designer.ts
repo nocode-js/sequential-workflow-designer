@@ -27,19 +27,15 @@ export class Designer<TDefinition extends Definition = Definition> {
 		configuration: DesignerConfiguration<TDef>
 	): Designer<TDef> {
 		if (!placeholder) {
-			throw new Error('Placeholder is not set');
+			throw new Error('Placeholder is not defined');
 		}
 		if (!isElementAttached(placeholder)) {
 			throw new Error('Placeholder is not attached to the DOM');
 		}
 		if (!startDefinition) {
-			throw new Error('Start definition is not set');
-		}
-		if (!configuration) {
-			throw new Error('Configuration is not set');
+			throw new Error('Start definition is not defined');
 		}
 		const config = configuration as DesignerConfiguration;
-
 		validateConfiguration(config);
 
 		const services = ServicesResolver.resolve(configuration.extensions, config);

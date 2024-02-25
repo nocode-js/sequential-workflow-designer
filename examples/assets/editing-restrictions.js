@@ -7,6 +7,7 @@ function createStep(name, properties) {
 		type: 'task',
 		name,
 		properties: Object.assign({
+			selectable: true,
 			draggable: true,
 			deletable: true
 		}, properties)
@@ -20,6 +21,7 @@ function createLoopStep() {
 		type: 'loop',
 		name: 'Loop',
 		properties: {
+			selectable: true,
 			draggable: true,
 			deletable: true
 		},
@@ -41,10 +43,12 @@ function load() {
 	const placeholder = document.getElementById('designer');
 	const definition = {
 		sequence: [
-			createStep('Draggable=true', { draggable: true }),
-			createStep('Draggable=false', { draggable: false }),
-			createStep('Deletable=true', { deletable: true }),
-			createStep('Deletable=false', { deletable: false }),
+			createStep('isSelectable=true', { selectable: true }),
+			createStep('isSelectable=false', { selectable: false }),
+			createStep('isDraggable=true', { draggable: true }),
+			createStep('isDraggable=false', { draggable: false }),
+			createStep('isDeletable=true', { deletable: true }),
+			createStep('isDeletable=false', { deletable: false }),
 		],
 		properties: {}
 	};
@@ -65,6 +69,9 @@ function load() {
 		},
 
 		steps: {
+			isSelectable: (step) => {
+				return step.properties.selectable;
+			},
 			canInsertStep: (step, _, targetIndex) => {
 				return window.confirm(`Can insert "${step.name}" (${targetIndex})?`);
 			},

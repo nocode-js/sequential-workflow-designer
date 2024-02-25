@@ -98,12 +98,12 @@ export class WorkspaceView {
 		return new Vector(this.canvas.clientWidth, this.canvas.clientHeight);
 	}
 
-	public bindClick(handler: (position: Vector, target: Element, buttonIndex: number) => void) {
+	public bindClick(handler: (position: Vector, target: Element, buttonIndex: number, altKey: boolean) => void) {
 		this.canvas.addEventListener(
 			'mousedown',
 			e => {
 				e.preventDefault();
-				handler(readMousePosition(e), e.target as Element, e.button);
+				handler(readMousePosition(e), e.target as Element, e.button, e.altKey);
 			},
 			false
 		);
@@ -116,7 +116,7 @@ export class WorkspaceView {
 				const element = document.elementFromPoint(clientPosition.x, clientPosition.y);
 				if (element) {
 					const position = readTouchPosition(e);
-					handler(position, element, 0);
+					handler(position, element, 0, false);
 				}
 			},
 			listenerOptions
