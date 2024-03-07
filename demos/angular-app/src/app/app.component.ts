@@ -9,16 +9,31 @@ import {
 	StepEditorContext,
 	StepsConfiguration,
 	ToolboxConfiguration,
-	ValidatorConfiguration
+	ValidatorConfiguration,
+	BranchedStep
 } from 'sequential-workflow-designer';
 
-function createStep(): Step {
+function createJob(): Step {
 	return {
 		id: Uid.next(),
 		componentType: 'task',
-		name: 'Step',
-		properties: { velocity: 0 },
-		type: 'task'
+		name: 'Job',
+		type: 'job',
+		properties: { velocity: 0 }
+	};
+}
+
+function createIf(): BranchedStep {
+	return {
+		id: Uid.next(),
+		componentType: 'switch',
+		name: 'If',
+		type: 'if',
+		properties: { velocity: 10 },
+		branches: {
+			true: [],
+			false: []
+		}
 	};
 }
 
@@ -27,7 +42,7 @@ function createDefinition(): Definition {
 		properties: {
 			velocity: 0
 		},
-		sequence: [createStep()]
+		sequence: [createJob(), createIf()]
 	};
 }
 
@@ -49,8 +64,8 @@ export class AppComponent implements OnInit {
 	public readonly toolboxConfiguration: ToolboxConfiguration = {
 		groups: [
 			{
-				name: 'Step',
-				steps: [createStep()]
+				name: 'Steps',
+				steps: [createJob(), createIf()]
 			}
 		]
 	};
