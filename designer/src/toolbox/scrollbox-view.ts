@@ -2,6 +2,8 @@ import { Dom } from '../core/dom';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 import { Vector } from '../core/vector';
 
+const MAX_DELTA_Y = 25;
+
 const listenerOptions: AddEventListenerOptions & EventListenerOptions = {
 	passive: false
 };
@@ -76,9 +78,9 @@ export class ScrollBoxView {
 		e.stopPropagation();
 
 		if (this.content) {
-			const delta = e.deltaY > 0 ? -25 : 25;
+			const delta = Math.sign(e.deltaY) * Math.min(Math.abs(e.deltaY), MAX_DELTA_Y);
 			const scrollTop = this.getScrollTop();
-			this.setScrollTop(scrollTop + delta);
+			this.setScrollTop(scrollTop - delta);
 		}
 	}
 
