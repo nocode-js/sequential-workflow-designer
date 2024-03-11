@@ -1,3 +1,7 @@
+## 0.19.3
+
+This version improves the experience of scrolling in the toolbox via the touchpad.
+
 ## 0.19.2
 
 This version adds the `alt` key support. Now when you hold the `alt` key and click on the canvas, the drag and drop is disabled [#126](https://github.com/nocode-js/sequential-workflow-designer/issues/126).
