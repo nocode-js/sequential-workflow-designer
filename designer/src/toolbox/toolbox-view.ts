@@ -81,20 +81,42 @@ export class ToolboxView {
 
 	public setGroups(groups: ToolboxGroupData[]) {
 		const list = Dom.element('div');
-
 		groups.forEach(group => {
 			const groupTitle = Dom.element('div', {
-				class: 'sqd-toolbox-group-title'
+				class: 'sqd-toolbox-group-title',
+				id: group.name
 			});
 			groupTitle.innerText = group.name;
-			list.appendChild(groupTitle);
-
-			group.items.forEach(item => ToolboxItem.create(list, item, this.api));
+			var groupToggleIcon = Icons.createSvg('sqd-toolbox-group-toggle-icon', Icons.chevronUp);
+			groupTitle.appendChild(groupToggleIcon)
+			const groupTasks = Dom.element('div', {
+				class: 'sqd-toolbox-group-items sqd-hidden',
+			});
+			list.appendChild(groupTitle)
+			list.appendChild(groupTasks);
+			groupTitle.addEventListener('click', e => this.onToggleClicked(groupTasks, groupTitle))
+			group.items.forEach(item => ToolboxItem.create(groupTasks, item, this.api));
 		});
 		this.scrollBoxView.setContent(list);
 	}
 
 	public destroy() {
 		this.scrollBoxView.destroy();
+	}
+	private onToggleClicked(groupContent: HTMLDivElement, parent: HTMLElement) {
+		if (groupContent.classList.contains("sqd-hidden")) {
+			groupContent.classList.remove("sqd-hidden")
+			const pathElement = parent.querySelector('path') as SVGPathElement;
+			const newPathData = Icons.expand
+			pathElement.setAttribute('d', newPathData);
+		}
+		else {
+			groupContent.classList.add("sqd-hidden")
+			const pathElement = parent.querySelector('path') as SVGPathElement;
+			const newPathData = Icons.chevronUp
+			pathElement.setAttribute('d', newPathData);
+			
+		}
+
 	}
 }

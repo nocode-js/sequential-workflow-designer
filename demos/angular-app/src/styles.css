@@ -4,14 +4,17 @@ textarea,
 button {
 	font: 13px/1.3em Arial, Verdana, Serif;
 }
+
 body {
 	margin: 0;
 	padding: 0;
 }
+
 a {
 	color: #2c18df;
 	text-decoration: none;
 }
+
 a:hover {
 	text-decoration: underline;
 }
@@ -19,6 +22,7 @@ a:hover {
 .full-width {
 	width: 100%;
 }
+
 textarea {
 	font-size: 9pt !important;
 	line-height: 1.2em !important;
@@ -28,11 +32,56 @@ textarea {
 	width: 100vw;
 	height: 50vh;
 }
+
 .sqd-editor {
 	padding: 10px;
+}
+
+.sqd-scrollbox-body {
+	width: 200px !important;
+}
+
+.sqd-toolbox {
+	width: 200px !important;
 }
 
 .block {
 	text-align: center;
 	margin: 10px;
+}
+
+.sqd-toolbox-item {
+	margin: 10px 10px !important;
+	width: 180px !important;
+}
+
+.sqd-toolbox-group-title {
+	text-align: start !important;
+	background-color: rgb(192, 190, 190);
+	margin: 8px 10px !important;
+	font-size: 1.1em !important;
+	line-height: 1em !important;
+	font-weight: bold !important;
+	position: relative !important;
+	padding: 12px 10px !important;
+	cursor: pointer !important;
+	border-radius: 0 !important;
+	border: 1px solid rgb(223, 223, 223);
+	border-radius: 7px !important;
+}
+
+.sqd-toolbox-group-toggle-icon {
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	width: 16px;
+	height: 16px;
+	margin: -8px 0 0;
+}
+.sqd-toolbox-group-items{
+	width: 100%;
+}
+.sqd-theme-light .sqd-toolbox-filter{
+	width: 180px;
+	padding: 10px;
 }
