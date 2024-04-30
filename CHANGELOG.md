@@ -1,3 +1,7 @@
+## 0.19.4
+
+This version adds the data-step-id attribute to the root `<g>` elements of step components on the canvas. This attribute contains the ID of the step, enabling the use of CSS selectors to style step components [#135](https://github.com/nocode-js/sequential-workflow-designer/issues/135).
+
 ## 0.19.3
 
 This version improves the experience of scrolling in the toolbox via the touchpad.

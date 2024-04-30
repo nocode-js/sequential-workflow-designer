@@ -8,14 +8,13 @@ import { LabelView } from '../common-views/label-view';
 import { RegionView } from '../common-views/region-view';
 import { StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
 import { ContainerStepComponentViewConfiguration } from './container-step-component-view-configuration';
+import { ComponentDom } from '../common-views/component-dom';
 
 export const createContainerStepComponentViewFactory =
 	(cfg: ContainerStepComponentViewConfiguration): StepComponentViewFactory =>
 	(parentElement: SVGElement, stepContext: StepContext<SequentialStep>, viewContext: StepComponentViewContext): StepComponentView => {
 		const { step } = stepContext;
-		const g = Dom.svg('g', {
-			class: `sqd-step-container sqd-type-${step.type}`
-		});
+		const g = ComponentDom.stepG('container', step.type, step.id);
 		parentElement.appendChild(g);
 
 		const labelView = LabelView.create(g, cfg.paddingTop, cfg.label, step.name, 'primary');

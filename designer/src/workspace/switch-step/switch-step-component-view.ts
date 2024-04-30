@@ -8,14 +8,13 @@ import { InputView } from '../common-views/input-view';
 import { ClickDetails, StepComponentView } from '../component';
 import { StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
 import { SwitchStepComponentViewConfiguration } from './switch-step-component-view-configuration';
+import { ComponentDom } from '../common-views/component-dom';
 
 export const createSwitchStepComponentViewFactory =
 	(cfg: SwitchStepComponentViewConfiguration): StepComponentViewFactory =>
 	(parent: SVGElement, stepContext: StepContext<BranchedStep>, viewContext: StepComponentViewContext): StepComponentView => {
 		const { step } = stepContext;
-		const g = Dom.svg('g', {
-			class: `sqd-step-switch sqd-type-${step.type}`
-		});
+		const g = ComponentDom.stepG('switch', step.type, step.id);
 		parent.appendChild(g);
 
 		const branchNames = Object.keys(step.branches);
