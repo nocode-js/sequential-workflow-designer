@@ -3,6 +3,7 @@ import { getAbsolutePosition } from '../../core/get-absolute-position';
 import { Vector } from '../../core/vector';
 import { Step } from '../../definition';
 import { StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
+import { ComponentDom } from '../common-views/component-dom';
 import { InputView } from '../common-views/input-view';
 import { OutputView } from '../common-views/output-view';
 import { ClickDetails, StepComponentView } from '../component';
@@ -12,9 +13,7 @@ export const createTaskStepComponentViewFactory =
 	(isInterrupted: boolean, cfg: TaskStepComponentViewConfiguration): StepComponentViewFactory =>
 	(parentElement: SVGElement, stepContext: StepContext<Step>, viewContext: StepComponentViewContext): StepComponentView => {
 		const { step } = stepContext;
-		const g = Dom.svg('g', {
-			class: `sqd-step-task sqd-type-${step.type}`
-		});
+		const g = ComponentDom.stepG('task', step.type, step.id);
 		parentElement.appendChild(g);
 
 		const boxHeight = cfg.paddingY * 2 + cfg.iconSize;
