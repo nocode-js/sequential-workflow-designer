@@ -4,9 +4,10 @@ import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
 import { ScrollBoxView } from './scrollbox-view';
 import { ToolboxItem } from './toolbox-item';
+import { I18n } from '../designer-configuration';
 
 export class ToolboxView {
-	public static create(parent: HTMLElement, api: ToolboxApi): ToolboxView {
+	public static create(parent: HTMLElement, api: ToolboxApi, i18n: I18n): ToolboxView {
 		const root = Dom.element('div', {
 			class: 'sqd-toolbox'
 		});
@@ -17,7 +18,7 @@ export class ToolboxView {
 		const headerTitle = Dom.element('div', {
 			class: 'sqd-toolbox-header-title'
 		});
-		headerTitle.innerText = 'Toolbox';
+		headerTitle.innerText = i18n('toolbox.title', 'Toolbox');
 
 		const body = Dom.element('div', {
 			class: 'sqd-toolbox-body'
@@ -26,7 +27,7 @@ export class ToolboxView {
 		const filterInput = Dom.element('input', {
 			class: 'sqd-toolbox-filter',
 			type: 'text',
-			placeholder: 'Search...'
+			placeholder: i18n('toolbox.search', 'Search...')
 		});
 
 		root.appendChild(header);

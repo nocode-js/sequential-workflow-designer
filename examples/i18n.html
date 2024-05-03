@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<title>🇪🇸 I18n Example - Sequential Workflow Designer</title>
+		<meta property="og:title" content="❎ I18n Example - Sequential Workflow Designer" />
+		<meta
+			name="description"
+			content="This example demonstrates the internationalization (i18n) feature of Sequential Workflow Designer."
+		/>
+		<meta
+			property="og:description"
+			content="This example demonstrates the internationalization (i18n) feature of Sequential Workflow Designer."
+		/>
+		<meta property="og:image" content="https://nocode-js.com/img/social-card.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png" />
+
+		<link rel="icon" href="./assets/favicon.ico" />
+		<link rel="stylesheet" href="./assets/common.css" />
+		<style>
+			html,
+			body {
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden;
+			}
+			body {
+				display: flex;
+				flex-direction: column;
+			}
+			#designer {
+				flex: 1;
+			}
+			.sqd-editor {
+				padding: 15px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="title-bar">
+			<div class="column flex-1 hidden-mobile">
+				<h1>🇪🇸 I18n Example</h1>
+			</div>
+
+			<div class="column">
+				Select language:
+				<select id="language">
+					<option value="es">🇪🇸 Spanish</option>
+					<option value="en">🇬🇧 English</option>
+				</select>
+			</div>
+			<div class="column text-end flex-1">
+				<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+			</div>
+		</header>
+
+		<div id="designer"></div>
+
+		<script src="./assets/lib.js"></script>
+		<script src="./assets/i18n.js"></script>
+	</body>
+</html>

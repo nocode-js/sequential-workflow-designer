@@ -1,6 +1,6 @@
 import { DefinitionValidator } from './core/definition-validator';
 import { IconProvider } from './core/icon-provider';
-import { StepsConfiguration, ValidatorConfiguration } from './designer-configuration';
+import { I18n, StepsConfiguration, ValidatorConfiguration } from './designer-configuration';
 import { PlaceholderController } from './designer-extension';
 import { DesignerState } from './designer-state';
 import { Services } from './services';
@@ -13,13 +13,14 @@ export class ComponentContext {
 		validatorConfiguration: ValidatorConfiguration | undefined,
 		state: DesignerState,
 		stepExtensionResolver: StepExtensionResolver,
+		i18n: I18n,
 		services: Services
 	): ComponentContext {
 		const validator = new DefinitionValidator(validatorConfiguration, state);
 		const iconProvider = new IconProvider(stepsConfiguration);
 		const placeholderController = services.placeholderController.create();
 		const stepComponentFactory = new StepComponentFactory(stepExtensionResolver);
-		return new ComponentContext(validator, iconProvider, placeholderController, stepComponentFactory, services);
+		return new ComponentContext(validator, iconProvider, placeholderController, stepComponentFactory, i18n, services);
 	}
 
 	private constructor(
@@ -27,6 +28,7 @@ export class ComponentContext {
 		public readonly iconProvider: IconProvider,
 		public readonly placeholderController: PlaceholderController,
 		public readonly stepComponentFactory: StepComponentFactory,
+		public readonly i18n: I18n,
 		public readonly services: Services
 	) {}
 }

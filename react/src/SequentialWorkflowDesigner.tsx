@@ -16,7 +16,8 @@ import {
 	ValidatorConfiguration,
 	RootEditorProvider,
 	StepEditorProvider,
-	KeyboardConfiguration
+	KeyboardConfiguration,
+	I18n
 } from 'sequential-workflow-designer';
 import { RootEditorWrapperContext } from './RootEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -56,6 +57,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	controller?: SequentialWorkflowDesignerController;
 	customActionHandler?: CustomActionHandler;
 	extensions?: DesignerExtension[];
+	i18n?: I18n;
 }
 
 export function SequentialWorkflowDesigner<TDefinition extends Definition>(props: SequentialWorkflowDesignerProps<TDefinition>) {
@@ -87,13 +89,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const contextMenu = props.contextMenu;
 	const keyboard = props.keyboard;
 	const extensions = props.extensions;
-
-	if (props.controlBar === undefined) {
-		throw new Error('The "controlBar" property is not set');
-	}
-	if ((props as { globalEditor?: object }).globalEditor) {
-		throw new Error('The "globalEditor" property is renamed to "rootEditor"');
-	}
+	const i18n = props.i18n;
 
 	function forwardDefinition() {
 		if (designerRef.current) {
@@ -240,6 +236,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 					: false,
 			customActionHandler: customActionHandlerRef.current && customActionHandler,
 			extensions,
+			i18n,
 			isReadonly
 		});
 		if (controllerRef.current) {
@@ -285,7 +282,8 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		controlBar,
 		steps,
 		validator,
-		extensions
+		extensions,
+		i18n
 	]);
 
 	useEffect(() => {

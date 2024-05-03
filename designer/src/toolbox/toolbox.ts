@@ -2,12 +2,13 @@ import { ToolboxApi } from '../api';
 import { ToolboxGroupData } from './toolbox-data-provider';
 import { UiComponent } from '../designer-extension';
 import { ToolboxView } from './toolbox-view';
+import { I18n } from '../designer-configuration';
 
 export class Toolbox implements UiComponent {
-	public static create(root: HTMLElement, api: ToolboxApi): Toolbox {
+	public static create(root: HTMLElement, api: ToolboxApi, i18n: I18n): Toolbox {
 		const allGroups = api.getAllGroups();
 
-		const view = ToolboxView.create(root, api);
+		const view = ToolboxView.create(root, api, i18n);
 
 		const toolbox = new Toolbox(view, api, allGroups);
 		toolbox.render();

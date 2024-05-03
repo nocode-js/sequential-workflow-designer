@@ -6,6 +6,7 @@ export class StepComponentViewContextFactory {
 	public static create<S extends Step>(stepContext: StepContext<S>, componentContext: ComponentContext): StepComponentViewContext {
 		return {
 			getStepIconUrl: () => componentContext.iconProvider.getIconUrl(stepContext.step),
+			getStepName: () => componentContext.i18n(`step.${stepContext.step.type}.name`, stepContext.step.name),
 			createSequenceComponent: (parentElement: SVGElement, sequence: Sequence) => {
 				const sequenceContext: SequenceContext = {
 					sequence,
@@ -15,7 +16,8 @@ export class StepComponentViewContextFactory {
 				};
 				return componentContext.services.sequenceComponent.create(parentElement, sequenceContext, componentContext);
 			},
-			createPlaceholderForArea: componentContext.services.placeholder.createForArea.bind(componentContext.services.placeholder)
+			createPlaceholderForArea: componentContext.services.placeholder.createForArea.bind(componentContext.services.placeholder),
+			i18n: componentContext.i18n
 		};
 	}
 }

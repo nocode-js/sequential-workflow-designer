@@ -1,3 +1,21 @@
+## 0.20.0
+
+This version introduces the localization feature. Now you can localize the designer to any language you want.
+
+```js
+const configuration = {
+  i18n: (key, defaultValue) => {
+    if (currentLang === 'pl') {
+      if (key === 'controlBar.undo') {
+        return 'Cofnij';
+      }
+    }
+    return defaultValue;
+  }
+  // ...
+};
+```
+
 ## 0.19.4
 
 This version adds the data-step-id attribute to the root `<g>` elements of step components on the canvas. This attribute contains the ID of the step, enabling the use of CSS selectors to style step components [#135](https://github.com/nocode-js/sequential-workflow-designer/issues/135).

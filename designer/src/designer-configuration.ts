@@ -77,9 +77,16 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	 * @description Custom generator of unique identifiers.
 	 */
 	uidGenerator?: UidGenerator;
+
+	/**
+	 * @description Custom translation function.
+	 */
+	i18n?: I18n;
 }
 
 export type UidGenerator = () => string;
+
+export type I18n = (key: string, defaultValue: string) => string;
 
 export type CustomActionHandler = (
 	action: CustomAction,

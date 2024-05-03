@@ -1,9 +1,13 @@
 import { IconProvider } from '../core/icon-provider';
 import { StepTypeValidator } from '../core/step-type-validator';
-import { StepDefinition, ToolboxConfiguration } from '../designer-configuration';
+import { I18n, StepDefinition, ToolboxConfiguration } from '../designer-configuration';
 
 export class ToolboxDataProvider {
-	public constructor(private readonly iconProvider: IconProvider, private readonly configuration: ToolboxConfiguration | false) {}
+	public constructor(
+		private readonly iconProvider: IconProvider,
+		private readonly i18n: I18n,
+		private readonly configuration: ToolboxConfiguration | false
+	) {}
 
 	public getAllGroups(): ToolboxGroupData[] {
 		if (!this.configuration) {
@@ -21,7 +25,8 @@ export class ToolboxDataProvider {
 		StepTypeValidator.validate(step.type);
 
 		const iconUrl = this.iconProvider.getIconUrl(step);
-		const label = this.configuration && this.configuration.labelProvider ? this.configuration.labelProvider(step) : step.name;
+		const rawLabel = this.configuration && this.configuration.labelProvider ? this.configuration.labelProvider(step) : step.name;
+		const label = this.i18n(`toolbox.item.${step.type}.label`, rawLabel);
 		const description =
 			this.configuration && this.configuration.descriptionProvider ? this.configuration.descriptionProvider(step) : label;
 		const lowerCaseLabel = label.toLowerCase();

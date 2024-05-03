@@ -1,26 +1,22 @@
 import { EditorApi } from '../api';
 import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
-import { EditorsConfiguration } from '../designer-configuration';
+import { EditorsConfiguration, I18n } from '../designer-configuration';
 import { Editor } from './editor';
 
 export class SmartEditorView {
-	public static create(parent: HTMLElement, api: EditorApi, configuration: EditorsConfiguration): SmartEditorView {
+	public static create(parent: HTMLElement, api: EditorApi, i18n: I18n, configuration: EditorsConfiguration): SmartEditorView {
 		const root = Dom.element('div', {
 			class: 'sqd-smart-editor'
 		});
 
 		const toggle = Dom.element('div', {
 			class: 'sqd-smart-editor-toggle',
-			title: 'Toggle editor'
+			title: i18n('smartEditor.toggle', 'Toggle editor')
 		});
 
 		parent.appendChild(toggle);
 		parent.appendChild(root);
-
-		if ((configuration as { globalEditorProvider?: object }).globalEditorProvider) {
-			throw new Error('globalEditorProvider is renamed to rootEditorProvider');
-		}
 
 		const editor = Editor.create(
 			root,
