@@ -54,7 +54,7 @@ export class StepComponent implements Component {
 				? {
 						type: ClickCommandType.selectStep,
 						component: this
-				  }
+					}
 				: viewResult;
 		}
 		return null;

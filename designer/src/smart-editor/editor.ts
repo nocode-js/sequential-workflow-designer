@@ -36,7 +36,10 @@ export class Editor {
 		return new Editor(view, renderer);
 	}
 
-	private constructor(private readonly view: EditorView, private readonly renderer: EditorRenderer) {}
+	private constructor(
+		private readonly view: EditorView,
+		private readonly renderer: EditorRenderer
+	) {}
 
 	public destroy() {
 		this.view.destroy();

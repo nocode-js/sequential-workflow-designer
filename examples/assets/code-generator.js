@@ -48,7 +48,7 @@ class Steps {
 				to
 			},
 			sequence: sequence || []
-		}
+		};
 	}
 }
 
@@ -58,7 +58,7 @@ class CodeGenerator {
 		switch (step.type) {
 			case 'setNumber':
 				variables.add(props.targetVarName);
-				return `${props.targetVarName} = ${props.value};\r\n`
+				return `${props.targetVarName} = ${props.value};\r\n`;
 			case 'assignVar':
 				variables.add(props.targetVarName);
 				variables.add(props.sourceVarName);
@@ -72,9 +72,11 @@ class CodeGenerator {
 				return `${props.targetVarName} += ${props.sourceVarName};\r\n`;
 			case 'loop':
 				variables.add(props.varName);
-				return `for (${props.varName} = ${props.from}; ${props.varName} < ${props.to}; ${props.varName}++) {\r\n` +
+				return (
+					`for (${props.varName} = ${props.from}; ${props.varName} < ${props.to}; ${props.varName}++) {\r\n` +
 					this.generateSequence(step.sequence, variables).replace(/(.*)\r\n/g, '  $1\r\n') +
-					'}\r\n';
+					'}\r\n'
+				);
 		}
 		throw new Error(`Not supported step: ${step.type}`);
 	}
@@ -105,7 +107,10 @@ class CodeGenerator {
 function canPlaceStep(step, parentSequence) {
 	const parentSteps = designer.getStepParents(parentSequence);
 
-	console.log('parent steps', parentSteps.map(s => typeof s === 'string' ? s : s.name));
+	console.log(
+		'parent steps',
+		parentSteps.map(s => (typeof s === 'string' ? s : s.name))
+	);
 
 	if (step.type === 'loop' && parentSteps.length >= 2) {
 		alert('Max depth is 2');
@@ -146,9 +151,7 @@ class Editors {
 			const input = item.querySelector('input');
 			input.value = step.properties[propName];
 			input.addEventListener('input', () => {
-				const value = isNumberProp
-					? parseInt(input.value)
-					: input.value;
+				const value = isNumberProp ? parseInt(input.value) : input.value;
 				step.properties[propName] = value;
 				editorContext.notifyPropertiesChanged();
 			});
@@ -205,13 +208,13 @@ const configuration = {
 		canMoveStep: (_, step, targetSequence) => {
 			return canPlaceStep(step, targetSequence);
 		},
-		canDeleteStep: (step) => {
+		canDeleteStep: step => {
 			return confirm(`Are you sure? (${step.name})`);
 		}
 	},
 
 	validator: {
-		step: (step) => {
+		step: step => {
 			return Object.keys(step.properties).every(name => {
 				const value = step.properties[name];
 				return value === 0 || Boolean(value);
@@ -226,7 +229,7 @@ const configuration = {
 		rootEditorProvider: Editors.createRootEditor,
 		stepEditorProvider: Editors.createStepEditor
 	},
-	controlBar: true,
+	controlBar: true
 };
 
 const startDefinition = {

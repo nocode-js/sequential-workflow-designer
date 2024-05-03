@@ -21,7 +21,11 @@ export class Badges {
 		return new Badges(g, position, badges);
 	}
 
-	private constructor(private readonly g: SVGGElement, private readonly position: Vector, private readonly badges: (Badge | null)[]) {}
+	private constructor(
+		private readonly g: SVGGElement,
+		private readonly position: Vector,
+		private readonly badges: (Badge | null)[]
+	) {}
 
 	public update(result: BadgesResult) {
 		const count = this.badges.length;

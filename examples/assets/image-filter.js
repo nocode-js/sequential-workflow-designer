@@ -8,7 +8,7 @@ function loadImage(url) {
 		};
 		image.onerror = e => {
 			console.error(e);
-		}
+		};
 		image.src = url;
 	});
 }
@@ -109,19 +109,17 @@ const configuration = {
 
 	steps: {
 		iconUrlProvider: () => {
-			return `./assets/icon-filter.svg`
-		},
+			return `./assets/icon-filter.svg`;
+		}
 	},
 
 	editors: false,
-	controlBar: true,
+	controlBar: true
 };
 
 const startDefinition = {
 	properties: {},
-	sequence: [
-		createTaskStep('00000000000000000000000000000001', 'contrast', 'Contrast')
-	]
+	sequence: [createTaskStep('00000000000000000000000000000001', 'contrast', 'Contrast')]
 };
 
 const placeholder = document.getElementById('designer');

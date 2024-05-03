@@ -36,7 +36,10 @@ export class RectPlaceholderView implements PlaceholderView {
 		return new RectPlaceholderView(rect, g);
 	}
 
-	private constructor(public readonly rect: SVGElement, public readonly g: SVGGElement) {}
+	private constructor(
+		public readonly rect: SVGElement,
+		public readonly g: SVGGElement
+	) {}
 
 	public setIsHover(isHover: boolean) {
 		Dom.toggleClass(this.g, isHover, 'sqd-hover');

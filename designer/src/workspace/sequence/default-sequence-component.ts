@@ -10,7 +10,10 @@ export class DefaultSequenceComponent implements SequenceComponent {
 		return new DefaultSequenceComponent(view, view.hasOutput());
 	}
 
-	private constructor(public readonly view: DefaultSequenceComponentView, public readonly hasOutput: boolean) {}
+	private constructor(
+		public readonly view: DefaultSequenceComponentView,
+		public readonly hasOutput: boolean
+	) {}
 
 	public resolveClick(click: ClickDetails): ClickCommand | null {
 		for (const component of this.view.components) {

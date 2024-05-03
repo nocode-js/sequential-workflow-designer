@@ -1,7 +1,6 @@
 /* global window, screen, document, console, requestAnimationFrame, StateMachine, StateMachineSteps, sequentialWorkflowDesigner */
 
 class Renderer {
-
 	static create(width, height, context, particles) {
 		const renderer = new Renderer(width, height, context, particles);
 
@@ -33,9 +32,7 @@ class Renderer {
 			p.x = (p.x + this.width) % this.width;
 			p.y = (p.y + this.height) % this.height;
 
-			const gradient = this.context.createLinearGradient(
-				p.x, p.y - r / 2,
-				p.x, p.y + r / 2);
+			const gradient = this.context.createLinearGradient(p.x, p.y - r / 2, p.x, p.y + r / 2);
 			gradient.addColorStop(0, p.colorA);
 			gradient.addColorStop(1, p.colorB);
 
@@ -53,7 +50,6 @@ class Renderer {
 }
 
 class Particle {
-
 	constructor(x, y, colorA, colorB, definition) {
 		this.colorA = colorA;
 		this.colorB = colorB;
@@ -98,7 +94,7 @@ class Particle {
 				this.reset();
 			},
 
-			executeStep: (step) => {
+			executeStep: step => {
 				switch (step.type) {
 					case 'move':
 						this.executeMoveStep(step);
@@ -164,7 +160,6 @@ function createEditor(titleText, properties) {
 }
 
 class Steps {
-
 	static createMove(speed, name) {
 		return StateMachineSteps.createTaskStep(name, 'move', { speed });
 	}
@@ -179,7 +174,6 @@ class Steps {
 }
 
 class Popup {
-
 	static create(particle) {
 		const popup = document.getElementById('popup');
 		popup.classList.remove('hidden');
@@ -205,18 +199,18 @@ class Popup {
 			},
 			steps: {
 				iconUrlProvider: () => {
-					return `./assets/icon-task.svg`
+					return `./assets/icon-task.svg`;
 				}
 			},
 			editors: {
-				rootEditorProvider: (definition) => {
+				rootEditorProvider: definition => {
 					return createEditor('Edit start state', definition.properties);
 				},
-				stepEditorProvider: (step) => {
+				stepEditorProvider: step => {
 					return createEditor('Edit step ' + step.name, step.properties);
 				}
 			},
-			controlBar: true,
+			controlBar: true
 		});
 
 		popupCloseButton.addEventListener('click', () => {
@@ -234,7 +228,6 @@ class Popup {
 }
 
 class ControlPanel {
-
 	static create(particles) {
 		const placeholder = document.getElementById('control-panel');
 		for (const p of particles) {
@@ -256,36 +249,29 @@ window.addEventListener('load', () => {
 	const context = canvas.getContext('2d');
 
 	const redDefinition = {
-		sequence: [
-			Steps.createMove(100, 'move slow'),
-			Steps.createRotate(90, 'turn right')
-		],
+		sequence: [Steps.createMove(100, 'move slow'), Steps.createRotate(90, 'turn right')],
 		properties: {
 			interval: 400
 		}
 	};
 
 	const blueDefinition = {
-		sequence: [
-			Steps.createWait()
-		],
+		sequence: [Steps.createWait()],
 		properties: {
 			interval: 400
 		}
 	};
 
 	const greenDefinition = {
-		sequence: [
-			Steps.createWait()
-		],
+		sequence: [Steps.createWait()],
 		properties: {
 			interval: 400
 		}
 	};
 
-	const red = new Particle(width * .2, height * .2, 'red', '#FF5827', redDefinition);
-	const green = new Particle(width * .5, height * .5, 'green', '#00A77E', blueDefinition);
-	const blue = new Particle(width * .8, height * .8, 'blue', '#1A7EFF', greenDefinition);
+	const red = new Particle(width * 0.2, height * 0.2, 'red', '#FF5827', redDefinition);
+	const green = new Particle(width * 0.5, height * 0.5, 'green', '#00A77E', blueDefinition);
+	const blue = new Particle(width * 0.8, height * 0.8, 'blue', '#1A7EFF', greenDefinition);
 	const particles = [red, green, blue];
 
 	particles.forEach(p => p.run());

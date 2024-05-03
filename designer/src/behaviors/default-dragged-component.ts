@@ -32,7 +32,10 @@ export class DefaultDraggedComponent implements DraggedComponent {
 		return new DefaultDraggedComponent(stepComponent.view.width, stepComponent.view.height);
 	}
 
-	private constructor(public readonly width: number, public readonly height: number) {}
+	private constructor(
+		public readonly width: number,
+		public readonly height: number
+	) {}
 
 	public destroy() {
 		// Nothing to destroy...

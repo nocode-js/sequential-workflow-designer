@@ -18,7 +18,10 @@ export class PlaceholderFinder {
 		br: Vector; // bottom right
 	}[];
 
-	private constructor(private readonly placeholders: Placeholder[], private readonly state: DesignerState) {}
+	private constructor(
+		private readonly placeholders: Placeholder[],
+		private readonly state: DesignerState
+	) {}
 
 	public find(vLt: Vector, vWidth: number, vHeight: number): Placeholder | undefined {
 		if (!this.cache) {

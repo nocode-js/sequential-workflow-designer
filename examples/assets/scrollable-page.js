@@ -21,7 +21,7 @@ function createSwitchStep(name) {
 		properties: {},
 		branches: {
 			true: [],
-			false: [],
+			false: []
 		}
 	};
 }
@@ -33,12 +33,7 @@ function createEditor(text) {
 }
 
 const definition = {
-	sequence: [
-		createTaskStep('Save e-mail'),
-		createTaskStep('Read file'),
-		createTaskStep('Delete file'),
-		createSwitchStep('Condition')
-	],
+	sequence: [createTaskStep('Save e-mail'), createTaskStep('Read file'), createTaskStep('Delete file'), createSwitchStep('Condition')],
 	properties: {}
 };
 const configuration = {
@@ -46,7 +41,9 @@ const configuration = {
 		groups: [
 			{
 				name: 'Test',
-				steps: Array(20).fill(null).map((_, i) => createTaskStep(`Task ${i}`))
+				steps: Array(20)
+					.fill(null)
+					.map((_, i) => createTaskStep(`Task ${i}`))
 			}
 		]
 	},
@@ -56,12 +53,12 @@ const configuration = {
 		rootEditorProvider: () => {
 			return createEditor('Please select any step.');
 		},
-		stepEditorProvider: (step) => {
+		stepEditorProvider: step => {
 			return createEditor(`Selected step: ${step.type}`);
 		}
 	},
 	controlBar: true,
-	keyboard: false,
+	keyboard: false
 };
 
 function init(placeholder) {

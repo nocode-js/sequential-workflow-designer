@@ -3,7 +3,10 @@ import { ValidatorConfiguration } from '../designer-configuration';
 import { DesignerState } from '../designer-state';
 
 export class DefinitionValidator {
-	public constructor(private readonly configuration: ValidatorConfiguration | undefined, private readonly state: DesignerState) {}
+	public constructor(
+		private readonly configuration: ValidatorConfiguration | undefined,
+		private readonly state: DesignerState
+	) {}
 
 	public validateStep(step: Step, parentSequence: Sequence): boolean {
 		if (this.configuration?.step) {

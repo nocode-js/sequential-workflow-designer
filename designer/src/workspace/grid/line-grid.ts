@@ -10,7 +10,10 @@ export class LineGrid implements Grid {
 		return new LineGrid(size, path);
 	}
 
-	private constructor(public readonly size: Vector, public readonly element: SVGPathElement) {}
+	private constructor(
+		public readonly size: Vector,
+		public readonly element: SVGPathElement
+	) {}
 
 	public setScale(_: number, scaledSize: Vector) {
 		Dom.attrs(this.element, {

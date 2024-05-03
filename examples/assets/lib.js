@@ -2,11 +2,7 @@
 
 function isTestEnv() {
 	const hostname = location.hostname.toLowerCase();
-	return (
-		hostname === 'localhost' ||
-		hostname === '127.0.0.1' ||
-		hostname.startsWith('192.168.')
-	);
+	return hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.');
 }
 
 function embedScript(url) {
@@ -17,9 +13,7 @@ function embedStylesheet(url) {
 	document.write(`<link href="${url}" rel="stylesheet">`);
 }
 
-const baseUrl = isTestEnv()
-	? '../designer'
-	: '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.20.0';
+const baseUrl = isTestEnv() ? '../designer' : '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.20.0';
 
 embedScript(`${baseUrl}/dist/index.umd.js`);
 embedStylesheet(`${baseUrl}/css/designer.css`);

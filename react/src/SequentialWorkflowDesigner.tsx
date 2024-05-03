@@ -219,7 +219,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 				? {
 						...toolbox,
 						isCollapsed: isToolboxCollapsed
-				  }
+					}
 				: false,
 			steps,
 			validator,
@@ -232,7 +232,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 							isCollapsed: isEditorCollapsed,
 							rootEditorProvider,
 							stepEditorProvider
-					  }
+						}
 					: false,
 			customActionHandler: customActionHandlerRef.current && customActionHandler,
 			extensions,

@@ -17,8 +17,8 @@ function createIfStep(id, _true, _false) {
 		type: 'if',
 		name: 'If',
 		branches: {
-			'true': _true,
-			'false': _false
+			true: _true,
+			false: _false
 		},
 		properties: {}
 	};
@@ -72,9 +72,13 @@ function appendPath(root, step) {
 	const parents = designer.getStepParents(step);
 	const path = document.createElement('div');
 	path.className = 'step-path';
-	path.innerText = 'Step path: ' + parents.map((parent) => {
-		return typeof parent === 'string' ? parent : parent.name;
-	}).join('/');
+	path.innerText =
+		'Step path: ' +
+		parents
+			.map(parent => {
+				return typeof parent === 'string' ? parent : parent.name;
+			})
+			.join('/');
 	root.appendChild(path);
 }
 
@@ -94,7 +98,7 @@ function loadState() {
 	}
 	return {
 		definition: getStartDefinition()
-	}
+	};
 }
 
 function saveState() {
@@ -111,11 +115,7 @@ const configuration = {
 	undoStack: initialState.undoStack,
 
 	toolbox: {
-		groups: [
-			toolboxGroup('Main'),
-			toolboxGroup('File system'),
-			toolboxGroup('E-mail')
-		]
+		groups: [toolboxGroup('Main'), toolboxGroup('File system'), toolboxGroup('E-mail')]
 	},
 
 	controlBar: true,
@@ -123,12 +123,12 @@ const configuration = {
 	steps: {
 		isDuplicable: () => true,
 		iconUrlProvider: (_, type) => {
-			return `./assets/icon-${type}.svg`
-		},
+			return `./assets/icon-${type}.svg`;
+		}
 	},
 
 	validator: {
-		step: (step) => {
+		step: step => {
 			return !step.properties['isInvalid'];
 		}
 	},
@@ -149,13 +149,13 @@ const configuration = {
 		stepEditorProvider: (step, editorContext, _definition, isReadonly) => {
 			const root = document.createElement('div');
 
-			appendCheckbox(root, 'Is invalid', isReadonly, !!step.properties['isInvalid'], (checked) => {
+			appendCheckbox(root, 'Is invalid', isReadonly, !!step.properties['isInvalid'], checked => {
 				step.properties['isInvalid'] = checked;
 				editorContext.notifyPropertiesChanged();
 			});
 
 			if (step.type === 'if') {
-				appendCheckbox(root, 'Catch branch', isReadonly, !!step.branches['catch'], (checked) => {
+				appendCheckbox(root, 'Catch branch', isReadonly, !!step.branches['catch'], checked => {
 					if (checked) {
 						step.branches['catch'] = [];
 					} else {
@@ -175,9 +175,10 @@ function getStartDefinition() {
 	return {
 		properties: {},
 		sequence: [
-			createIfStep('00000000000000000000000000000001',
-				[ createTaskStep('00000000000000000000000000000002', 'save', 'Save file', { isInvalid: true }) ],
-				[ createTaskStep('00000000000000000000000000000003', 'text', 'Send email') ]
+			createIfStep(
+				'00000000000000000000000000000001',
+				[createTaskStep('00000000000000000000000000000002', 'save', 'Save file', { isInvalid: true })],
+				[createTaskStep('00000000000000000000000000000003', 'text', 'Send email')]
 			),
 			createContainerStep('00000000000000000000000000000004', [
 				createTaskStep('00000000000000000000000000000005', 'task', 'Create task')
@@ -188,7 +189,7 @@ function getStartDefinition() {
 
 const placeholder = document.getElementById('designer');
 designer = sequentialWorkflowDesigner.Designer.create(placeholder, initialState.definition, configuration);
-designer.onDefinitionChanged.subscribe((newDefinition) => {
+designer.onDefinitionChanged.subscribe(newDefinition => {
 	refreshValidationStatus();
 	saveState();
 	console.log('the definition has changed', newDefinition);

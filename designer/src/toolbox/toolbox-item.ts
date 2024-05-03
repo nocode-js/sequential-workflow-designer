@@ -15,7 +15,10 @@ export class ToolboxItem {
 		return item;
 	}
 
-	private constructor(private readonly step: StepDefinition, private readonly api: ToolboxApi) {}
+	private constructor(
+		private readonly step: StepDefinition,
+		private readonly api: ToolboxApi
+	) {}
 
 	private onTouchstart(e: TouchEvent) {
 		e.preventDefault();

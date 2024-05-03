@@ -30,8 +30,8 @@ const configuration = {
 
 	steps: {
 		iconUrlProvider: () => {
-			return `./assets/icon-task.svg`
-		},
+			return `./assets/icon-task.svg`;
+		}
 	},
 
 	editors: {
@@ -40,7 +40,7 @@ const configuration = {
 			editor.innerText = 'Please select any step.';
 			return editor;
 		},
-		stepEditorProvider: (step) => {
+		stepEditorProvider: step => {
 			const editor = document.createElement('div');
 
 			if (step.type === 'readUserInput') {
@@ -55,8 +55,7 @@ const configuration = {
 
 				editor.appendChild(label);
 				editor.appendChild(input);
-			}
-			else if (step.type === 'sendEmail') {
+			} else if (step.type === 'sendEmail') {
 				const propNames = ['ifReqisterEquals', 'email'];
 				for (let propName of propNames) {
 					const label = document.createElement('label');
@@ -77,7 +76,7 @@ const configuration = {
 		}
 	},
 
-	controlBar: true,
+	controlBar: true
 };
 
 const startDefinition = {
@@ -101,8 +100,7 @@ function runWorkflow() {
 	for (let step of definition.sequence) {
 		if (step.type === 'readUserInput') {
 			register = prompt(step.properties['question']);
-		}
-		else if (step.type === 'sendEmail') {
+		} else if (step.type === 'sendEmail') {
 			if (step.properties['ifReqisterEquals'] === register) {
 				alert(`E-mail sent to ${step.properties['email']}`);
 			}

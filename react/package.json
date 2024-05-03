@@ -60,7 +60,7 @@
 		"eslint": "^8.30.0",
 		"jest": "^29.3.1",
 		"jest-environment-jsdom": "^29.3.1",
-		"prettier": "^2.8.2",
+		"prettier": "^3.2.5",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"sequential-workflow-designer": "^0.20.0",

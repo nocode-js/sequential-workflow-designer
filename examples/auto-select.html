@@ -1,53 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-	<title>🌀 Auto-Select Example - Sequential Workflow Designer</title>
-	<meta property="og:title" content="🌀 Auto-Select Example - Sequential Workflow Designer">
-	<meta name="description" content="This example demonstrates the auto-select feature of Sequential Workflow Designer.">
-	<meta property="og:description" content="This example demonstrates the auto-select feature of Sequential Workflow Designer.">
-	<meta property="og:image" content="https://nocode-js.com/img/social-card.png">
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png">
+		<title>🌀 Auto-Select Example - Sequential Workflow Designer</title>
+		<meta property="og:title" content="🌀 Auto-Select Example - Sequential Workflow Designer" />
+		<meta name="description" content="This example demonstrates the auto-select feature of Sequential Workflow Designer." />
+		<meta property="og:description" content="This example demonstrates the auto-select feature of Sequential Workflow Designer." />
+		<meta property="og:image" content="https://nocode-js.com/img/social-card.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png" />
 
-	<link rel="icon" href="./assets/favicon.ico">
-	<link rel="stylesheet" href="./assets/common.css">
-	<style>
-		html, body {width: 100vw; height: 100vh; overflow: hidden;}
-		body {display: flex; flex-direction: column;}
-		main {display: flex; flex: 1;}
-		main .example {display: flex; flex: 1; margin: 10px; flex-direction: column;}
-		main .example .title {text-align: center; padding: 5px 0 15px;}
-		main .example .placeholder {flex: 1; border: 1px solid #e8e8e8;}
-		main .example .viewport {text-align: center; padding: 15px 0 10px;}
-	</style>
-</head>
-<body>
-	<header class="title-bar">
-		<div class="column">
-			<h1>🌀 Auto-Select Example</h1>
-		</div>
-		<div class="column text-end flex-1">
-			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
-		</div>
-	</header>
+		<link rel="icon" href="./assets/favicon.ico" />
+		<link rel="stylesheet" href="./assets/common.css" />
+		<style>
+			html,
+			body {
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden;
+			}
+			body {
+				display: flex;
+				flex-direction: column;
+			}
+			main {
+				display: flex;
+				flex: 1;
+			}
+			main .example {
+				display: flex;
+				flex: 1;
+				margin: 10px;
+				flex-direction: column;
+			}
+			main .example .title {
+				text-align: center;
+				padding: 5px 0 15px;
+			}
+			main .example .placeholder {
+				flex: 1;
+				border: 1px solid #e8e8e8;
+			}
+			main .example .viewport {
+				text-align: center;
+				padding: 15px 0 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="title-bar">
+			<div class="column">
+				<h1>🌀 Auto-Select Example</h1>
+			</div>
+			<div class="column text-end flex-1">
+				<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+			</div>
+		</header>
 
-	<main>
-		<div class="example">
-			<div class="title">Auto-select after drop is <strong>✅ enabled</strong></div>
-			<div class="placeholder" id="designer1"></div>
-			<div class="viewport" id="viewport1"></div>
-		</div>
-		<div class="example">
-			<div class="title">Auto-select after drop is <strong>❌ disabled</strong></div>
-			<div class="placeholder" id="designer2"></div>
-			<div class="viewport" id="viewport2"></div>
-		</div>
-	</main>
+		<main>
+			<div class="example">
+				<div class="title">Auto-select after drop is <strong>✅ enabled</strong></div>
+				<div class="placeholder" id="designer1"></div>
+				<div class="viewport" id="viewport1"></div>
+			</div>
+			<div class="example">
+				<div class="title">Auto-select after drop is <strong>❌ disabled</strong></div>
+				<div class="placeholder" id="designer2"></div>
+				<div class="viewport" id="viewport2"></div>
+			</div>
+		</main>
 
-	<script src="./assets/lib.js"></script>
-	<script src="./assets/auto-select.js"></script>
-</body>
+		<script src="./assets/lib.js"></script>
+		<script src="./assets/auto-select.js"></script>
+	</body>
 </html>

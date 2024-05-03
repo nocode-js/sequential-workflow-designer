@@ -35,5 +35,9 @@ export class LabelView {
 		return new LabelView(g, width, cfg.height);
 	}
 
-	public constructor(public readonly g: SVGGElement, public readonly width: number, public readonly height: number) {}
+	public constructor(
+		public readonly g: SVGGElement,
+		public readonly width: number,
+		public readonly height: number
+	) {}
 }

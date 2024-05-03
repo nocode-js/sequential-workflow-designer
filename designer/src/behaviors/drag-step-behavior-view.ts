@@ -16,7 +16,10 @@ export class DragStepView {
 		return new DragStepView(component, layer);
 	}
 
-	private constructor(public readonly component: DraggedComponent, private readonly layer: HTMLElement) {}
+	private constructor(
+		public readonly component: DraggedComponent,
+		private readonly layer: HTMLElement
+	) {}
 
 	public setPosition(position: Vector) {
 		this.layer.style.top = position.y + 'px';

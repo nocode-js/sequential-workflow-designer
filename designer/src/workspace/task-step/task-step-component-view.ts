@@ -44,12 +44,12 @@ export const createTaskStepComponentViewFactory =
 		const icon = iconUrl
 			? Dom.svg('image', {
 					href: iconUrl
-			  })
+				})
 			: Dom.svg('rect', {
 					class: 'sqd-step-task-empty-icon',
 					rx: cfg.radius,
 					ry: cfg.radius
-			  });
+				});
 		Dom.attrs(icon, {
 			x: cfg.paddingLeft,
 			y: cfg.paddingY,

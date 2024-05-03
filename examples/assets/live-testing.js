@@ -3,7 +3,6 @@
 let designer;
 
 class Steps {
-
 	static createMathStep(type, name, varName, val) {
 		return StateMachineSteps.createTaskStep(name, type, {
 			var: varName,
@@ -18,17 +17,26 @@ class Steps {
 	}
 
 	static createIfStep(varName, val, name, trueSteps, falseSteps) {
-		return StateMachineSteps.createIfStep(name, {
-			var: varName,
-			val
-		}, trueSteps, falseSteps);
+		return StateMachineSteps.createIfStep(
+			name,
+			{
+				var: varName,
+				val
+			},
+			trueSteps,
+			falseSteps
+		);
 	}
 
 	static createLoopStep(varName, val, name, steps) {
-		return StateMachineSteps.createLoopStep(name, {
-			var: varName,
-			val
-		}, steps);
+		return StateMachineSteps.createLoopStep(
+			name,
+			{
+				var: varName,
+				val
+			},
+			steps
+		);
 	}
 }
 
@@ -51,7 +59,6 @@ function onRunClicked() {
 
 	const definition = designer.getDefinition();
 	const sm = new StateMachine(definition, definition.properties['speed'], {
-
 		executeStep: (step, data) => {
 			if (step.type === 'text') {
 				document.getElementById('console').innerText += step.properties['text'] + '\r\n';
@@ -80,7 +87,7 @@ function onRunClicked() {
 		executeIf: (step, data) => {
 			var varName = step.properties['var'];
 			createVariableIfNeeded(varName, data);
-			return (data[varName] > step.properties['val']);
+			return data[varName] > step.properties['val'];
 		},
 
 		initLoopStep: (step, data) => {
@@ -129,11 +136,10 @@ function appendTextField(parent, label, isReadonly, startValue, set) {
 function rootEditorProvider(definition, editorContext, isReadonly) {
 	const container = document.createElement('span');
 	appendTitle(container, 'State machine config');
-	appendTextField(container, 'Speed (ms)', isReadonly, definition.properties['speed'],
-		v => {
-			definition.properties['speed'] = parseInt(v, 10);
-			editorContext.notifyPropertiesChanged();
-		});
+	appendTextField(container, 'Speed (ms)', isReadonly, definition.properties['speed'], v => {
+		definition.properties['speed'] = parseInt(v, 10);
+		editorContext.notifyPropertiesChanged();
+	});
 	return container;
 }
 
@@ -141,31 +147,27 @@ function stepEditorProvider(step, editorContext, _definition, isReadonly) {
 	const container = document.createElement('div');
 	appendTitle(container, 'Step ' + step.type);
 
-	appendTextField(container, 'Name', isReadonly, step.name,
-		v => {
-			step.name = v;
-			editorContext.notifyNameChanged();
-		});
+	appendTextField(container, 'Name', isReadonly, step.name, v => {
+		step.name = v;
+		editorContext.notifyNameChanged();
+	});
 	if (step.properties['var'] !== undefined) {
-		appendTextField(container, 'Variable', isReadonly, step.properties['var'],
-			v => {
-				step.properties['var'] = v;
-				editorContext.notifyPropertiesChanged();
-			});
+		appendTextField(container, 'Variable', isReadonly, step.properties['var'], v => {
+			step.properties['var'] = v;
+			editorContext.notifyPropertiesChanged();
+		});
 	}
 	if (step.properties['val']) {
-		appendTextField(container, 'Value', isReadonly, step.properties['val'],
-			v => {
-				step.properties['val'] = parseInt(v, 10);
-				editorContext.notifyPropertiesChanged();
-			});
+		appendTextField(container, 'Value', isReadonly, step.properties['val'], v => {
+			step.properties['val'] = parseInt(v, 10);
+			editorContext.notifyPropertiesChanged();
+		});
 	}
 	if (step.properties['text']) {
-		appendTextField(container, 'Text', isReadonly, step.properties['text'],
-			v => {
-				step.properties['text'] = v;
-				editorContext.notifyPropertiesChanged();
-			});
+		appendTextField(container, 'Text', isReadonly, step.properties['text'], v => {
+			step.properties['text'] = v;
+			editorContext.notifyPropertiesChanged();
+		});
 	}
 	return container;
 }
@@ -187,10 +189,7 @@ const configuration = {
 			},
 			{
 				name: 'Logic',
-				steps: [
-					Steps.createIfStep('x', 10, 'If'),
-					Steps.createLoopStep('index', 3, 'Loop')
-				]
+				steps: [Steps.createIfStep('x', 10, 'If'), Steps.createLoopStep('index', 3, 'Loop')]
 			}
 		]
 	},
@@ -200,14 +199,14 @@ const configuration = {
 			const supportedIcons = ['if', 'loop', 'text'];
 			const fileName = supportedIcons.includes(type) ? type : 'task';
 			return `./assets/icon-${fileName}.svg`;
-		},
+		}
 	},
 
 	validator: {
-		step: (step) => {
+		step: step => {
 			return Object.keys(step.properties).every(n => !!step.properties[n]);
 		},
-		root: (definition) => {
+		root: definition => {
 			return definition.properties['speed'] > 0;
 		}
 	},
@@ -217,7 +216,7 @@ const configuration = {
 		stepEditorProvider
 	},
 
-	controlBar: true,
+	controlBar: true
 };
 
 const startDefinition = {
@@ -229,9 +228,7 @@ const startDefinition = {
 		Steps.createLoopStep('index', 4, 'Loop', [
 			Steps.createMathStep('add', 'x += 3', 'x', 3),
 			Steps.createMathStep('mul', 'x *= 2', 'x', 2),
-			Steps.createIfStep('x', 50, 'If x > 50',
-				[ Steps.createTextStep('yes!') ],
-				[ Steps.createTextStep('no...')]),
+			Steps.createIfStep('x', 50, 'If x > 50', [Steps.createTextStep('yes!')], [Steps.createTextStep('no...')])
 		]),
 		Steps.createTextStep('the end')
 	]

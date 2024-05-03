@@ -1,47 +1,75 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-	<title>🌅 Image Filter Example - Sequential Workflow Designer</title>
-	<meta property="og:title" content="🌅 Image Filter Example - Sequential Workflow Designer">
-	<meta name="description" content="How to use Sequential Workflow Designer to create a simple image filter.">
-	<meta property="og:description" content="How to use Sequential Workflow Designer to create a simple image filter.">
-	<meta property="og:image" content="https://nocode-js.com/img/social-card.png">
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png">
+		<title>🌅 Image Filter Example - Sequential Workflow Designer</title>
+		<meta property="og:title" content="🌅 Image Filter Example - Sequential Workflow Designer" />
+		<meta name="description" content="How to use Sequential Workflow Designer to create a simple image filter." />
+		<meta property="og:description" content="How to use Sequential Workflow Designer to create a simple image filter." />
+		<meta property="og:image" content="https://nocode-js.com/img/social-card.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png" />
 
-	<link rel="icon" href="./assets/favicon.ico">
-	<link rel="stylesheet" href="./assets/common.css">
-	<style>
-		html, body {width: 100vw; height: 100vh; overflow: hidden; background: #171717;}
-		body {display: flex; flex-direction: column;}
-		.main {flex: 1; position: relative;}
+		<link rel="icon" href="./assets/favicon.ico" />
+		<link rel="stylesheet" href="./assets/common.css" />
+		<style>
+			html,
+			body {
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden;
+				background: #171717;
+			}
+			body {
+				display: flex;
+				flex-direction: column;
+			}
+			.main {
+				flex: 1;
+				position: relative;
+			}
 
-		#designer {position: absolute; left: 0; top: 0; width: 100vw; height: 50vh;}
-		#result {position: absolute; left: 0; bottom: 0; width: 100vw; height: 50vh; display: flex; align-items: center;}
-		#preview {margin: 0 auto;}
-	</style>
-</head>
-<body>
-	<header class="title-bar">
-		<div class="column">
-			<h1>🌅 Image Filter Example</h1>
+			#designer {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100vw;
+				height: 50vh;
+			}
+			#result {
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				width: 100vw;
+				height: 50vh;
+				display: flex;
+				align-items: center;
+			}
+			#preview {
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="title-bar">
+			<div class="column">
+				<h1>🌅 Image Filter Example</h1>
+			</div>
+			<div class="column text-end flex-1">
+				<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
+			</div>
+		</header>
+
+		<div class="main">
+			<div id="designer"></div>
+			<div id="result">
+				<canvas id="preview"></canvas>
+			</div>
 		</div>
-		<div class="column text-end flex-1">
-			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
-		</div>
-	</header>
 
-	<div class="main">
-		<div id="designer"></div>
-		<div id="result">
-			<canvas id="preview"></canvas>
-		</div>
-	</div>
-
-	<script src="./assets/lib.js"></script>
-	<script src="./assets/image-filter.js"></script>
-</body>
+		<script src="./assets/lib.js"></script>
+		<script src="./assets/image-filter.js"></script>
+	</body>
 </html>

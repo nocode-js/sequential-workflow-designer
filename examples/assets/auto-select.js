@@ -22,7 +22,7 @@ function init(id, isAutoSelectDisabled) {
 			]
 		},
 		editors: false,
-		controlBar: true,
+		controlBar: true
 	};
 
 	const startDefinition = {
@@ -45,7 +45,7 @@ function init(id, isAutoSelectDisabled) {
 		const x = Math.round(vp.position.x);
 		const y = Math.round(vp.position.x);
 		const scale = vp.scale.toFixed(2);
-		viewport.innerText = `Viewport x: ${x}, y: ${y}, scale: ${scale}`
+		viewport.innerText = `Viewport x: ${x}, y: ${y}, scale: ${scale}`;
 	}
 
 	designer.onViewportChanged.subscribe(reloadViewport);

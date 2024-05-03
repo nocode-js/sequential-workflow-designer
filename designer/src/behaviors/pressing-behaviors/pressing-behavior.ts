@@ -9,7 +9,10 @@ export class PressingBehavior implements Behavior {
 		return new PressingBehavior(clickedElement, handler);
 	}
 
-	private constructor(private readonly clickedElement: Element, private readonly handler: PressingBehaviorHandler) {}
+	private constructor(
+		private readonly clickedElement: Element,
+		private readonly handler: PressingBehaviorHandler
+	) {}
 
 	public onStart() {
 		// Nothing...

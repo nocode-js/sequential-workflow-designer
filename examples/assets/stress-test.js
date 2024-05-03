@@ -20,8 +20,8 @@ class Steps {
 			type: 'if',
 			name: 'Switch',
 			branches: {
-				'true': trueSteps,
-				'false': falseSteps
+				true: trueSteps,
+				false: falseSteps
 			},
 			properties: {}
 		};
@@ -32,11 +32,11 @@ const configuration = {
 	steps: {
 		iconUrlProvider: (_, type) => {
 			return `./assets/icon-${type}.svg`;
-		},
+		}
 	},
 	toolbox: false,
 	editors: false,
-	controlBar: true,
+	controlBar: true
 };
 
 const LIMIT = 256;

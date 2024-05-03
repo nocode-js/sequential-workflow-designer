@@ -1,61 +1,127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-	<title>🤖 Code Generator Example - Sequential Workflow Designer</title>
-	<meta property="og:title" content="🤖 Code Generator Example - Sequential Workflow Designer">
-	<meta name="description" content="How you can use Sequential Workflow Designer to generate code.">
-	<meta property="og:description" content="How you can use Sequential Workflow Designer to generate code.">
-	<meta property="og:image" content="https://nocode-js.com/img/social-card.png">
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png">
+		<title>🤖 Code Generator Example - Sequential Workflow Designer</title>
+		<meta property="og:title" content="🤖 Code Generator Example - Sequential Workflow Designer" />
+		<meta name="description" content="How you can use Sequential Workflow Designer to generate code." />
+		<meta property="og:description" content="How you can use Sequential Workflow Designer to generate code." />
+		<meta property="og:image" content="https://nocode-js.com/img/social-card.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png" />
 
-	<link rel="icon" href="./assets/favicon.ico">
-	<style>
-		body {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
-		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden;}
-		#designer {position: absolute; top: 0; left: 0; bottom: 0; right: 42%;}
-		#output {position: absolute; top: 0; right: 0; bottom: 0; left: 58%; padding: 10px; box-sizing: border-box; color: #FFF; background: #151515;}
-		#output #code {color: silver;}
-		#output #result {color: yellow;}
-		#output a {color: #FFF;}
-		#output a:hover {text-decoration: none;}
+		<link rel="icon" href="./assets/favicon.ico" />
+		<style>
+			body {
+				font:
+					14px/1.3em 'Open Sans',
+					Arial,
+					Verdana,
+					Serif;
+			}
+			html,
+			body {
+				width: 100vw;
+				height: 100vh;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			#designer {
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 42%;
+			}
+			#output {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 58%;
+				padding: 10px;
+				box-sizing: border-box;
+				color: #fff;
+				background: #151515;
+			}
+			#output #code {
+				color: silver;
+			}
+			#output #result {
+				color: yellow;
+			}
+			#output a {
+				color: #fff;
+			}
+			#output a:hover {
+				text-decoration: none;
+			}
 
-		.sqd-root-editor {padding: 10px;}
+			.sqd-root-editor {
+				padding: 10px;
+			}
 
-		.sqd-editor h3 {margin: 0; padding: 10px;}
-		.sqd-editor p {margin: 0; padding: 10px;}
-		.sqd-editor p label {display: block; padding: 0 0 5px;}
-		.sqd-editor input {width: 100%; box-sizing: border-box; border: 1px solid silver; padding: 6px; border-radius: 5px;}
+			.sqd-editor h3 {
+				margin: 0;
+				padding: 10px;
+			}
+			.sqd-editor p {
+				margin: 0;
+				padding: 10px;
+			}
+			.sqd-editor p label {
+				display: block;
+				padding: 0 0 5px;
+			}
+			.sqd-editor input {
+				width: 100%;
+				box-sizing: border-box;
+				border: 1px solid silver;
+				padding: 6px;
+				border-radius: 5px;
+			}
 
-		/* types */
+			/* types */
 
-		.sqd-theme-light .sqd-toolbox-item.sqd-type-setNumber {background: #E6F2FF;}
-		.sqd-step-task.sqd-type-setNumber .sqd-step-task-rect {fill: #E6F2FF !important;}
+			.sqd-theme-light .sqd-toolbox-item.sqd-type-setNumber {
+				background: #e6f2ff;
+			}
+			.sqd-step-task.sqd-type-setNumber .sqd-step-task-rect {
+				fill: #e6f2ff !important;
+			}
 
-		.sqd-theme-light .sqd-toolbox-item.sqd-type-assignVar {background: #FFEEE6;}
-		.sqd-step-task.sqd-type-assignVar .sqd-step-task-rect {fill: #FFEEE6 !important;}
+			.sqd-theme-light .sqd-toolbox-item.sqd-type-assignVar {
+				background: #ffeee6;
+			}
+			.sqd-step-task.sqd-type-assignVar .sqd-step-task-rect {
+				fill: #ffeee6 !important;
+			}
 
-		.sqd-theme-light .sqd-toolbox-item.sqd-type-addVar {background: #E6FFE6;}
-		.sqd-step-task.sqd-type-addVar .sqd-step-task-rect {fill: #E6FFE6 !important;}
-	</style>
-</head>
-<body>
-	<div id="designer"></div>
+			.sqd-theme-light .sqd-toolbox-item.sqd-type-addVar {
+				background: #e6ffe6;
+			}
+			.sqd-step-task.sqd-type-addVar .sqd-step-task-rect {
+				fill: #e6ffe6 !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="designer"></div>
 
-	<div id="output">
-		<h4>🤖 Code Generator | <a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a></h4>
+		<div id="output">
+			<h4>🤖 Code Generator | <a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a></h4>
 
-		<pre id="code"></pre>
+			<pre id="code"></pre>
 
-		<h4>Result</h4>
+			<h4>Result</h4>
 
-		<pre id="result"></pre>
-	</div>
+			<pre id="result"></pre>
+		</div>
 
-	<script src="./assets/lib.js"></script>
-	<script src="./assets/code-generator.js"></script>
-</body>
+		<script src="./assets/lib.js"></script>
+		<script src="./assets/code-generator.js"></script>
+	</body>
 </html>

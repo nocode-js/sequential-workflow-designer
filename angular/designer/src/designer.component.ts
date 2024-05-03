@@ -111,7 +111,10 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Output()
 	public readonly onIsEditorCollapsedChanged = new EventEmitter<boolean>();
 
-	public constructor(private readonly ngZone: NgZone, private readonly applicationRef: ApplicationRef) {}
+	public constructor(
+		private readonly ngZone: NgZone,
+		private readonly applicationRef: ApplicationRef
+	) {}
 
 	public ngAfterViewInit() {
 		this.attach();
@@ -205,14 +208,14 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 							isCollapsed: this.isEditorCollapsed,
 							rootEditorProvider: this.rootEditorProvider,
 							stepEditorProvider: this.stepEditorProvider
-					  },
+						},
 				steps: this.stepsConfiguration,
 				validator: this.validatorConfiguration,
 				toolbox: this.toolboxConfiguration
 					? {
 							isCollapsed: this.isToolboxCollapsed,
 							...this.toolboxConfiguration
-					  }
+						}
 					: false,
 				controlBar: this.controlBar,
 				contextMenu: this.contextMenu,

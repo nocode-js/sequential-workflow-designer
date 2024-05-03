@@ -18,9 +18,7 @@ function createEditor(text) {
 
 function install(placeholder, theme) {
 	const definition = {
-		sequence: [
-			createStep('00000000000000000000000000000000')
-		],
+		sequence: [createStep('00000000000000000000000000000000')],
 		properties: {}
 	};
 	const configuration = {
@@ -29,9 +27,7 @@ function install(placeholder, theme) {
 			groups: [
 				{
 					name: 'Tasks',
-					steps: [
-						createStep(null)
-					]
+					steps: [createStep(null)]
 				}
 			]
 		},
@@ -52,12 +48,12 @@ function install(placeholder, theme) {
 			rootEditorProvider: () => {
 				return createEditor('Please select any step.');
 			},
-			stepEditorProvider: (step) => {
+			stepEditorProvider: step => {
 				return createEditor(`Selected step: ${step.type}`);
 			}
 		},
 
-		controlBar: true,
+		controlBar: true
 	};
 	sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
 }

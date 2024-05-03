@@ -3,7 +3,10 @@ import { DefinitionWalker } from '../definition';
 import { DesignerState } from '../designer-state';
 
 export class PathBarApi {
-	public constructor(private readonly state: DesignerState, private readonly definitionWalker: DefinitionWalker) {}
+	public constructor(
+		private readonly state: DesignerState,
+		private readonly definitionWalker: DefinitionWalker
+	) {}
 
 	public readonly onStateChanged = race(0, this.state.onFolderPathChanged, this.state.onDefinitionChanged);
 

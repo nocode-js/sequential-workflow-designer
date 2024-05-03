@@ -1,56 +1,120 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-	<title>⏩ Live Testing Example - Sequential Workflow Designer</title>
-	<meta property="og:title" content="⏩ Live Testing Example - Sequential Workflow Designer">
-	<meta name="description" content="Run your workflow in real time with nice animation.">
-	<meta property="og:description" content="Run your workflow in real time with nice animation.">
-	<meta property="og:image" content="https://nocode-js.com/img/social-card.png">
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png">
+		<title>⏩ Live Testing Example - Sequential Workflow Designer</title>
+		<meta property="og:title" content="⏩ Live Testing Example - Sequential Workflow Designer" />
+		<meta name="description" content="Run your workflow in real time with nice animation." />
+		<meta property="og:description" content="Run your workflow in real time with nice animation." />
+		<meta property="og:image" content="https://nocode-js.com/img/social-card.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png" />
 
-	<link rel="icon" href="./assets/favicon.ico">
-	<style>
-		body, input, button {font: 14px/1.3em 'Open Sans', Arial, Verdana, Serif;}
-		html, body {width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden;}
+		<link rel="icon" href="./assets/favicon.ico" />
+		<style>
+			body,
+			input,
+			button {
+				font:
+					14px/1.3em 'Open Sans',
+					Arial,
+					Verdana,
+					Serif;
+			}
+			html,
+			body {
+				width: 100vw;
+				height: 100vh;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
 
-		#designer {position: absolute; left: 0; top: 0; width: 70vw; height: 100vh;}
-		.sqd-editor {padding: 10px;}
-		.sqd-editor p {margin: 0; padding: 0 0 10px;}
-		.sqd-editor label {display: block; padding: 0 0 10px;}
-		.sqd-editor input[type=text] {width: 100%; box-sizing: border-box; border: 1px solid silver; padding: 6px; border-radius: 5px;}
-		.sqd-editor input[type=text]:read-only {background: #f4f4f4; border-color: #ddd; color: #999;}
+			#designer {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 70vw;
+				height: 100vh;
+			}
+			.sqd-editor {
+				padding: 10px;
+			}
+			.sqd-editor p {
+				margin: 0;
+				padding: 0 0 10px;
+			}
+			.sqd-editor label {
+				display: block;
+				padding: 0 0 10px;
+			}
+			.sqd-editor input[type='text'] {
+				width: 100%;
+				box-sizing: border-box;
+				border: 1px solid silver;
+				padding: 6px;
+				border-radius: 5px;
+			}
+			.sqd-editor input[type='text']:read-only {
+				background: #f4f4f4;
+				border-color: #ddd;
+				color: #999;
+			}
 
-		#result {position: absolute; right: 0; bottom: 0; width: 30vw; height: 100vh; padding: 10px; box-sizing: border-box; color: #FFF; background: #2C18DF;}
-		#result a.github {color: #FFF; display: inline-block; margin: 6px 8px;}
-		#result a.github:hover {text-decoration: none;}
-		#result button {padding: 10px; color: #000; background: #FFF; border: 0; border-radius: 5px; cursor: pointer;}
-		#result button:hover {opacity: 0.8;}
-	</style>
-</head>
-<body>
-	<div id="designer"></div>
+			#result {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				width: 30vw;
+				height: 100vh;
+				padding: 10px;
+				box-sizing: border-box;
+				color: #fff;
+				background: #2c18df;
+			}
+			#result a.github {
+				color: #fff;
+				display: inline-block;
+				margin: 6px 8px;
+			}
+			#result a.github:hover {
+				text-decoration: none;
+			}
+			#result button {
+				padding: 10px;
+				color: #000;
+				background: #fff;
+				border: 0;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+			#result button:hover {
+				opacity: 0.8;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="designer"></div>
 
-	<div id="result">
-		<p>
-			<button id="run">Run 🚀</button>
-			<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank" class="github">GitHub</a>
-		</p>
+		<div id="result">
+			<p>
+				<button id="run">Run 🚀</button>
+				<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank" class="github">GitHub</a>
+			</p>
 
-		<h5>Variables</h5>
+			<h5>Variables</h5>
 
-		<pre id="variables"></pre>
+			<pre id="variables"></pre>
 
-		<h5>Console</h5>
+			<h5>Console</h5>
 
-		<pre id="console"></pre>
-	</div>
+			<pre id="console"></pre>
+		</div>
 
-	<script src="./assets/lib.js"></script>
-	<script src="./assets/state-machine.js"></script>
-	<script src="./assets/live-testing.js"></script>
-</body>
+		<script src="./assets/lib.js"></script>
+		<script src="./assets/state-machine.js"></script>
+		<script src="./assets/live-testing.js"></script>
+	</body>
 </html>

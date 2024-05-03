@@ -32,7 +32,10 @@ export class ScrollBoxView {
 		startScrollTop: number;
 	};
 
-	public constructor(private readonly root: HTMLElement, private readonly viewport: HTMLElement) {}
+	public constructor(
+		private readonly root: HTMLElement,
+		private readonly viewport: HTMLElement
+	) {}
 
 	public setContent(element: HTMLElement) {
 		if (this.content) {

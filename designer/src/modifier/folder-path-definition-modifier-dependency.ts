@@ -3,7 +3,10 @@ import { DesignerState } from '../designer-state';
 import { StateModifierDependency } from './state-modifier-dependency';
 
 export class FolderPathDefinitionModifierDependency implements StateModifierDependency {
-	public constructor(private readonly state: DesignerState, private readonly definitionWalker: DefinitionWalker) {}
+	public constructor(
+		private readonly state: DesignerState,
+		private readonly definitionWalker: DefinitionWalker
+	) {}
 
 	public update() {
 		for (let index = 0; index < this.state.folderPath.length; index++) {

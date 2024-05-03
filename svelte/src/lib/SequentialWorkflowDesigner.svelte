@@ -112,13 +112,13 @@
 							}
 							throw new Error('No root editor provided');
 						}
-				  }
+					}
 				: false;
 		const _toolbox: ToolboxConfiguration | false = toolbox
 			? {
 					...toolbox,
 					isCollapsed: isToolboxCollapsed
-			  }
+				}
 			: false;
 
 		const d = Designer.create(placeholder, definition, {

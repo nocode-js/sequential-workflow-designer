@@ -4,13 +4,13 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"prettier": "prettier --check ./i18n.html ./assets/i18n.js",
-		"prettier:fix": "prettier --write ./i18n.html ./assets/i18n.js",
+		"prettier": "prettier --check ./*.html ./*/*.js",
+		"prettier:fix": "prettier --write ./*.html ./*/*.js",
 		"build": "echo \"No build yet\"",
 		"test:single": "echo \"No tests yet\"",
 		"eslint": "echo \"No eslint yet\""
 	},
 	"devDependencies": {
-		"prettier": "^2.8.2"
+		"prettier": "^3.2.5"
 	}
 }

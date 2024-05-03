@@ -12,7 +12,10 @@ export class KeyboardDaemon implements Daemon {
 		return controller;
 	}
 
-	private constructor(private readonly controlBarApi: ControlBarApi, private readonly configuration: KeyboardConfiguration) {}
+	private constructor(
+		private readonly controlBarApi: ControlBarApi,
+		private readonly configuration: KeyboardConfiguration
+	) {}
 
 	private readonly onKeyUp = (e: KeyboardEvent) => {
 		const action = detectAction(e);

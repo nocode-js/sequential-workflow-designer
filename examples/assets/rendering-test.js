@@ -32,7 +32,7 @@ function createContainerStep(name, sequence) {
 		type: 'container',
 		name,
 		sequence,
-		properties: {},
+		properties: {}
 	};
 }
 
@@ -40,39 +40,39 @@ const switchLabelsDefinition = {
 	properties: {},
 	sequence: [
 		createSwitchStep('short', {
-			'$': [],
-			'!': [],
+			$: [],
+			'!': []
 		}),
 		createSwitchStep('short', {
-			'$': [],
+			$: [],
 			'quite long branch name for switch step': [createTaskStep('@')]
 		}),
 		createSwitchStep('super long description for switch step super long description', {
-			'$': [],
+			$: [],
 			'#': []
 		}),
 		createSwitchStep('super long description for switch step super long description', {
-			'$': [],
+			$: [],
 			'quite long branch name for switch step quite long branch name for switch step': []
 		}),
 		createSwitchStep('@', {
-			'$': [],
+			$: [],
 			'#': [createTaskStep('super long description super long description')]
 		}),
 		createSwitchStep('@', {
-			'1': [],
-			'2': [],
-			'3': []
+			1: [],
+			2: [],
+			3: []
 		}),
 		createSwitchStep('@', {
 			'#': [
 				createSwitchStep('@', {
 					'some long branch name': [],
-					'@': [],
+					'@': []
 				})
 			],
-			'@': [],
-		}),
+			'@': []
+		})
 	]
 };
 
@@ -99,7 +99,7 @@ const containerLabelsDefinition = {
 				'some super long branch name': [],
 				'!': []
 			})
-		]),
+		])
 	]
 };
 
@@ -107,26 +107,22 @@ const sequenceSizeDefinition = {
 	properties: {},
 	sequence: [
 		createSwitchStep('$', {
-			'true': [
+			true: [
 				createTaskStep('Lorem Ipsum is simply dummy text of the printing and typesetting industry'),
 				createSwitchStep('$', {
-					'true': [
-						createTaskStep('Lorem Ipsum is simply dummy text of the printing and typesetting industry')
-					],
-					'false': []
+					true: [createTaskStep('Lorem Ipsum is simply dummy text of the printing and typesetting industry')],
+					false: []
 				})
 			],
-			'false': [
-				createTaskStep('@')
-			]
-		}),
+			false: [createTaskStep('@')]
+		})
 	]
 };
 
 const testCases = {
 	'Switch labels': switchLabelsDefinition,
 	'Container labels': containerLabelsDefinition,
-	'Sequence size': sequenceSizeDefinition,
+	'Sequence size': sequenceSizeDefinition
 };
 let designer;
 
@@ -149,14 +145,14 @@ function initDesigner(testCaseName) {
 				editor.innerText = 'Please select any step.';
 				return editor;
 			},
-			stepEditorProvider: (step) => {
+			stepEditorProvider: step => {
 				const editor = document.createElement('div');
 				editor.innerText = `Component type: ${step.componentType}`;
 				return editor;
 			}
 		},
 
-		controlBar: true,
+		controlBar: true
 	};
 
 	const placeholder = document.getElementById('designer');
@@ -170,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const startTestCaseName = localStorage[localStorageKey] || testCaseNames[0];
 
 	const testCasesSelect = document.getElementById('testCases');
-	testCaseNames.forEach((name) => {
+	testCaseNames.forEach(name => {
 		const option = document.createElement('option');
 		option.innerText = name;
 		testCasesSelect.appendChild(option);

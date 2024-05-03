@@ -1,12 +1,11 @@
 /* global setTimeout */
 
 function uid() {
-	return Math.ceil(Math.random() * 10**16).toString(16);
+	return Math.ceil(Math.random() * 10 ** 16).toString(16);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class StateMachine {
-
 	isInterrupted = false;
 
 	constructor(definition, speed, handler) {
@@ -34,9 +33,7 @@ class StateMachine {
 
 	executeIfStep(step) {
 		const value = this.handler.executeIf(step, this.data);
-		const branchName = value
-			? 'true'
-			: 'false';
+		const branchName = value ? 'true' : 'false';
 
 		this.callstack.push({
 			sequence: step.branches[branchName],
@@ -126,7 +123,6 @@ class StateMachine {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class StateMachineSteps {
-
 	static createIfStep(name, properties, trueSteps, falseSteps) {
 		return {
 			id: uid(),
@@ -134,8 +130,8 @@ class StateMachineSteps {
 			type: 'if',
 			name,
 			branches: {
-				'true': trueSteps || [],
-				'false': falseSteps || []
+				true: trueSteps || [],
+				false: falseSteps || []
 			},
 			properties
 		};

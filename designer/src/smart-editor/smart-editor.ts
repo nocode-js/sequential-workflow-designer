@@ -16,7 +16,11 @@ export class SmartEditor implements UiComponent {
 		return editor;
 	}
 
-	private constructor(private readonly view: SmartEditorView, private editorApi: EditorApi, private workspaceApi: WorkspaceApi) {}
+	private constructor(
+		private readonly view: SmartEditorView,
+		private editorApi: EditorApi,
+		private workspaceApi: WorkspaceApi
+	) {}
 
 	private onToggleClicked() {
 		this.editorApi.toggleIsCollapsed();

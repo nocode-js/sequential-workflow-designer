@@ -23,7 +23,11 @@ export class RegionView {
 		return new RegionView(lines, totalWidth, height);
 	}
 
-	public constructor(private readonly lines: SVGLineElement[], private readonly width: number, private readonly height: number) {}
+	public constructor(
+		private readonly lines: SVGLineElement[],
+		private readonly width: number,
+		private readonly height: number
+	) {}
 
 	public getClientPosition(): Vector {
 		return getAbsolutePosition(this.lines[0]);

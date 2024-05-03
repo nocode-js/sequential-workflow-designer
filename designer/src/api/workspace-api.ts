@@ -4,7 +4,10 @@ import { DesignerState } from '../designer-state';
 import { WorkspaceControllerWrapper } from '../workspace/workspace-controller';
 
 export class WorkspaceApi {
-	public constructor(private readonly state: DesignerState, private readonly workspaceController: WorkspaceControllerWrapper) {}
+	public constructor(
+		private readonly state: DesignerState,
+		private readonly workspaceController: WorkspaceControllerWrapper
+	) {}
 
 	public getCanvasPosition(): Vector {
 		return this.workspaceController.getCanvasPosition();

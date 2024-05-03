@@ -6,11 +6,14 @@ function createStep(name, properties) {
 		componentType: 'task',
 		type: 'task',
 		name,
-		properties: Object.assign({
-			selectable: true,
-			draggable: true,
-			deletable: true
-		}, properties)
+		properties: Object.assign(
+			{
+				selectable: true,
+				draggable: true,
+				deletable: true
+			},
+			properties
+		)
 	};
 }
 
@@ -26,7 +29,7 @@ function createLoopStep() {
 			deletable: true
 		},
 		sequence: []
-	}
+	};
 }
 
 function createEditor(text) {
@@ -36,7 +39,7 @@ function createEditor(text) {
 }
 
 function serializeStepParents(parents) {
-	return '/' + parents.map(s => Array.isArray(s) ? 'sequence' : s.name).join('/');
+	return '/' + parents.map(s => (Array.isArray(s) ? 'sequence' : s.name)).join('/');
 }
 
 function load() {
@@ -48,7 +51,7 @@ function load() {
 			createStep('isDraggable=true', { draggable: true }),
 			createStep('isDraggable=false', { draggable: false }),
 			createStep('isDeletable=true', { deletable: true }),
-			createStep('isDeletable=false', { deletable: false }),
+			createStep('isDeletable=false', { deletable: false })
 		],
 		properties: {}
 	};
@@ -56,26 +59,24 @@ function load() {
 	const configuration = {
 		toolbox: {
 			isCollapsed: true,
-			labelProvider: (step) => `** ${step.name} **`,
-			descriptionProvider: (step) => `This is a description for ${step.name}`,
+			labelProvider: step => `** ${step.name} **`,
+			descriptionProvider: step => `This is a description for ${step.name}`,
 			groups: [
 				{
 					name: 'Steps',
-					steps: [
-						createLoopStep()
-					]
+					steps: [createLoopStep()]
 				}
 			]
 		},
 
 		steps: {
-			isSelectable: (step) => {
+			isSelectable: step => {
 				return step.properties.selectable;
 			},
 			canInsertStep: (step, _, targetIndex) => {
 				return window.confirm(`Can insert "${step.name}" (${targetIndex})?`);
 			},
-			isDraggable: (step) => {
+			isDraggable: step => {
 				return step.properties.draggable;
 			},
 			canMoveStep: (sourceSequence, step, targetSequence, index) => {
@@ -89,18 +90,18 @@ function load() {
 				];
 				return window.confirm(message.join('\n'));
 			},
-			isDeletable: (step) => {
+			isDeletable: step => {
 				return step.properties.deletable;
 			},
-			isDuplicable: (step) => {
+			isDuplicable: step => {
 				return step.properties.deletable;
 			},
-			canDeleteStep: (step) => {
+			canDeleteStep: step => {
 				return window.confirm(`Can delete "${step.name}"?`);
 			},
 			iconUrlProvider: () => {
 				return './assets/icon-task.svg';
-			},
+			}
 		},
 
 		editors: {
@@ -108,11 +109,11 @@ function load() {
 			rootEditorProvider: () => {
 				return createEditor('Please select any step.');
 			},
-			stepEditorProvider: (step) => {
+			stepEditorProvider: step => {
 				return createEditor(`Selected step: ${step.type}`);
 			}
 		},
-		controlBar: true,
+		controlBar: true
 	};
 	designer = sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
 	designer.onIsToolboxCollapsedChanged.subscribe(is => console.log(`isToolboxCollapsed = ${is}`));

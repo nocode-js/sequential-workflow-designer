@@ -32,7 +32,11 @@ export class SmartEditorView {
 
 	private toggleIcon?: SVGElement;
 
-	private constructor(private readonly root: HTMLElement, private readonly toggle: HTMLElement, private readonly editor: Editor) {}
+	private constructor(
+		private readonly root: HTMLElement,
+		private readonly toggle: HTMLElement,
+		private readonly editor: Editor
+	) {}
 
 	public bindToggleClick(handler: () => void) {
 		this.toggle.addEventListener(
