@@ -31,6 +31,7 @@ jobs:
         run: |
             mkdir _deploy
             cp -R examples _deploy
+			rm -rf _deploy/examples/node_modules
             cp -R demos/angular-app/dist/angular-app _deploy/angular-app
             cp -R demos/react-app/build _deploy/react-app
             cp -R demos/svelte-app/build _deploy/svelte-app
