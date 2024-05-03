@@ -2,7 +2,10 @@ body,
 input,
 textarea,
 button {
-	font: 13px/1.3em Arial, Verdana, Serif;
+	font:
+		13px/1.3em Arial,
+		Verdana,
+		Serif;
 }
 body {
 	margin: 0;
