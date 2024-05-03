@@ -29,6 +29,7 @@ export class Workspace implements WorkspaceController {
 
 		const contextMenuItemsBuilder = new ContextMenuItemsBuilder(
 			api.viewport,
+			api.i18n,
 			designerContext.stateModifier,
 			designerContext.state,
 			designerContext.services.contextMenu?.createItemsProvider

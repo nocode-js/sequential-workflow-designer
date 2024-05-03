@@ -7,7 +7,7 @@ describe('ToolboxView', () => {
 		const parent = Dom.element('div');
 		const api = createDesignerApiStub();
 
-		const view = ToolboxView.create(parent, api.toolbox);
+		const view = ToolboxView.create(parent, api.toolbox, api.i18n);
 
 		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);

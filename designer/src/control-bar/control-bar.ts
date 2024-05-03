@@ -6,7 +6,7 @@ import { DesignerApi } from '../api/designer-api';
 export class ControlBar implements UiComponent {
 	public static create(parent: HTMLElement, api: DesignerApi): UiComponent {
 		const isUndoRedoSupported = api.controlBar.isUndoRedoSupported();
-		const view = ControlBarView.create(parent, isUndoRedoSupported);
+		const view = ControlBarView.create(parent, isUndoRedoSupported, api.i18n);
 		const bar = new ControlBar(view, api.controlBar, isUndoRedoSupported);
 
 		view.bindResetButtonClick(() => bar.onResetButtonClicked());

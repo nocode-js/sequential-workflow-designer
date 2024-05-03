@@ -24,10 +24,12 @@ export const createSwitchStepComponentViewFactory =
 
 		const branchLabelViews = branchNames.map(branchName => {
 			const labelY = cfg.paddingTop + cfg.nameLabel.height + cfg.connectionHeight;
-			return LabelView.create(g, labelY, cfg.branchNameLabel, branchName, 'secondary');
+			const translatedBranchName = viewContext.i18n(`stepComponent.${step.type}.branchName`, branchName);
+			return LabelView.create(g, labelY, cfg.branchNameLabel, translatedBranchName, 'secondary');
 		});
 
-		const nameLabelView = LabelView.create(g, cfg.paddingTop, cfg.nameLabel, step.name, 'primary');
+		const name = viewContext.getStepName();
+		const nameLabelView = LabelView.create(g, cfg.paddingTop, cfg.nameLabel, name, 'primary');
 
 		let prevOffsetX = 0;
 		const branchSizes = branchComponents.map((component, i) => {

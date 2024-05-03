@@ -23,7 +23,7 @@ export const createTaskStepComponentViewFactory =
 			y: boxHeight / 2,
 			class: 'sqd-step-task-text'
 		});
-		text.textContent = step.name;
+		text.textContent = viewContext.getStepName();
 		g.appendChild(text);
 		const textWidth = Math.max(text.getBBox().width, cfg.minTextWidth);
 

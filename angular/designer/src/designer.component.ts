@@ -28,7 +28,8 @@ import {
 	StepsConfiguration,
 	ToolboxConfiguration,
 	UidGenerator,
-	ValidatorConfiguration
+	ValidatorConfiguration,
+	I18n
 } from 'sequential-workflow-designer';
 
 export interface RootEditorWrapper {
@@ -77,6 +78,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public keyboard?: boolean | KeyboardConfiguration;
 	@Input('extensions')
 	public extensions?: DesignerExtension[];
+	@Input('i18n')
+	public i18n?: I18n;
 	@Input('customActionHandler')
 	public customActionHandler?: CustomActionHandler;
 	@Input('isReadonly')
@@ -216,6 +219,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 				keyboard: this.keyboard,
 				extensions: this.extensions,
 				isReadonly: this.isReadonly,
+				i18n: this.i18n,
 				uidGenerator: this.uidGenerator,
 				customActionHandler
 			});

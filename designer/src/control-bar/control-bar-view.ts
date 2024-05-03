@@ -1,36 +1,37 @@
 import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
+import { I18n } from '../designer-configuration';
 
 export class ControlBarView {
-	public static create(parent: HTMLElement, isUndoRedoSupported: boolean): ControlBarView {
+	public static create(parent: HTMLElement, isUndoRedoSupported: boolean, i18n: I18n): ControlBarView {
 		const root = Dom.element('div', {
 			class: 'sqd-control-bar'
 		});
 
-		const resetButton = createButton(Icons.center, 'Reset view');
+		const resetButton = createButton(Icons.center, i18n('controlBar.resetView', 'Reset view'));
 		root.appendChild(resetButton);
 
-		const zoomInButton = createButton(Icons.zoomIn, 'Zoom in');
+		const zoomInButton = createButton(Icons.zoomIn, i18n('controlBar.zoomIn', 'Zoom in'));
 		root.appendChild(zoomInButton);
 
-		const zoomOutButton = createButton(Icons.zoomOut, 'Zoom out');
+		const zoomOutButton = createButton(Icons.zoomOut, i18n('controlBar.zoomOut', 'Zoom out'));
 		root.appendChild(zoomOutButton);
 
 		let undoButton: HTMLElement | null = null;
 		let redoButton: HTMLElement | null = null;
 
 		if (isUndoRedoSupported) {
-			undoButton = createButton(Icons.undo, 'Undo');
+			undoButton = createButton(Icons.undo, i18n('controlBar.undo', 'Undo'));
 			root.appendChild(undoButton);
-			redoButton = createButton(Icons.redo, 'Redo');
+			redoButton = createButton(Icons.redo, i18n('controlBar.redo', 'Redo'));
 			root.appendChild(redoButton);
 		}
 
-		const disableDragButton = createButton(Icons.move, 'Turn on/off drag and drop');
+		const disableDragButton = createButton(Icons.move, i18n('controlBar.turnOnOffDragAndDrop', 'Turn on/off drag and drop'));
 		disableDragButton.classList.add('sqd-disabled');
 		root.appendChild(disableDragButton);
 
-		const deleteButton = createButton(Icons.delete, 'Delete selected step');
+		const deleteButton = createButton(Icons.delete, i18n('controlBar.deleteSelectedStep', 'Delete selected step'));
 		deleteButton.classList.add('sqd-delete');
 		deleteButton.classList.add('sqd-hidden');
 		root.appendChild(deleteButton);

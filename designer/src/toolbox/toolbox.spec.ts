@@ -7,7 +7,7 @@ describe('Toolbox', () => {
 		const parent = Dom.element('div');
 		const api = createDesignerApiStub();
 
-		const item = Toolbox.create(parent, api.toolbox);
+		const item = Toolbox.create(parent, api.toolbox, api.i18n);
 
 		expect(item).toBeDefined();
 	});

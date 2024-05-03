@@ -4,6 +4,7 @@ import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { CustomActionController } from './custom-action-controller';
 import { ComponentType, Sequence, Step } from './definition';
+import { I18n } from './designer-configuration';
 import { Badge, Component, Placeholder, PlaceholderDirection, SequenceComponent, StepComponentView } from './workspace';
 
 export interface DesignerExtension {
@@ -33,6 +34,7 @@ export interface StepExtension<S extends Step = Step> {
 export type StepComponentViewFactory = StepExtension['createComponentView'];
 
 export interface StepComponentViewContext {
+	getStepName(): string;
 	getStepIconUrl(): string | null;
 	createSequenceComponent(parentElement: SVGElement, sequence: Sequence): SequenceComponent;
 	createPlaceholderForArea(
@@ -42,6 +44,7 @@ export interface StepComponentViewContext {
 		sequence: Sequence,
 		index: number
 	): Placeholder;
+	i18n: I18n;
 }
 
 export interface StepContext<S extends Step = Step> {

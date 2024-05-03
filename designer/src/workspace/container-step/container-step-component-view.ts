@@ -17,7 +17,8 @@ export const createContainerStepComponentViewFactory =
 		const g = ComponentDom.stepG('container', step.type, step.id);
 		parentElement.appendChild(g);
 
-		const labelView = LabelView.create(g, cfg.paddingTop, cfg.label, step.name, 'primary');
+		const name = viewContext.getStepName();
+		const labelView = LabelView.create(g, cfg.paddingTop, cfg.label, name, 'primary');
 		const sequenceComponent = viewContext.createSequenceComponent(g, step.sequence);
 
 		const halfOfWidestElement = labelView.width / 2;

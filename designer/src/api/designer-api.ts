@@ -7,13 +7,18 @@ import { ToolboxDataProvider } from '../toolbox/toolbox-data-provider';
 import { ViewportApi } from './viewport-api';
 import { WorkspaceApi } from './workspace-api';
 import { DefinitionWalker } from '../definition';
+import { I18n } from '../designer-configuration';
 
 export class DesignerApi {
 	public static create(context: DesignerContext): DesignerApi {
 		const workspace = new WorkspaceApi(context.state, context.workspaceController);
 		const viewportController = context.services.viewportController.create(workspace);
 		const viewport = new ViewportApi(context.workspaceController, viewportController);
-		const toolboxDataProvider = new ToolboxDataProvider(context.componentContext.iconProvider, context.configuration.toolbox);
+		const toolboxDataProvider = new ToolboxDataProvider(
+			context.componentContext.iconProvider,
+			context.i18n,
+			context.configuration.toolbox
+		);
 
 		return new DesignerApi(
 			ControlBarApi.create(context.state, context.historyController, context.stateModifier, viewport),
@@ -22,7 +27,8 @@ export class DesignerApi {
 			workspace,
 			viewport,
 			new PathBarApi(context.state, context.definitionWalker),
-			context.definitionWalker
+			context.definitionWalker,
+			context.i18n
 		);
 	}
 
@@ -33,6 +39,7 @@ export class DesignerApi {
 		public readonly workspace: WorkspaceApi,
 		public readonly viewport: ViewportApi,
 		public readonly pathBar: PathBarApi,
-		public readonly definitionWalker: DefinitionWalker
+		public readonly definitionWalker: DefinitionWalker,
+		public readonly i18n: I18n
 	) {}
 }

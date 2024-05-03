@@ -17,7 +17,8 @@
 		type CustomActionHandler,
 		type StepEditorProvider,
 		type RootEditorProvider,
-		type KeyboardConfiguration
+		type KeyboardConfiguration,
+		type I18n
 	} from 'sequential-workflow-designer';
 
 	const dispatch = createEventDispatcher<{
@@ -47,9 +48,10 @@
 	export let undoStackSize: number | undefined = undefined;
 	export let undoStack: UndoStack | undefined = undefined;
 	export let validator: ValidatorConfiguration | undefined = undefined;
-	export let uidGenerator: UidGenerator | undefined = undefined;
 	export let definitionWalker: DefinitionWalker | undefined = undefined;
 	export let extensions: DesignerExtension[] | undefined = undefined;
+	export let i18n: I18n | undefined = undefined;
+	export let uidGenerator: UidGenerator | undefined = undefined;
 	export let customActionHandler: CustomActionHandler | undefined = undefined;
 
 	/**
@@ -133,6 +135,7 @@
 			definitionWalker,
 			extensions,
 			isReadonly,
+			i18n,
 			uidGenerator,
 			customActionHandler
 		});

@@ -1,11 +1,12 @@
 import { ToolboxDataProvider } from './toolbox-data-provider';
 import { IconProvider } from '../core/icon-provider';
-import { StepDefinition } from '../designer-configuration';
+import { I18n, StepDefinition } from '../designer-configuration';
 
 describe('ToolboxDataProvider', () => {
 	const iconProvider = new IconProvider({
 		iconUrlProvider: (_, type) => `${type}.jpg`
 	});
+	const i18n: I18n = (_, defaultValue) => defaultValue;
 
 	const sendEmailStep = {
 		componentType: 'task',
@@ -28,13 +29,13 @@ describe('ToolboxDataProvider', () => {
 
 	describe('getAllGroups()', () => {
 		it('return empty array if configuration is false', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, false);
+			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, false);
 
 			expect(dataProvider.getAllGroups()).toEqual([]);
 		});
 
 		it('returns groups with correct labels and descriptions', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, {
+			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, {
 				groups
 			});
 
@@ -52,7 +53,7 @@ describe('ToolboxDataProvider', () => {
 		});
 
 		it('returns groups with correct labels and descriptions when custom providers are provided', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, {
+			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, {
 				groups,
 				labelProvider: reverseStepName,
 				descriptionProvider: step => `Description of ${step.name}`
@@ -74,7 +75,7 @@ describe('ToolboxDataProvider', () => {
 
 	describe('applyFilter()', () => {
 		it('filters by label', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, {
+			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, {
 				groups
 			});
 
@@ -97,7 +98,7 @@ describe('ToolboxDataProvider', () => {
 		});
 
 		it('filters by custom label', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, {
+			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, {
 				groups,
 				labelProvider: reverseStepName
 			});

@@ -4,7 +4,7 @@ import { ObjectCloner } from './core/object-cloner';
 import { CustomActionController } from './custom-action-controller';
 import { Definition, DefinitionWalker } from './definition';
 import { StateModifier } from './modifier/state-modifier';
-import { DesignerConfiguration } from './designer-configuration';
+import { DesignerConfiguration, I18n } from './designer-configuration';
 import { DesignerState } from './designer-state';
 import { HistoryController } from './history-controller';
 import { LayoutController } from './layout-controller';
@@ -33,6 +33,7 @@ export class DesignerContext {
 		const behaviorController = new BehaviorController();
 		const stepExtensionResolver = StepExtensionResolver.create(services);
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
+		const i18n: I18n = configuration.i18n ?? ((_, defaultValue) => defaultValue);
 		const stateModifier = StateModifier.create(definitionWalker, state, configuration);
 		const customActionController = new CustomActionController(configuration, state, stateModifier);
 
@@ -46,6 +47,7 @@ export class DesignerContext {
 			configuration.validator,
 			state,
 			stepExtensionResolver,
+			i18n,
 			services
 		);
 
@@ -56,6 +58,7 @@ export class DesignerContext {
 			services,
 			componentContext,
 			definitionWalker,
+			i18n,
 			stateModifier,
 			layoutController,
 			workspaceController,
@@ -72,6 +75,7 @@ export class DesignerContext {
 		public readonly services: Services,
 		public readonly componentContext: ComponentContext,
 		public readonly definitionWalker: DefinitionWalker,
+		public readonly i18n: I18n,
 		public readonly stateModifier: StateModifier,
 		public readonly layoutController: LayoutController,
 		public readonly workspaceController: WorkspaceControllerWrapper,
