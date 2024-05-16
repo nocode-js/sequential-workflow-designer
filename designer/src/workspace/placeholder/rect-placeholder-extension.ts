@@ -6,7 +6,7 @@ import { RectPlaceholder } from './rect-placeholder';
 import { RectPlaceholderConfiguration } from './rect-placeholder-configuration';
 
 const defaultConfiguration: RectPlaceholderConfiguration = {
-	gapWidth: 100,
+	gapWidth: 88,
 	gapHeight: 24,
 	radius: 6,
 	iconSize: 16

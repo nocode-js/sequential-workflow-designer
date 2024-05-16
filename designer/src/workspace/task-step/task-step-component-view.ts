@@ -9,11 +9,13 @@ import { OutputView } from '../common-views/output-view';
 import { ClickDetails, StepComponentView } from '../component';
 import { TaskStepComponentViewConfiguration } from './task-step-component-view-configuration';
 
+const COMPONENT_CLASS_NAME = 'task';
+
 export const createTaskStepComponentViewFactory =
 	(isInterrupted: boolean, cfg: TaskStepComponentViewConfiguration): StepComponentViewFactory =>
 	(parentElement: SVGElement, stepContext: StepContext<Step>, viewContext: StepComponentViewContext): StepComponentView => {
 		const { step } = stepContext;
-		const g = ComponentDom.stepG('task', step.type, step.id);
+		const g = ComponentDom.stepG(COMPONENT_CLASS_NAME, step.type, step.id);
 		parentElement.appendChild(g);
 
 		const boxHeight = cfg.paddingY * 2 + cfg.iconSize;
@@ -71,10 +73,8 @@ export const createTaskStepComponentViewFactory =
 			joinX: boxWidth / 2,
 			sequenceComponents: null,
 			placeholders: null,
+			hasOutput: !!outputView,
 
-			hasOutput(): boolean {
-				return !!outputView;
-			},
 			getClientPosition(): Vector {
 				return getAbsolutePosition(rect);
 			},

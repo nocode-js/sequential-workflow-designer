@@ -1,6 +1,7 @@
+import { DefinitionWalker } from 'sequential-workflow-model';
 import { DefinitionValidator } from './core/definition-validator';
 import { IconProvider } from './core/icon-provider';
-import { I18n, StepsConfiguration, ValidatorConfiguration } from './designer-configuration';
+import { DesignerConfiguration, I18n, PreferenceStorage } from './designer-configuration';
 import { PlaceholderController } from './designer-extension';
 import { DesignerState } from './designer-state';
 import { Services } from './services';
@@ -9,18 +10,28 @@ import { StepExtensionResolver } from './workspace/step-extension-resolver';
 
 export class ComponentContext {
 	public static create(
-		stepsConfiguration: StepsConfiguration,
-		validatorConfiguration: ValidatorConfiguration | undefined,
+		configuration: DesignerConfiguration,
 		state: DesignerState,
 		stepExtensionResolver: StepExtensionResolver,
+		definitionWalker: DefinitionWalker,
+		preferenceStorage: PreferenceStorage,
 		i18n: I18n,
 		services: Services
 	): ComponentContext {
-		const validator = new DefinitionValidator(validatorConfiguration, state);
-		const iconProvider = new IconProvider(stepsConfiguration);
+		const validator = new DefinitionValidator(configuration.validator, state);
+		const iconProvider = new IconProvider(configuration.steps);
 		const placeholderController = services.placeholderController.create();
 		const stepComponentFactory = new StepComponentFactory(stepExtensionResolver);
-		return new ComponentContext(validator, iconProvider, placeholderController, stepComponentFactory, i18n, services);
+		return new ComponentContext(
+			validator,
+			iconProvider,
+			placeholderController,
+			stepComponentFactory,
+			definitionWalker,
+			services,
+			preferenceStorage,
+			i18n
+		);
 	}
 
 	private constructor(
@@ -28,7 +39,9 @@ export class ComponentContext {
 		public readonly iconProvider: IconProvider,
 		public readonly placeholderController: PlaceholderController,
 		public readonly stepComponentFactory: StepComponentFactory,
-		public readonly i18n: I18n,
-		public readonly services: Services
+		public readonly definitionWalker: DefinitionWalker,
+		public readonly services: Services,
+		public readonly preferenceStorage: PreferenceStorage,
+		public readonly i18n: I18n
 	) {}
 }

@@ -5,7 +5,16 @@ import { Vector } from './core';
 import { CustomActionController } from './custom-action-controller';
 import { ComponentType, Sequence, Step } from './definition';
 import { I18n } from './designer-configuration';
-import { Badge, Component, Placeholder, PlaceholderDirection, SequenceComponent, StepComponentView } from './workspace';
+import {
+	Badge,
+	ClickCommand,
+	ClickDetails,
+	Component,
+	Placeholder,
+	PlaceholderDirection,
+	SequenceComponent,
+	StepComponentView
+} from './workspace';
 
 export interface DesignerExtension {
 	steps?: StepExtension[];
@@ -17,6 +26,7 @@ export interface DesignerExtension {
 	viewportController?: ViewportControllerExtension;
 	placeholderController?: PlaceholderControllerExtension;
 	placeholder?: PlaceholderExtension;
+	regionComponentView?: RegionComponentViewExtension;
 	grid?: GridExtension;
 	rootComponent?: RootComponentExtension;
 	sequenceComponent?: SequenceComponentExtension;
@@ -34,6 +44,7 @@ export interface StepExtension<S extends Step = Step> {
 export type StepComponentViewFactory = StepExtension['createComponentView'];
 
 export interface StepComponentViewContext {
+	i18n: I18n;
 	getStepName(): string;
 	getStepIconUrl(): string | null;
 	createSequenceComponent(parentElement: SVGElement, sequence: Sequence): SequenceComponent;
@@ -44,7 +55,13 @@ export interface StepComponentViewContext {
 		sequence: Sequence,
 		index: number
 	): Placeholder;
-	i18n: I18n;
+	createRegionComponentView(
+		parentElement: SVGElement,
+		componentClassName: string,
+		contentFactory: RegionComponentViewContentFactory
+	): StepComponentView;
+	getPreference(key: string): string | null;
+	setPreference(key: string, value: string): void;
 }
 
 export interface StepContext<S extends Step = Step> {
@@ -71,7 +88,7 @@ export interface StepComponentViewWrapperExtension {
 
 export interface BadgeExtension {
 	id: string;
-	createForStep(parentElement: SVGElement, stepContext: StepContext, componentContext: ComponentContext): Badge;
+	createForStep(parentElement: SVGElement, view: StepComponentView, stepContext: StepContext, componentContext: ComponentContext): Badge;
 	createForRoot?: (parentElement: SVGElement, componentContext: ComponentContext) => Badge;
 	createStartValue(): unknown;
 }
@@ -201,4 +218,29 @@ export interface DaemonExtension {
 
 export interface Daemon {
 	destroy(): void;
+}
+
+// RegionComponentViewExtension
+
+export interface RegionView {
+	getClientPosition(): Vector;
+	/**
+	 * @returns `true` if the click is inside the region, `null` if it's outside. The view may return a command to be executed.
+	 */
+	resolveClick(click: ClickDetails): true | ClickCommand | null;
+	setIsSelected(isSelected: boolean): void;
+}
+
+export type RegionViewFactory = (parent: SVGElement, widths: number[], height: number) => RegionView;
+
+export type RegionComponentViewContentFactory = (g: SVGGElement, regionViewFactory: RegionViewFactory) => StepComponentView;
+
+export interface RegionComponentViewExtension {
+	create(
+		parentElement: SVGElement,
+		componentClassName: string,
+		stepContext: StepContext,
+		viewContext: StepComponentViewContext,
+		contentFactory: RegionComponentViewContentFactory
+	): StepComponentView;
 }

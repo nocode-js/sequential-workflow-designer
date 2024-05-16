@@ -10,3 +10,4 @@ export * from './component';
 export * from './step-component';
 export * from './step-extension-resolver';
 export * from './placeholder';
+export * from './region';

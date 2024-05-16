@@ -1,7 +1,7 @@
 import { Step } from '../../../definition';
 import { ComponentContext } from '../../../component-context';
 import { BadgeExtension, StepContext } from '../../../designer-extension';
-import { Badge } from '../../component';
+import { Badge, StepComponentView } from '../../component';
 import { ValidationErrorBadge } from './validation-error-badge';
 import { ValidationErrorBadgeExtensionConfiguration } from './validation-error-badge-extension-configuration';
 
@@ -21,8 +21,13 @@ export class ValidationErrorBadgeExtension implements BadgeExtension {
 
 	private constructor(private readonly configuration: ValidationErrorBadgeExtensionConfiguration) {}
 
-	public createForStep(parentElement: SVGElement, stepContext: StepContext<Step>, componentContext: ComponentContext): Badge {
-		return ValidationErrorBadge.createForStep(parentElement, stepContext, componentContext, this.configuration.view);
+	public createForStep(
+		parentElement: SVGElement,
+		view: StepComponentView,
+		stepContext: StepContext<Step>,
+		componentContext: ComponentContext
+	): Badge {
+		return ValidationErrorBadge.createForStep(parentElement, view, stepContext, componentContext, this.configuration.view);
 	}
 
 	public createForRoot(parentElement: SVGElement, componentContext: ComponentContext): Badge {

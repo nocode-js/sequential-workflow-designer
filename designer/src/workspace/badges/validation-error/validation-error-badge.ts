@@ -1,17 +1,19 @@
 import { ComponentContext } from '../../../component-context';
 import { StepContext } from '../../../designer-extension';
-import { Badge } from '../../component';
+import { Badge, StepComponentView } from '../../component';
 import { ValidationErrorBadgeView } from './validation-error-badge-view';
 import { ValidationErrorBadgeViewConfiguration } from './validation-error-badge-view-configuration';
+import { ValidatorFactory } from './validator-factory';
 
 export class ValidationErrorBadge implements Badge {
 	public static createForStep(
 		parentElement: SVGElement,
+		view: StepComponentView,
 		stepContext: StepContext,
 		componentContext: ComponentContext,
 		configuration: ValidationErrorBadgeViewConfiguration
 	): ValidationErrorBadge {
-		const validator = () => componentContext.validator.validateStep(stepContext.step, stepContext.parentSequence);
+		const validator = ValidatorFactory.createForStep(stepContext, view, componentContext);
 		return new ValidationErrorBadge(parentElement, validator, configuration);
 	}
 
@@ -20,7 +22,7 @@ export class ValidationErrorBadge implements Badge {
 		componentContext: ComponentContext,
 		configuration: ValidationErrorBadgeViewConfiguration
 	) {
-		const validator = () => componentContext.validator.validateRoot();
+		const validator = ValidatorFactory.createForRoot(componentContext);
 		return new ValidationErrorBadge(parentElement, validator, configuration);
 	}
 

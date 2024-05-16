@@ -24,7 +24,9 @@ export interface StepComponentView extends ComponentView {
 	sequenceComponents: SequenceComponent[] | null;
 	placeholders: Placeholder[] | null;
 
-	hasOutput(): boolean;
+	hasOutput: boolean;
+	haveCollapsedChildren?: boolean;
+
 	/**
 	 * @param click Details about the click.
 	 * @returns `true` if selected a step, a click command if clicked a specific action, `null` if not clicked at this view.

@@ -74,6 +74,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	definitionWalker?: DefinitionWalker;
 
 	/**
+	 * @description Custom preference storage. By default, all preferences are stored in the memory.
+	 */
+	preferenceStorage?: PreferenceStorage;
+
+	/**
 	 * @description Custom generator of unique identifiers.
 	 */
 	uidGenerator?: UidGenerator;
@@ -142,6 +147,11 @@ export type StepDescriptionProvider = (step: StepDefinition) => string;
 export interface ToolboxGroupConfiguration {
 	name: string;
 	steps: StepDefinition[];
+}
+
+export interface PreferenceStorage {
+	setItem(key: string, value: string): void;
+	getItem(key: string): string | null;
 }
 
 export interface StepsConfiguration {

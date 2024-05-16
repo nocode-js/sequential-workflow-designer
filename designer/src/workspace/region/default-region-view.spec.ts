@@ -1,10 +1,10 @@
 import { Dom } from '../../core/dom';
-import { RegionView } from './region-view';
+import { DefaultRegionView } from './default-region-view';
 
-describe('RegionView', () => {
+describe('DefaultRegionView', () => {
 	it('create() creates view', () => {
 		const parent = Dom.svg('svg');
-		RegionView.create(parent, [70, 80, 90], 100);
+		DefaultRegionView.create(parent, [70, 80, 90], 100);
 		expect(parent.children.length).not.toEqual(0);
 	});
 });

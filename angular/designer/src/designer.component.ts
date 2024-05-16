@@ -29,7 +29,8 @@ import {
 	ToolboxConfiguration,
 	UidGenerator,
 	ValidatorConfiguration,
-	I18n
+	I18n,
+	PreferenceStorage
 } from 'sequential-workflow-designer';
 
 export interface RootEditorWrapper {
@@ -76,6 +77,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public contextMenu?: boolean;
 	@Input('keyboard')
 	public keyboard?: boolean | KeyboardConfiguration;
+	@Input('preferenceStorage')
+	public preferenceStorage?: PreferenceStorage;
 	@Input('extensions')
 	public extensions?: DesignerExtension[];
 	@Input('i18n')
@@ -220,6 +223,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 				controlBar: this.controlBar,
 				contextMenu: this.contextMenu,
 				keyboard: this.keyboard,
+				preferenceStorage: this.preferenceStorage,
 				extensions: this.extensions,
 				isReadonly: this.isReadonly,
 				i18n: this.i18n,

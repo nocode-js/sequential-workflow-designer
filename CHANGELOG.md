@@ -1,3 +1,7 @@
+## 0.21.0
+
+This version introduces several changes related with the collapsible regions in the pro version.
+
 ## 0.20.0
 
 This version introduces the localization feature. Now you can localize the designer to any language you want.

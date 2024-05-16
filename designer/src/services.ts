@@ -18,6 +18,7 @@ import { findValidationBadgeIndex } from './workspace/badges/find-validation-bad
 import { DefaultSequenceComponentExtension } from './workspace/sequence/default-sequence-component-extension';
 import { DefaultStepComponentViewWrapperExtension } from './workspace/default-step-component-view-wrapper-extension';
 import { LineGridExtension } from './workspace/grid/line-grid-extension';
+import { DefaultRegionComponentViewExtension } from './workspace/region/default-region-component-view-extension';
 
 export type Services = Required<DesignerExtension>;
 
@@ -55,6 +56,9 @@ function merge(services: Partial<Services>, extensions: DesignerExtension[]) {
 		}
 		if (ext.placeholder) {
 			services.placeholder = ext.placeholder;
+		}
+		if (ext.regionComponentView) {
+			services.regionComponentView = ext.regionComponentView;
 		}
 		if (ext.viewportController) {
 			services.viewportController = ext.viewportController;
@@ -120,6 +124,9 @@ function setDefaults(services: Partial<Services>, configuration: DesignerConfigu
 	}
 	if (!services.placeholder) {
 		services.placeholder = RectPlaceholderExtension.create();
+	}
+	if (!services.regionComponentView) {
+		services.regionComponentView = new DefaultRegionComponentViewExtension();
 	}
 	if (!services.viewportController) {
 		services.viewportController = new DefaultViewportControllerExtension();
