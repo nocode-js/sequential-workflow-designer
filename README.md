@@ -44,6 +44,7 @@ Pro:
 * [🍬 Custom Theme Flat](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-theme-flat.html)
 * [🌹 Custom Step Types](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-step-types.html)
 * [📺 Popup Editor](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/popup-editor.html)
+* [🔽 Collapsible Region](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/collapsible-region.html)
 * [💼 Copy Paste](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/copy-paste.html)
 * [👈 Goto](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/goto.html)
 * [📁 Folders](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/folders.html)
