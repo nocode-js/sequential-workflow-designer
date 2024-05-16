@@ -17,7 +17,8 @@ import {
 	RootEditorProvider,
 	StepEditorProvider,
 	KeyboardConfiguration,
-	I18n
+	I18n,
+	PreferenceStorage
 } from 'sequential-workflow-designer';
 import { RootEditorWrapperContext } from './RootEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -54,6 +55,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	controlBar: boolean;
 	contextMenu?: boolean;
 	keyboard?: boolean | KeyboardConfiguration;
+	preferenceStorage?: PreferenceStorage;
 	controller?: SequentialWorkflowDesignerController;
 	customActionHandler?: CustomActionHandler;
 	extensions?: DesignerExtension[];
@@ -88,6 +90,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const controlBar = props.controlBar;
 	const contextMenu = props.contextMenu;
 	const keyboard = props.keyboard;
+	const preferenceStorage = props.preferenceStorage;
 	const extensions = props.extensions;
 	const i18n = props.i18n;
 
@@ -226,6 +229,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 			controlBar,
 			contextMenu,
 			keyboard,
+			preferenceStorage,
 			editors:
 				rootEditorRef.current && stepEditorRef.current
 					? {
@@ -279,6 +283,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		isEditorCollapsed,
 		contextMenu,
 		keyboard,
+		preferenceStorage,
 		controlBar,
 		steps,
 		validator,

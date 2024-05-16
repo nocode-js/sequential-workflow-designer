@@ -1,69 +1,68 @@
 import { Dom } from '../../core/dom';
 import { Vector } from '../../core/vector';
 import { SequentialStep } from '../../definition';
-import { ClickDetails, StepComponentView } from '../component';
+import { ClickDetails, StepComponentView, ClickCommand } from '../component';
 import { InputView } from '../common-views/input-view';
 import { JoinView } from '../common-views/join-view';
 import { LabelView } from '../common-views/label-view';
-import { RegionView } from '../common-views/region-view';
 import { StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
 import { ContainerStepComponentViewConfiguration } from './container-step-component-view-configuration';
-import { ComponentDom } from '../common-views/component-dom';
+
+const COMPONENT_CLASS_NAME = 'container';
 
 export const createContainerStepComponentViewFactory =
 	(cfg: ContainerStepComponentViewConfiguration): StepComponentViewFactory =>
 	(parentElement: SVGElement, stepContext: StepContext<SequentialStep>, viewContext: StepComponentViewContext): StepComponentView => {
-		const { step } = stepContext;
-		const g = ComponentDom.stepG('container', step.type, step.id);
-		parentElement.appendChild(g);
+		return viewContext.createRegionComponentView(parentElement, COMPONENT_CLASS_NAME, (g, regionViewBuilder) => {
+			const step = stepContext.step;
+			const name = viewContext.getStepName();
+			const labelView = LabelView.create(g, cfg.paddingTop, cfg.label, name, 'primary');
+			const sequenceComponent = viewContext.createSequenceComponent(g, step.sequence);
 
-		const name = viewContext.getStepName();
-		const labelView = LabelView.create(g, cfg.paddingTop, cfg.label, name, 'primary');
-		const sequenceComponent = viewContext.createSequenceComponent(g, step.sequence);
+			const halfOfWidestElement = labelView.width / 2;
+			const offsetLeft = Math.max(halfOfWidestElement - sequenceComponent.view.joinX, 0) + cfg.paddingX;
+			const offsetRight =
+				Math.max(halfOfWidestElement - (sequenceComponent.view.width - sequenceComponent.view.joinX), 0) + cfg.paddingX;
 
-		const halfOfWidestElement = labelView.width / 2;
-		const offsetLeft = Math.max(halfOfWidestElement - sequenceComponent.view.joinX, 0) + cfg.paddingX;
-		const offsetRight = Math.max(halfOfWidestElement - (sequenceComponent.view.width - sequenceComponent.view.joinX), 0) + cfg.paddingX;
+			const width = offsetLeft + sequenceComponent.view.width + offsetRight;
+			const height = cfg.paddingTop + cfg.label.height + sequenceComponent.view.height;
+			const joinX = sequenceComponent.view.joinX + offsetLeft;
 
-		const width = offsetLeft + sequenceComponent.view.width + offsetRight;
-		const height = cfg.paddingTop + cfg.label.height + sequenceComponent.view.height;
-		const joinX = sequenceComponent.view.joinX + offsetLeft;
+			Dom.translate(labelView.g, joinX, 0);
+			Dom.translate(sequenceComponent.view.g, offsetLeft, cfg.paddingTop + cfg.label.height);
 
-		Dom.translate(labelView.g, joinX, 0);
-		Dom.translate(sequenceComponent.view.g, offsetLeft, cfg.paddingTop + cfg.label.height);
+			const iconUrl = viewContext.getStepIconUrl();
+			const inputView = InputView.createRectInput(g, joinX, 0, cfg.inputSize, cfg.inputIconSize, iconUrl);
 
-		const iconUrl = viewContext.getStepIconUrl();
-		const inputView = InputView.createRectInput(g, joinX, 0, cfg.inputSize, cfg.inputIconSize, iconUrl);
+			JoinView.createStraightJoin(g, new Vector(joinX, 0), cfg.paddingTop);
 
-		JoinView.createStraightJoin(g, new Vector(joinX, 0), cfg.paddingTop);
+			const regionView = regionViewBuilder(g, [width], height);
 
-		const regionView = RegionView.create(g, [width], height);
+			return {
+				g,
+				width,
+				height,
+				joinX,
+				placeholders: null,
+				sequenceComponents: [sequenceComponent],
+				hasOutput: sequenceComponent.hasOutput,
 
-		return {
-			g,
-			width,
-			height,
-			joinX,
-			placeholders: null,
-			sequenceComponents: [sequenceComponent],
-
-			getClientPosition(): Vector {
-				return regionView.getClientPosition();
-			},
-			resolveClick(click: ClickDetails): true | null {
-				return regionView.resolveClick(click) || g.contains(click.element) ? true : null;
-			},
-			setIsDragging(isDragging: boolean) {
-				inputView.setIsHidden(isDragging);
-			},
-			setIsSelected(isSelected: boolean) {
-				regionView.setIsSelected(isSelected);
-			},
-			setIsDisabled(isDisabled: boolean) {
-				Dom.toggleClass(g, isDisabled, 'sqd-disabled');
-			},
-			hasOutput(): boolean {
-				return sequenceComponent.hasOutput;
-			}
-		};
+				getClientPosition(): Vector {
+					return regionView.getClientPosition();
+				},
+				resolveClick(click: ClickDetails): true | ClickCommand | null {
+					const result = regionView.resolveClick(click);
+					return result === true || (result === null && g.contains(click.element)) ? true : result;
+				},
+				setIsDragging(isDragging: boolean) {
+					inputView.setIsHidden(isDragging);
+				},
+				setIsSelected(isSelected: boolean) {
+					regionView.setIsSelected(isSelected);
+				},
+				setIsDisabled(isDisabled: boolean) {
+					Dom.toggleClass(g, isDisabled, 'sqd-disabled');
+				}
+			};
+		});
 	};

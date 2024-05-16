@@ -1,12 +1,12 @@
 import { Dom } from '../../core/dom';
 import { getAbsolutePosition } from '../../core/get-absolute-position';
 import { Vector } from '../../core/vector';
+import { RegionView } from '../../designer-extension';
 import { ClickDetails } from '../component';
 
-export class RegionView {
-	public static create(parent: SVGElement, widths: number[], height: number): RegionView {
+export class DefaultRegionView implements RegionView {
+	public static create(parent: SVGElement, widths: number[], height: number): DefaultRegionView {
 		const totalWidth = widths.reduce((result, width) => result + width, 0);
-
 		const lines: SVGLineElement[] = [
 			drawLine(parent, 0, 0, totalWidth, 0),
 			drawLine(parent, 0, 0, 0, height),
@@ -19,8 +19,7 @@ export class RegionView {
 			lines.push(drawLine(parent, offsetX, 0, offsetX, height));
 			offsetX += widths[i];
 		}
-
-		return new RegionView(lines, totalWidth, height);
+		return new DefaultRegionView(lines, totalWidth, height);
 	}
 
 	public constructor(
@@ -33,10 +32,13 @@ export class RegionView {
 		return getAbsolutePosition(this.lines[0]);
 	}
 
-	public resolveClick(click: ClickDetails): boolean {
+	public resolveClick(click: ClickDetails): true | null {
 		const regionPosition = this.getClientPosition();
 		const d = click.position.subtract(regionPosition);
-		return d.x >= 0 && d.y >= 0 && d.x < this.width * click.scale && d.y < this.height * click.scale;
+		if (d.x >= 0 && d.y >= 0 && d.x < this.width * click.scale && d.y < this.height * click.scale) {
+			return true;
+		}
+		return null;
 	}
 
 	public setIsSelected(isSelected: boolean) {

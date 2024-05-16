@@ -11,6 +11,7 @@ import { LayoutController } from './layout-controller';
 import { Services } from './services';
 import { StepExtensionResolver } from './workspace/step-extension-resolver';
 import { WorkspaceController, WorkspaceControllerWrapper } from './workspace/workspace-controller';
+import { MemoryPreferenceStorage } from './core/memory-preference-storage';
 
 export class DesignerContext {
 	public static create(
@@ -42,11 +43,13 @@ export class DesignerContext {
 			historyController = HistoryController.create(configuration.undoStack, state, stateModifier, configuration);
 		}
 
+		const preferenceStorage = configuration.preferenceStorage ?? new MemoryPreferenceStorage();
 		const componentContext = ComponentContext.create(
-			configuration.steps,
-			configuration.validator,
+			configuration,
 			state,
 			stepExtensionResolver,
+			definitionWalker,
+			preferenceStorage,
 			i18n,
 			services
 		);

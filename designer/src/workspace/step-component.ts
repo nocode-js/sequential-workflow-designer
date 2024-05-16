@@ -7,7 +7,7 @@ import { BadgesResult, ClickDetails, ClickCommand, Component, Placeholder, StepC
 export class StepComponent implements Component {
 	public static create(view: StepComponentView, stepContext: StepContext, componentContext: ComponentContext) {
 		const badges = Badges.createForStep(stepContext, view, componentContext);
-		return new StepComponent(view, stepContext.step, stepContext.parentSequence, view.hasOutput(), badges);
+		return new StepComponent(view, stepContext.step, stepContext.parentSequence, view.hasOutput, badges);
 	}
 
 	private isDisabled = false;

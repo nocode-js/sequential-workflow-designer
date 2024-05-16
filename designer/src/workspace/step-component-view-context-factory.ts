@@ -1,10 +1,13 @@
 import { Sequence, Step } from '../definition';
 import { ComponentContext } from '../component-context';
-import { SequenceContext, StepComponentViewContext, StepContext } from '../designer-extension';
+import { SequenceContext, StepComponentViewContext, StepContext, RegionComponentViewContentFactory } from '../designer-extension';
 
 export class StepComponentViewContextFactory {
 	public static create<S extends Step>(stepContext: StepContext<S>, componentContext: ComponentContext): StepComponentViewContext {
+		const preferenceKeyPrefix = stepContext.step.id + ':';
+
 		return {
+			i18n: componentContext.i18n,
 			getStepIconUrl: () => componentContext.iconProvider.getIconUrl(stepContext.step),
 			getStepName: () => componentContext.i18n(`step.${stepContext.step.type}.name`, stepContext.step.name),
 			createSequenceComponent: (parentElement: SVGElement, sequence: Sequence) => {
@@ -16,8 +19,22 @@ export class StepComponentViewContextFactory {
 				};
 				return componentContext.services.sequenceComponent.create(parentElement, sequenceContext, componentContext);
 			},
+			createRegionComponentView(
+				parentElement: SVGElement,
+				componentClassName: string,
+				contentFactory: RegionComponentViewContentFactory
+			) {
+				return componentContext.services.regionComponentView.create(
+					parentElement,
+					componentClassName,
+					stepContext,
+					this,
+					contentFactory
+				);
+			},
 			createPlaceholderForArea: componentContext.services.placeholder.createForArea.bind(componentContext.services.placeholder),
-			i18n: componentContext.i18n
+			getPreference: (key: string) => componentContext.preferenceStorage.getItem(preferenceKeyPrefix + key),
+			setPreference: (key: string, value: string) => componentContext.preferenceStorage.setItem(preferenceKeyPrefix + key, value)
 		};
 	}
 }

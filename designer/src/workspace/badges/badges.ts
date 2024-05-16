@@ -8,7 +8,7 @@ const BADGE_GAP = 4;
 export class Badges {
 	public static createForStep(stepContext: StepContext, view: StepComponentView, componentContext: ComponentContext): Badges {
 		const g = createG(view.g);
-		const badges = componentContext.services.badges.map(ext => ext.createForStep(g, stepContext, componentContext));
+		const badges = componentContext.services.badges.map(ext => ext.createForStep(g, view, stepContext, componentContext));
 		const position = new Vector(view.width, 0);
 		return new Badges(g, position, badges);
 	}

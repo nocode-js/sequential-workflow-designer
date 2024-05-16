@@ -18,7 +18,8 @@
 		type StepEditorProvider,
 		type RootEditorProvider,
 		type KeyboardConfiguration,
-		type I18n
+		type I18n,
+		type PreferenceStorage
 	} from 'sequential-workflow-designer';
 
 	const dispatch = createEventDispatcher<{
@@ -45,6 +46,7 @@
 	export let theme = 'light';
 	export let contextMenu = true;
 	export let keyboard: boolean | KeyboardConfiguration | undefined = undefined;
+	export let preferenceStorage: PreferenceStorage | undefined = undefined;
 	export let undoStackSize: number | undefined = undefined;
 	export let undoStack: UndoStack | undefined = undefined;
 	export let validator: ValidatorConfiguration | undefined = undefined;
@@ -129,6 +131,7 @@
 			theme,
 			contextMenu,
 			keyboard,
+			preferenceStorage,
 			undoStackSize,
 			undoStack,
 			validator,
