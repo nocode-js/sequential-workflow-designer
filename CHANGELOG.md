@@ -1,3 +1,7 @@
+# 0.21.1
+
+Added support for Angular 17 [#145](https://github.com/nocode-js/sequential-workflow-designer/issues/145).
+
 ## 0.21.0
 
 This version introduces several changes related with the collapsible regions in the pro version.
