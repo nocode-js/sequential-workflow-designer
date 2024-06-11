@@ -1,3 +1,7 @@
+# 0.21.2
+
+This version resolves the problem of unwanted dragging of the image element in the toolbox [#149](https://github.com/nocode-js/sequential-workflow-designer/issues/149).
+
 # 0.21.1
 
 Added support for Angular 17 [#145](https://github.com/nocode-js/sequential-workflow-designer/issues/145).
