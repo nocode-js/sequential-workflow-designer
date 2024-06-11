@@ -15,7 +15,8 @@ export class ToolboxItemView {
 		if (data.iconUrl) {
 			const iconImage = Dom.element('img', {
 				class: 'sqd-toolbox-item-icon-image',
-				src: data.iconUrl
+				src: data.iconUrl,
+				draggable: 'false'
 			});
 			icon.appendChild(iconImage);
 		} else {
