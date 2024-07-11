@@ -22,8 +22,9 @@ export class ToolboxItem {
 
 	private onTouchstart(e: TouchEvent) {
 		e.preventDefault();
-		e.stopPropagation();
 		if (e.touches.length === 1) {
+			// We stop propagation only if it was a single touch event (we can start dragging).
+			// Otherwise we want to bubble up the event to the scrollbox.
 			e.stopPropagation();
 			this.tryDrag(readTouchPosition(e));
 		}
