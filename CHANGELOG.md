@@ -1,3 +1,7 @@
+# 0.21.4
+
+This version fixes the problem with scrolling the toolbox on mobile devices by using two fingers.
+
 # 0.21.3
 
 This version resolves the problem of unwanted text selection in the toolbox in Safari 17.5 [#153](https://github.com/nocode-js/sequential-workflow-designer/issues/153).
