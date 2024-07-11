@@ -22,6 +22,7 @@ export class ToolboxItem {
 
 	private onTouchstart(e: TouchEvent) {
 		e.preventDefault();
+		e.stopPropagation();
 		if (e.touches.length === 1) {
 			e.stopPropagation();
 			this.tryDrag(readTouchPosition(e));
@@ -29,6 +30,7 @@ export class ToolboxItem {
 	}
 
 	private onMousedown(e: MouseEvent) {
+		e.preventDefault();
 		e.stopPropagation();
 		const isPrimaryButton = e.button === 0;
 		if (isPrimaryButton) {
