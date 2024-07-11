@@ -93,6 +93,7 @@ export class ScrollBoxView {
 	};
 
 	private readonly onMouseDown = (e: MouseEvent) => {
+		e.preventDefault();
 		this.startScroll(readMousePosition(e));
 	};
 
