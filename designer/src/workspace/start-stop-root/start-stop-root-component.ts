@@ -1,5 +1,5 @@
 import { Sequence } from '../../definition';
-import { BadgesResult, ClickDetails, ClickCommand, Component, Placeholder } from '../component';
+import { BadgesResult, ClickDetails, ClickCommand, Component, FoundPlaceholders } from '../component';
 import { ComponentContext } from '../../component-context';
 import { StartStopRootComponentView } from './start-stop-root-component-view';
 import { SequencePlaceIndicator } from '../../designer-extension';
@@ -26,21 +26,12 @@ export class StartStopRootComponent implements Component {
 		return this.view.component.findById(stepId);
 	}
 
-	public getPlaceholders(result: Placeholder[]) {
-		this.view.component.getPlaceholders(result);
+	public resolvePlaceholders(skipComponent: StepComponent | undefined, result: FoundPlaceholders) {
+		this.view.component.resolvePlaceholders(skipComponent, result);
 
 		if (this.view.startPlaceholder && this.view.endPlaceholder) {
-			result.push(this.view.startPlaceholder);
-			result.push(this.view.endPlaceholder);
-		}
-	}
-
-	public setIsDragging(isDragging: boolean) {
-		this.view.component.setIsDragging(isDragging);
-
-		if (this.view.startPlaceholder && this.view.endPlaceholder) {
-			this.view.startPlaceholder.setIsVisible(isDragging);
-			this.view.endPlaceholder.setIsVisible(isDragging);
+			result.placeholders.push(this.view.startPlaceholder);
+			result.placeholders.push(this.view.endPlaceholder);
 		}
 	}
 

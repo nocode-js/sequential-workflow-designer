@@ -15,12 +15,12 @@ export class ComponentContext {
 		stepExtensionResolver: StepExtensionResolver,
 		definitionWalker: DefinitionWalker,
 		preferenceStorage: PreferenceStorage,
+		placeholderController: PlaceholderController,
 		i18n: I18n,
 		services: Services
 	): ComponentContext {
 		const validator = new DefinitionValidator(configuration.validator, state);
 		const iconProvider = new IconProvider(configuration.steps);
-		const placeholderController = services.placeholderController.create();
 		const stepComponentFactory = new StepComponentFactory(stepExtensionResolver);
 		return new ComponentContext(
 			validator,

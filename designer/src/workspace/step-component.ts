@@ -2,15 +2,13 @@ import { ComponentContext } from '../component-context';
 import { Sequence, Step } from '../definition';
 import { StepContext } from '../designer-extension';
 import { Badges } from './badges/badges';
-import { BadgesResult, ClickDetails, ClickCommand, Component, Placeholder, StepComponentView, ClickCommandType } from './component';
+import { BadgesResult, ClickDetails, ClickCommand, Component, StepComponentView, ClickCommandType, FoundPlaceholders } from './component';
 
 export class StepComponent implements Component {
 	public static create(view: StepComponentView, stepContext: StepContext, componentContext: ComponentContext) {
 		const badges = Badges.createForStep(stepContext, view, componentContext);
 		return new StepComponent(view, stepContext.step, stepContext.parentSequence, view.hasOutput, badges);
 	}
-
-	private isDisabled = false;
 
 	private constructor(
 		public readonly view: StepComponentView,
@@ -60,26 +58,19 @@ export class StepComponent implements Component {
 		return null;
 	}
 
-	public getPlaceholders(result: Placeholder[]) {
-		if (!this.isDisabled) {
+	public resolvePlaceholders(skipComponent: StepComponent | undefined, result: FoundPlaceholders) {
+		if (skipComponent !== this) {
 			if (this.view.sequenceComponents) {
-				this.view.sequenceComponents.forEach(component => component.getPlaceholders(result));
+				this.view.sequenceComponents.forEach(component => component.resolvePlaceholders(skipComponent, result));
 			}
 			if (this.view.placeholders) {
-				this.view.placeholders.forEach(ph => result.push(ph));
+				this.view.placeholders.forEach(ph => result.placeholders.push(ph));
 			}
+			result.components.push(this);
 		}
 	}
 
 	public setIsDragging(isDragging: boolean) {
-		if (!this.isDisabled) {
-			if (this.view.sequenceComponents) {
-				this.view.sequenceComponents.forEach(component => component.setIsDragging(isDragging));
-			}
-			if (this.view.placeholders) {
-				this.view.placeholders.forEach(ph => ph.setIsVisible(isDragging));
-			}
-		}
 		this.view.setIsDragging(isDragging);
 	}
 
@@ -88,7 +79,6 @@ export class StepComponent implements Component {
 	}
 
 	public setIsDisabled(isDisabled: boolean) {
-		this.isDisabled = isDisabled;
 		this.view.setIsDisabled(isDisabled);
 	}
 

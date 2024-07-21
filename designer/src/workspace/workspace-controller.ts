@@ -1,9 +1,9 @@
 import { Vector } from '../core';
-import { Placeholder } from './component';
+import { FoundPlaceholders } from './component';
 import { StepComponent } from './step-component';
 
 export interface WorkspaceController {
-	getPlaceholders(): Placeholder[];
+	resolvePlaceholders(skipComponent: StepComponent | undefined): FoundPlaceholders;
 	getComponentByStepId(stepId: string): StepComponent;
 	getCanvasPosition(): Vector;
 	getCanvasSize(): Vector;
@@ -30,8 +30,8 @@ export class WorkspaceControllerWrapper implements WorkspaceController {
 		return this.controller;
 	}
 
-	public getPlaceholders(): Placeholder[] {
-		return this.get().getPlaceholders();
+	public resolvePlaceholders(skipComponent: StepComponent | undefined): FoundPlaceholders {
+		return this.get().resolvePlaceholders(skipComponent);
 	}
 
 	public getComponentByStepId(stepId: string): StepComponent {

@@ -1,4 +1,4 @@
-import { BadgesResult, ClickCommand, ClickDetails, Placeholder, SequenceComponent } from '../component';
+import { BadgesResult, ClickCommand, ClickDetails, FoundPlaceholders, SequenceComponent } from '../component';
 import { DefaultSequenceComponentView } from './default-sequence-component-view';
 import { ComponentContext } from '../../component-context';
 import { StepComponent } from '../step-component';
@@ -41,14 +41,9 @@ export class DefaultSequenceComponent implements SequenceComponent {
 		return null;
 	}
 
-	public getPlaceholders(result: Placeholder[]) {
-		this.view.placeholders.forEach(placeholder => result.push(placeholder));
-		this.view.components.forEach(c => c.getPlaceholders(result));
-	}
-
-	public setIsDragging(isDragging: boolean) {
-		this.view.setIsDragging(isDragging);
-		this.view.components.forEach(c => c.setIsDragging(isDragging));
+	public resolvePlaceholders(skipComponent: StepComponent | undefined, result: FoundPlaceholders) {
+		this.view.placeholders.forEach(placeholder => result.placeholders.push(placeholder));
+		this.view.components.forEach(c => c.resolvePlaceholders(skipComponent, result));
 	}
 
 	public updateBadges(result: BadgesResult) {

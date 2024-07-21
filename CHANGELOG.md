@@ -1,3 +1,7 @@
+# 0.22.0
+
+This version refactors the code responsible for displaying placeholders.
+
 # 0.21.4
 
 This version fixes the problem with scrolling the toolbox on mobile devices by using two fingers.

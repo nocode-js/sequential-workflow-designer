@@ -10,7 +10,8 @@ describe('DefaultSequenceComponentView', () => {
 			depth: 0,
 			isInputConnected: true,
 			isOutputConnected: true,
-			sequence: []
+			sequence: [],
+			isPreview: false
 		};
 		const componentContext = createComponentContextStub();
 		DefaultSequenceComponentView.create(parent, sequenceContext, componentContext);

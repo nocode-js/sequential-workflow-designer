@@ -27,7 +27,8 @@ export class DefaultSequenceComponentView implements ComponentView {
 				depth: sequenceContext.depth,
 				position: index,
 				isInputConnected: index === 0 ? sequenceContext.isInputConnected : components[index - 1].hasOutput,
-				isOutputConnected: index === sequence.length - 1 ? sequenceContext.isOutputConnected : true
+				isOutputConnected: index === sequence.length - 1 ? sequenceContext.isOutputConnected : true,
+				isPreview: sequenceContext.isPreview
 			};
 			components[index] = componentContext.stepComponentFactory.create(g, stepContext, componentContext);
 		}
@@ -55,7 +56,7 @@ export class DefaultSequenceComponentView implements ComponentView {
 				JoinView.createStraightJoin(g, new Vector(joinX, offsetY - phHeight), phHeight);
 			}
 
-			if (componentContext.placeholderController.canCreate(sequence, i)) {
+			if (!sequenceContext.isPreview && componentContext.placeholderController.canCreate(sequence, i)) {
 				const ph = componentContext.services.placeholder.createForGap(g, sequence, i);
 				Dom.translate(ph.view.g, joinX - phWidth / 2, offsetY - phHeight);
 				placeholders.push(ph);
@@ -70,7 +71,7 @@ export class DefaultSequenceComponentView implements ComponentView {
 		}
 
 		const newIndex = components.length;
-		if (componentContext.placeholderController.canCreate(sequence, newIndex)) {
+		if (!sequenceContext.isPreview && componentContext.placeholderController.canCreate(sequence, newIndex)) {
 			const ph = componentContext.services.placeholder.createForGap(g, sequence, newIndex);
 			Dom.translate(ph.view.g, joinX - phWidth / 2, offsetY - phHeight);
 			placeholders.push(ph);
@@ -86,12 +87,6 @@ export class DefaultSequenceComponentView implements ComponentView {
 		public readonly placeholders: Placeholder[],
 		public readonly components: StepComponent[]
 	) {}
-
-	public setIsDragging(isDragging: boolean) {
-		this.placeholders.forEach(placeholder => {
-			placeholder.setIsVisible(isDragging);
-		});
-	}
 
 	public hasOutput(): boolean {
 		if (this.components.length > 0) {

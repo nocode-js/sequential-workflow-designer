@@ -15,7 +15,8 @@ export class StepComponentViewContextFactory {
 					sequence,
 					depth: stepContext.depth + 1,
 					isInputConnected: true,
-					isOutputConnected: stepContext.isOutputConnected
+					isOutputConnected: stepContext.isOutputConnected,
+					isPreview: stepContext.isPreview
 				};
 				return componentContext.services.sequenceComponent.create(parentElement, sequenceContext, componentContext);
 			},

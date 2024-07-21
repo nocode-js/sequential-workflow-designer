@@ -26,7 +26,8 @@ describe('SwitchStepComponentView', () => {
 			isInputConnected: true,
 			isOutputConnected: true,
 			parentSequence: [],
-			step
+			step,
+			isPreview: false
 		};
 		const componentContext = createComponentContextStub();
 		const viewContext = StepComponentViewContextFactory.create(stepContext, componentContext);

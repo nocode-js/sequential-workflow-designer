@@ -2,7 +2,7 @@ import { race } from '../core/simple-event-race';
 import { Vector } from '../core/vector';
 import { DefinitionWalker, Sequence, StepChildrenType } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { ClickCommand, ClickDetails, Component, Placeholder } from './component';
+import { ClickCommand, ClickDetails, Component, FoundPlaceholders } from './component';
 import { WorkspaceView } from './workspace-view';
 import { DefinitionChangedEvent, DesignerState } from '../designer-state';
 import { WorkspaceController } from './workspace-controller';
@@ -59,8 +59,7 @@ export class Workspace implements WorkspaceController {
 		});
 
 		designerContext.setWorkspaceController(workspace);
-		designerContext.state.onViewportChanged.subscribe(vp => workspace.onViewportChanged(vp));
-		designerContext.state.onIsDraggingChanged.subscribe(is => workspace.onIsDraggingChanged(is));
+		designerContext.state.onViewportChanged.subscribe(workspace.onViewportChanged);
 
 		race(
 			0,
@@ -136,9 +135,12 @@ export class Workspace implements WorkspaceController {
 		this.isValid = Boolean(result[this.validationErrorBadgeIndex]);
 	}
 
-	public getPlaceholders(): Placeholder[] {
-		const result: Placeholder[] = [];
-		this.getRootComponent().getPlaceholders(result);
+	public resolvePlaceholders(skipComponent: StepComponent | undefined): FoundPlaceholders {
+		const result: FoundPlaceholders = {
+			placeholders: [],
+			components: []
+		};
+		this.getRootComponent().resolvePlaceholders(skipComponent, result);
 		return result;
 	}
 
@@ -197,13 +199,9 @@ export class Workspace implements WorkspaceController {
 		this.contextMenuController.tryOpen(position, commandOrNull);
 	};
 
-	private onIsDraggingChanged(isDragging: boolean) {
-		this.getRootComponent().setIsDragging(isDragging);
-	}
-
-	private onViewportChanged(viewport: Viewport) {
+	private readonly onViewportChanged = (viewport: Viewport) => {
 		this.view.setPositionAndScale(viewport.position, viewport.scale);
-	}
+	};
 
 	private onStateChanged(
 		definitionChanged: DefinitionChangedEvent | undefined,

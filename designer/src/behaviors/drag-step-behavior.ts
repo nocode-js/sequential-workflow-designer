@@ -1,7 +1,7 @@
 import { Vector } from '../core/vector';
 import { Step } from '../definition';
 import { DesignerContext } from '../designer-context';
-import { Placeholder } from '../workspace/component';
+import { FoundPlaceholders, Placeholder } from '../workspace/component';
 import { Behavior } from './behavior';
 import { DragStepView } from './drag-step-behavior-view';
 import { PlaceholderFinder } from './placeholder-finder';
@@ -9,6 +9,7 @@ import { DesignerState } from '../designer-state';
 import { StateModifier } from '../modifier/state-modifier';
 import { WorkspaceController } from '../workspace/workspace-controller';
 import { StepComponent } from '../workspace/step-component';
+import { PlaceholderController } from '../designer-extension';
 
 export class DragStepBehavior implements Behavior {
 	public static create(designerContext: DesignerContext, step: Step, draggedStepComponent?: StepComponent): DragStepBehavior {
@@ -16,6 +17,7 @@ export class DragStepBehavior implements Behavior {
 		return new DragStepBehavior(
 			view,
 			designerContext.workspaceController,
+			designerContext.placeholderController,
 			designerContext.state,
 			step,
 			designerContext.stateModifier,
@@ -27,12 +29,13 @@ export class DragStepBehavior implements Behavior {
 		finder: PlaceholderFinder;
 		startPosition: Vector;
 		offset: Vector;
-	};
+	} & FoundPlaceholders;
 	private currentPlaceholder?: Placeholder;
 
 	private constructor(
 		private readonly view: DragStepView,
 		private readonly workspaceController: WorkspaceController,
+		private readonly placeholderController: PlaceholderController,
 		private readonly designerState: DesignerState,
 		private readonly step: Step,
 		private readonly stateModifier: StateModifier,
@@ -44,6 +47,7 @@ export class DragStepBehavior implements Behavior {
 
 		if (this.draggedStepComponent) {
 			this.draggedStepComponent.setIsDisabled(true);
+			this.draggedStepComponent.setIsDragging(true);
 
 			const hasSameSize =
 				this.draggedStepComponent.view.width === this.view.component.width &&
@@ -62,12 +66,17 @@ export class DragStepBehavior implements Behavior {
 		this.view.setPosition(position.subtract(offset));
 		this.designerState.setIsDragging(true);
 
-		const placeholders = this.workspaceController.getPlaceholders();
+		const { placeholders, components } = this.resolvePlaceholders(this.draggedStepComponent);
 		this.state = {
+			placeholders,
+			components,
 			startPosition: position,
 			finder: PlaceholderFinder.create(placeholders, this.designerState),
 			offset
 		};
+
+		placeholders.forEach(placeholder => placeholder.setIsVisible(true));
+		components.forEach(component => component.setIsDragging(true));
 	}
 
 	public onMove(delta: Vector) {
@@ -94,6 +103,8 @@ export class DragStepBehavior implements Behavior {
 			throw new Error('Invalid state');
 		}
 
+		this.state.placeholders.forEach(placeholder => placeholder.setIsVisible(false));
+		this.state.components.forEach(component => component.setIsDragging(false));
 		this.state.finder.destroy();
 		this.state = undefined;
 
@@ -117,11 +128,23 @@ export class DragStepBehavior implements Behavior {
 		if (!modified) {
 			if (this.draggedStepComponent) {
 				this.draggedStepComponent.setIsDisabled(false);
+				this.draggedStepComponent.setIsDragging(false);
 			}
 			if (this.currentPlaceholder) {
 				this.currentPlaceholder.setIsHover(false);
 			}
 		}
 		this.currentPlaceholder = undefined;
+	}
+
+	private resolvePlaceholders(skipComponent: StepComponent | undefined): FoundPlaceholders {
+		const result = this.workspaceController.resolvePlaceholders(skipComponent);
+		if (this.placeholderController.canShow) {
+			const canShow = this.placeholderController.canShow;
+			result.placeholders = result.placeholders.filter(placeholder =>
+				canShow(placeholder.parentSequence, placeholder.index, this.step.componentType, this.step.type)
+			);
+		}
+		return result;
 	}
 }
