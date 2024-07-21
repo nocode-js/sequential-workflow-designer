@@ -23,7 +23,8 @@ describe('ContainerStepComponentView', () => {
 			position: 0,
 			isInputConnected: true,
 			isOutputConnected: true,
-			parentSequence: []
+			parentSequence: [],
+			isPreview: false
 		};
 		const componentContext = createComponentContextStub();
 		const viewContext = StepComponentViewContextFactory.create(stepContext, componentContext);

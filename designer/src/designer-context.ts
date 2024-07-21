@@ -12,6 +12,7 @@ import { Services } from './services';
 import { StepExtensionResolver } from './workspace/step-extension-resolver';
 import { WorkspaceController, WorkspaceControllerWrapper } from './workspace/workspace-controller';
 import { MemoryPreferenceStorage } from './core/memory-preference-storage';
+import { PlaceholderController } from './designer-extension';
 
 export class DesignerContext {
 	public static create(
@@ -31,6 +32,7 @@ export class DesignerContext {
 		const theme = configuration.theme || 'light';
 		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
 		const workspaceController = new WorkspaceControllerWrapper();
+		const placeholderController = services.placeholderController.create();
 		const behaviorController = new BehaviorController();
 		const stepExtensionResolver = StepExtensionResolver.create(services);
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
@@ -50,6 +52,7 @@ export class DesignerContext {
 			stepExtensionResolver,
 			definitionWalker,
 			preferenceStorage,
+			placeholderController,
 			i18n,
 			services
 		);
@@ -65,6 +68,7 @@ export class DesignerContext {
 			stateModifier,
 			layoutController,
 			workspaceController,
+			placeholderController,
 			behaviorController,
 			customActionController,
 			historyController
@@ -82,6 +86,7 @@ export class DesignerContext {
 		public readonly stateModifier: StateModifier,
 		public readonly layoutController: LayoutController,
 		public readonly workspaceController: WorkspaceControllerWrapper,
+		public readonly placeholderController: PlaceholderController,
 		public readonly behaviorController: BehaviorController,
 		public readonly customActionController: CustomActionController,
 		public readonly historyController: HistoryController | undefined

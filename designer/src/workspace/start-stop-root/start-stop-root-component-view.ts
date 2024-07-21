@@ -29,7 +29,8 @@ export class StartStopRootComponentView implements ComponentView {
 				sequence,
 				depth: 0,
 				isInputConnected: true,
-				isOutputConnected: true
+				isOutputConnected: true,
+				isPreview: false
 			},
 			context
 		);

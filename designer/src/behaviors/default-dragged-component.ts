@@ -13,15 +13,16 @@ export class DefaultDraggedComponent implements DraggedComponent {
 
 		parent.appendChild(canvas);
 
-		const fakeStepContext: StepContext = {
+		const previewStepContext: StepContext = {
 			parentSequence: [],
 			step,
 			depth: 0,
 			position: 0,
 			isInputConnected: true,
-			isOutputConnected: true
+			isOutputConnected: true,
+			isPreview: true
 		};
-		const stepComponent = componentContext.stepComponentFactory.create(canvas, fakeStepContext, componentContext);
+		const stepComponent = componentContext.stepComponentFactory.create(canvas, previewStepContext, componentContext);
 
 		Dom.attrs(canvas, {
 			width: stepComponent.view.width + SAFE_OFFSET * 2,

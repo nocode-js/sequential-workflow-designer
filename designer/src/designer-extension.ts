@@ -71,6 +71,7 @@ export interface StepContext<S extends Step = Step> {
 	position: number;
 	isInputConnected: boolean;
 	isOutputConnected: boolean;
+	isPreview: boolean;
 }
 
 export interface SequenceContext {
@@ -78,6 +79,7 @@ export interface SequenceContext {
 	depth: number;
 	isInputConnected: boolean;
 	isOutputConnected: boolean;
+	isPreview: boolean;
 }
 
 export interface StepComponentViewWrapperExtension {
@@ -183,6 +185,7 @@ export interface PlaceholderControllerExtension {
 
 export interface PlaceholderController {
 	canCreate(sequence: Sequence, index: number): boolean;
+	canShow?: (sequence: Sequence, index: number, draggingStepComponentType: ComponentType, draggingStepType: string) => boolean;
 }
 
 // PlaceholderExtension

@@ -8,9 +8,13 @@ export interface Component {
 
 	findById(stepId: string): StepComponent | null;
 	resolveClick(click: ClickDetails): ClickCommand | null;
-	getPlaceholders(result: Placeholder[]): void;
-	setIsDragging(isDragging: boolean): void;
+	resolvePlaceholders(skipComponent: StepComponent | undefined, result: FoundPlaceholders): void;
 	updateBadges(result: BadgesResult): void;
+}
+
+export interface FoundPlaceholders {
+	placeholders: Placeholder[];
+	components: StepComponent[];
 }
 
 export interface ComponentView {

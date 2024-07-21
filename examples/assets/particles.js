@@ -213,7 +213,7 @@ class Popup {
 			controlBar: true
 		});
 
-		popupCloseButton.addEventListener('click', () => {
+		function onClosePopup() {
 			const newDefinition = designer.getDefinition();
 			if (newDefinition.sequence.length === 0) {
 				window.alert('The sequence must have minimum one step.');
@@ -223,7 +223,10 @@ class Popup {
 
 			popup.classList.add('hidden');
 			designer.destroy();
-		});
+			popupCloseButton.removeEventListener('click', onClosePopup, false);
+		}
+
+		popupCloseButton.addEventListener('click', onClosePopup, false);
 	}
 }
 

@@ -10,7 +10,8 @@ describe('DefaultSequenceComponent', () => {
 			depth: 0,
 			isInputConnected: true,
 			isOutputConnected: false,
-			sequence: [createStepStub()]
+			sequence: [createStepStub()],
+			isPreview: false
 		};
 		const componentContext = createComponentContextStub();
 		const component = DefaultSequenceComponent.create(parent, sequenceContext, componentContext);

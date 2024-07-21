@@ -21,7 +21,8 @@ describe('TaskStepComponentView', () => {
 			isInputConnected: true,
 			isOutputConnected: false,
 			step,
-			parentSequence: [step]
+			parentSequence: [step],
+			isPreview: false
 		};
 		const componentContext = createComponentContextStub();
 		const viewContext = StepComponentViewContextFactory.create(stepContext, componentContext);
