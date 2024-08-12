@@ -6,7 +6,7 @@ import { SelectedStepIdProvider } from './editor-api';
 
 export type EditorRendererHandler = (step: Step | null) => void;
 
-type RaceEventArgs = [(DefinitionChangedEvent | undefined)?, (string | null | undefined)?, (boolean | undefined)?];
+type RaceEventArgs = [(DefinitionChangedEvent | undefined)?, (string | null | undefined)?, (boolean | undefined)?, unknown?];
 
 export class EditorRenderer {
 	public static create(

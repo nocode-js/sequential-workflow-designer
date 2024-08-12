@@ -1,8 +1,14 @@
 import { SimpleEvent } from './simple-event';
 
-export function race<A, B, C>(timeout: number, a: SimpleEvent<A>, b: SimpleEvent<B>, c?: SimpleEvent<C>): SimpleEvent<[A?, B?, C?]> {
-	const value: [A?, B?, C?] = [undefined, undefined, undefined];
-	const result = new SimpleEvent<[A?, B?, C?]>();
+export function race<A, B, C, D>(
+	timeout: number,
+	a: SimpleEvent<A>,
+	b: SimpleEvent<B>,
+	c?: SimpleEvent<C>,
+	d?: SimpleEvent<D>
+): SimpleEvent<[A?, B?, C?, D?]> {
+	const value: [A?, B?, C?, D?] = [undefined, undefined, undefined, undefined];
+	const result = new SimpleEvent<[A?, B?, C?, D?]>();
 	let scheduled = false;
 
 	function forward() {
@@ -20,13 +26,20 @@ export function race<A, B, C>(timeout: number, a: SimpleEvent<A>, b: SimpleEvent
 		}, timeout);
 	}
 
-	[a, b, c]
-		.filter(e => e)
-		.forEach((e, index) => {
-			(e as SimpleEvent<A | B | C>).subscribe(v => {
-				value[index] = v;
-				forward();
-			});
+	function subscribe<T extends A | B | C | D>(event: SimpleEvent<T>, index: number) {
+		event.subscribe(v => {
+			value[index] = v;
+			forward();
 		});
+	}
+
+	subscribe(a, 0);
+	subscribe(b, 1);
+	if (c) {
+		subscribe(c, 2);
+	}
+	if (d) {
+		subscribe(d, 3);
+	}
 	return result;
 }
