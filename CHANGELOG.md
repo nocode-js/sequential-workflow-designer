@@ -1,3 +1,7 @@
+# 0.22.1
+
+This release resolves an issue that prevented a step from being deleted due to a bug in the control bar implementation.
+
 # 0.22.0
 
 This version refactors the code responsible for displaying placeholders.

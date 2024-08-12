@@ -1,4 +1,4 @@
-import { SimpleEvent } from '../core';
+import { race, SimpleEvent } from '../core';
 import { StateModifier } from '../modifier/state-modifier';
 import { DesignerState } from '../designer-state';
 import { HistoryController } from '../history-controller';
@@ -12,12 +12,14 @@ export class ControlBarApi {
 		viewportApi: ViewportApi
 	): ControlBarApi {
 		const api = new ControlBarApi(state, historyController, stateModifier, viewportApi);
-		state.onIsReadonlyChanged.subscribe(api.onStateChanged.forward);
-		state.onSelectedStepIdChanged.subscribe(api.onStateChanged.forward);
-		state.onIsDragDisabledChanged.subscribe(api.onStateChanged.forward);
-		if (api.isUndoRedoSupported()) {
-			state.onDefinitionChanged.subscribe(api.onStateChanged.forward);
-		}
+
+		race(
+			0,
+			state.onIsReadonlyChanged,
+			state.onSelectedStepIdChanged,
+			state.onIsDragDisabledChanged,
+			api.isUndoRedoSupported() ? state.onDefinitionChanged : undefined
+		).subscribe(api.onStateChanged.forward);
 		return api;
 	}
 

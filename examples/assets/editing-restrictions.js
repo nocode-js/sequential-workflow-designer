@@ -57,6 +57,7 @@ function load() {
 	};
 	let designer;
 	const configuration = {
+		undoStackSize: 10,
 		toolbox: {
 			isCollapsed: true,
 			labelProvider: step => `** ${step.name} **`,
