@@ -22,7 +22,7 @@
 /* .sqd-toolbox */
 
 .sqd-toolbox,
-.sqd-toolbox-filter {
+.sqd-toolbox-filter-input {
 	font-size: 11px;
 	line-height: 1.2em;
 }
@@ -66,26 +66,31 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0 10px;
 }
 .sqd-toolbox-filter {
+	padding: 0 10px 10px;
+}
+.sqd-toolbox-filter-input {
 	display: block;
 	box-sizing: border-box;
 	padding: 6px 8px;
 	outline: none;
-	width: 110px;
-	margin: 0 10px 10px;
-	box-sizing: border-box;
+	width: 100%;
 }
 .sqd-toolbox-group-title {
 	text-align: center;
 	padding: 5px 0;
-	margin: 0 10px 10px;
+	margin: 0 0 10px;
+	width: 100%;
 }
 .sqd-toolbox-item {
 	position: relative;
 	box-sizing: border-box;
-	margin: 0 10px 10px;
-	width: 110px;
+	margin: 0 0 10px;
+	width: 100%;
 	cursor: move;
 }
 .sqd-toolbox-item-icon {

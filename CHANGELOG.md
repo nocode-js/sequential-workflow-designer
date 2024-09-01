@@ -1,3 +1,11 @@
+# 0.23.0
+
+This release updates the CSS selectors for the toolbox, allowing you to adjust its width with a single CSS override.
+
+```css
+.sqd-toolbox { width: 170px !important; }
+```
+
 # 0.22.1
 
 This release resolves an issue that prevented a step from being deleted due to a bug in the control bar implementation.
