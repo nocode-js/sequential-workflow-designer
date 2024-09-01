@@ -24,8 +24,11 @@ export class ToolboxView {
 			class: 'sqd-toolbox-body'
 		});
 
+		const filter = Dom.element('div', {
+			class: 'sqd-toolbox-filter'
+		});
 		const filterInput = Dom.element('input', {
-			class: 'sqd-toolbox-filter',
+			class: 'sqd-toolbox-filter-input',
 			type: 'text',
 			placeholder: i18n('toolbox.search', 'Search...')
 		});
@@ -33,7 +36,8 @@ export class ToolboxView {
 		root.appendChild(header);
 		root.appendChild(body);
 		header.appendChild(headerTitle);
-		body.appendChild(filterInput);
+		filter.appendChild(filterInput);
+		body.appendChild(filter);
 		parent.appendChild(root);
 
 		const scrollBoxView = ScrollBoxView.create(body, parent);

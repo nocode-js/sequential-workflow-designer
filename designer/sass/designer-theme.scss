@@ -22,13 +22,13 @@
 		.sqd-toolbox-header-title {
 			color: $headerTextColor;
 		}
-		.sqd-toolbox-filter {
+		.sqd-toolbox-filter-input {
 			background: $filterBackground;
 			color: $filterTextColor;
 			border: $filterBorder;
 			border-radius: $filterBorderRadius;
 		}
-		.sqd-toolbox-filter:focus {
+		.sqd-toolbox-filter-input:focus {
 			border-color: $filterBorderColorFocused;
 		}
 		.sqd-toolbox-group-title {
