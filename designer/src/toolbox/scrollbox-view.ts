@@ -16,7 +16,6 @@ export class ScrollBoxView {
 		parent.appendChild(root);
 
 		const view = new ScrollBoxView(root, viewport);
-		window.addEventListener('resize', view.onResize, false);
 		root.addEventListener('wheel', e => view.onWheel(e), listenerOptions);
 		root.addEventListener('touchstart', e => view.onTouchStart(e), listenerOptions);
 		root.addEventListener('mousedown', e => view.onMouseDown(e), false);
@@ -46,14 +45,14 @@ export class ScrollBoxView {
 		this.reload(element);
 	}
 
-	public refresh() {
+	public updateLayout() {
 		if (this.content) {
 			this.reload(this.content.element);
 		}
 	}
 
 	public destroy() {
-		window.removeEventListener('resize', this.onResize, false);
+		//
 	}
 
 	private reload(element: HTMLElement) {
@@ -71,10 +70,6 @@ export class ScrollBoxView {
 			height
 		};
 	}
-
-	private readonly onResize = () => {
-		this.refresh();
-	};
 
 	private onWheel(e: WheelEvent) {
 		e.preventDefault();

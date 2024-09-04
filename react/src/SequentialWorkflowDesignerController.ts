@@ -34,6 +34,13 @@ export class SequentialWorkflowDesignerController {
 	};
 
 	/**
+	 * @description Updates the layout of the designer.
+	 */
+	public readonly updateLayout = () => {
+		this.getDesigner().updateLayout();
+	};
+
+	/**
 	 * Replaces the current definition with a new one and adds the previous definition to the undo stack.
 	 * @param definition A new definition.
 	 */

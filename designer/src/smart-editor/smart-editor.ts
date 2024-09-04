@@ -39,6 +39,10 @@ export class SmartEditor implements UiComponent {
 		this.setIsCollapsed(this.editorApi.isCollapsed());
 	}
 
+	public updateLayout() {
+		//
+	}
+
 	public destroy() {
 		this.view.destroy();
 	}

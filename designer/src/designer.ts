@@ -188,6 +188,14 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
+	 * @description Updates the layout of the designer.
+	 */
+	public updateLayout() {
+		this.api.workspace.updateCanvasSize();
+		this.view.updateLayout();
+	}
+
+	/**
 	 * @description Updates all badges.
 	 */
 	public updateBadges() {
