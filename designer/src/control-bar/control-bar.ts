@@ -31,6 +31,10 @@ export class ControlBar implements UiComponent {
 		private readonly isUndoRedoSupported: boolean
 	) {}
 
+	public updateLayout() {
+		//
+	}
+
 	public destroy() {
 		//
 	}

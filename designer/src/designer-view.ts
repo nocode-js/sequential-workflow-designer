@@ -18,12 +18,10 @@ export class DesignerView {
 		const daemons = designerContext.services.daemons.map(factory => factory.create(api));
 
 		const view = new DesignerView(root, designerContext.layoutController, workspace, uiComponents, daemons);
-		view.reloadLayout();
-		window.addEventListener('resize', view.onResizeHandler, false);
+		view.applyLayout();
+		window.addEventListener('resize', view.onResize, false);
 		return view;
 	}
-
-	private readonly onResizeHandler = () => this.onResize();
 
 	public constructor(
 		private readonly root: HTMLElement,
@@ -33,8 +31,15 @@ export class DesignerView {
 		private readonly daemons: Daemon[]
 	) {}
 
+	public updateLayout() {
+		this.applyLayout();
+		for (const component of this.uiComponents) {
+			component.updateLayout();
+		}
+	}
+
 	public destroy() {
-		window.removeEventListener('resize', this.onResizeHandler, false);
+		window.removeEventListener('resize', this.onResize, false);
 
 		this.workspace.destroy();
 		this.uiComponents.forEach(component => component.destroy());
@@ -43,11 +48,11 @@ export class DesignerView {
 		this.root.parentElement?.removeChild(this.root);
 	}
 
-	private onResize() {
-		this.reloadLayout();
-	}
+	private readonly onResize = () => {
+		this.updateLayout();
+	};
 
-	private reloadLayout() {
+	private applyLayout() {
 		const isMobile = this.layoutController.isMobile();
 		Dom.toggleClass(this.root, !isMobile, 'sqd-layout-desktop');
 		Dom.toggleClass(this.root, isMobile, 'sqd-layout-mobile');

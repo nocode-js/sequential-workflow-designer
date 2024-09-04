@@ -54,6 +54,10 @@ export class ToolboxView {
 		private readonly api: ToolboxApi
 	) {}
 
+	public updateLayout() {
+		this.scrollBoxView.updateLayout();
+	}
+
 	public bindToggleClick(handler: () => void) {
 		function forward(e: Event) {
 			e.preventDefault();
@@ -80,7 +84,7 @@ export class ToolboxView {
 		this.header.appendChild(this.headerToggleIcon);
 
 		if (!isCollapsed) {
-			this.scrollBoxView.refresh();
+			this.updateLayout();
 		}
 	}
 

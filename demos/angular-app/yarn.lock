@@ -6744,17 +6744,17 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sequential-workflow-designer-angular@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-designer-angular/-/sequential-workflow-designer-angular-0.23.0.tgz#aa8a8f9f6e0332d1d3e37c9f973526858db47529"
-  integrity sha512-zLLDzDCY9YOjEpDBdKhYPmsaMIph8boZ9sHyCG8G3btDe5DxyQ0CWly83gn3JYn+ydEbxP8uKr79QOCx5qU86g==
+sequential-workflow-designer-angular@^0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-designer-angular/-/sequential-workflow-designer-angular-0.24.0.tgz#b7f93508228e309648597c17eb742ac0e437d62d"
+  integrity sha512-H137tfBzgB7ETQFWtgVwSIVPL9Spe47zSx1xTpClMQndVMEh2ueOstncHoZouF97NuxGenfogfPRQ1r2yX8rfg==
   dependencies:
     tslib "^2.3.0"
 
-sequential-workflow-designer@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/sequential-workflow-designer/-/sequential-workflow-designer-0.23.0.tgz#8564eed552a75d5d6bca4aeb84e410add3fe431d"
-  integrity sha512-wySBYU+r8UoXeRaqThnH99NDgyAEek4QJSWZHGhKwgPfguH0Y9JZB+8DvV15iLFL9lMKPYiqWQHZvIhUtDz2LA==
+sequential-workflow-designer@^0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/sequential-workflow-designer/-/sequential-workflow-designer-0.24.0.tgz#33d1bba1ccbf33a1ba8b70c133d381faf2361536"
+  integrity sha512-o4wWHw4z2W2r5EqIKTmR3VUh+Cb6yMn+4nIcFWyA63J4XOKcEAEV32eBHtXnmxsjdlfkfRDcXMITp8zV4QbzUA==
   dependencies:
     sequential-workflow-model "^0.2.0"
 

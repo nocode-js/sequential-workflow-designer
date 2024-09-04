@@ -112,6 +112,7 @@ export interface UiComponentExtension {
 }
 
 export interface UiComponent {
+	updateLayout(): void;
 	destroy(): void;
 }
 

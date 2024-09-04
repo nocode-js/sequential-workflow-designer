@@ -1,3 +1,7 @@
+# 0.24.0
+
+This version introduces a new function in the `Designer` class: `updateLayout()`. You can now manually update the layout of the designer, which is particularly useful when you change the size of the designer container. Previously, the layout was updated automatically only when the browser window was resized. However, if you changed the container size dynamically, there was no way to update the layout manually.
+
 # 0.23.0
 
 This release updates the CSS selectors for the toolbox, allowing you to adjust its width with a single CSS override.

@@ -27,6 +27,10 @@ export class Toolbox implements UiComponent {
 		private readonly allGroups: ToolboxGroupData[]
 	) {}
 
+	public updateLayout() {
+		this.view.updateLayout();
+	}
+
 	public destroy() {
 		this.view.destroy();
 	}
