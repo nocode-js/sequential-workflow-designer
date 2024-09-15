@@ -2,7 +2,7 @@ import { Vector } from '../../core';
 import { ContextMenuItem } from '../../designer-extension';
 
 export class ContextMenu {
-	public static create(position: Vector, theme: string, items: ContextMenuItem[]) {
+	public static create(documentBody: Node, position: Vector, theme: string, items: ContextMenuItem[]) {
 		const menu = document.createElement('div');
 		menu.style.left = `${position.x}px`;
 		menu.style.top = `${position.y}px`;
@@ -25,18 +25,19 @@ export class ContextMenu {
 			menu.appendChild(element);
 		}
 
-		const instance = new ContextMenu(menu, elements, items, Date.now());
+		const instance = new ContextMenu(documentBody, menu, elements, items, Date.now());
 		document.addEventListener('mousedown', instance.mouseDown, false);
 		document.addEventListener('mouseup', instance.mouseUp, false);
 		document.addEventListener('touchstart', instance.mouseDown, false);
 		document.addEventListener('touchend', instance.mouseUp, false);
-		document.body.appendChild(menu);
+		documentBody.appendChild(menu);
 		return instance;
 	}
 
 	private isAttached = true;
 
 	private constructor(
+		private readonly documentBody: Node,
 		private readonly menu: HTMLElement,
 		private readonly elements: HTMLElement[],
 		private readonly items: ContextMenuItem[],
@@ -85,7 +86,7 @@ export class ContextMenu {
 
 	public tryDestroy() {
 		if (this.isAttached) {
-			document.body.removeChild(this.menu);
+			this.documentBody.removeChild(this.menu);
 			document.removeEventListener('mousedown', this.mouseDown, false);
 			document.removeEventListener('mouseup', this.mouseUp, false);
 			document.removeEventListener('touchstart', this.mouseDown, false);
