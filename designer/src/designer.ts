@@ -36,12 +36,13 @@ export class Designer<TDefinition extends Definition = Definition> {
 		const config = configuration as DesignerConfiguration;
 		validateConfiguration(config);
 
-		if (!config.disableDomAttachmentCheck && !isElementAttached(placeholder)) {
+		const documentBody = configuration.documentBody ?? document.body;
+		if (!isElementAttached(placeholder, documentBody)) {
 			throw new Error('Placeholder is not attached to the DOM');
 		}
 
 		const services = ServicesResolver.resolve(configuration.extensions, config);
-		const designerContext = DesignerContext.create(placeholder, startDefinition, config, services);
+		const designerContext = DesignerContext.create(placeholder, startDefinition, config, services, documentBody);
 		const designerApi = DesignerApi.create(designerContext);
 
 		const view = DesignerView.create(placeholder, designerContext, designerApi);

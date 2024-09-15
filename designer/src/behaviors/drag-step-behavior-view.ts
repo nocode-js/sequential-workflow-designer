@@ -9,16 +9,17 @@ export class DragStepView {
 		const layer = Dom.element('div', {
 			class: `sqd-drag sqd-theme-${theme}`
 		});
-		document.body.appendChild(layer);
+		componentContext.documentBody.appendChild(layer);
 
 		const component = componentContext.services.draggedComponent.create(layer, step, componentContext);
 
-		return new DragStepView(component, layer);
+		return new DragStepView(component, layer, componentContext.documentBody);
 	}
 
 	private constructor(
 		public readonly component: DraggedComponent,
-		private readonly layer: HTMLElement
+		private readonly layer: HTMLElement,
+		private readonly documentBody: Node
 	) {}
 
 	public setPosition(position: Vector) {
@@ -28,6 +29,6 @@ export class DragStepView {
 
 	public remove() {
 		this.component.destroy();
-		document.body.removeChild(this.layer);
+		this.documentBody.removeChild(this.layer);
 	}
 }

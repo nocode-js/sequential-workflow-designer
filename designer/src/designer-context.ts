@@ -19,7 +19,8 @@ export class DesignerContext {
 		parent: HTMLElement,
 		startDefinition: Definition,
 		configuration: DesignerConfiguration,
-		services: Services
+		services: Services,
+		documentBody: Node
 	): DesignerContext {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
@@ -54,7 +55,8 @@ export class DesignerContext {
 			preferenceStorage,
 			placeholderController,
 			i18n,
-			services
+			services,
+			documentBody
 		);
 
 		return new DesignerContext(

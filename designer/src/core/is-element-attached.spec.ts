@@ -1,12 +1,14 @@
 import { isElementAttached } from './is-element-attached';
 
 describe('isElementAttached', () => {
+	const documentBody = document.body;
+
 	it('returns true if attached', () => {
 		const element = document.createElement('h2');
 
 		document.body.appendChild(element);
 
-		expect(isElementAttached(element)).toBe(true);
+		expect(isElementAttached(element, documentBody)).toBe(true);
 
 		document.body.removeChild(element);
 	});
@@ -14,6 +16,6 @@ describe('isElementAttached', () => {
 	it('returns false if not attached', () => {
 		const element = document.createElement('h2');
 
-		expect(isElementAttached(element)).toBe(false);
+		expect(isElementAttached(element, documentBody)).toBe(false);
 	});
 });
