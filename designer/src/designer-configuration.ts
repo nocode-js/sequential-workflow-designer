@@ -87,6 +87,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	 * @description Custom translation function.
 	 */
 	i18n?: I18n;
+
+	/**
+	 * @description By default, the designer checks if the placeholder is attached to the DOM. This flag may disable this check.
+	 */
+	disableDomAttachmentCheck?: boolean;
 }
 
 export type UidGenerator = () => string;

@@ -1,3 +1,7 @@
+# 0.24.1
+
+This version allows to disable the DOM attachment check.
+
 # 0.24.0
 
 This version introduces a new function in the `Designer` class: `updateLayout()`. You can now manually update the layout of the designer, which is particularly useful when you change the size of the designer container. Previously, the layout was updated automatically only when the browser window was resized. However, if you changed the container size dynamically, there was no way to update the layout manually.

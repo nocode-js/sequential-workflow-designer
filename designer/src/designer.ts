@@ -29,14 +29,16 @@ export class Designer<TDefinition extends Definition = Definition> {
 		if (!placeholder) {
 			throw new Error('Placeholder is not defined');
 		}
-		if (!isElementAttached(placeholder)) {
-			throw new Error('Placeholder is not attached to the DOM');
-		}
 		if (!startDefinition) {
 			throw new Error('Start definition is not defined');
 		}
+
 		const config = configuration as DesignerConfiguration;
 		validateConfiguration(config);
+
+		if (!config.disableDomAttachmentCheck && !isElementAttached(placeholder)) {
+			throw new Error('Placeholder is not attached to the DOM');
+		}
 
 		const services = ServicesResolver.resolve(configuration.extensions, config);
 		const designerContext = DesignerContext.create(placeholder, startDefinition, config, services);
