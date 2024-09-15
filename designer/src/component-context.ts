@@ -10,6 +10,8 @@ import { StepExtensionResolver } from './workspace/step-extension-resolver';
 
 export class ComponentContext {
 	public static create(
+		documentOrShadowRoot: Document | ShadowRoot,
+		documentBody: Node,
 		configuration: DesignerConfiguration,
 		state: DesignerState,
 		stepExtensionResolver: StepExtensionResolver,
@@ -17,13 +19,14 @@ export class ComponentContext {
 		preferenceStorage: PreferenceStorage,
 		placeholderController: PlaceholderController,
 		i18n: I18n,
-		services: Services,
-		documentBody: Node
+		services: Services
 	): ComponentContext {
 		const validator = new DefinitionValidator(configuration.validator, state);
 		const iconProvider = new IconProvider(configuration.steps);
 		const stepComponentFactory = new StepComponentFactory(stepExtensionResolver);
 		return new ComponentContext(
+			documentOrShadowRoot,
+			documentBody,
 			validator,
 			iconProvider,
 			placeholderController,
@@ -31,12 +34,13 @@ export class ComponentContext {
 			definitionWalker,
 			services,
 			preferenceStorage,
-			i18n,
-			documentBody
+			i18n
 		);
 	}
 
 	private constructor(
+		public readonly documentOrShadowRoot: Document | ShadowRoot,
+		public readonly documentBody: Node,
 		public readonly validator: DefinitionValidator,
 		public readonly iconProvider: IconProvider,
 		public readonly placeholderController: PlaceholderController,
@@ -44,7 +48,6 @@ export class ComponentContext {
 		public readonly definitionWalker: DefinitionWalker,
 		public readonly services: Services,
 		public readonly preferenceStorage: PreferenceStorage,
-		public readonly i18n: I18n,
-		public readonly documentBody: Node
+		public readonly i18n: I18n
 	) {}
 }

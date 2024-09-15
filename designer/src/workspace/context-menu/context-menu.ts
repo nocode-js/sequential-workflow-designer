@@ -26,10 +26,10 @@ export class ContextMenu {
 		}
 
 		const instance = new ContextMenu(documentBody, menu, elements, items, Date.now());
-		document.addEventListener('mousedown', instance.mouseDown, false);
-		document.addEventListener('mouseup', instance.mouseUp, false);
-		document.addEventListener('touchstart', instance.mouseDown, false);
-		document.addEventListener('touchend', instance.mouseUp, false);
+		documentBody.addEventListener('mousedown', instance.mouseDown, false);
+		documentBody.addEventListener('mouseup', instance.mouseUp, false);
+		documentBody.addEventListener('touchstart', instance.mouseDown, false);
+		documentBody.addEventListener('touchend', instance.mouseUp, false);
 		documentBody.appendChild(menu);
 		return instance;
 	}
@@ -44,7 +44,7 @@ export class ContextMenu {
 		private readonly startTime: number
 	) {}
 
-	private readonly mouseDown = (e: MouseEvent | TouchEvent) => {
+	private readonly mouseDown = (e: Event) => {
 		const index = this.findIndex(e.target as HTMLElement);
 		if (index === null) {
 			this.tryDestroy();
@@ -54,7 +54,7 @@ export class ContextMenu {
 		}
 	};
 
-	private readonly mouseUp = (e: MouseEvent | TouchEvent) => {
+	private readonly mouseUp = (e: Event) => {
 		const dt = Date.now() - this.startTime;
 		if (dt < 300) {
 			e.preventDefault();
@@ -87,10 +87,10 @@ export class ContextMenu {
 	public tryDestroy() {
 		if (this.isAttached) {
 			this.documentBody.removeChild(this.menu);
-			document.removeEventListener('mousedown', this.mouseDown, false);
-			document.removeEventListener('mouseup', this.mouseUp, false);
-			document.removeEventListener('touchstart', this.mouseDown, false);
-			document.removeEventListener('touchend', this.mouseUp, false);
+			this.documentBody.removeEventListener('mousedown', this.mouseDown, false);
+			this.documentBody.removeEventListener('mouseup', this.mouseUp, false);
+			this.documentBody.removeEventListener('touchstart', this.mouseDown, false);
+			this.documentBody.removeEventListener('touchend', this.mouseUp, false);
 			this.isAttached = false;
 		}
 	}

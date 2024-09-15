@@ -15,6 +15,8 @@ export class BehaviorController {
 		lastPosition?: Vector;
 	};
 
+	public constructor(private readonly documentOrShadowRoot: DocumentOrShadowRoot) {}
+
 	public start(startPosition: Vector, behavior: Behavior) {
 		if (this.state) {
 			this.stop(true, null);
@@ -56,7 +58,7 @@ export class BehaviorController {
 		}
 
 		const position = this.state.lastPosition ?? this.state.startPosition;
-		const element = document.elementFromPoint(position.x, position.y);
+		const element = this.documentOrShadowRoot.elementFromPoint(position.x, position.y);
 		this.stop(false, element);
 	};
 
