@@ -1,3 +1,7 @@
+# 0.24.4
+
+Fixed event handling when the designer is placed in a shadow DOM.
+
 # 0.24.3
 
 Fixed the placement of the context menu in the `documentBody` element if specified in the configuration.

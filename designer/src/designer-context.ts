@@ -16,6 +16,7 @@ import { PlaceholderController } from './designer-extension';
 
 export class DesignerContext {
 	public static create(
+		documentOrShadowRoot: Document | ShadowRoot,
 		documentBody: Node,
 		parent: HTMLElement,
 		startDefinition: Definition,
@@ -34,7 +35,7 @@ export class DesignerContext {
 		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const placeholderController = services.placeholderController.create();
-		const behaviorController = new BehaviorController();
+		const behaviorController = new BehaviorController(documentOrShadowRoot);
 		const stepExtensionResolver = StepExtensionResolver.create(services);
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
 		const i18n: I18n = configuration.i18n ?? ((_, defaultValue) => defaultValue);
@@ -48,6 +49,8 @@ export class DesignerContext {
 
 		const preferenceStorage = configuration.preferenceStorage ?? new MemoryPreferenceStorage();
 		const componentContext = ComponentContext.create(
+			documentOrShadowRoot,
+			documentBody,
 			configuration,
 			state,
 			stepExtensionResolver,
@@ -55,11 +58,11 @@ export class DesignerContext {
 			preferenceStorage,
 			placeholderController,
 			i18n,
-			services,
-			documentBody
+			services
 		);
 
 		return new DesignerContext(
+			documentOrShadowRoot,
 			documentBody,
 			theme,
 			state,
@@ -79,6 +82,7 @@ export class DesignerContext {
 	}
 
 	public constructor(
+		public readonly documentOrShadowRoot: Document | ShadowRoot,
 		public readonly documentBody: Node,
 		public readonly theme: string,
 		public readonly state: DesignerState,

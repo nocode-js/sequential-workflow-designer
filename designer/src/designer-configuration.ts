@@ -89,6 +89,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	i18n?: I18n;
 
 	/**
+	 * @description The document or shadow root where the designer is rendered. By default, the designer will use the `document`.
+	 */
+	documentOrShadowRoot?: Document | ShadowRoot;
+
+	/**
 	 * @description The body of the document. By default, the designer will use the `document.body`.
 	 */
 	documentBody?: Node;
