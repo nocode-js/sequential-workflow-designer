@@ -89,9 +89,9 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	i18n?: I18n;
 
 	/**
-	 * @description By default, the designer checks if the placeholder is attached to the DOM. This flag may disable this check.
+	 * @description The body of the document. By default, the designer will use the `document.body`.
 	 */
-	disableDomAttachmentCheck?: boolean;
+	documentBody?: Node;
 }
 
 export type UidGenerator = () => string;

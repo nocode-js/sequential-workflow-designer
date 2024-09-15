@@ -48,7 +48,8 @@ export function createDesignerContextStub(): DesignerContext {
 	const parent = document.createElement('div');
 	const configuration = createDesignerConfigurationStub();
 	const services = ServicesResolver.resolve([], configuration);
-	return DesignerContext.create(parent, createDefinitionStub(), createDesignerConfigurationStub(), services);
+	const documentBody = document.body;
+	return DesignerContext.create(parent, createDefinitionStub(), createDesignerConfigurationStub(), services, documentBody);
 }
 
 export function createComponentContextStub(): ComponentContext {

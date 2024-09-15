@@ -1,3 +1,7 @@
+# 0.24.2
+
+This version reverts the changes introduced in version 0.24.1. To modify the DOM attachment check, you should now pass the `documentBody` property in the configuration, which should reference the document's body element.
+
 # 0.24.1
 
 This version allows to disable the DOM attachment check.

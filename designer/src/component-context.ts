@@ -17,7 +17,8 @@ export class ComponentContext {
 		preferenceStorage: PreferenceStorage,
 		placeholderController: PlaceholderController,
 		i18n: I18n,
-		services: Services
+		services: Services,
+		documentBody: Node
 	): ComponentContext {
 		const validator = new DefinitionValidator(configuration.validator, state);
 		const iconProvider = new IconProvider(configuration.steps);
@@ -30,7 +31,8 @@ export class ComponentContext {
 			definitionWalker,
 			services,
 			preferenceStorage,
-			i18n
+			i18n,
+			documentBody
 		);
 	}
 
@@ -42,6 +44,7 @@ export class ComponentContext {
 		public readonly definitionWalker: DefinitionWalker,
 		public readonly services: Services,
 		public readonly preferenceStorage: PreferenceStorage,
-		public readonly i18n: I18n
+		public readonly i18n: I18n,
+		public readonly documentBody: Node
 	) {}
 }
