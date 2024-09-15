@@ -16,11 +16,11 @@ import { PlaceholderController } from './designer-extension';
 
 export class DesignerContext {
 	public static create(
+		documentBody: Node,
 		parent: HTMLElement,
 		startDefinition: Definition,
 		configuration: DesignerConfiguration,
-		services: Services,
-		documentBody: Node
+		services: Services
 	): DesignerContext {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
@@ -60,6 +60,7 @@ export class DesignerContext {
 		);
 
 		return new DesignerContext(
+			documentBody,
 			theme,
 			state,
 			configuration,
@@ -78,6 +79,7 @@ export class DesignerContext {
 	}
 
 	public constructor(
+		public readonly documentBody: Node,
 		public readonly theme: string,
 		public readonly state: DesignerState,
 		public readonly configuration: DesignerConfiguration,

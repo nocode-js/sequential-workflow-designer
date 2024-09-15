@@ -8,6 +8,7 @@ export class ContextMenuController {
 	private current?: ContextMenu;
 
 	public constructor(
+		private readonly documentBody: Node,
 		private readonly theme: string,
 		private readonly configuration: DesignerConfiguration,
 		private readonly itemsBuilder: ContextMenuItemsBuilder
@@ -24,7 +25,7 @@ export class ContextMenuController {
 		}
 
 		const items = this.itemsBuilder.build(commandOrNull);
-		this.current = ContextMenu.create(position, this.theme, items);
+		this.current = ContextMenu.create(this.documentBody, position, this.theme, items);
 	}
 
 	public destroy() {
