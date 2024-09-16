@@ -2,7 +2,7 @@ import { Vector } from '../../core';
 import { ContextMenuItem } from '../../designer-extension';
 
 export class ContextMenu {
-	public static create(documentBody: Node, position: Vector, theme: string, items: ContextMenuItem[]) {
+	public static create(shadowRoot: ShadowRoot | undefined, position: Vector, theme: string, items: ContextMenuItem[]) {
 		const menu = document.createElement('div');
 		menu.style.left = `${position.x}px`;
 		menu.style.top = `${position.y}px`;
@@ -25,19 +25,22 @@ export class ContextMenu {
 			menu.appendChild(element);
 		}
 
-		const instance = new ContextMenu(documentBody, menu, elements, items, Date.now());
-		documentBody.addEventListener('mousedown', instance.mouseDown, false);
-		documentBody.addEventListener('mouseup', instance.mouseUp, false);
-		documentBody.addEventListener('touchstart', instance.mouseDown, false);
-		documentBody.addEventListener('touchend', instance.mouseUp, false);
-		documentBody.appendChild(menu);
+		const body = shadowRoot ?? document.body;
+		const dom = shadowRoot ?? document;
+		const instance = new ContextMenu(body, dom, menu, elements, items, Date.now());
+		dom.addEventListener('mousedown', instance.mouseDown, false);
+		dom.addEventListener('mouseup', instance.mouseUp, false);
+		dom.addEventListener('touchstart', instance.mouseDown, false);
+		dom.addEventListener('touchend', instance.mouseUp, false);
+		body.appendChild(menu);
 		return instance;
 	}
 
 	private isAttached = true;
 
 	private constructor(
-		private readonly documentBody: Node,
+		private readonly body: Node,
+		private readonly dom: Document | ShadowRoot,
 		private readonly menu: HTMLElement,
 		private readonly elements: HTMLElement[],
 		private readonly items: ContextMenuItem[],
@@ -86,11 +89,11 @@ export class ContextMenu {
 
 	public tryDestroy() {
 		if (this.isAttached) {
-			this.documentBody.removeChild(this.menu);
-			this.documentBody.removeEventListener('mousedown', this.mouseDown, false);
-			this.documentBody.removeEventListener('mouseup', this.mouseUp, false);
-			this.documentBody.removeEventListener('touchstart', this.mouseDown, false);
-			this.documentBody.removeEventListener('touchend', this.mouseUp, false);
+			this.body.removeChild(this.menu);
+			this.dom.removeEventListener('mousedown', this.mouseDown, false);
+			this.dom.removeEventListener('mouseup', this.mouseUp, false);
+			this.dom.removeEventListener('touchstart', this.mouseDown, false);
+			this.dom.removeEventListener('touchend', this.mouseUp, false);
 			this.isAttached = false;
 		}
 	}

@@ -37,7 +37,6 @@ export class Workspace implements WorkspaceController {
 				: undefined
 		);
 		const contextMenuController = new ContextMenuController(
-			designerContext.documentBody,
 			designerContext.theme,
 			designerContext.configuration,
 			contextMenuItemsBuilder

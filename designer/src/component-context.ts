@@ -10,8 +10,6 @@ import { StepExtensionResolver } from './workspace/step-extension-resolver';
 
 export class ComponentContext {
 	public static create(
-		documentOrShadowRoot: Document | ShadowRoot,
-		documentBody: Node,
 		configuration: DesignerConfiguration,
 		state: DesignerState,
 		stepExtensionResolver: StepExtensionResolver,
@@ -25,8 +23,7 @@ export class ComponentContext {
 		const iconProvider = new IconProvider(configuration.steps);
 		const stepComponentFactory = new StepComponentFactory(stepExtensionResolver);
 		return new ComponentContext(
-			documentOrShadowRoot,
-			documentBody,
+			configuration.shadowRoot,
 			validator,
 			iconProvider,
 			placeholderController,
@@ -39,8 +36,7 @@ export class ComponentContext {
 	}
 
 	private constructor(
-		public readonly documentOrShadowRoot: Document | ShadowRoot,
-		public readonly documentBody: Node,
+		public readonly shadowRoot: ShadowRoot | undefined,
 		public readonly validator: DefinitionValidator,
 		public readonly iconProvider: IconProvider,
 		public readonly placeholderController: PlaceholderController,

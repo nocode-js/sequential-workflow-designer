@@ -1,7 +1,7 @@
 export class LayoutController {
-	public constructor(private readonly parent: HTMLElement) {}
+	public constructor(private readonly placeholder: HTMLElement) {}
 
 	public isMobile(): boolean {
-		return this.parent.clientWidth < 400; // TODO
+		return this.placeholder.clientWidth < 400; // TODO
 	}
 }

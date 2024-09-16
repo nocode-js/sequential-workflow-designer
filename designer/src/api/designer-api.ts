@@ -21,8 +21,7 @@ export class DesignerApi {
 		);
 
 		return new DesignerApi(
-			context.documentOrShadowRoot,
-			context.documentBody,
+			context.configuration.shadowRoot,
 			ControlBarApi.create(context.state, context.historyController, context.stateModifier, viewport),
 			new ToolboxApi(context.state, context, context.behaviorController, toolboxDataProvider, context.configuration.uidGenerator),
 			new EditorApi(context.state, context.definitionWalker, context.stateModifier),
@@ -35,8 +34,7 @@ export class DesignerApi {
 	}
 
 	private constructor(
-		public readonly documentOrShadowRoot: Document | ShadowRoot,
-		public readonly documentBody: Node,
+		public readonly shadowRoot: ShadowRoot | undefined,
 		public readonly controlBar: ControlBarApi,
 		public readonly toolbox: ToolboxApi,
 		public readonly editor: EditorApi,
