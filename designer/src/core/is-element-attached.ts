@@ -1,3 +1,3 @@
-export function isElementAttached(element: HTMLElement, documentBody: Node): boolean {
-	return !(documentBody.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_DISCONNECTED);
+export function isElementAttached(dom: Document | ShadowRoot, element: HTMLElement): boolean {
+	return !(dom.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_DISCONNECTED);
 }

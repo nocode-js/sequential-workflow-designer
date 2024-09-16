@@ -15,7 +15,14 @@ export class BehaviorController {
 		lastPosition?: Vector;
 	};
 
-	public constructor(private readonly documentOrShadowRoot: DocumentOrShadowRoot) {}
+	public static create(shadowRoot: ShadowRoot | undefined) {
+		return new BehaviorController(shadowRoot ?? document, shadowRoot);
+	}
+
+	private constructor(
+		private readonly dom: Document | ShadowRoot,
+		private readonly shadowRoot: ShadowRoot | undefined
+	) {}
 
 	public start(startPosition: Vector, behavior: Behavior) {
 		if (this.state) {
@@ -29,42 +36,62 @@ export class BehaviorController {
 		};
 		behavior.onStart(this.state.startPosition);
 
-		window.addEventListener('mousemove', this.onMouseMove, false);
-		window.addEventListener('touchmove', this.onTouchMove, nonPassiveOptions);
-		window.addEventListener('mouseup', this.onMouseUp, false);
-		window.addEventListener('touchend', this.onTouchEnd, nonPassiveOptions);
-		window.addEventListener('touchstart', this.onTouchStart, nonPassiveOptions);
+		if (this.shadowRoot) {
+			this.bind(this.shadowRoot);
+		}
+		this.bind(window);
 	}
 
-	private readonly onMouseMove = (e: MouseEvent) => {
+	private bind(target: EventTarget) {
+		target.addEventListener('mousemove', this.onMouseMove, false);
+		target.addEventListener('touchmove', this.onTouchMove, nonPassiveOptions);
+		target.addEventListener('mouseup', this.onMouseUp, false);
+		target.addEventListener('touchend', this.onTouchEnd, nonPassiveOptions);
+		target.addEventListener('touchstart', this.onTouchStart, nonPassiveOptions);
+	}
+
+	private unbind(target: EventTarget) {
+		target.removeEventListener('mousemove', this.onMouseMove, false);
+		target.removeEventListener('touchmove', this.onTouchMove, nonPassiveOptions);
+		target.removeEventListener('mouseup', this.onMouseUp, false);
+		target.removeEventListener('touchend', this.onTouchEnd, nonPassiveOptions);
+		target.removeEventListener('touchstart', this.onTouchStart, nonPassiveOptions);
+	}
+
+	private readonly onMouseMove = (e: Event) => {
 		e.preventDefault();
-		this.move(readMousePosition(e));
+		e.stopPropagation();
+		this.move(readMousePosition(e as MouseEvent));
 	};
 
-	private readonly onTouchMove = (e: TouchEvent) => {
+	private readonly onTouchMove = (e: Event) => {
 		e.preventDefault();
-		this.move(readTouchPosition(e));
+		e.stopPropagation();
+		this.move(readTouchPosition(e as TouchEvent));
 	};
 
-	private readonly onMouseUp = (e: MouseEvent) => {
+	private readonly onMouseUp = (e: Event) => {
 		e.preventDefault();
+		e.stopPropagation();
 		this.stop(false, e.target as Element | null);
 	};
 
-	private readonly onTouchEnd = (e: TouchEvent) => {
+	private readonly onTouchEnd = (e: Event) => {
 		e.preventDefault();
+		e.stopPropagation();
 		if (!this.state) {
 			throw new Error(notInitializedError);
 		}
 
 		const position = this.state.lastPosition ?? this.state.startPosition;
-		const element = this.documentOrShadowRoot.elementFromPoint(position.x, position.y);
+		const element = this.dom.elementFromPoint(position.x, position.y);
 		this.stop(false, element);
 	};
 
-	private readonly onTouchStart = (e: TouchEvent) => {
+	private readonly onTouchStart = (e: Event) => {
 		e.preventDefault();
-		if (e.touches.length !== 1) {
+		e.stopPropagation();
+		if ((e as TouchEvent).touches.length !== 1) {
 			this.stop(true, null);
 		}
 	};
@@ -92,11 +119,10 @@ export class BehaviorController {
 			throw new Error(notInitializedError);
 		}
 
-		window.removeEventListener('mousemove', this.onMouseMove, false);
-		window.removeEventListener('touchmove', this.onTouchMove, nonPassiveOptions);
-		window.removeEventListener('mouseup', this.onMouseUp, false);
-		window.removeEventListener('touchend', this.onTouchEnd, nonPassiveOptions);
-		window.removeEventListener('touchstart', this.onTouchStart, nonPassiveOptions);
+		if (this.shadowRoot) {
+			this.unbind(this.shadowRoot);
+		}
+		this.unbind(window);
 
 		this.state.behavior.onEnd(interrupt, element);
 		this.state = undefined;

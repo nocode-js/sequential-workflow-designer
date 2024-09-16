@@ -89,14 +89,9 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	i18n?: I18n;
 
 	/**
-	 * @description The document or shadow root where the designer is rendered. By default, the designer will use the `document`.
+	 * @description Pass the shadow root of the shadow root to the designer if the designer is placed inside the shadow DOM.
 	 */
-	documentOrShadowRoot?: Document | ShadowRoot;
-
-	/**
-	 * @description The body of the document. By default, the designer will use the `document.body`.
-	 */
-	documentBody?: Node;
+	shadowRoot?: ShadowRoot;
 }
 
 export type UidGenerator = () => string;

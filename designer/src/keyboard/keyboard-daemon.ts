@@ -7,13 +7,14 @@ const ignoreTagNames = ['INPUT', 'TEXTAREA', 'SELECT'];
 
 export class KeyboardDaemon implements Daemon {
 	public static create(api: DesignerApi, configuration: KeyboardConfiguration): KeyboardDaemon {
-		const controller = new KeyboardDaemon(api.documentOrShadowRoot, api.controlBar, configuration);
-		api.documentOrShadowRoot.addEventListener('keyup', controller.onKeyUp, false);
+		const dom = api.shadowRoot || document;
+		const controller = new KeyboardDaemon(dom, api.controlBar, configuration);
+		dom.addEventListener('keyup', controller.onKeyUp, false);
 		return controller;
 	}
 
 	private constructor(
-		private readonly documentOrShadowRoot: Document | ShadowRoot,
+		private readonly dom: Document | ShadowRoot,
 		private readonly controlBarApi: ControlBarApi,
 		private readonly configuration: KeyboardConfiguration
 	) {}
@@ -41,7 +42,7 @@ export class KeyboardDaemon implements Daemon {
 	};
 
 	public destroy() {
-		this.documentOrShadowRoot.removeEventListener('keyup', this.onKeyUp, false);
+		this.dom.removeEventListener('keyup', this.onKeyUp, false);
 	}
 }
 

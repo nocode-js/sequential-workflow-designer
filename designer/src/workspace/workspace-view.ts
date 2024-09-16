@@ -46,15 +46,7 @@ export class WorkspaceView {
 		workspace.appendChild(canvas);
 		parent.appendChild(workspace);
 
-		const view = new WorkspaceView(
-			componentContext.documentOrShadowRoot,
-			workspace,
-			canvas,
-			pattern,
-			gridPattern,
-			foreground,
-			componentContext
-		);
+		const view = new WorkspaceView(componentContext.shadowRoot, workspace, canvas, pattern, gridPattern, foreground, componentContext);
 		window.addEventListener('resize', view.onResizeHandler, false);
 		return view;
 	}
@@ -63,7 +55,7 @@ export class WorkspaceView {
 	public rootComponent?: Component;
 
 	private constructor(
-		private readonly documentOrShadowRoot: DocumentOrShadowRoot,
+		private readonly shadowRoot: ShadowRoot | undefined,
 		private readonly workspace: HTMLElement,
 		private readonly canvas: SVGElement,
 		private readonly pattern: SVGPatternElement,
@@ -122,7 +114,8 @@ export class WorkspaceView {
 			e => {
 				e.preventDefault();
 				const clientPosition = readTouchClientPosition(e);
-				const element = this.documentOrShadowRoot.elementFromPoint(clientPosition.x, clientPosition.y);
+				const dom = this.shadowRoot ?? document;
+				const element = dom.elementFromPoint(clientPosition.x, clientPosition.y);
 				if (element) {
 					const position = readTouchPosition(e);
 					handler(position, element, 0, false);

@@ -16,17 +16,15 @@ import { PlaceholderController } from './designer-extension';
 
 export class DesignerContext {
 	public static create(
-		documentOrShadowRoot: Document | ShadowRoot,
-		documentBody: Node,
-		parent: HTMLElement,
+		placeholder: HTMLElement,
 		startDefinition: Definition,
 		configuration: DesignerConfiguration,
 		services: Services
 	): DesignerContext {
 		const definition = ObjectCloner.deepClone(startDefinition);
 
-		const layoutController = new LayoutController(parent);
-		const isReadonly = !!configuration.isReadonly;
+		const layoutController = new LayoutController(placeholder);
+		const isReadonly = Boolean(configuration.isReadonly);
 
 		const isToolboxCollapsed = configuration.toolbox ? configuration.toolbox.isCollapsed ?? layoutController.isMobile() : false;
 		const isEditorCollapsed = configuration.editors ? configuration.editors.isCollapsed ?? layoutController.isMobile() : false;
@@ -35,7 +33,7 @@ export class DesignerContext {
 		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const placeholderController = services.placeholderController.create();
-		const behaviorController = new BehaviorController(documentOrShadowRoot);
+		const behaviorController = BehaviorController.create(configuration.shadowRoot);
 		const stepExtensionResolver = StepExtensionResolver.create(services);
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
 		const i18n: I18n = configuration.i18n ?? ((_, defaultValue) => defaultValue);
@@ -49,8 +47,6 @@ export class DesignerContext {
 
 		const preferenceStorage = configuration.preferenceStorage ?? new MemoryPreferenceStorage();
 		const componentContext = ComponentContext.create(
-			documentOrShadowRoot,
-			documentBody,
 			configuration,
 			state,
 			stepExtensionResolver,
@@ -62,8 +58,6 @@ export class DesignerContext {
 		);
 
 		return new DesignerContext(
-			documentOrShadowRoot,
-			documentBody,
 			theme,
 			state,
 			configuration,
@@ -82,8 +76,6 @@ export class DesignerContext {
 	}
 
 	public constructor(
-		public readonly documentOrShadowRoot: Document | ShadowRoot,
-		public readonly documentBody: Node,
 		public readonly theme: string,
 		public readonly state: DesignerState,
 		public readonly configuration: DesignerConfiguration,

@@ -16,8 +16,8 @@
 		"eslint": "eslint ./src --ext .ts"
 	},
 	"dependencies": {
-		"sequential-workflow-designer": "^0.24.4",
-		"sequential-workflow-designer-svelte": "^0.24.4"
+		"sequential-workflow-designer": "^0.24.5",
+		"sequential-workflow-designer-svelte": "^0.24.5"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^2.0.3",

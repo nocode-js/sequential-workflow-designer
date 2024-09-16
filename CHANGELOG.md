@@ -1,3 +1,7 @@
+# 0.24.5
+
+Fixed another bug with event handling when the designer is placed in a shadow DOM.
+
 # 0.24.4
 
 Fixed event handling when the designer is placed in a shadow DOM.
