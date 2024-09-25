@@ -1,3 +1,7 @@
+# 0.24.6
+
+Fixed a bug where the designer remained in an invalid state when rendered inside a placeholder with a width or height of 0px.
+
 # 0.24.5
 
 Fixed another bug with event handling when the designer is placed in a shadow DOM.

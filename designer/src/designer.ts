@@ -169,6 +169,13 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
+	 * @description Resets the viewport.
+	 */
+	public resetViewport() {
+		this.api.viewport.resetViewport();
+	}
+
+	/**
 	 * @description Unselects the selected step.
 	 */
 	public clearSelectedStep() {
