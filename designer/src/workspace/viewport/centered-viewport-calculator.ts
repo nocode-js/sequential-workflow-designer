@@ -3,6 +3,13 @@ import { Viewport } from '../../designer-extension';
 
 export class CenteredViewportCalculator {
 	public static center(margin: number, canvasSize: Vector, rootComponentSize: Vector): Viewport {
+		if (canvasSize.x === 0 || canvasSize.y === 0) {
+			return {
+				position: new Vector(0, 0),
+				scale: 1
+			};
+		}
+
 		const canvasSafeWidth = Math.max(canvasSize.x - margin * 2, 0);
 		const canvasSafeHeight = Math.max(canvasSize.y - margin * 2, 0);
 
