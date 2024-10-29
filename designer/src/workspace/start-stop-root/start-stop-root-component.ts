@@ -4,15 +4,17 @@ import { ComponentContext } from '../../component-context';
 import { StartStopRootComponentView } from './start-stop-root-component-view';
 import { SequencePlaceIndicator } from '../../designer-extension';
 import { StepComponent } from '../step-component';
+import { StartStopRootComponentViewConfiguration } from './start-stop-root-component-view-configuration';
 
 export class StartStopRootComponent implements Component {
 	public static create(
 		parentElement: SVGElement,
 		sequence: Sequence,
 		parentPlaceIndicator: SequencePlaceIndicator | null,
-		context: ComponentContext
+		context: ComponentContext,
+		viewConfiguration: StartStopRootComponentViewConfiguration
 	): StartStopRootComponent {
-		const view = StartStopRootComponentView.create(parentElement, sequence, parentPlaceIndicator, context);
+		const view = StartStopRootComponentView.create(parentElement, sequence, parentPlaceIndicator, context, viewConfiguration);
 		return new StartStopRootComponent(view);
 	}
 
