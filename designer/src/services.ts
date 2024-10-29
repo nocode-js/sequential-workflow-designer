@@ -135,7 +135,7 @@ function setDefaults(services: Partial<Services>, configuration: DesignerConfigu
 		services.grid = LineGridExtension.create();
 	}
 	if (!services.rootComponent) {
-		services.rootComponent = new StartStopRootComponentExtension();
+		services.rootComponent = StartStopRootComponentExtension.create();
 	}
 	if (!services.sequenceComponent) {
 		services.sequenceComponent = new DefaultSequenceComponentExtension();

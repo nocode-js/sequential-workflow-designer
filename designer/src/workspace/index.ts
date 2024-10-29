@@ -1,6 +1,7 @@
 export * from './badges';
 export * from './common-views';
 export * from './sequence';
+export * from './start-stop-root';
 export * from './container-step';
 export * from './grid';
 export * from './switch-step';

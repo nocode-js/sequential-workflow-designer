@@ -1,3 +1,7 @@
+# 0.24.7
+
+This version introduces the ability to adjust the appearance of the start-stop root component.
+
 # 0.24.6
 
 Fixed a bug where the designer remained in an invalid state when rendered inside a placeholder with a width or height of 0px.
