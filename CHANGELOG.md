@@ -1,3 +1,7 @@
+# 0.24.8
+
+This version adds new classes to the start-stop root component.
+
 # 0.24.7
 
 This version introduces the ability to adjust the appearance of the start-stop root component.

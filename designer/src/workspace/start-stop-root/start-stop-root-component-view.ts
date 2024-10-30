@@ -38,15 +38,15 @@ export class StartStopRootComponentView implements ComponentView {
 		const endY = cfg.size + view.height;
 
 		const iconSize = parentPlaceIndicator ? cfg.folderIconSize : cfg.defaultIconSize;
-		const startCircle = createCircle(parentPlaceIndicator ? cfg.folderIconD : cfg.startIconD, cfg.size, iconSize);
+		const startCircle = createCircle('start', parentPlaceIndicator ? cfg.folderIconD : cfg.startIconD, cfg.size, iconSize);
 		Dom.translate(startCircle, x, 0);
 		g.appendChild(startCircle);
 
 		Dom.translate(view.g, 0, cfg.size);
 
-		const endCircle = createCircle(parentPlaceIndicator ? cfg.folderIconD : cfg.stopIconD, cfg.size, iconSize);
-		Dom.translate(endCircle, x, endY);
-		g.appendChild(endCircle);
+		const stopCircle = createCircle('stop', parentPlaceIndicator ? cfg.folderIconD : cfg.stopIconD, cfg.size, iconSize);
+		Dom.translate(stopCircle, x, endY);
+		g.appendChild(stopCircle);
 
 		let startPlaceholder: Placeholder | null = null;
 		let endPlaceholder: Placeholder | null = null;
@@ -101,7 +101,11 @@ export class StartStopRootComponentView implements ComponentView {
 	}
 }
 
-function createCircle(d: string, size: number, iconSize: number): SVGGElement {
+function createCircle(classSuffix: string, d: string, size: number, iconSize: number): SVGGElement {
+	const g = Dom.svg('g', {
+		class: 'sqd-root-start-stop-' + classSuffix
+	});
+
 	const r = size / 2;
 	const circle = Dom.svg('circle', {
 		class: 'sqd-root-start-stop-circle',
@@ -109,8 +113,6 @@ function createCircle(d: string, size: number, iconSize: number): SVGGElement {
 		cy: r,
 		r: r
 	});
-
-	const g = Dom.svg('g');
 	g.appendChild(circle);
 
 	const offset = (size - iconSize) / 2;
