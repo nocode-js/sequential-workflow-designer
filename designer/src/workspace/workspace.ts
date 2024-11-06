@@ -19,13 +19,15 @@ import { ContextMenuController } from './context-menu/context-menu-controller';
 import { ViewportApi } from '../api/viewport-api';
 import { DefinitionChangeType } from '../designer-configuration';
 import { ContextMenuItemsBuilder } from './context-menu/context-menu-items-builder';
+import { PinchToZoomController } from './viewport/pinch-to-zoom-controller';
 
 export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {
 		const view = WorkspaceView.create(parent, designerContext.componentContext);
 
 		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext);
-		const wheelController = designerContext.services.wheelController.create(api.workspace);
+		const wheelController = designerContext.services.wheelController.create(api.viewport, api.workspace);
+		const pinchToZoomController = PinchToZoomController.create(api.workspace, api.viewport, api.shadowRoot);
 
 		const contextMenuItemsBuilder = new ContextMenuItemsBuilder(
 			api.viewport,
@@ -48,6 +50,7 @@ export class Workspace implements WorkspaceController {
 			designerContext.state,
 			designerContext.behaviorController,
 			wheelController,
+			pinchToZoomController,
 			contextMenuController,
 			clickBehaviorResolver,
 			api.viewport,
@@ -70,7 +73,8 @@ export class Workspace implements WorkspaceController {
 			workspace.onStateChanged(r[0], r[1], r[2]);
 		});
 
-		view.bindClick(workspace.onClick);
+		view.bindMouseDown(workspace.onClick);
+		view.bindTouchStart(workspace.onClick, workspace.onPinchToZoom);
 		view.bindWheel(workspace.onWheel);
 		view.bindContextMenu(workspace.onContextMenu);
 		return workspace;
@@ -88,6 +92,7 @@ export class Workspace implements WorkspaceController {
 		private readonly state: DesignerState,
 		private readonly behaviorController: BehaviorController,
 		private readonly wheelController: WheelController,
+		private readonly pinchToZoomController: PinchToZoomController,
 		private readonly contextMenuController: ContextMenuController,
 		private readonly clickBehaviorResolver: ClickBehaviorResolver,
 		private readonly viewportApi: ViewportApi,
@@ -185,6 +190,10 @@ export class Workspace implements WorkspaceController {
 			const behavior = this.clickBehaviorResolver.resolve(commandOrNull, target, forceMove);
 			this.behaviorController.start(position, behavior);
 		}
+	};
+
+	private readonly onPinchToZoom = (distance: number, centerPoint: Vector) => {
+		this.pinchToZoomController.start(distance, centerPoint);
 	};
 
 	private readonly onWheel = (e: WheelEvent) => {

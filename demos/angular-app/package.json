@@ -26,8 +26,8 @@
 		"@angular/platform-browser-dynamic": "^17.3.9",
 		"@angular/router": "^17.3.9",
 		"rxjs": "~7.8.0",
-		"sequential-workflow-designer": "^0.24.8",
-		"sequential-workflow-designer-angular": "^0.24.8",
+		"sequential-workflow-designer": "^0.25.0",
+		"sequential-workflow-designer-angular": "^0.25.0",
 		"tslib": "^2.3.0",
 		"zone.js": "~0.14.6"
 	},

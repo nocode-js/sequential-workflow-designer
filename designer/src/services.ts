@@ -129,7 +129,7 @@ function setDefaults(services: Partial<Services>, configuration: DesignerConfigu
 		services.regionComponentView = new DefaultRegionComponentViewExtension();
 	}
 	if (!services.viewportController) {
-		services.viewportController = new DefaultViewportControllerExtension();
+		services.viewportController = DefaultViewportControllerExtension.create();
 	}
 	if (!services.grid) {
 		services.grid = LineGridExtension.create();

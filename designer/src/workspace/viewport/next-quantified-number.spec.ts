@@ -24,4 +24,11 @@ describe('NextQuantifiedNumber', () => {
 		expect(e.current).toBe(0);
 		expect(e.next).toBe(0.5);
 	});
+
+	it('limits correctly', () => {
+		expect(nqn.limit(1.5)).toBe(1);
+		expect(nqn.limit(1)).toBe(1);
+		expect(nqn.limit(-0.5)).toBe(0);
+		expect(nqn.limit(0)).toBe(0);
+	});
 });

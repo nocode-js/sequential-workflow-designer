@@ -13,7 +13,7 @@ export class DesignerApi {
 	public static create(context: DesignerContext): DesignerApi {
 		const workspace = new WorkspaceApi(context.state, context.workspaceController);
 		const viewportController = context.services.viewportController.create(workspace);
-		const viewport = new ViewportApi(context.workspaceController, viewportController);
+		const viewport = new ViewportApi(context.workspaceController, viewportController, workspace);
 		const toolboxDataProvider = new ToolboxDataProvider(
 			context.componentContext.iconProvider,
 			context.i18n,

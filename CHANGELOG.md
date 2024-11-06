@@ -1,3 +1,7 @@
+# 0.25.0
+
+This version introduces the pinch-to-zoom feature. Now you can zoom in and out using the pinch gesture on touch devices.
+
 # 0.24.8
 
 This version adds new classes to the start-stop root component.

@@ -23,4 +23,10 @@ export class NextQuantifiedNumber {
 			next: this.values[index]
 		};
 	}
+
+	public limit(scale: number): number {
+		const min = this.values[0];
+		const max = this.values[this.values.length - 1];
+		return Math.min(Math.max(scale, min), max);
+	}
 }

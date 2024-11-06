@@ -9,15 +9,15 @@ const nonPassiveOptions: AddEventListenerOptions & EventListenerOptions = {
 };
 
 export class BehaviorController {
+	public static create(shadowRoot: ShadowRoot | undefined) {
+		return new BehaviorController(shadowRoot ?? document, shadowRoot);
+	}
+
 	private state?: {
 		startPosition: Vector;
 		behavior: Behavior;
 		lastPosition?: Vector;
 	};
-
-	public static create(shadowRoot: ShadowRoot | undefined) {
-		return new BehaviorController(shadowRoot ?? document, shadowRoot);
-	}
 
 	private constructor(
 		private readonly dom: Document | ShadowRoot,
