@@ -1,5 +1,11 @@
 import { Dom } from '../core/dom';
-import { readMousePosition, readTouchClientPosition, readTouchPosition } from '../core/event-readers';
+import {
+	readFingerCenterPoint,
+	calculateFingerDistance,
+	readMousePosition,
+	readTouchClientPosition,
+	readTouchPosition
+} from '../core/event-readers';
 import { Vector } from '../core/vector';
 import { Sequence } from '../definition';
 import { Grid, SequencePlaceIndicator } from '../designer-extension';
@@ -12,6 +18,9 @@ let lastGridPatternId = 0;
 const listenerOptions: AddEventListenerOptions & EventListenerOptions = {
 	passive: false
 };
+
+export type ClickHandler = (position: Vector, target: Element, buttonIndex: number, altKey: boolean) => void;
+export type PinchToZoomHandler = (distance: number, centerPoint: Vector) => void;
 
 export class WorkspaceView {
 	public static create(parent: HTMLElement, componentContext: ComponentContext): WorkspaceView {
@@ -99,7 +108,7 @@ export class WorkspaceView {
 		return new Vector(this.canvas.clientWidth, this.canvas.clientHeight);
 	}
 
-	public bindClick(handler: (position: Vector, target: Element, buttonIndex: number, altKey: boolean) => void) {
+	public bindMouseDown(handler: ClickHandler) {
 		this.canvas.addEventListener(
 			'mousedown',
 			e => {
@@ -108,17 +117,25 @@ export class WorkspaceView {
 			},
 			false
 		);
+	}
 
+	public bindTouchStart(clickHandler: ClickHandler, pinchToZoomHandler: PinchToZoomHandler) {
 		this.canvas.addEventListener(
 			'touchstart',
 			e => {
 				e.preventDefault();
+
+				if (e.touches.length === 2) {
+					pinchToZoomHandler(calculateFingerDistance(e), readFingerCenterPoint(e));
+					return;
+				}
+
 				const clientPosition = readTouchClientPosition(e);
 				const dom = this.shadowRoot ?? document;
 				const element = dom.elementFromPoint(clientPosition.x, clientPosition.y);
 				if (element) {
 					const position = readTouchPosition(e);
-					handler(position, element, 0, false);
+					clickHandler(position, element, 0, false);
 				}
 			},
 			listenerOptions

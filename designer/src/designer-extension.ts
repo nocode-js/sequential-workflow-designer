@@ -1,5 +1,6 @@
 import { WorkspaceApi } from './api';
 import { DesignerApi } from './api/designer-api';
+import { ViewportApi } from './api/viewport-api';
 import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { CustomActionController } from './custom-action-controller';
@@ -98,7 +99,7 @@ export interface BadgeExtension {
 // WheelControllerExtension
 
 export interface WheelControllerExtension {
-	create(api: WorkspaceApi): WheelController;
+	create(viewportApi: ViewportApi, workspaceApi: WorkspaceApi): WheelController;
 }
 
 export interface WheelController {
@@ -204,9 +205,17 @@ export interface ViewportControllerExtension {
 }
 
 export interface ViewportController {
-	setDefault(): void;
-	zoom(direction: boolean): void;
-	focusOnComponent(componentPosition: Vector, componentSize: Vector): void;
+	smoothDeltaYLimit: number;
+	getDefault(): Viewport;
+	getZoomed(direction: boolean): Viewport | null;
+	getFocusedOnComponent(componentPosition: Vector, componentSize: Vector): Viewport;
+	getNextScale(scale: number, direction: boolean): NextScale;
+	limitScale(scale: number): number;
+}
+
+export interface NextScale {
+	current: number;
+	next: number;
 }
 
 export interface Viewport {
