@@ -1,4 +1,5 @@
 export * from './api';
+export * from './behaviors';
 export * from './core';
 export * from './extensions';
 export * from './modifier';

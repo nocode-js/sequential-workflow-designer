@@ -19,6 +19,7 @@ import { DefaultSequenceComponentExtension } from './workspace/sequence/default-
 import { DefaultStepComponentViewWrapperExtension } from './workspace/default-step-component-view-wrapper-extension';
 import { LineGridExtension } from './workspace/grid/line-grid-extension';
 import { DefaultRegionComponentViewExtension } from './workspace/region/default-region-component-view-extension';
+import { DefaultClickBehaviorWrapperExtension } from './behaviors/default-click-behavior-wrapper-extension';
 
 export type Services = Required<DesignerExtension>;
 
@@ -38,6 +39,9 @@ function merge(services: Partial<Services>, extensions: DesignerExtension[]) {
 		}
 		if (ext.stepComponentViewWrapper) {
 			services.stepComponentViewWrapper = ext.stepComponentViewWrapper;
+		}
+		if (ext.clickBehaviorWrapperExtension) {
+			services.clickBehaviorWrapperExtension = ext.clickBehaviorWrapperExtension;
 		}
 		if (ext.badges) {
 			services.badges = (services.badges || []).concat(ext.badges);
@@ -91,6 +95,9 @@ function setDefaults(services: Partial<Services>, configuration: DesignerConfigu
 
 	if (!services.stepComponentViewWrapper) {
 		services.stepComponentViewWrapper = new DefaultStepComponentViewWrapperExtension();
+	}
+	if (!services.clickBehaviorWrapperExtension) {
+		services.clickBehaviorWrapperExtension = new DefaultClickBehaviorWrapperExtension();
 	}
 
 	if (!services.badges) {

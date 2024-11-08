@@ -1,3 +1,7 @@
+# 0.26.0
+
+This version introduces a few internal changes to support the double-click feature in the pro version.
+
 # 0.25.0
 
 This version introduces the pinch-to-zoom feature. Now you can zoom in and out using the pinch gesture on touch devices.

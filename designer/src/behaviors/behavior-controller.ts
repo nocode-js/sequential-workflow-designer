@@ -1,5 +1,5 @@
 import { Vector } from '../core/vector';
-import { Behavior } from './behavior';
+import { Behavior, BehaviorEndToken } from './behavior';
 import { readMousePosition, readTouchPosition } from '../core/event-readers';
 
 const notInitializedError = 'State is not initialized';
@@ -13,11 +13,12 @@ export class BehaviorController {
 		return new BehaviorController(shadowRoot ?? document, shadowRoot);
 	}
 
-	private state?: {
+	private previousEndToken: BehaviorEndToken | null = null;
+	private state: {
 		startPosition: Vector;
 		behavior: Behavior;
 		lastPosition?: Vector;
-	};
+	} | null = null;
 
 	private constructor(
 		private readonly dom: Document | ShadowRoot,
@@ -106,7 +107,7 @@ export class BehaviorController {
 		const delta = this.state.startPosition.subtract(position);
 		const newBehavior = this.state.behavior.onMove(delta);
 		if (newBehavior) {
-			this.state.behavior.onEnd(true, null);
+			this.state.behavior.onEnd(true, null, null);
 
 			this.state.behavior = newBehavior;
 			this.state.startPosition = position;
@@ -124,7 +125,8 @@ export class BehaviorController {
 		}
 		this.unbind(window);
 
-		this.state.behavior.onEnd(interrupt, element);
-		this.state = undefined;
+		const endToken = this.state.behavior.onEnd(interrupt, element, this.previousEndToken);
+		this.state = null;
+		this.previousEndToken = endToken || null;
 	}
 }
