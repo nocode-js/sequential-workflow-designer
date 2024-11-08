@@ -1,17 +1,17 @@
 import { Vector } from '../core';
 import { ViewportController } from '../designer-extension';
+import { DesignerState } from '../designer-state';
 import { ViewportAnimator } from '../workspace/viewport/viewport-animator';
 import { ZoomByWheelCalculator } from '../workspace/viewport/zoom-by-wheel-calculator';
 import { WorkspaceControllerWrapper } from '../workspace/workspace-controller';
-import { WorkspaceApi } from './workspace-api';
 
 export class ViewportApi {
-	private readonly animator = new ViewportAnimator(this.api);
+	private readonly animator = new ViewportAnimator(this.state);
 
 	public constructor(
+		private readonly state: DesignerState,
 		private readonly workspaceController: WorkspaceControllerWrapper,
-		private readonly viewportController: ViewportController,
-		private readonly api: WorkspaceApi
+		private readonly viewportController: ViewportController
 	) {}
 
 	public limitScale(scale: number): number {
@@ -20,13 +20,13 @@ export class ViewportApi {
 
 	public resetViewport() {
 		const defaultViewport = this.viewportController.getDefault();
-		this.api.setViewport(defaultViewport);
+		this.state.setViewport(defaultViewport);
 	}
 
 	public zoom(direction: boolean) {
 		const viewport = this.viewportController.getZoomed(direction);
 		if (viewport) {
-			this.api.setViewport(viewport);
+			this.state.setViewport(viewport);
 		}
 	}
 
@@ -43,12 +43,11 @@ export class ViewportApi {
 	}
 
 	public handleWheelEvent(e: WheelEvent) {
-		const viewport = this.api.getViewport();
-		const canvasPosition = this.api.getCanvasPosition();
+		const canvasPosition = this.workspaceController.getCanvasPosition();
 
-		const newViewport = ZoomByWheelCalculator.calculate(this.viewportController, viewport, canvasPosition, e);
+		const newViewport = ZoomByWheelCalculator.calculate(this.viewportController, this.state.viewport, canvasPosition, e);
 		if (newViewport) {
-			this.api.setViewport(newViewport);
+			this.state.setViewport(newViewport);
 		}
 	}
 }

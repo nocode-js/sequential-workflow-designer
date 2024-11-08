@@ -83,6 +83,8 @@ export interface SequenceContext {
 	isPreview: boolean;
 }
 
+// StepComponentViewWrapperExtension
+
 export interface StepComponentViewWrapperExtension {
 	wrap(view: StepComponentView, stepContext: StepContext): StepComponentView;
 }

@@ -2,16 +2,14 @@ import { race, SimpleEvent } from '../core';
 import { StateModifier } from '../modifier/state-modifier';
 import { DesignerState } from '../designer-state';
 import { HistoryController } from '../history-controller';
-import { ViewportApi } from './viewport-api';
 
 export class ControlBarApi {
 	public static create(
 		state: DesignerState,
 		historyController: HistoryController | undefined,
-		stateModifier: StateModifier,
-		viewportApi: ViewportApi
+		stateModifier: StateModifier
 	): ControlBarApi {
-		const api = new ControlBarApi(state, historyController, stateModifier, viewportApi);
+		const api = new ControlBarApi(state, historyController, stateModifier);
 
 		race(
 			0,
@@ -26,23 +24,10 @@ export class ControlBarApi {
 	private constructor(
 		private readonly state: DesignerState,
 		private readonly historyController: HistoryController | undefined,
-		private readonly stateModifier: StateModifier,
-		private readonly viewportApi: ViewportApi
+		private readonly stateModifier: StateModifier
 	) {}
 
 	public readonly onStateChanged = new SimpleEvent<unknown>();
-
-	public resetViewport() {
-		this.viewportApi.resetViewport();
-	}
-
-	public zoomIn() {
-		this.viewportApi.zoom(true);
-	}
-
-	public zoomOut() {
-		this.viewportApi.zoom(false);
-	}
 
 	public isDragDisabled(): boolean {
 		return this.state.isDragDisabled;

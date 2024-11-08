@@ -2,12 +2,13 @@ import { ControlBarView } from './control-bar-view';
 import { UiComponent } from '../designer-extension';
 import { ControlBarApi } from '../api/control-bar-api';
 import { DesignerApi } from '../api/designer-api';
+import { ViewportApi } from '../api';
 
 export class ControlBar implements UiComponent {
 	public static create(parent: HTMLElement, api: DesignerApi): UiComponent {
 		const isUndoRedoSupported = api.controlBar.isUndoRedoSupported();
 		const view = ControlBarView.create(parent, isUndoRedoSupported, api.i18n);
-		const bar = new ControlBar(view, api.controlBar, isUndoRedoSupported);
+		const bar = new ControlBar(view, api.controlBar, api.viewport, isUndoRedoSupported);
 
 		view.bindResetButtonClick(() => bar.onResetButtonClicked());
 		view.bindZoomInButtonClick(() => bar.onZoomInButtonClicked());
@@ -28,6 +29,7 @@ export class ControlBar implements UiComponent {
 	private constructor(
 		private readonly view: ControlBarView,
 		private readonly controlBarApi: ControlBarApi,
+		private readonly viewportApi: ViewportApi,
 		private readonly isUndoRedoSupported: boolean
 	) {}
 
@@ -40,15 +42,15 @@ export class ControlBar implements UiComponent {
 	}
 
 	private onResetButtonClicked() {
-		this.controlBarApi.resetViewport();
+		this.viewportApi.resetViewport();
 	}
 
 	private onZoomInButtonClicked() {
-		this.controlBarApi.zoomIn();
+		this.viewportApi.zoom(true);
 	}
 
 	private onZoomOutButtonClicked() {
-		this.controlBarApi.zoomOut();
+		this.viewportApi.zoom(false);
 	}
 
 	private onMoveButtonClicked() {
