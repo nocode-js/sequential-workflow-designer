@@ -13,7 +13,6 @@ export class DesignerApi {
 	public static create(context: DesignerContext): DesignerApi {
 		const workspace = new WorkspaceApi(context.state, context.workspaceController);
 		const viewportController = context.services.viewportController.create(workspace);
-		const viewport = new ViewportApi(context.workspaceController, viewportController, workspace);
 		const toolboxDataProvider = new ToolboxDataProvider(
 			context.componentContext.iconProvider,
 			context.i18n,
@@ -22,11 +21,11 @@ export class DesignerApi {
 
 		return new DesignerApi(
 			context.configuration.shadowRoot,
-			ControlBarApi.create(context.state, context.historyController, context.stateModifier, viewport),
+			ControlBarApi.create(context.state, context.historyController, context.stateModifier),
 			new ToolboxApi(context.state, context, context.behaviorController, toolboxDataProvider, context.configuration.uidGenerator),
 			new EditorApi(context.state, context.definitionWalker, context.stateModifier),
 			workspace,
-			viewport,
+			new ViewportApi(context.state, context.workspaceController, viewportController),
 			new PathBarApi(context.state, context.definitionWalker),
 			context.definitionWalker,
 			context.i18n

@@ -9,7 +9,7 @@ import { WorkspaceController } from './workspace-controller';
 import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
 import { SimpleEvent } from '../core/simple-event';
-import { SequencePlaceIndicator, Viewport, WheelController } from '../designer-extension';
+import { ClickBehaviorWrapper, SequencePlaceIndicator, Viewport, WheelController } from '../designer-extension';
 import { DesignerApi } from '../api/designer-api';
 import { StepComponent } from './step-component';
 import { BadgesResultFactory } from './badges/badges-result-factory';
@@ -26,6 +26,8 @@ export class Workspace implements WorkspaceController {
 		const view = WorkspaceView.create(parent, designerContext.componentContext);
 
 		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext);
+		const clickBehaviorWrapper = designerContext.services.clickBehaviorWrapperExtension.create(designerContext.customActionController);
+
 		const wheelController = designerContext.services.wheelController.create(api.viewport, api.workspace);
 		const pinchToZoomController = PinchToZoomController.create(api.workspace, api.viewport, api.shadowRoot);
 
@@ -53,6 +55,7 @@ export class Workspace implements WorkspaceController {
 			pinchToZoomController,
 			contextMenuController,
 			clickBehaviorResolver,
+			clickBehaviorWrapper,
 			api.viewport,
 			designerContext.services
 		);
@@ -95,6 +98,7 @@ export class Workspace implements WorkspaceController {
 		private readonly pinchToZoomController: PinchToZoomController,
 		private readonly contextMenuController: ContextMenuController,
 		private readonly clickBehaviorResolver: ClickBehaviorResolver,
+		private readonly clickBehaviorWrapper: ClickBehaviorWrapper,
 		private readonly viewportApi: ViewportApi,
 		private readonly services: Services
 	) {}
@@ -188,7 +192,8 @@ export class Workspace implements WorkspaceController {
 
 			const commandOrNull = this.resolveClick(target, position);
 			const behavior = this.clickBehaviorResolver.resolve(commandOrNull, target, forceMove);
-			this.behaviorController.start(position, behavior);
+			const wrappedBehavior = this.clickBehaviorWrapper.wrap(behavior, commandOrNull);
+			this.behaviorController.start(position, wrappedBehavior);
 		}
 	};
 

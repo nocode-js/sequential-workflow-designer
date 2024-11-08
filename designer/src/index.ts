@@ -1,5 +1,7 @@
 export * from './api';
+export * from './behaviors';
 export * from './core';
+export * from './extensions';
 export * from './modifier';
 export * from './component-context';
 export * from './custom-action-controller';
@@ -11,6 +13,4 @@ export * from './designer-context';
 export * from './designer-extension';
 export * from './designer-state';
 export * from './designer';
-export * from './line-grid-designer-extension';
 export * from './services';
-export * from './steps-designer-extension';

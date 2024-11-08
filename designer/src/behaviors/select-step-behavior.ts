@@ -6,6 +6,7 @@ import { StepComponent } from '../workspace/step-component';
 import { Behavior } from './behavior';
 import { DragStepBehavior } from './drag-step-behavior';
 import { MoveViewportBehavior } from './move-viewport-behavior';
+import { SelectStepBehaviorEndToken } from './select-step-behavior-end-token';
 
 export class SelectStepBehavior implements Behavior {
 	public static create(pressedStepComponent: StepComponent, forceMove: boolean, context: DesignerContext): SelectStepBehavior {
@@ -40,9 +41,12 @@ export class SelectStepBehavior implements Behavior {
 		}
 	}
 
-	public onEnd(interrupt: boolean) {
-		if (!interrupt) {
-			this.stateModifier.trySelectStep(this.pressedStepComponent.step, this.pressedStepComponent.parentSequence);
+	public onEnd(interrupt: boolean): SelectStepBehaviorEndToken | void {
+		if (interrupt) {
+			return;
 		}
+
+		this.stateModifier.trySelectStep(this.pressedStepComponent.step, this.pressedStepComponent.parentSequence);
+		return new SelectStepBehaviorEndToken(this.pressedStepComponent.step.id, Date.now());
 	}
 }

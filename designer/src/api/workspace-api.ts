@@ -9,6 +9,14 @@ export class WorkspaceApi {
 		private readonly workspaceController: WorkspaceControllerWrapper
 	) {}
 
+	public getViewport(): Viewport {
+		return this.state.viewport;
+	}
+
+	public setViewport(viewport: Viewport) {
+		this.state.setViewport(viewport);
+	}
+
 	public getCanvasPosition(): Vector {
 		return this.workspaceController.getCanvasPosition();
 	}
@@ -19,14 +27,6 @@ export class WorkspaceApi {
 
 	public getRootComponentSize(): Vector {
 		return this.workspaceController.getRootComponentSize();
-	}
-
-	public getViewport(): Viewport {
-		return this.state.viewport;
-	}
-
-	public setViewport(viewport: Viewport) {
-		this.state.setViewport(viewport);
 	}
 
 	public updateRootComponent() {

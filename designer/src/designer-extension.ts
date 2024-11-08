@@ -1,6 +1,7 @@
 import { WorkspaceApi } from './api';
 import { DesignerApi } from './api/designer-api';
 import { ViewportApi } from './api/viewport-api';
+import { Behavior } from './behaviors';
 import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { CustomActionController } from './custom-action-controller';
@@ -20,6 +21,7 @@ import {
 export interface DesignerExtension {
 	steps?: StepExtension[];
 	stepComponentViewWrapper?: StepComponentViewWrapperExtension;
+	clickBehaviorWrapperExtension?: ClickBehaviorWrapperExtension;
 	badges?: BadgeExtension[];
 	uiComponents?: UiComponentExtension[];
 	draggedComponent?: DraggedComponentExtension;
@@ -83,8 +85,20 @@ export interface SequenceContext {
 	isPreview: boolean;
 }
 
+// StepComponentViewWrapperExtension
+
 export interface StepComponentViewWrapperExtension {
 	wrap(view: StepComponentView, stepContext: StepContext): StepComponentView;
+}
+
+// ClickBehaviorWrapperExtension
+
+export interface ClickBehaviorWrapperExtension {
+	create(customActionController: CustomActionController): ClickBehaviorWrapper;
+}
+
+export interface ClickBehaviorWrapper {
+	wrap(behavior: Behavior, commandOrNull: ClickCommand | null): Behavior;
 }
 
 // BadgeExtension
