@@ -77,10 +77,7 @@ export class PinchToZoomController {
 			.divideByScalar(this.state.lastViewport.scale)
 			.subtract(this.state.lastViewport.position.divideByScalar(this.state.lastViewport.scale));
 
-		const position = zoomRealPoint
-			.multiplyByScalar(-scale)
-			.add(zoomPoint)
-			.add(deltaCenterPoint.divideByScalar(this.state.lastViewport.scale));
+		const position = zoomRealPoint.multiplyByScalar(-scale).add(zoomPoint).add(deltaCenterPoint);
 
 		const newViewport: Viewport = {
 			position,

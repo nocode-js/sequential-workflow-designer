@@ -1,3 +1,7 @@
+# 0.26.1
+
+This version fixes the bug with scaling in the pinch-to-zoom feature. Additionally, this version improves the rendering of lines that join steps.
+
 # 0.26.0
 
 This version introduces a few internal changes to support the double-click feature in the pro version.
