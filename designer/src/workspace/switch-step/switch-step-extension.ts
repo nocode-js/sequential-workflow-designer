@@ -7,10 +7,13 @@ const defaultConfiguration: SwitchStepExtensionConfiguration = {
 	view: {
 		minContainerWidth: 40,
 		paddingX: 20,
-		paddingTop: 20,
+		paddingTop1: 0,
+		paddingTop2: 22,
 		connectionHeight: 16,
 		inputSize: 18,
 		inputIconSize: 14,
+		inputRadius: 4,
+		autoHideInputOnDrag: true,
 		branchNameLabel: {
 			height: 22,
 			paddingX: 10,

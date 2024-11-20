@@ -9,7 +9,7 @@ describe('InputView', () => {
 	});
 
 	it('createRectInput() creates view', () => {
-		const view = InputView.createRectInput(parent, 10, 10, 16, 20, null);
+		const view = InputView.createRectInput(parent, 10, 10, 16, 4, 20, null);
 		expect(view).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);
 	});

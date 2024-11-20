@@ -3,6 +3,7 @@
 	$panelBackgroundColor: #fff,
 	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.15)),
 	$panelBorderRadius: 10px,
+	$panelBorder: none,
 	$headerTextColor: #000,
 	$filterBackground: #fff,
 	$filterTextColor: #000,
@@ -17,6 +18,7 @@
 		.sqd-toolbox {
 			background: $panelBackgroundColor;
 			box-shadow: $panelBoxShadow;
+			border: $panelBorder;
 			border-radius: $panelBorderRadius;
 		}
 		.sqd-toolbox-header-title {
@@ -75,6 +77,7 @@
 	$panelBackgroundColor: #fff,
 	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.15)),
 	$panelBorderRadius: 10px,
+	$panelBorder: none,
 	$buttonBackground: #fff,
 	$buttonBackgroundHovered: #fff,
 	$buttonBorder: (1px solid #c3c3c3),
@@ -87,6 +90,7 @@
 		.sqd-control-bar {
 			background: $panelBackgroundColor;
 			box-shadow: $panelBoxShadow;
+			border: $panelBorder;
 			border-radius: $panelBorderRadius;
 		}
 		.sqd-control-bar-button {
@@ -131,6 +135,7 @@
 	$panelBackgroundColor: #fff,
 	$panelBoxShadow: (0 0 8px rgba(0, 0, 0, 0.2)),
 	$panelBorderRadius: 4px,
+	$panelBorder: none,
 	$groupTextColor: #888,
 	$itemTextColor: #000,
 	$itemBackgroundColorHovered: #eee,
@@ -139,6 +144,7 @@
 	.sqd-theme-#{$theme}.sqd-context-menu {
 		background: $panelBackgroundColor;
 		box-shadow: $panelBoxShadow;
+		border: $panelBorder;
 		border-radius: $panelBorderRadius;
 	}
 	.sqd-theme-#{$theme} .sqd-context-menu-group {

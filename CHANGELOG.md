@@ -1,3 +1,7 @@
+# 0.27.0
+
+This version adds the ability to configure the border style of the toolbox, control bar, and context menu using SASS mixins. It also updates the internal configuration structure for the container and switch step components.
+
 # 0.26.1
 
 This version fixes the bug with scaling in the pinch-to-zoom feature. Additionally, this version improves the rendering of lines that join steps.

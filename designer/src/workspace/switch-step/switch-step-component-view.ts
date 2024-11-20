@@ -15,6 +15,7 @@ export const createSwitchStepComponentViewFactory =
 	(parent: SVGElement, stepContext: StepContext<BranchedStep>, viewContext: StepComponentViewContext): StepComponentView => {
 		return viewContext.createRegionComponentView(parent, COMPONENT_CLASS_NAME, (g, regionViewBuilder) => {
 			const step = stepContext.step;
+			const paddingTop = cfg.paddingTop1 + cfg.paddingTop2;
 
 			const branchNames = Object.keys(step.branches);
 			const branchComponents = branchNames.map(branchName => {
@@ -22,13 +23,13 @@ export const createSwitchStepComponentViewFactory =
 			});
 
 			const branchLabelViews = branchNames.map(branchName => {
-				const labelY = cfg.paddingTop + cfg.nameLabel.height + cfg.connectionHeight;
+				const labelY = paddingTop + cfg.nameLabel.height + cfg.connectionHeight;
 				const translatedBranchName = viewContext.i18n(`stepComponent.${step.type}.branchName`, branchName);
 				return LabelView.create(g, labelY, cfg.branchNameLabel, translatedBranchName, 'secondary');
 			});
 
 			const name = viewContext.getStepName();
-			const nameLabelView = LabelView.create(g, cfg.paddingTop, cfg.nameLabel, name, 'primary');
+			const nameLabelView = LabelView.create(g, paddingTop, cfg.nameLabel, name, 'primary');
 
 			let prevOffsetX = 0;
 			const branchSizes = branchComponents.map((component, i) => {
@@ -62,12 +63,12 @@ export const createSwitchStepComponentViewFactory =
 
 			const viewWidth = switchOffsetLeft + totalBranchesWidth + switchOffsetRight;
 			const viewHeight =
-				maxBranchesHeight + cfg.paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight * 2;
+				maxBranchesHeight + paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight * 2;
 
 			const shiftedJoinX = switchOffsetLeft + joinX;
 			Dom.translate(nameLabelView.g, shiftedJoinX, 0);
 
-			const branchOffsetTop = cfg.paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight;
+			const branchOffsetTop = paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight;
 
 			branchComponents.forEach((component, i) => {
 				const branchSize = branchSizes[i];
@@ -78,7 +79,7 @@ export const createSwitchStepComponentViewFactory =
 
 				if (component.hasOutput && stepContext.isOutputConnected) {
 					const endOffsetTopOfComponent =
-						cfg.paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight + component.view.height;
+						paddingTop + cfg.nameLabel.height + cfg.branchNameLabel.height + cfg.connectionHeight + component.view.height;
 					const missingHeight = viewHeight - endOffsetTopOfComponent - cfg.connectionHeight;
 					if (missingHeight > 0) {
 						JoinView.createStraightJoin(
@@ -93,16 +94,24 @@ export const createSwitchStepComponentViewFactory =
 			let inputView: InputView | null = null;
 			if (cfg.inputSize > 0) {
 				const iconUrl = viewContext.getStepIconUrl();
-				inputView = InputView.createRectInput(g, shiftedJoinX, 0, cfg.inputSize, cfg.inputIconSize, iconUrl);
+				inputView = InputView.createRectInput(
+					g,
+					shiftedJoinX,
+					cfg.paddingTop1,
+					cfg.inputSize,
+					cfg.inputRadius,
+					cfg.inputIconSize,
+					iconUrl
+				);
 			}
 
-			JoinView.createStraightJoin(g, new Vector(shiftedJoinX, 0), cfg.paddingTop);
+			JoinView.createStraightJoin(g, new Vector(shiftedJoinX, 0), paddingTop);
 
 			JoinView.createJoins(
 				g,
-				new Vector(shiftedJoinX, cfg.paddingTop + cfg.nameLabel.height),
+				new Vector(shiftedJoinX, paddingTop + cfg.nameLabel.height),
 				branchSizes.map(
-					o => new Vector(switchOffsetLeft + o.offsetX + o.joinX, cfg.paddingTop + cfg.nameLabel.height + cfg.connectionHeight)
+					o => new Vector(switchOffsetLeft + o.offsetX + o.joinX, paddingTop + cfg.nameLabel.height + cfg.connectionHeight)
 				)
 			);
 
@@ -114,7 +123,7 @@ export const createSwitchStepComponentViewFactory =
 					(i: number) =>
 						new Vector(
 							switchOffsetLeft + branchSizes[i].offsetX + branchSizes[i].joinX,
-							cfg.paddingTop + cfg.connectionHeight + cfg.nameLabel.height + cfg.branchNameLabel.height + maxBranchesHeight
+							paddingTop + cfg.connectionHeight + cfg.nameLabel.height + cfg.branchNameLabel.height + maxBranchesHeight
 						)
 				);
 				if (ongoingJoinTargets.length > 0) {
@@ -146,7 +155,9 @@ export const createSwitchStepComponentViewFactory =
 				},
 
 				setIsDragging(isDragging: boolean) {
-					inputView?.setIsHidden(isDragging);
+					if (cfg.autoHideInputOnDrag && inputView) {
+						inputView.setIsHidden(isDragging);
+					}
 				},
 
 				setIsSelected(isSelected: boolean) {

@@ -6,6 +6,7 @@ export class InputView {
 		x: number,
 		y: number,
 		size: number,
+		radius: number,
 		iconSize: number,
 		iconUrl: string | null
 	): InputView {
@@ -18,8 +19,8 @@ export class InputView {
 			height: size,
 			x: x - size / 2,
 			y: y + size / -2 + 0.5,
-			rx: 4,
-			ry: 4
+			rx: radius,
+			ry: radius
 		});
 		g.appendChild(rect);
 

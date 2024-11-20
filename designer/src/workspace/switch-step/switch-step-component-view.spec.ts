@@ -41,10 +41,13 @@ describe('SwitchStepComponentView', () => {
 		const factory = createSwitchStepComponentViewFactory({
 			minContainerWidth: 40,
 			paddingX: 20,
-			paddingTop: 20,
+			paddingTop1: 0,
+			paddingTop2: 20,
 			connectionHeight: 16,
 			inputSize: 18,
 			inputIconSize: 14,
+			inputRadius: 4,
+			autoHideInputOnDrag: true,
 			branchNameLabel: labelViewCfg,
 			nameLabel: labelViewCfg
 		});

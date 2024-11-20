@@ -31,8 +31,11 @@ export const createContainerStepComponentViewFactory =
 			Dom.translate(labelView.g, joinX, 0);
 			Dom.translate(sequenceComponent.view.g, offsetLeft, cfg.paddingTop + cfg.label.height);
 
-			const iconUrl = viewContext.getStepIconUrl();
-			const inputView = InputView.createRectInput(g, joinX, 0, cfg.inputSize, cfg.inputIconSize, iconUrl);
+			let inputView: InputView | null = null;
+			if (cfg.inputSize > 0) {
+				const iconUrl = viewContext.getStepIconUrl();
+				inputView = InputView.createRectInput(g, joinX, 0, cfg.inputSize, cfg.inputRadius, cfg.inputIconSize, iconUrl);
+			}
 
 			JoinView.createStraightJoin(g, new Vector(joinX, 0), cfg.paddingTop);
 
@@ -55,7 +58,9 @@ export const createContainerStepComponentViewFactory =
 					return result === true || (result === null && g.contains(click.element)) ? true : result;
 				},
 				setIsDragging(isDragging: boolean) {
-					inputView.setIsHidden(isDragging);
+					if (cfg.autoHideInputOnDrag && inputView) {
+						inputView.setIsHidden(isDragging);
+					}
 				},
 				setIsSelected(isSelected: boolean) {
 					regionView.setIsSelected(isSelected);
