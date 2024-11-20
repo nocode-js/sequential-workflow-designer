@@ -1,16 +1,15 @@
 import { ComponentContext } from '../../component-context';
 import { Dom, Vector } from '../../core';
-import { StepContext } from '../../designer-extension';
+import { BadgesDecorator, StepContext } from '../../designer-extension';
 import { Badge, BadgesResult, ClickCommand, ClickDetails, StepComponentView } from '../component';
-
-const BADGE_GAP = 4;
+import { DefaultBadgesDecorator } from './default-badges-decorator';
 
 export class Badges {
 	public static createForStep(stepContext: StepContext, view: StepComponentView, componentContext: ComponentContext): Badges {
 		const g = createG(view.g);
 		const badges = componentContext.services.badges.map(ext => ext.createForStep(g, view, stepContext, componentContext));
-		const position = new Vector(view.width, 0);
-		return new Badges(g, position, badges);
+		const decorator = componentContext.services.stepBadgesDecorator.create(g, view, badges);
+		return new Badges(badges, decorator);
 	}
 
 	public static createForRoot(parentElement: SVGGElement, position: Vector, componentContext: ComponentContext): Badges {
@@ -18,13 +17,13 @@ export class Badges {
 		const badges = componentContext.services.badges.map(ext => {
 			return ext.createForRoot ? ext.createForRoot(g, componentContext) : null;
 		});
-		return new Badges(g, position, badges);
+		const decorator = new DefaultBadgesDecorator(position, badges, g);
+		return new Badges(badges, decorator);
 	}
 
 	private constructor(
-		private readonly g: SVGGElement,
-		private readonly position: Vector,
-		private readonly badges: (Badge | null)[]
+		private readonly badges: (Badge | null)[],
+		private readonly decorator: BadgesDecorator
 	) {}
 
 	public update(result: BadgesResult) {
@@ -35,22 +34,7 @@ export class Badges {
 				result[i] = badge.update(result[i]);
 			}
 		}
-
-		let offsetX = 0;
-		let maxHeight = 0;
-		let j = 0;
-		for (let i = 0; i < count; i++) {
-			const badge = this.badges[i];
-			if (badge && badge.view) {
-				offsetX += j === 0 ? badge.view.width / 2 : badge.view.width;
-				maxHeight = Math.max(maxHeight, badge.view.height);
-				Dom.translate(badge.view.g, -offsetX, 0);
-				offsetX += BADGE_GAP;
-				j++;
-			}
-		}
-
-		Dom.translate(this.g, this.position.x, this.position.y + -maxHeight / 2);
+		this.decorator.update();
 	}
 
 	public resolveClick(click: ClickDetails): ClickCommand | null {

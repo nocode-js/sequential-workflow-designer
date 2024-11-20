@@ -8,7 +8,9 @@ const defaultConfiguration: ContainerStepExtensionConfiguration = {
 		paddingTop: 20,
 		paddingX: 20,
 		inputSize: 18,
+		inputRadius: 4,
 		inputIconSize: 14,
+		autoHideInputOnDrag: true,
 		label: {
 			height: 22,
 			paddingX: 10,

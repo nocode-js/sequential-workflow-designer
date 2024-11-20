@@ -21,6 +21,7 @@ import {
 export interface DesignerExtension {
 	steps?: StepExtension[];
 	stepComponentViewWrapper?: StepComponentViewWrapperExtension;
+	stepBadgesDecorator?: StepBadgesDecoratorExtension;
 	clickBehaviorWrapperExtension?: ClickBehaviorWrapperExtension;
 	badges?: BadgeExtension[];
 	uiComponents?: UiComponentExtension[];
@@ -89,6 +90,16 @@ export interface SequenceContext {
 
 export interface StepComponentViewWrapperExtension {
 	wrap(view: StepComponentView, stepContext: StepContext): StepComponentView;
+}
+
+// StepBadgesDecoratorExtension
+
+export interface StepBadgesDecoratorExtension {
+	create(g: SVGGElement, view: StepComponentView, badges: (Badge | null)[]): BadgesDecorator;
+}
+
+export interface BadgesDecorator {
+	update(): void;
 }
 
 // ClickBehaviorWrapperExtension

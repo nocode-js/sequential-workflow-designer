@@ -32,6 +32,8 @@ describe('ContainerStepComponentView', () => {
 		const factory = createContainerStepComponentViewFactory({
 			inputIconSize: 10,
 			inputSize: 14,
+			inputRadius: 4,
+			autoHideInputOnDrag: true,
 			paddingTop: 20,
 			paddingX: 20,
 			label: {
