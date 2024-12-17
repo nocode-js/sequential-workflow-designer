@@ -1,3 +1,7 @@
+# 0.27.1
+
+Added support for Angular 19.
+
 # 0.27.0
 
 This version adds the ability to configure the border style of the toolbox, control bar, and context menu using SASS mixins. It also updates the internal configuration structure for the container and switch step components.
