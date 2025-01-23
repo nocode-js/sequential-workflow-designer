@@ -85,9 +85,11 @@ export class DesignerState {
 		}
 	}
 
-	public toggleIsDragDisabled() {
-		this.isDragDisabled = !this.isDragDisabled;
-		this.onIsDragDisabledChanged.forward(this.isDragDisabled);
+	public setIsDragDisabled(isDragDisabled: boolean) {
+		if (this.isDragDisabled !== isDragDisabled) {
+			this.isDragDisabled = isDragDisabled;
+			this.onIsDragDisabledChanged.forward(isDragDisabled);
+		}
 	}
 
 	public setIsToolboxCollapsed(isCollapsed: boolean) {
