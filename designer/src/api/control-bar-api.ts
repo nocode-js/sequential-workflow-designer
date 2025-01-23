@@ -33,8 +33,12 @@ export class ControlBarApi {
 		return this.state.isDragDisabled;
 	}
 
+	public setIsDragDisabled(isDragDisabled: boolean) {
+		this.state.setIsDragDisabled(isDragDisabled);
+	}
+
 	public toggleIsDragDisabled() {
-		this.state.toggleIsDragDisabled();
+		this.setIsDragDisabled(!this.isDragDisabled());
 	}
 
 	public isUndoRedoSupported(): boolean {

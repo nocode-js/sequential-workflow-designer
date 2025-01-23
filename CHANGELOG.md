@@ -1,3 +1,7 @@
+# 0.27.2
+
+Added a new method to the internal control bar api.
+
 # 0.27.1
 
 Added support for Angular 19.
