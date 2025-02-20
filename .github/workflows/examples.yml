@@ -42,9 +42,9 @@ jobs:
             node scripts/append-ga.cjs _deploy/angular-app
             node scripts/append-ga.cjs _deploy/svelte-app
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: _deploy
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
