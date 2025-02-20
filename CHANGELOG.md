@@ -1,3 +1,7 @@
+# 0.27.3
+
+This version adds the `onIsReadyChanged` event to the `SequentialWorkflowDesignerController` class for React.
+
 # 0.27.2
 
 Added a new method to the internal control bar api.
