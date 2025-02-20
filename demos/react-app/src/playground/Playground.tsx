@@ -46,6 +46,16 @@ export function Playground() {
 	const definitionJson = JSON.stringify(definition.value, null, 2);
 
 	useEffect(() => {
+		function onIsReadyChanged() {
+			console.log(`isReady=${controller.isReady()}`);
+		}
+		controller.onIsReadyChanged.subscribe(onIsReadyChanged);
+		return () => {
+			controller.onIsReadyChanged.unsubscribe(onIsReadyChanged);
+		};
+	}, [controller]);
+
+	useEffect(() => {
 		console.log(`definition updated, isValid=${definition.isValid}`);
 	}, [definition]);
 

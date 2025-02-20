@@ -1,10 +1,15 @@
 import { DependencyList, useMemo } from 'react';
-import { Definition, Designer } from 'sequential-workflow-designer';
+import { Definition, Designer, SimpleEvent } from 'sequential-workflow-designer';
 
 export class SequentialWorkflowDesignerController {
 	public static create(): SequentialWorkflowDesignerController {
 		return new SequentialWorkflowDesignerController();
 	}
+
+	/**
+	 * @description Event that is raised when the controller is ready to be used.
+	 */
+	public readonly onIsReadyChanged = new SimpleEvent<void>();
 
 	private designer: Designer | null = null;
 
@@ -52,7 +57,7 @@ export class SequentialWorkflowDesignerController {
 	 * @returns `true` if the controller is ready to be used, `false` otherwise.
 	 */
 	public isReady(): boolean {
-		return !!this.designer;
+		return Boolean(this.designer);
 	}
 
 	public setDesigner(designer: Designer | null) {
@@ -60,6 +65,7 @@ export class SequentialWorkflowDesignerController {
 			throw new Error('Designer is already set');
 		}
 		this.designer = designer;
+		this.onIsReadyChanged.forward();
 	}
 
 	private getDesigner(): Designer {
