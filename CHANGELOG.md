@@ -1,3 +1,7 @@
+# 0.27.4
+
+Support for React 19 has been added.
+
 # 0.27.3
 
 This version adds the `onIsReadyChanged` event to the `SequentialWorkflowDesignerController` class for React.
