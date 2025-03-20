@@ -1,6 +1,5 @@
 import { race } from '../core/simple-event-race';
 import { Vector } from '../core/vector';
-import { DefinitionWalker, Sequence, StepChildrenType } from '../definition';
 import { DesignerContext } from '../designer-context';
 import { ClickCommand, ClickDetails, Component, FoundPlaceholders } from './component';
 import { WorkspaceView } from './workspace-view';
@@ -10,13 +9,14 @@ import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
 import { SimpleEvent } from '../core/simple-event';
 import { ClickBehaviorWrapper, SequencePlaceIndicator, Viewport, WheelController } from '../designer-extension';
-import { DesignerApi } from '../api/designer-api';
 import { StepComponent } from './step-component';
 import { BadgesResultFactory } from './badges/badges-result-factory';
 import { Services } from '../services';
 import { findValidationBadgeIndex } from './badges/find-validation-badge-index';
 import { ContextMenuController } from './context-menu/context-menu-controller';
 import { ViewportApi } from '../api/viewport-api';
+import { DesignerApi } from '../api/designer-api';
+import { WorkspaceApi } from '../api/workspace-api';
 import { DefinitionChangeType } from '../designer-configuration';
 import { ContextMenuItemsBuilder } from './context-menu/context-menu-items-builder';
 import { PinchToZoomController } from './viewport/pinch-to-zoom-controller';
@@ -33,6 +33,7 @@ export class Workspace implements WorkspaceController {
 
 		const contextMenuItemsBuilder = new ContextMenuItemsBuilder(
 			api.viewport,
+			api.workspace,
 			api.i18n,
 			designerContext.stateModifier,
 			designerContext.state,
@@ -48,7 +49,6 @@ export class Workspace implements WorkspaceController {
 
 		const workspace = new Workspace(
 			view,
-			designerContext.definitionWalker,
 			designerContext.state,
 			designerContext.behaviorController,
 			wheelController,
@@ -57,6 +57,7 @@ export class Workspace implements WorkspaceController {
 			clickBehaviorResolver,
 			clickBehaviorWrapper,
 			api.viewport,
+			api.workspace,
 			designerContext.services
 		);
 		setTimeout(() => {
@@ -91,7 +92,6 @@ export class Workspace implements WorkspaceController {
 
 	private constructor(
 		private readonly view: WorkspaceView,
-		private readonly definitionWalker: DefinitionWalker,
 		private readonly state: DesignerState,
 		private readonly behaviorController: BehaviorController,
 		private readonly wheelController: WheelController,
@@ -100,34 +100,22 @@ export class Workspace implements WorkspaceController {
 		private readonly clickBehaviorResolver: ClickBehaviorResolver,
 		private readonly clickBehaviorWrapper: ClickBehaviorWrapper,
 		private readonly viewportApi: ViewportApi,
+		private readonly workspaceApi: WorkspaceApi,
 		private readonly services: Services
 	) {}
 
 	public updateRootComponent() {
 		this.selectedStepComponent = null;
 
-		let parentSequencePlaceIndicator: SequencePlaceIndicator | null;
-		let sequence: Sequence;
+		const rootSequence = this.workspaceApi.getRootSequence();
+		const parentPlaceIndicator: SequencePlaceIndicator | null = rootSequence.parentStep
+			? {
+					sequence: rootSequence.parentStep.parentSequence,
+					index: rootSequence.parentStep.index
+				}
+			: null;
 
-		const stepId = this.state.tryGetLastStepIdFromFolderPath();
-		if (stepId) {
-			const parentSequence = this.definitionWalker.getParentSequence(this.state.definition, stepId);
-			const children = this.definitionWalker.getChildren(parentSequence.step);
-			if (!children || children.type !== StepChildrenType.sequence) {
-				throw new Error('Cannot find single sequence in folder step');
-			}
-			sequence = children.items as Sequence;
-
-			parentSequencePlaceIndicator = {
-				sequence: parentSequence.parentSequence,
-				index: parentSequence.index
-			};
-		} else {
-			sequence = this.state.definition.sequence;
-			parentSequencePlaceIndicator = null;
-		}
-
-		this.view.render(sequence, parentSequencePlaceIndicator);
+		this.view.render(rootSequence.sequence, parentPlaceIndicator);
 		this.trySelectStepComponent(this.state.selectedStepId);
 		this.updateBadges();
 

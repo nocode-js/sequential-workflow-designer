@@ -11,7 +11,7 @@ import { I18n } from '../designer-configuration';
 
 export class DesignerApi {
 	public static create(context: DesignerContext): DesignerApi {
-		const workspace = new WorkspaceApi(context.state, context.workspaceController);
+		const workspace = new WorkspaceApi(context.state, context.definitionWalker, context.workspaceController);
 		const viewportController = context.services.viewportController.create(workspace);
 		const toolboxDataProvider = new ToolboxDataProvider(
 			context.componentContext.iconProvider,

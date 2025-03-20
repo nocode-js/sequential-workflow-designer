@@ -68,6 +68,7 @@ export interface SelectStepClickCommand extends BaseClickCommand {
 export interface RerenderStepClickCommand extends BaseClickCommand {
 	type: ClickCommandType.rerenderStep;
 	step: Step;
+	beforeCallback?: () => void;
 }
 
 export interface OpenFolderClickCommand extends BaseClickCommand {

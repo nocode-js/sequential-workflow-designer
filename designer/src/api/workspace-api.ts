@@ -1,3 +1,4 @@
+import { DefinitionWalker, Sequence, StepChildrenType, StepWithParentSequence } from 'sequential-workflow-model';
 import { Vector } from '../core';
 import { Viewport } from '../designer-extension';
 import { DesignerState } from '../designer-state';
@@ -6,6 +7,7 @@ import { WorkspaceControllerWrapper } from '../workspace/workspace-controller';
 export class WorkspaceApi {
 	public constructor(
 		private readonly state: DesignerState,
+		private readonly definitionWalker: DefinitionWalker,
 		private readonly workspaceController: WorkspaceControllerWrapper
 	) {}
 
@@ -40,4 +42,28 @@ export class WorkspaceApi {
 	public updateCanvasSize() {
 		this.workspaceController.updateCanvasSize();
 	}
+
+	public getRootSequence(): WorkspaceRootSequence {
+		const stepId = this.state.tryGetLastStepIdFromFolderPath();
+		if (stepId) {
+			const parentStep = this.definitionWalker.getParentSequence(this.state.definition, stepId);
+			const children = this.definitionWalker.getChildren(parentStep.step);
+			if (!children || children.type !== StepChildrenType.sequence) {
+				throw new Error('Cannot find single sequence in folder step');
+			}
+			return {
+				sequence: children.items as Sequence,
+				parentStep
+			};
+		}
+		return {
+			sequence: this.state.definition.sequence,
+			parentStep: null
+		};
+	}
+}
+
+export interface WorkspaceRootSequence {
+	sequence: Sequence;
+	parentStep: StepWithParentSequence | null;
 }
