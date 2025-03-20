@@ -21,7 +21,7 @@ export class ClickBehaviorResolver {
 				return SelectStepBehavior.create(commandOrNull.component, forceMove, this.context);
 
 			case ClickCommandType.rerenderStep:
-				return PressingBehavior.create(element, new RerenderStepPressingBehaviorHandler(this.context));
+				return PressingBehavior.create(element, new RerenderStepPressingBehaviorHandler(commandOrNull, this.context));
 
 			case ClickCommandType.openFolder:
 				return PressingBehavior.create(element, new OpenFolderPressingBehaviorHandler(commandOrNull, this.context));

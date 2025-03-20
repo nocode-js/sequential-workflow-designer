@@ -5,7 +5,7 @@ import { Behavior } from './behaviors';
 import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { CustomActionController } from './custom-action-controller';
-import { ComponentType, Sequence, Step } from './definition';
+import { ComponentType, Definition, Sequence, Step } from './definition';
 import { I18n } from './designer-configuration';
 import {
 	Badge,
@@ -195,7 +195,7 @@ export interface ContextMenuExtension {
 }
 
 export interface ContextMenuItemsProvider {
-	getItems(step: Step | null, sequence: Sequence): ContextMenuItem[];
+	getItems(step: Step | null, parentSequence: Sequence, definition: Definition): ContextMenuItem[];
 }
 
 export interface ContextMenuItem {

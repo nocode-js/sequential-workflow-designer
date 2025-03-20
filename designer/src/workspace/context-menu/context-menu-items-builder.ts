@@ -1,5 +1,6 @@
 import { Sequence, Step } from '../../definition';
 import { ViewportApi } from '../../api/viewport-api';
+import { WorkspaceApi } from '../../api/workspace-api';
 import { StateModifier } from '../../modifier/state-modifier';
 import { ContextMenuItem, ContextMenuItemsProvider } from '../../designer-extension';
 import { DesignerState } from '../../designer-state';
@@ -9,6 +10,7 @@ import { I18n } from '../../designer-configuration';
 export class ContextMenuItemsBuilder {
 	public constructor(
 		private readonly viewportApi: ViewportApi,
+		private readonly workspaceApi: WorkspaceApi,
 		private readonly i18n: I18n,
 		private readonly stateModifier: StateModifier,
 		private readonly state: DesignerState,
@@ -70,8 +72,9 @@ export class ContextMenuItemsBuilder {
 					});
 				}
 			}
-		} else {
-			this.tryAppendCustomItems(items, null, this.state.definition.sequence);
+		} else if (!commandOrNull) {
+			const rootSequence = this.workspaceApi.getRootSequence();
+			this.tryAppendCustomItems(items, null, rootSequence.sequence);
 		}
 
 		items.push({
@@ -88,7 +91,7 @@ export class ContextMenuItemsBuilder {
 
 	private tryAppendCustomItems(items: ContextMenuItem[], step: Step | null, parentSequence: Sequence) {
 		if (this.customMenuItemsProvider) {
-			const customItems = this.customMenuItemsProvider.getItems(step, parentSequence);
+			const customItems = this.customMenuItemsProvider.getItems(step, parentSequence, this.state.definition);
 			for (const customItem of customItems) {
 				items.push(customItem);
 			}

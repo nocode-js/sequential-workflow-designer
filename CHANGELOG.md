@@ -1,3 +1,7 @@
+# 0.28.0
+
+This update modifies the custom context menu in the pro version. The context menu items provider now retrieves the parent sequence of the selected workspace root sequence. If the root sequence is a folder sequence, the parent sequence is the folder sequence.
+
 # 0.27.4
 
 Support for React 19 has been added.

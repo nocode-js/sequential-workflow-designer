@@ -73,16 +73,11 @@ export class WorkspaceView {
 		private readonly context: ComponentContext
 	) {}
 
-	public render(sequence: Sequence, parentSequencePlaceIndicator: SequencePlaceIndicator | null) {
+	public render(sequence: Sequence, parentPlaceIndicator: SequencePlaceIndicator | null) {
 		if (this.rootComponent) {
 			this.foreground.removeChild(this.rootComponent.view.g);
 		}
-		this.rootComponent = this.context.services.rootComponent.create(
-			this.foreground,
-			sequence,
-			parentSequencePlaceIndicator,
-			this.context
-		);
+		this.rootComponent = this.context.services.rootComponent.create(this.foreground, sequence, parentPlaceIndicator, this.context);
 		this.refreshSize();
 	}
 
