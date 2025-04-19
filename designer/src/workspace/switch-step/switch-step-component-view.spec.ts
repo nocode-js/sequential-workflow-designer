@@ -39,11 +39,12 @@ describe('SwitchStepComponentView', () => {
 			radius: 10
 		};
 		const factory = createSwitchStepComponentViewFactory({
-			minContainerWidth: 40,
+			minBranchWidth: 40,
 			paddingX: 20,
 			paddingTop1: 0,
 			paddingTop2: 20,
 			connectionHeight: 16,
+			noBranchPaddingBottom: 24,
 			inputSize: 18,
 			inputIconSize: 14,
 			inputRadius: 4,

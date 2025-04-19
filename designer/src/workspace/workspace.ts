@@ -60,10 +60,6 @@ export class Workspace implements WorkspaceController {
 			api.workspace,
 			designerContext.services
 		);
-		setTimeout(() => {
-			workspace.updateRootComponent();
-			api.viewport.resetViewport();
-		});
 
 		designerContext.setWorkspaceController(workspace);
 		designerContext.state.onViewportChanged.subscribe(workspace.onViewportChanged);
@@ -81,12 +77,15 @@ export class Workspace implements WorkspaceController {
 		view.bindTouchStart(workspace.onClick, workspace.onPinchToZoom);
 		view.bindWheel(workspace.onWheel);
 		view.bindContextMenu(workspace.onContextMenu);
+
+		workspace.scheduleInit();
 		return workspace;
 	}
 
 	public readonly onRendered = new SimpleEvent<void>();
 	public isValid = false;
 
+	private initTimeout: ReturnType<typeof setTimeout> | null = null;
 	private selectedStepComponent: StepComponent | null = null;
 	private validationErrorBadgeIndex: number | null = null;
 
@@ -103,6 +102,14 @@ export class Workspace implements WorkspaceController {
 		private readonly workspaceApi: WorkspaceApi,
 		private readonly services: Services
 	) {}
+
+	public scheduleInit() {
+		this.initTimeout = setTimeout(() => {
+			this.initTimeout = null;
+			this.updateRootComponent();
+			this.viewportApi.resetViewport();
+		});
+	}
 
 	public updateRootComponent() {
 		this.selectedStepComponent = null;
@@ -167,6 +174,10 @@ export class Workspace implements WorkspaceController {
 	}
 
 	public destroy() {
+		if (this.initTimeout) {
+			clearTimeout(this.initTimeout);
+			this.initTimeout = null;
+		}
 		this.contextMenuController.destroy();
 		this.view.destroy();
 	}

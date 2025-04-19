@@ -142,13 +142,6 @@ function parallelStepEditorProvider(step, editorContext) {
 		});
 
 		const deleteButton = createButton('Delete branch', () => {
-			if (Object.keys(step.branches).length <= 1) {
-				window.alert('You cannot delete the last branch.');
-				return;
-			}
-			if (!window.confirm('Are you sure?')) {
-				return;
-			}
 			deleteBranch(branch, name);
 		});
 		branch.appendChild(deleteButton);

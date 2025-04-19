@@ -5,11 +5,12 @@ import { SwitchStepExtensionConfiguration } from './switch-step-extension-config
 
 const defaultConfiguration: SwitchStepExtensionConfiguration = {
 	view: {
-		minContainerWidth: 40,
+		minBranchWidth: 88,
 		paddingX: 20,
 		paddingTop1: 0,
 		paddingTop2: 22,
-		connectionHeight: 16,
+		connectionHeight: 20,
+		noBranchPaddingBottom: 24,
 		inputSize: 18,
 		inputIconSize: 14,
 		inputRadius: 4,
