@@ -1,7 +1,7 @@
 import { LabelViewConfiguration } from '../common-views/label-view-configuration';
 
 export interface SwitchStepComponentViewConfiguration {
-	minContainerWidth: number;
+	minBranchWidth: number;
 	paddingX: number;
 	/**
 	 * The distance between the top of the container and the center point of the input.
@@ -12,6 +12,10 @@ export interface SwitchStepComponentViewConfiguration {
 	 */
 	paddingTop2: number;
 	connectionHeight: number;
+	/**
+	 * The distance between the end of the label and the bottom of the container when there are no branches.
+	 */
+	noBranchPaddingBottom: number;
 	inputSize: number;
 	inputIconSize: number;
 	autoHideInputOnDrag: boolean;

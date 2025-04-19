@@ -49,10 +49,10 @@ export class InputView {
 		return new InputView(circle);
 	}
 
-	private constructor(private readonly root: SVGElement) {}
+	private constructor(public readonly g: SVGElement) {}
 
 	public setIsHidden(isHidden: boolean) {
-		Dom.attrs(this.root, {
+		Dom.attrs(this.g, {
 			visibility: isHidden ? 'hidden' : 'visible'
 		});
 	}
