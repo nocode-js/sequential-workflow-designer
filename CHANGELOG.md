@@ -1,6 +1,6 @@
 # 0.29.0
 
-This version adds support for 0 branches to the switch step. The switch step can now have 0 branches.
+This version adds support for 0 branches to the switch step component. The switch step component can now have 0 branches.
 
 # 0.28.0
 
