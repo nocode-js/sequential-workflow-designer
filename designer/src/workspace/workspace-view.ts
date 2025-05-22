@@ -56,11 +56,10 @@ export class WorkspaceView {
 		parent.appendChild(workspace);
 
 		const view = new WorkspaceView(componentContext.shadowRoot, workspace, canvas, pattern, gridPattern, foreground, componentContext);
-		window.addEventListener('resize', view.onResizeHandler, false);
+		window.addEventListener('resize', view.onResize, false);
 		return view;
 	}
 
-	private onResizeHandler = () => this.onResize();
 	public rootComponent?: Component;
 
 	private constructor(
@@ -153,7 +152,7 @@ export class WorkspaceView {
 	}
 
 	public destroy() {
-		window.removeEventListener('resize', this.onResizeHandler, false);
+		window.removeEventListener('resize', this.onResize, false);
 	}
 
 	public refreshSize() {
@@ -163,7 +162,7 @@ export class WorkspaceView {
 		});
 	}
 
-	private onResize() {
+	private readonly onResize = () => {
 		this.refreshSize();
-	}
+	};
 }
