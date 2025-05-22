@@ -5,12 +5,10 @@ import { Placeholder } from '../workspace/component';
 export class PlaceholderFinder {
 	public static create(placeholders: Placeholder[], state: DesignerState): PlaceholderFinder {
 		const checker = new PlaceholderFinder(placeholders, state);
-		state.onViewportChanged.subscribe(checker.clearCacheHandler);
-		window.addEventListener('scroll', checker.clearCacheHandler, false);
+		state.onViewportChanged.subscribe(checker.clearCache);
+		window.addEventListener('scroll', checker.clearCache, false);
 		return checker;
 	}
-
-	private readonly clearCacheHandler = () => this.clearCache();
 
 	private cache?: {
 		placeholder: Placeholder;
@@ -46,11 +44,11 @@ export class PlaceholderFinder {
 	}
 
 	public destroy() {
-		this.state.onViewportChanged.unsubscribe(this.clearCacheHandler);
-		window.removeEventListener('scroll', this.clearCacheHandler, false);
+		this.state.onViewportChanged.unsubscribe(this.clearCache);
+		window.removeEventListener('scroll', this.clearCache, false);
 	}
 
-	private clearCache() {
+	private readonly clearCache = () => {
 		this.cache = undefined;
-	}
+	};
 }

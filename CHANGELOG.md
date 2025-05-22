@@ -1,3 +1,7 @@
+# 0.29.1
+
+This release includes a small code refactor.
+
 # 0.29.0
 
 This version adds support for 0 branches to the switch step component. The switch step component can now have 0 branches.
