@@ -133,6 +133,7 @@ function initDesigner(testCaseName) {
 
 	const definition = testCases[testCaseName];
 	const configuration = {
+		theme: 'soft',
 		toolbox: false,
 
 		steps: {

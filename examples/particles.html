@@ -13,32 +13,13 @@
 		<meta name="twitter:image" content="https://nocode-js.com/img/social-card.png" />
 
 		<link rel="icon" href="./assets/favicon.ico" />
+		<link rel="stylesheet" href="./assets/common.css" />
 		<style>
-			body {
-				font:
-					14px/1.3em 'Open Sans',
-					Arial,
-					Verdana,
-					Serif;
-				background: #ededed;
-			}
-			html,
-			body {
-				min-width: 100%;
-				min-height: 100%;
-				margin: 0;
-				padding: 0;
-				overflow: hidden;
-			}
-			body {
-				display: flex;
-				align-items: center;
-			}
-
 			.box {
 				padding: 15px 0;
-				margin: 0 auto;
+				text-align: center;
 			}
+
 			button {
 				margin: 0 5px;
 				border: 1px solid #bcbcbc;
@@ -49,12 +30,6 @@
 			}
 			button:hover {
 				border-color: #7e7e7e;
-			}
-			a {
-				color: #000;
-			}
-			a:hover {
-				text-decoration: none;
 			}
 			#canvas {
 				border: 1px solid silver;
@@ -111,6 +86,16 @@
 		</style>
 	</head>
 	<body>
+		<header class="title-bar">
+			<div class="column">
+				<h1>🔴 Particles Example</h1>
+			</div>
+			<div class="column text-end flex-1 text-gray">
+				<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a> |
+				<a href="https://nocode-js.com" target="_blank">NoCode JS</a>
+			</div>
+		</header>
+
 		<div id="popup" class="hidden">
 			<div id="popup-placeholder"></div>
 			<div id="popup-footer">
@@ -122,10 +107,6 @@
 			<canvas id="canvas"></canvas>
 
 			<div id="control-panel" class="panel"></div>
-
-			<div class="panel">
-				<a href="https://github.com/nocode-js/sequential-workflow-designer" target="_blank">GitHub</a>
-			</div>
 		</div>
 
 		<script src="./assets/lib.js"></script>

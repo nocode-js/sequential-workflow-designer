@@ -182,6 +182,7 @@ function reload(definition) {
 }
 
 const configuration = {
+	theme: 'soft',
 	toolbox: {
 		groups: [
 			{

@@ -13,9 +13,10 @@ function embedStylesheet(url) {
 	document.write(`<link href="${url}" rel="stylesheet">`);
 }
 
-const baseUrl = isTestEnv() ? '../designer' : '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.29.1';
+const baseUrl = isTestEnv() ? '../designer' : '//cdn.jsdelivr.net/npm/sequential-workflow-designer@0.29.2';
 
 embedScript(`${baseUrl}/dist/index.umd.js`);
 embedStylesheet(`${baseUrl}/css/designer.css`);
 embedStylesheet(`${baseUrl}/css/designer-light.css`);
+embedStylesheet(`${baseUrl}/css/designer-soft.css`);
 embedStylesheet(`${baseUrl}/css/designer-dark.css`);

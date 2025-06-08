@@ -59,6 +59,6 @@ function install(placeholder, theme) {
 }
 
 window.addEventListener('load', () => {
-	install(document.getElementById('light'), 'light');
+	install(document.getElementById('light'), 'soft');
 	install(document.getElementById('dark'), 'dark');
 });

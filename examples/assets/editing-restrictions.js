@@ -57,6 +57,7 @@ function load() {
 	};
 	let designer;
 	const configuration = {
+		theme: 'soft',
 		undoStackSize: 10,
 		toolbox: {
 			isCollapsed: true,

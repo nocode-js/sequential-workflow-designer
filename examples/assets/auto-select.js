@@ -2,6 +2,7 @@
 
 function init(id, isAutoSelectDisabled) {
 	const configuration = {
+		theme: 'soft',
 		steps: {
 			iconUrlProvider: () => './assets/icon-task.svg',
 			isAutoSelectDisabled

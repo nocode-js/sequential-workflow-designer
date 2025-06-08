@@ -88,7 +88,7 @@ let validationStatusText;
 const localStorageKey = 'sqdFullscreen';
 
 function refreshValidationStatus() {
-	validationStatusText.innerText = designer.isValid() ? 'Definition is valid' : 'Definition is invalid';
+	validationStatusText.innerText = designer.isValid() ? '✅ Definition is valid' : '❌ Definition is invalid';
 }
 
 function loadState() {
@@ -111,6 +111,7 @@ function saveState() {
 const initialState = loadState();
 
 const configuration = {
+	theme: 'soft',
 	undoStackSize: 20,
 	undoStack: initialState.undoStack,
 
@@ -178,7 +179,7 @@ function getStartDefinition() {
 			createIfStep(
 				'00000000000000000000000000000001',
 				[createTaskStep('00000000000000000000000000000002', 'save', 'Save file', { isInvalid: true })],
-				[createTaskStep('00000000000000000000000000000003', 'text', 'Send email')]
+				[createTaskStep('00000000000000000000000000000003', 'text', 'Ask AI')]
 			),
 			createContainerStep('00000000000000000000000000000004', [
 				createTaskStep('00000000000000000000000000000005', 'task', 'Create task')
