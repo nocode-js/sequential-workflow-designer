@@ -173,6 +173,7 @@ function stepEditorProvider(step, editorContext, _definition, isReadonly) {
 }
 
 const configuration = {
+	theme: 'soft',
 	undoStackSize: 5,
 
 	toolbox: {

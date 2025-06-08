@@ -211,6 +211,7 @@ function load() {
 		properties: {}
 	};
 	const configuration = {
+		theme: 'soft',
 		toolbox: {
 			groups: [
 				{

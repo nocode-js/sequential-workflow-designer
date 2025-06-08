@@ -29,6 +29,7 @@ class Steps {
 }
 
 const configuration = {
+	theme: 'soft',
 	steps: {
 		iconUrlProvider: (_, type) => {
 			return `./assets/icon-${type}.svg`;

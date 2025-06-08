@@ -78,6 +78,7 @@ function mount(lang) {
 		return (LANG[lang] && LANG[lang][key]) || defaultValue;
 	};
 	const configuration = {
+		theme: 'soft',
 		undoStackSize: 5,
 		toolbox: {
 			groups: [

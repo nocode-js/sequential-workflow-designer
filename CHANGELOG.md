@@ -1,3 +1,7 @@
+# 0.29.2
+
+Added a new theme: `soft`.
+
 # 0.29.1
 
 This release includes a small code refactor.

@@ -1,0 +1,47 @@
+@import './designer-theme.scss';
+
+$joinColor: #2a2a2a;
+
+@include sqd-theme-ui-toolbox(
+	'soft',
+	$groupBackgroundColor: #efefef,
+	$filterBorder: 1px solid #dbdbdb,
+	$filterBorderColorFocused: #c3c3c3,
+	$panelBoxShadow: (0 1px 4px rgba(0, 0, 0, 0.15))
+);
+@include sqd-theme-ui-toolbox-item(
+	'soft',
+	$itemBorder: 1px solid #dbdbdb,
+	$itemBorderHovered: #cfcfcf,
+	$itemBoxShadow: (0 1px 3px rgba(0, 0, 0, 0.1)),
+	$noIconBackgroundColor: #e9e9e9
+);
+@include sqd-theme-ui-control-bar('soft', $panelBoxShadow: (0 1px 4px rgba(0, 0, 0, 0.15)));
+@include sqd-theme-ui-editor('soft', $panelBoxShadow: (0 1px 4px rgba(0, 0, 0, 0.15)), $toggleBoxShadow: (0 1px 4px rgba(0, 0, 0, 0.1)));
+@include sqd-theme-ui-context-menu('soft');
+
+@include sqd-theme-workspace('soft');
+@include sqd-theme-line-grid('soft', $strokeColor: #ebebeb);
+@include sqd-theme-join('soft', $joinStrokeColor: $joinColor);
+@include sqd-theme-region('soft', $strokeColor: #e9e9e9);
+@include sqd-theme-placeholder('soft', $rectFillColor: #e9e9e9, $rectStrokeColor: #707070);
+@include sqd-theme-validation-error-badge('soft');
+
+@include sqd-theme-start-stop-root-component('soft', $circleFillColor: #3747dd);
+
+@include sqd-theme-task-step-component(
+	'soft',
+	$rectStrokeColor: #dbdbdb,
+	$rectShadow: (0 1px 3px rgba(0, 0, 0, 0.1)),
+	$emptyIconColor: #e9e9e9,
+	$inputStrokeColor: $joinColor,
+	$outputFillColor: $joinColor
+);
+@include sqd-theme-switch-step-component(
+	'soft',
+	$labelPrimaryFillColor: #3747dd,
+	$labelSecondaryTextColor: #555555,
+	$labelSecondaryFillColor: #e9e9e9,
+	$inputStrokeColor: $joinColor
+);
+@include sqd-theme-container-step-component('soft', $labelFillColor: #3747dd, $inputStrokeColor: $joinColor);

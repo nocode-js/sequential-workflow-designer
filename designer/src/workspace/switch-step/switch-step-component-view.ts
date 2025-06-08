@@ -86,11 +86,11 @@ export const createSwitchStepComponentViewFactory =
 			let maxBranchesHeight = 0;
 
 			branchNames.forEach(branchName => {
-				const component = viewContext.createSequenceComponent(g, step.branches[branchName]);
-
 				const labelY = paddingTop + cfg.nameLabel.height + cfg.connectionHeight;
 				const translatedBranchName = viewContext.i18n(`stepComponent.${step.type}.branchName`, branchName);
 				const labelView = LabelView.create(g, labelY, cfg.branchNameLabel, translatedBranchName, 'secondary');
+
+				const component = viewContext.createSequenceComponent(g, step.branches[branchName]);
 
 				const halfOfWidestBranchElement = Math.max(labelView.width, cfg.minBranchWidth) / 2;
 

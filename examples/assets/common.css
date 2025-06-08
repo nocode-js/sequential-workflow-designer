@@ -1,8 +1,9 @@
+html,
 body,
 h1,
 select {
 	font:
-		13px/1.3em 'Open Sans',
+		14px/1.3em 'Open Sans',
 		Arial,
 		Verdana,
 		Serif;
@@ -12,15 +13,15 @@ select {
 
 .title-bar {
 	display: flex;
-	min-height: 40px;
-	background: #242424;
+	min-height: 60px;
 	align-items: center;
 	width: 100%;
-	box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+	background: #fff;
+	box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.06);
 }
 .title-bar,
 .title-bar a {
-	color: #fff;
+	color: #000;
 	text-decoration: none;
 }
 .title-bar a:hover {
@@ -31,11 +32,15 @@ select {
 }
 .title-bar select,
 .title-bar button {
-	background: #fff;
+	background: #efefef;
 	color: #000;
 	border: 0;
-	padding: 5px;
-	border-radius: 5px;
+	padding: 6px 12px;
+	border-radius: 10px;
+}
+.title-bar select:hover,
+.title-bar button:hover {
+	background: #e8e8e8;
 }
 .title-bar button {
 	cursor: pointer;
@@ -46,6 +51,9 @@ select {
 }
 .text-end {
 	text-align: end;
+}
+.text-gray {
+	color: #d7d7d7;
 }
 @media only screen and (max-width: 700px) {
 	.hidden-mobile {
