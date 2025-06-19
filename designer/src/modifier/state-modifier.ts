@@ -1,25 +1,30 @@
-import { Uid } from '../core';
 import { SequenceModifier } from './sequence-modifier';
 import { StepDuplicator } from '../core/step-duplicator';
 import { Definition, DefinitionWalker, Sequence, Step } from '../definition';
-import { DefinitionChangeType, DesignerConfiguration } from '../designer-configuration';
+import { DefinitionChangeType, StepsConfiguration, UidGenerator } from '../designer-configuration';
 import { DesignerState } from '../designer-state';
 import { StateModifierDependency } from './state-modifier-dependency';
 import { FolderPathDefinitionModifierDependency } from './folder-path-definition-modifier-dependency';
 import { SelectedStepIdDefinitionModifierDependency } from './selected-step-id-definition-modifier-dependency';
 
 export class StateModifier {
-	public static create(definitionWalker: DefinitionWalker, state: DesignerState, configuration: DesignerConfiguration): StateModifier {
+	public static create(
+		definitionWalker: DefinitionWalker,
+		uidGenerator: UidGenerator,
+		state: DesignerState,
+		configuration: StepsConfiguration
+	): StateModifier {
 		const dependencies: StateModifierDependency[] = [];
 		dependencies.push(new SelectedStepIdDefinitionModifierDependency(state, definitionWalker));
 		dependencies.push(new FolderPathDefinitionModifierDependency(state, definitionWalker));
-		return new StateModifier(definitionWalker, state, configuration, dependencies);
+		return new StateModifier(definitionWalker, uidGenerator, state, configuration, dependencies);
 	}
 
 	public constructor(
 		private readonly definitionWalker: DefinitionWalker,
+		private readonly uidGenerator: UidGenerator,
 		private readonly state: DesignerState,
-		private readonly configuration: DesignerConfiguration,
+		private readonly configuration: StepsConfiguration,
 		private readonly dependencies: StateModifierDependency[]
 	) {}
 
@@ -28,7 +33,7 @@ export class StateModifier {
 	}
 
 	public isSelectable(step: Step, parentSequence: Sequence): boolean {
-		return this.configuration.steps.isSelectable ? this.configuration.steps.isSelectable(step, parentSequence) : true;
+		return this.configuration.isSelectable ? this.configuration.isSelectable(step, parentSequence) : true;
 	}
 
 	public trySelectStep(step: Step, parentSequence: Sequence) {
@@ -38,7 +43,7 @@ export class StateModifier {
 	}
 
 	public trySelectStepById(stepId: string) {
-		if (this.configuration.steps.isSelectable) {
+		if (this.configuration.isSelectable) {
 			const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
 			this.trySelectStep(result.step, result.parentSequence);
 		} else {
@@ -47,9 +52,9 @@ export class StateModifier {
 	}
 
 	public isDeletable(stepId: string): boolean {
-		if (this.configuration.steps.isDeletable) {
+		if (this.configuration.isDeletable) {
 			const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
-			return this.configuration.steps.isDeletable(result.step, result.parentSequence);
+			return this.configuration.isDeletable(result.step, result.parentSequence);
 		}
 		return true;
 	}
@@ -57,8 +62,8 @@ export class StateModifier {
 	public tryDelete(stepId: string): boolean {
 		const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
 
-		const canDeleteStep = this.configuration.steps.canDeleteStep
-			? this.configuration.steps.canDeleteStep(result.step, result.parentSequence)
+		const canDeleteStep = this.configuration.canDeleteStep
+			? this.configuration.canDeleteStep(result.step, result.parentSequence)
 			: true;
 		if (!canDeleteStep) {
 			return false;
@@ -72,9 +77,7 @@ export class StateModifier {
 	}
 
 	public tryInsert(step: Step, targetSequence: Sequence, targetIndex: number): boolean {
-		const canInsertStep = this.configuration.steps.canInsertStep
-			? this.configuration.steps.canInsertStep(step, targetSequence, targetIndex)
-			: true;
+		const canInsertStep = this.configuration.canInsertStep ? this.configuration.canInsertStep(step, targetSequence, targetIndex) : true;
 		if (!canInsertStep) {
 			return false;
 		}
@@ -82,14 +85,14 @@ export class StateModifier {
 		SequenceModifier.insertStep(step, targetSequence, targetIndex);
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepInserted, step.id);
 
-		if (!this.configuration.steps.isAutoSelectDisabled) {
+		if (!this.configuration.isAutoSelectDisabled) {
 			this.trySelectStepById(step.id);
 		}
 		return true;
 	}
 
 	public isDraggable(step: Step, parentSequence: Sequence): boolean {
-		return this.configuration.steps.isDraggable ? this.configuration.steps.isDraggable(step, parentSequence) : true;
+		return this.configuration.isDraggable ? this.configuration.isDraggable(step, parentSequence) : true;
 	}
 
 	public tryMove(sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number): boolean {
@@ -98,8 +101,8 @@ export class StateModifier {
 			return false;
 		}
 
-		const canMoveStep = this.configuration.steps.canMoveStep
-			? this.configuration.steps.canMoveStep(sourceSequence, step, targetSequence, targetIndex)
+		const canMoveStep = this.configuration.canMoveStep
+			? this.configuration.canMoveStep(sourceSequence, step, targetSequence, targetIndex)
 			: true;
 		if (!canMoveStep) {
 			return false;
@@ -108,19 +111,18 @@ export class StateModifier {
 		apply();
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepMoved, step.id);
 
-		if (!this.configuration.steps.isAutoSelectDisabled) {
+		if (!this.configuration.isAutoSelectDisabled) {
 			this.trySelectStep(step, targetSequence);
 		}
 		return true;
 	}
 
 	public isDuplicable(step: Step, parentSequence: Sequence): boolean {
-		return this.configuration.steps.isDuplicable ? this.configuration.steps.isDuplicable(step, parentSequence) : false;
+		return this.configuration.isDuplicable ? this.configuration.isDuplicable(step, parentSequence) : false;
 	}
 
 	public tryDuplicate(step: Step, parentSequence: Sequence): boolean {
-		const uidGenerator = this.configuration.uidGenerator ? this.configuration.uidGenerator : Uid.next;
-		const duplicator = new StepDuplicator(uidGenerator, this.definitionWalker);
+		const duplicator = new StepDuplicator(this.uidGenerator, this.definitionWalker);
 
 		const index = parentSequence.indexOf(step);
 		const newStep = duplicator.duplicate(step);

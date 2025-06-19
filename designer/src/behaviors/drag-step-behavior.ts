@@ -9,7 +9,7 @@ import { DesignerState } from '../designer-state';
 import { StateModifier } from '../modifier/state-modifier';
 import { WorkspaceController } from '../workspace/workspace-controller';
 import { StepComponent } from '../workspace/step-component';
-import { PlaceholderController } from '../designer-extension';
+import { PlaceholderController } from '../workspace/placeholder/placeholder-controller';
 
 export class DragStepBehavior implements Behavior {
 	public static create(designerContext: DesignerContext, step: Step, draggedStepComponent?: StepComponent): DragStepBehavior {

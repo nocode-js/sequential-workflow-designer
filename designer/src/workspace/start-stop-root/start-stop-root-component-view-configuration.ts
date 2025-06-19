@@ -3,6 +3,8 @@ export interface StartStopRootComponentViewConfiguration {
 	defaultIconSize: number;
 	folderIconSize: number;
 	folderIconD: string;
-	startIconD: string;
+	start: {
+		iconD: string;
+	} | null;
 	stopIconD: string;
 }

@@ -1,6 +1,6 @@
 import { Step } from '../definition';
 import { BehaviorController } from '../behaviors/behavior-controller';
-import { ObjectCloner, SimpleEventListener, Uid, Vector } from '../core';
+import { ObjectCloner, SimpleEventListener, Vector } from '../core';
 import { StepDefinition, UidGenerator } from '../designer-configuration';
 import { DesignerState } from '../designer-state';
 import { DragStepBehavior } from '../behaviors/drag-step-behavior';
@@ -13,7 +13,7 @@ export class ToolboxApi {
 		private readonly designerContext: DesignerContext,
 		private readonly behaviorController: BehaviorController,
 		private readonly toolboxDataProvider: ToolboxDataProvider,
-		private readonly uidGenerator: UidGenerator | undefined
+		private readonly uidGenerator: UidGenerator
 	) {}
 
 	public isCollapsed(): boolean {
@@ -52,7 +52,7 @@ export class ToolboxApi {
 
 	private activateStep(step: StepDefinition): Step {
 		const newStep = ObjectCloner.deepClone(step) as Step;
-		newStep.id = this.uidGenerator ? this.uidGenerator() : Uid.next();
+		newStep.id = this.uidGenerator();
 		return newStep;
 	}
 }

@@ -44,4 +44,5 @@ $joinColor: #2a2a2a;
 	$labelSecondaryFillColor: #e9e9e9,
 	$inputStrokeColor: $joinColor
 );
+@include sqd-theme-launch-pad-step-component('soft', $emptyInputStrokeColor: $joinColor, $emptyOutputFillColor: $joinColor);
 @include sqd-theme-container-step-component('soft', $labelFillColor: #3747dd, $inputStrokeColor: $joinColor);

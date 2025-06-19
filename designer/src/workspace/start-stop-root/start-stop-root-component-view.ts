@@ -26,7 +26,7 @@ export class StartStopRootComponentView implements ComponentView {
 			{
 				sequence,
 				depth: 0,
-				isInputConnected: true,
+				isInputConnected: Boolean(cfg.start),
 				isOutputConnected: true,
 				isPreview: false
 			},
@@ -36,11 +36,13 @@ export class StartStopRootComponentView implements ComponentView {
 
 		const x = view.joinX - cfg.size / 2;
 		const endY = cfg.size + view.height;
-
 		const iconSize = parentPlaceIndicator ? cfg.folderIconSize : cfg.defaultIconSize;
-		const startCircle = createCircle('start', parentPlaceIndicator ? cfg.folderIconD : cfg.startIconD, cfg.size, iconSize);
-		Dom.translate(startCircle, x, 0);
-		g.appendChild(startCircle);
+
+		if (cfg.start) {
+			const startCircle = createCircle('start', parentPlaceIndicator ? cfg.folderIconD : cfg.start.iconD, cfg.size, iconSize);
+			Dom.translate(startCircle, x, 0);
+			g.appendChild(startCircle);
+		}
 
 		Dom.translate(view.g, 0, cfg.size);
 

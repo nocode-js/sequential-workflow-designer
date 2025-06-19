@@ -60,7 +60,7 @@ export const createTaskStepComponentViewFactory =
 		});
 		g.appendChild(icon);
 
-		const isInputViewHidden = stepContext.depth === 0 && stepContext.position === 0 && !stepContext.isInputConnected;
+		const isInputViewHidden = !stepContext.isInputConnected; // TODO: handle inside the folder
 		const isOutputViewHidden = isInterrupted;
 
 		const inputView = isInputViewHidden ? null : InputView.createRoundInput(g, boxWidth / 2, 0, cfg.inputSize);

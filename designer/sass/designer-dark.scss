@@ -65,4 +65,10 @@
 	$outputFillColor: #707070
 );
 @include sqd-theme-switch-step-component('dark', $inputStrokeColor: #707070, $inputFillColor: #c6c6c6);
+@include sqd-theme-launch-pad-step-component(
+	'dark',
+	$emptyInputStrokeColor: #707070,
+	$emptyInputFillColor: #c6c6c6,
+	$emptyOutputFillColor: #707070
+);
 @include sqd-theme-container-step-component('dark', $inputStrokeColor: #707070, $inputFillColor: #c6c6c6);

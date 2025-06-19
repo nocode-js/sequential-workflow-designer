@@ -24,7 +24,7 @@ export class JoinView {
 		switch (targets.length) {
 			case 1:
 				if (start.x === targets[0].x) {
-					JoinView.createStraightJoin(parent, start, firstTarget.y * dy);
+					JoinView.createStraightJoin(parent, start, h * 2 * dy);
 				} else {
 					appendCurvedJoins(parent, start, targets, h, dy);
 				}

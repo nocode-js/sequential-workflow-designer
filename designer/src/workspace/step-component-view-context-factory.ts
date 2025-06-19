@@ -10,6 +10,21 @@ export class StepComponentViewContextFactory {
 			i18n: componentContext.i18n,
 			getStepIconUrl: () => componentContext.iconProvider.getIconUrl(stepContext.step),
 			getStepName: () => componentContext.i18n(`step.${stepContext.step.type}.name`, stepContext.step.name),
+			createStepComponent: (parentElement: SVGElement, parentSequence: Sequence, step: Step, position: number) => {
+				return componentContext.stepComponentFactory.create(
+					parentElement,
+					{
+						parentSequence,
+						step,
+						depth: stepContext.depth + 1,
+						position,
+						isInputConnected: stepContext.isInputConnected,
+						isOutputConnected: stepContext.isOutputConnected,
+						isPreview: stepContext.isPreview
+					},
+					componentContext
+				);
+			},
 			createSequenceComponent: (parentElement: SVGElement, sequence: Sequence) => {
 				const sequenceContext: SequenceContext = {
 					sequence,
@@ -33,6 +48,8 @@ export class StepComponentViewContextFactory {
 					contentFactory
 				);
 			},
+			getPlaceholderGapSize: orientation => componentContext.services.placeholder.getGapSize(orientation),
+			createPlaceholderForGap: componentContext.services.placeholder.createForGap.bind(componentContext.services.placeholder),
 			createPlaceholderForArea: componentContext.services.placeholder.createForArea.bind(componentContext.services.placeholder),
 			getPreference: (key: string) => componentContext.preferenceStorage.getItem(preferenceKeyPrefix + key),
 			setPreference: (key: string, value: string) => componentContext.preferenceStorage.setItem(preferenceKeyPrefix + key, value)

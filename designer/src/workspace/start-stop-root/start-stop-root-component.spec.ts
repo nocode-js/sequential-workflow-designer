@@ -12,7 +12,9 @@ describe('StartStopRootComponent', () => {
 			defaultIconSize: 22,
 			folderIconSize: 22,
 			folderIconD: Icons.folder,
-			startIconD: Icons.play,
+			start: {
+				iconD: Icons.play
+			},
 			stopIconD: Icons.stop
 		});
 

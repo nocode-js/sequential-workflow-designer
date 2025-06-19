@@ -4,6 +4,7 @@ import { DesignerState } from '../designer-state';
 import { createDefinitionStub, createDesignerConfigurationStub, createStepStub } from '../test-tools/stubs';
 import { StateModifier } from '../modifier/state-modifier';
 import { Editor } from './editor';
+import { Uid } from '../core';
 
 describe('Editor', () => {
 	const step = createStepStub();
@@ -27,7 +28,7 @@ describe('Editor', () => {
 		state = new DesignerState(definition, false, false, false);
 
 		const walker = new DefinitionWalker();
-		const modifier = StateModifier.create(walker, state, configuration);
+		const modifier = StateModifier.create(walker, Uid.next, state, configuration.steps);
 		api = new EditorApi(state, walker, modifier);
 
 		stepEditorProvider = jasmine.createSpy().and.returnValue(document.createElement('div'));

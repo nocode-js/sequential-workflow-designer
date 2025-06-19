@@ -7,7 +7,6 @@ import { SmartEditorExtension } from './smart-editor/smart-editor-extension';
 import { ToolboxExtension } from './toolbox/toolbox-extension';
 import { ValidationErrorBadgeExtension } from './workspace/badges/validation-error/validation-error-badge-extension';
 import { ContainerStepExtension } from './workspace/container-step/container-step-extension';
-import { DefaultPlaceholderControllerExtension } from './workspace/placeholder/default-placeholder-controller-extension';
 import { RectPlaceholderExtension } from './workspace/placeholder/rect-placeholder-extension';
 import { StartStopRootComponentExtension } from './workspace/start-stop-root/start-stop-root-component-extension';
 import { SwitchStepExtension } from './workspace/switch-step/switch-step-extension';
@@ -21,6 +20,7 @@ import { LineGridExtension } from './workspace/grid/line-grid-extension';
 import { DefaultRegionComponentViewExtension } from './workspace/region/default-region-component-view-extension';
 import { DefaultClickBehaviorWrapperExtension } from './behaviors/default-click-behavior-wrapper-extension';
 import { DefaultStepBadgesDecoratorExtension } from './workspace/badges/default-step-badges-decorator-extension';
+import { LaunchPadStepExtension } from './workspace/launch-pad-step/launch-pad-step-extension';
 
 export type Services = Required<DesignerExtension>;
 
@@ -59,9 +59,6 @@ function merge(services: Partial<Services>, extensions: DesignerExtension[]) {
 		if (ext.wheelController) {
 			services.wheelController = ext.wheelController;
 		}
-		if (ext.placeholderController) {
-			services.placeholderController = ext.placeholderController;
-		}
 		if (ext.placeholder) {
 			services.placeholder = ext.placeholder;
 		}
@@ -96,6 +93,7 @@ function setDefaults(services: Partial<Services>, configuration: DesignerConfigu
 	services.steps.push(ContainerStepExtension.create());
 	services.steps.push(SwitchStepExtension.create());
 	services.steps.push(TaskStepExtension.create());
+	services.steps.push(LaunchPadStepExtension.create());
 
 	if (!services.stepComponentViewWrapper) {
 		services.stepComponentViewWrapper = new DefaultStepComponentViewWrapperExtension();
@@ -132,9 +130,6 @@ function setDefaults(services: Partial<Services>, configuration: DesignerConfigu
 
 	if (!services.wheelController) {
 		services.wheelController = new ClassicWheelControllerExtension();
-	}
-	if (!services.placeholderController) {
-		services.placeholderController = new DefaultPlaceholderControllerExtension();
 	}
 	if (!services.placeholder) {
 		services.placeholder = RectPlaceholderExtension.create();

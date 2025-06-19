@@ -14,15 +14,15 @@ export class DesignerApi {
 		const workspace = new WorkspaceApi(context.state, context.definitionWalker, context.workspaceController);
 		const viewportController = context.services.viewportController.create(workspace);
 		const toolboxDataProvider = new ToolboxDataProvider(
-			context.componentContext.iconProvider,
 			context.i18n,
+			context.componentContext.iconProvider,
 			context.configuration.toolbox
 		);
 
 		return new DesignerApi(
 			context.configuration.shadowRoot,
 			ControlBarApi.create(context.state, context.historyController, context.stateModifier),
-			new ToolboxApi(context.state, context, context.behaviorController, toolboxDataProvider, context.configuration.uidGenerator),
+			new ToolboxApi(context.state, context, context.behaviorController, toolboxDataProvider, context.uidGenerator),
 			new EditorApi(context.state, context.definitionWalker, context.stateModifier),
 			workspace,
 			new ViewportApi(context.state, context.workspaceController, viewportController),

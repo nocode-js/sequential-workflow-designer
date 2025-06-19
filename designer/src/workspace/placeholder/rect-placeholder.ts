@@ -1,7 +1,6 @@
 import { Vector } from '../../core';
 import { Sequence } from '../../definition';
 import { Placeholder, PlaceholderDirection } from '../component';
-import { RectPlaceholderConfiguration } from './rect-placeholder-configuration';
 import { RectPlaceholderView } from './rect-placeholder-view';
 
 export class RectPlaceholder implements Placeholder {
@@ -11,9 +10,10 @@ export class RectPlaceholder implements Placeholder {
 		direction: PlaceholderDirection,
 		sequence: Sequence,
 		index: number,
-		configuration: RectPlaceholderConfiguration
+		radius: number,
+		iconSize: number
 	): RectPlaceholder {
-		const view = RectPlaceholderView.create(parent, size.x, size.y, configuration.radius, configuration.iconSize, direction);
+		const view = RectPlaceholderView.create(parent, size.x, size.y, radius, iconSize, direction);
 		return new RectPlaceholder(view, sequence, index);
 	}
 

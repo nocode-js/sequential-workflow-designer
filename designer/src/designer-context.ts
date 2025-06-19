@@ -4,7 +4,7 @@ import { ObjectCloner } from './core/object-cloner';
 import { CustomActionController } from './custom-action-controller';
 import { Definition, DefinitionWalker } from './definition';
 import { StateModifier } from './modifier/state-modifier';
-import { DesignerConfiguration, I18n } from './designer-configuration';
+import { DesignerConfiguration, I18n, UidGenerator } from './designer-configuration';
 import { DesignerState } from './designer-state';
 import { HistoryController } from './history-controller';
 import { LayoutController } from './layout-controller';
@@ -12,7 +12,8 @@ import { Services } from './services';
 import { StepExtensionResolver } from './workspace/step-extension-resolver';
 import { WorkspaceController, WorkspaceControllerWrapper } from './workspace/workspace-controller';
 import { MemoryPreferenceStorage } from './core/memory-preference-storage';
-import { PlaceholderController } from './designer-extension';
+import { PlaceholderController } from './workspace/placeholder/placeholder-controller';
+import { Uid } from './core';
 
 export class DesignerContext {
 	public static create(
@@ -32,12 +33,13 @@ export class DesignerContext {
 		const theme = configuration.theme || 'light';
 		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
 		const workspaceController = new WorkspaceControllerWrapper();
-		const placeholderController = services.placeholderController.create();
 		const behaviorController = BehaviorController.create(configuration.shadowRoot);
 		const stepExtensionResolver = StepExtensionResolver.create(services);
+		const placeholderController = PlaceholderController.create(configuration.placeholder);
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
 		const i18n: I18n = configuration.i18n ?? ((_, defaultValue) => defaultValue);
-		const stateModifier = StateModifier.create(definitionWalker, state, configuration);
+		const uidGenerator = configuration.uidGenerator ?? Uid.next;
+		const stateModifier = StateModifier.create(definitionWalker, uidGenerator, state, configuration.steps);
 		const customActionController = new CustomActionController(configuration, state, stateModifier);
 
 		let historyController: HistoryController | undefined = undefined;
@@ -50,9 +52,9 @@ export class DesignerContext {
 			configuration,
 			state,
 			stepExtensionResolver,
+			placeholderController,
 			definitionWalker,
 			preferenceStorage,
-			placeholderController,
 			i18n,
 			services
 		);
@@ -65,6 +67,7 @@ export class DesignerContext {
 			componentContext,
 			definitionWalker,
 			i18n,
+			uidGenerator,
 			stateModifier,
 			layoutController,
 			workspaceController,
@@ -83,6 +86,7 @@ export class DesignerContext {
 		public readonly componentContext: ComponentContext,
 		public readonly definitionWalker: DefinitionWalker,
 		public readonly i18n: I18n,
+		public readonly uidGenerator: UidGenerator,
 		public readonly stateModifier: StateModifier,
 		public readonly layoutController: LayoutController,
 		public readonly workspaceController: WorkspaceControllerWrapper,

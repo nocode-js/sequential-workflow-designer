@@ -120,7 +120,7 @@ export interface Placeholder {
 }
 
 export enum PlaceholderDirection {
-	none = 0,
+	gap = 0,
 	in = 1,
 	out = 2
 }
