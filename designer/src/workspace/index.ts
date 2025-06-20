@@ -4,6 +4,7 @@ export * from './sequence';
 export * from './start-stop-root';
 export * from './container-step';
 export * from './grid';
+export * from './launch-pad-step';
 export * from './switch-step';
 export * from './task-step';
 export * from './viewport';
