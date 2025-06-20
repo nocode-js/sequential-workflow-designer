@@ -18,7 +18,8 @@ import {
 	StepEditorProvider,
 	KeyboardConfiguration,
 	I18n,
-	PreferenceStorage
+	PreferenceStorage,
+	PlaceholderConfiguration
 } from 'sequential-workflow-designer';
 import { RootEditorWrapperContext } from './RootEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -46,6 +47,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	undoStackSize?: number;
 	stepsConfiguration: StepsConfiguration;
 	validatorConfiguration?: ValidatorConfiguration;
+	placeholderConfiguration?: PlaceholderConfiguration;
 	toolboxConfiguration: false | ReactToolboxConfiguration;
 	isToolboxCollapsed?: boolean;
 	onIsToolboxCollapsedChanged?: (isCollapsed: boolean) => void;
@@ -63,7 +65,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 }
 
 export function SequentialWorkflowDesigner<TDefinition extends Definition>(props: SequentialWorkflowDesignerProps<TDefinition>) {
-	const [placeholder, setPlaceholder] = useState<HTMLElement | null>(null);
+	const [root, setRoot] = useState<HTMLElement | null>(null);
 
 	const onDefinitionChangeRef = useRef(props.onDefinitionChange);
 	const onSelectedStepIdChangedRef = useRef(props.onSelectedStepIdChanged);
@@ -84,6 +86,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const undoStackSize = props.undoStackSize;
 	const steps = props.stepsConfiguration;
 	const validator = props.validatorConfiguration;
+	const placeholder = props.placeholderConfiguration;
 	const toolbox = props.toolboxConfiguration;
 	const isEditorCollapsed = props.isEditorCollapsed;
 	const isToolboxCollapsed = props.isToolboxCollapsed;
@@ -181,7 +184,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	}, [props.customActionHandler]);
 
 	useEffect(() => {
-		if (!placeholder) {
+		if (!root) {
 			return;
 		}
 
@@ -215,7 +218,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 			tryDestroy();
 		}
 
-		const designer = Designer.create(placeholder, definition.value, {
+		const designer = Designer.create(root, definition.value, {
 			theme,
 			undoStackSize,
 			toolbox: toolbox
@@ -226,6 +229,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 				: false,
 			steps,
 			validator,
+			placeholder,
 			controlBar,
 			contextMenu,
 			keyboard,
@@ -272,7 +276,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 
 		designerRef.current = designer;
 	}, [
-		placeholder,
+		root,
 		definition,
 		selectedStepId,
 		isReadonly,
@@ -287,6 +291,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		controlBar,
 		steps,
 		validator,
+		placeholder,
 		extensions,
 		i18n
 	]);
@@ -295,5 +300,5 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		return tryDestroy;
 	}, []);
 
-	return <div ref={setPlaceholder} data-testid="designer" className="sqd-designer-react"></div>;
+	return <div ref={setRoot} data-testid="designer" className="sqd-designer-react"></div>;
 }

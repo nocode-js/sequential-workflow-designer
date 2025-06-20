@@ -29,6 +29,7 @@ import {
 	ToolboxConfiguration,
 	UidGenerator,
 	ValidatorConfiguration,
+	PlaceholderConfiguration,
 	I18n,
 	PreferenceStorage
 } from 'sequential-workflow-designer';
@@ -69,6 +70,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	public stepsConfiguration?: StepsConfiguration;
 	@Input('validatorConfiguration')
 	public validatorConfiguration?: ValidatorConfiguration;
+	@Input('placeholderConfiguration')
+	public placeholderConfiguration?: PlaceholderConfiguration;
 	@Input('toolboxConfiguration')
 	public toolboxConfiguration?: AngularToolboxConfiguration | false;
 	@Input('controlBar')
@@ -214,6 +217,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 						},
 				steps: this.stepsConfiguration,
 				validator: this.validatorConfiguration,
+				placeholder: this.placeholderConfiguration,
 				toolbox: this.toolboxConfiguration
 					? {
 							isCollapsed: this.isToolboxCollapsed,

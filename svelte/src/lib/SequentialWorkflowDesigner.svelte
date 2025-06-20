@@ -11,6 +11,7 @@
 		type RootEditorContext,
 		type UndoStack,
 		type ValidatorConfiguration,
+		type PlaceholderConfiguration,
 		type UidGenerator,
 		type DesignerExtension,
 		type EditorsConfiguration,
@@ -50,6 +51,7 @@
 	export let undoStackSize: number | undefined = undefined;
 	export let undoStack: UndoStack | undefined = undefined;
 	export let validator: ValidatorConfiguration | undefined = undefined;
+	export let placeholder: PlaceholderConfiguration | undefined = undefined;
 	export let definitionWalker: DefinitionWalker | undefined = undefined;
 	export let extensions: DesignerExtension[] | undefined = undefined;
 	export let i18n: I18n | undefined = undefined;
@@ -79,7 +81,7 @@
 
 	let isFirstChange = true;
 	let designer: Designer | null = null;
-	let placeholder: HTMLElement;
+	let root: HTMLElement;
 
 	function init() {
 		const editors: EditorsConfiguration | false =
@@ -123,7 +125,7 @@
 				}
 			: false;
 
-		const d = Designer.create(placeholder, definition, {
+		const d = Designer.create(root, definition, {
 			steps,
 			controlBar,
 			toolbox: _toolbox,
@@ -135,6 +137,7 @@
 			undoStackSize,
 			undoStack,
 			validator,
+			placeholder,
 			definitionWalker,
 			extensions,
 			isReadonly,
@@ -205,4 +208,4 @@
 	});
 </script>
 
-<div bind:this={placeholder} class="sqd-designer-svelte" />
+<div bind:this={root} class="sqd-designer-svelte" />
