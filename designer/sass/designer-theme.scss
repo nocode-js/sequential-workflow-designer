@@ -362,8 +362,7 @@
 	$emptyInputFillColor: #fff,
 	$emptyOutputFillColor: #000,
 	$emptyOutputStrokeWidth: 0,
-	$emptyOutputStrokeColor: #000,
-	$emptyIconFillColor: #b3b3b3
+	$emptyOutputStrokeColor: #000
 ) {
 	.sqd-theme-#{$theme} .sqd-step-launch-pad#{if($stepType != '', '.sqd-type-' + $stepType, '')} {
 		& > g > {
@@ -377,9 +376,6 @@
 				$outputStrokeWidth: $emptyOutputStrokeWidth,
 				$outputStrokeColor: $emptyOutputStrokeColor
 			);
-		}
-		& > g > .sqd-launch-pad-empty-icon {
-			fill: $emptyIconFillColor;
 		}
 	}
 }

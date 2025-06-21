@@ -7,5 +7,4 @@ export interface LaunchPadStepComponentViewConfiguration {
 	emptyInputSize: number;
 	emptyOutputSize: number;
 	emptyIconSize: number;
-	emptyIconD: string;
 }

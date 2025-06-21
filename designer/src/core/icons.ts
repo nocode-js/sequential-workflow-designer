@@ -31,7 +31,6 @@ export class Icons {
 	public static stop = 'M10.75 37.25V10.7H37.3v26.55Z';
 	public static folder =
 		'M7.05 40q-1.2 0-2.1-.925-.9-.925-.9-2.075V11q0-1.15.9-2.075Q5.85 8 7.05 8h14l3 3h17q1.15 0 2.075.925.925.925.925 2.075v23q0 1.15-.925 2.075Q42.2 40 41.05 40Z';
-	public static trigger = 'm12.93 46.3 8.93-16.75-17.87-2.23 26.8-25.68h4.47l-8.93 16.75 17.87 2.23L17.4 46.3h-4.47z';
 
 	public static appendPath(parent: SVGElement, pathClassName: string, d: string, size: number): SVGGElement {
 		const g = Dom.svg('g');

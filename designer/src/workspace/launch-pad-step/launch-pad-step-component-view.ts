@@ -10,7 +10,7 @@ import {
 import { ComponentDom, InputView, JoinView, OutputView } from '../common-views';
 import { LaunchPadStepComponentViewConfiguration } from './launch-pad-step-component-view-configuration';
 import { ClickCommand, ClickDetails, Placeholder, StepComponentView } from '../component';
-import { Dom, getAbsolutePosition, Icons, Vector } from '../../core';
+import { Dom, getAbsolutePosition, Vector } from '../../core';
 import { StepComponent } from '../step-component';
 
 const COMPONENT_CLASS_NAME = 'launch-pad';
@@ -118,8 +118,19 @@ function createView(
 			outputView = OutputView.create(g, width / 2, height, cfg.emptyOutputSize);
 		}
 
-		const icon = Icons.appendPath(g, 'sqd-launch-pad-empty-icon', cfg.emptyIconD, cfg.emptyIconSize);
-		Dom.translate(icon, (width - cfg.emptyIconSize) / 2, (height - cfg.emptyIconSize) / 2);
+		if (cfg.emptyIconSize > 0) {
+			const iconUrl = viewContext.getStepIconUrl();
+			if (iconUrl) {
+				const icon = Dom.svg('image', {
+					href: iconUrl,
+					x: (width - cfg.emptyIconSize) / 2,
+					y: (height - cfg.emptyIconSize) / 2,
+					width: cfg.emptyIconSize,
+					height: cfg.emptyIconSize
+				});
+				g.appendChild(icon);
+			}
+		}
 
 		joinX = width / 2;
 	}

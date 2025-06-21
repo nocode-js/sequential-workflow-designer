@@ -56,6 +56,9 @@ const configuration = {
 
 	steps: {
 		iconUrlProvider: (_, type) => {
+			if (type === 'launchPad') {
+				return './assets/icon-trigger.svg';
+			}
 			return `./assets/icon-${type}.svg`;
 		},
 		isDuplicable(step) {

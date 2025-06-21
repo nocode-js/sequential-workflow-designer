@@ -3,7 +3,6 @@ import { StepExtension } from '../../designer-extension';
 import { LaunchPadStepExtensionConfiguration } from './launch-pad-step-extension-configuration';
 import { createLaunchPadStepComponentViewFactory } from './launch-pad-step-component-view';
 import { LaunchPadStepComponentViewConfiguration } from './launch-pad-step-component-view-configuration';
-import { Icons } from '../../core';
 
 const defaultViewConfiguration: LaunchPadStepComponentViewConfiguration = {
 	isRegionEnabled: true,
@@ -13,8 +12,7 @@ const defaultViewConfiguration: LaunchPadStepComponentViewConfiguration = {
 	emptyPaddingY: 20,
 	emptyInputSize: 14,
 	emptyOutputSize: 10,
-	emptyIconSize: 24,
-	emptyIconD: Icons.trigger
+	emptyIconSize: 24
 };
 
 export class LaunchPadStepExtension implements StepExtension<SequentialStep> {
