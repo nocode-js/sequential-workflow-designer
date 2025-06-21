@@ -71,7 +71,7 @@ export const createTaskStepComponentViewFactory =
 			width: boxWidth,
 			height: boxHeight,
 			joinX: boxWidth / 2,
-			sequenceComponents: null,
+			components: null,
 			placeholders: null,
 			hasOutput: !!outputView,
 

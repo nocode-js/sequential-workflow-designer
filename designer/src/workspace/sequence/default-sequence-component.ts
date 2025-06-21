@@ -33,22 +33,20 @@ export class DefaultSequenceComponent implements SequenceComponent {
 
 	public findById(stepId: string): StepComponent | null {
 		for (const component of this.view.components) {
-			const sc = component.findById(stepId);
-			if (sc) {
-				return sc;
+			const result = component.findById(stepId);
+			if (result) {
+				return result;
 			}
 		}
 		return null;
 	}
 
 	public resolvePlaceholders(skipComponent: StepComponent | undefined, result: FoundPlaceholders) {
+		this.view.components.forEach(component => component.resolvePlaceholders(skipComponent, result));
 		this.view.placeholders.forEach(placeholder => result.placeholders.push(placeholder));
-		this.view.components.forEach(c => c.resolvePlaceholders(skipComponent, result));
 	}
 
 	public updateBadges(result: BadgesResult) {
-		for (const component of this.view.components) {
-			component.updateBadges(result);
-		}
+		this.view.components.forEach(component => component.updateBadges(result));
 	}
 }

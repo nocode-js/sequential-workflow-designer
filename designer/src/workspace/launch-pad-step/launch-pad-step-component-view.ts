@@ -142,7 +142,7 @@ function createView(
 		width,
 		height,
 		joinX,
-		sequenceComponents: components,
+		components,
 		placeholders,
 		hasOutput,
 

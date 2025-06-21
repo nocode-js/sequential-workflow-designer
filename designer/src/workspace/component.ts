@@ -25,7 +25,7 @@ export interface ComponentView {
 }
 
 export interface StepComponentView extends ComponentView {
-	sequenceComponents: SequenceComponent[] | null;
+	components: Component[] | null;
 	placeholders: Placeholder[] | null;
 
 	hasOutput: boolean;

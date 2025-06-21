@@ -32,7 +32,7 @@ function createView(
 		height,
 		joinX,
 		placeholders: null,
-		sequenceComponents,
+		components: sequenceComponents,
 		hasOutput: sequenceComponents ? sequenceComponents.some(c => c.hasOutput) : true,
 
 		getClientPosition(): Vector {
