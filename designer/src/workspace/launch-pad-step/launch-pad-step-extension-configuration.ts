@@ -2,5 +2,4 @@ import { LaunchPadStepComponentViewConfiguration } from './launch-pad-step-compo
 
 export interface LaunchPadStepExtensionConfiguration {
 	view?: LaunchPadStepComponentViewConfiguration;
-	componentType?: string;
 }

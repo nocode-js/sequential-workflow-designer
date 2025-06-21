@@ -22,7 +22,7 @@ export class LaunchPadStepExtension implements StepExtension<SequentialStep> {
 		return new LaunchPadStepExtension(configuration);
 	}
 
-	public readonly componentType = this.configuration?.componentType || 'launchPad';
+	public readonly componentType = 'launchPad';
 
 	private constructor(private readonly configuration: LaunchPadStepExtensionConfiguration | undefined) {}
 
