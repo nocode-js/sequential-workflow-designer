@@ -22,6 +22,7 @@ Features:
 ## 👀 Examples
 
 * [⏩ Live Testing](https://nocode-js.github.io/sequential-workflow-designer/examples/live-testing.html)
+* [💥 Triggers](https://nocode-js.github.io/sequential-workflow-designer/examples/triggers.html)
 * [❎ Fullscreen](https://nocode-js.github.io/sequential-workflow-designer/examples/fullscreen.html)
 * [🌅 Image Filter](https://nocode-js.github.io/sequential-workflow-designer/examples/image-filter.html)
 * [🔴 Particles](https://nocode-js.github.io/sequential-workflow-designer/examples/particles.html)

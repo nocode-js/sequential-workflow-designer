@@ -46,7 +46,10 @@ export class SelectStepBehavior implements Behavior {
 			return;
 		}
 
-		this.stateModifier.trySelectStep(this.pressedStepComponent.step, this.pressedStepComponent.parentSequence);
+		if (!this.stateModifier.trySelectStep(this.pressedStepComponent.step, this.pressedStepComponent.parentSequence)) {
+			// If we cannot select the step, we clear the selection.
+			this.state.setSelectedStepId(null);
+		}
 		return new SelectStepBehaviorEndToken(this.pressedStepComponent.step.id, Date.now());
 	}
 }

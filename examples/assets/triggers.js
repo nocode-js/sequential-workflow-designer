@@ -38,7 +38,7 @@ const configuration = {
 	toolbox: {
 		groups: [
 			{
-				name: 'Signals',
+				name: 'Triggers',
 				steps: [
 					createTriggerStep(null, 'On email received'),
 					createTriggerStep(null, 'On file created'),
@@ -101,11 +101,23 @@ const configuration = {
 	editors: {
 		rootEditorProvider: () => {
 			const root = document.createElement('div');
+			const h3 = document.createElement('h3');
+			h3.innerText = 'Workflows Activated by Triggers';
+			const p0 = document.createElement('p');
+			p0.innerText =
+				'This example demonstrates how to build a sequential workflow designer with support for triggers and tasks. A workflow can be initiated by any one of multiple triggers, after which a defined sequence of tasks is executed.';
+			const p1 = document.createElement('p');
+			p1.innerText =
+				'Please note that only trigger steps can be added in the launch section, while any task steps can be added in the section below.';
+
+			root.appendChild(h3);
+			root.appendChild(p0);
+			root.appendChild(p1);
 			return root;
 		},
 		stepEditorProvider: step => {
 			const root = document.createElement('div');
-			root.innerText = step.type;
+			root.innerText = `Selected step type: ${step.type}`;
 			return root;
 		}
 	},
@@ -130,7 +142,8 @@ const definition = {
 			properties: {},
 			sequence: [createTriggerStep('0x1', 'On email received'), createTriggerStep('0x2', 'On file created')]
 		},
-		createTaskStep('0x3', 'save', 'Save file')
+		createTaskStep('0x3', 'save', 'Save file'),
+		createLoopStep('0x4', [createTaskStep('0x6', 'text', 'Send SMS')])
 	]
 };
 

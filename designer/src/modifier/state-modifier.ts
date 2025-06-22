@@ -36,10 +36,12 @@ export class StateModifier {
 		return this.configuration.isSelectable ? this.configuration.isSelectable(step, parentSequence) : true;
 	}
 
-	public trySelectStep(step: Step, parentSequence: Sequence) {
+	public trySelectStep(step: Step, parentSequence: Sequence): boolean {
 		if (this.isSelectable(step, parentSequence)) {
 			this.state.setSelectedStepId(step.id);
+			return true;
 		}
+		return false;
 	}
 
 	public trySelectStepById(stepId: string) {
