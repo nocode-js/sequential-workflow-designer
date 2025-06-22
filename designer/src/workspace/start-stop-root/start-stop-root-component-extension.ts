@@ -5,24 +5,25 @@ import { RootComponentExtension, SequencePlaceIndicator } from '../../designer-e
 import { StartStopRootComponent } from './start-stop-root-component';
 import { StartStopRootComponentExtensionConfiguration } from './start-stop-root-component-extension-configuration';
 import { Component } from '../component';
+import { StartStopRootComponentViewConfiguration } from './start-stop-root-component-view-configuration';
 
-const defaultConfiguration: StartStopRootComponentExtensionConfiguration = {
-	view: {
-		size: 30,
-		defaultIconSize: 22,
-		folderIconSize: 18,
-		startIconD: Icons.play,
-		stopIconD: Icons.stop,
-		folderIconD: Icons.folder
-	}
+const defaultViewConfiguration: StartStopRootComponentViewConfiguration = {
+	size: 30,
+	defaultIconSize: 22,
+	folderIconSize: 18,
+	start: {
+		iconD: Icons.play
+	},
+	stopIconD: Icons.stop,
+	folderIconD: Icons.folder
 };
 
 export class StartStopRootComponentExtension implements RootComponentExtension {
 	public static create(configuration?: StartStopRootComponentExtensionConfiguration) {
-		return new StartStopRootComponentExtension(configuration ?? defaultConfiguration);
+		return new StartStopRootComponentExtension(configuration);
 	}
 
-	private constructor(private readonly configuration: StartStopRootComponentExtensionConfiguration) {}
+	private constructor(private readonly configuration: StartStopRootComponentExtensionConfiguration | undefined) {}
 
 	public create(
 		parentElement: SVGElement,
@@ -30,6 +31,7 @@ export class StartStopRootComponentExtension implements RootComponentExtension {
 		parentPlaceIndicator: SequencePlaceIndicator | null,
 		context: ComponentContext
 	): Component {
-		return StartStopRootComponent.create(parentElement, sequence, parentPlaceIndicator, context, this.configuration.view);
+		const view = this.configuration?.view ? { ...defaultViewConfiguration, ...this.configuration.view } : defaultViewConfiguration;
+		return StartStopRootComponent.create(parentElement, sequence, parentPlaceIndicator, context, view);
 	}
 }

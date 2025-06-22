@@ -3,7 +3,7 @@ import { Vector } from '../../core/vector';
 import { JoinView } from '../common-views/join-view';
 import { ComponentView, Placeholder } from '../component';
 import { ComponentContext } from '../../component-context';
-import { SequenceContext, StepContext } from '../../designer-extension';
+import { PlaceholderGapOrientation, SequenceContext, StepContext } from '../../designer-extension';
 import { StepComponent } from '../step-component';
 
 export class DefaultSequenceComponentView implements ComponentView {
@@ -12,8 +12,9 @@ export class DefaultSequenceComponentView implements ComponentView {
 		sequenceContext: SequenceContext,
 		componentContext: ComponentContext
 	): DefaultSequenceComponentView {
-		const phWidth = componentContext.services.placeholder.gapSize.x;
-		const phHeight = componentContext.services.placeholder.gapSize.y;
+		const phSize = componentContext.services.placeholder.getGapSize(PlaceholderGapOrientation.along);
+		const phWidth = phSize.x;
+		const phHeight = phSize.y;
 
 		const { sequence } = sequenceContext;
 		const g = Dom.svg('g');
@@ -57,7 +58,7 @@ export class DefaultSequenceComponentView implements ComponentView {
 			}
 
 			if (!sequenceContext.isPreview && componentContext.placeholderController.canCreate(sequence, i)) {
-				const ph = componentContext.services.placeholder.createForGap(g, sequence, i);
+				const ph = componentContext.services.placeholder.createForGap(g, sequence, i, PlaceholderGapOrientation.along);
 				Dom.translate(ph.view.g, joinX - phWidth / 2, offsetY - phHeight);
 				placeholders.push(ph);
 			}
@@ -72,7 +73,7 @@ export class DefaultSequenceComponentView implements ComponentView {
 
 		const newIndex = components.length;
 		if (!sequenceContext.isPreview && componentContext.placeholderController.canCreate(sequence, newIndex)) {
-			const ph = componentContext.services.placeholder.createForGap(g, sequence, newIndex);
+			const ph = componentContext.services.placeholder.createForGap(g, sequence, newIndex, PlaceholderGapOrientation.along);
 			Dom.translate(ph.view.g, joinX - phWidth / 2, offsetY - phHeight);
 			placeholders.push(ph);
 		}

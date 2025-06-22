@@ -14,6 +14,7 @@ export class PlaceholderFinder {
 		placeholder: Placeholder;
 		lt: Vector; // left top
 		br: Vector; // bottom right
+		diagSq: number; // left top diagonal squared
 	}[];
 
 	private constructor(
@@ -27,15 +28,17 @@ export class PlaceholderFinder {
 
 			this.cache = this.placeholders.map(placeholder => {
 				const rect = placeholder.getClientRect();
+				const lt = new Vector(rect.x, rect.y).add(scroll);
+				const br = new Vector(rect.x + rect.width, rect.y + rect.height).add(scroll);
 				return {
 					placeholder,
-					lt: new Vector(rect.x, rect.y).add(scroll),
-					br: new Vector(rect.x + rect.width, rect.y + rect.height).add(scroll)
+					lt,
+					br,
+					diagSq: lt.x * lt.x + lt.y * lt.y
 				};
 			});
-			this.cache.sort((a, b) => a.lt.y - b.lt.y);
+			this.cache.sort((a, b) => a.diagSq - b.diagSq);
 		}
-
 		const vR = vLt.x + vWidth;
 		const vB = vLt.y + vHeight;
 		return this.cache.find(p => {

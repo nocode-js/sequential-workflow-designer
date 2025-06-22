@@ -354,6 +354,32 @@
 	}
 }
 
+@mixin sqd-theme-launch-pad-step-component(
+	$theme,
+	$stepType: '',
+	$emptyInputStrokeWidth: 2,
+	$emptyInputStrokeColor: #000,
+	$emptyInputFillColor: #fff,
+	$emptyOutputFillColor: #000,
+	$emptyOutputStrokeWidth: 0,
+	$emptyOutputStrokeColor: #000
+) {
+	.sqd-theme-#{$theme} .sqd-step-launch-pad#{if($stepType != '', '.sqd-type-' + $stepType, '')} {
+		& > g > {
+			@include _sqd-input(
+				$inputFillColor: $emptyInputFillColor,
+				$inputStrokeWidth: $emptyInputStrokeWidth,
+				$inputStrokeColor: $emptyInputStrokeColor
+			);
+			@include _sqd-output(
+				$outputFillColor: $emptyOutputFillColor,
+				$outputStrokeWidth: $emptyOutputStrokeWidth,
+				$outputStrokeColor: $emptyOutputStrokeColor
+			);
+		}
+	}
+}
+
 @mixin sqd-theme-container-step-component(
 	$theme,
 	$stepType: '',

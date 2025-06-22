@@ -29,13 +29,13 @@ describe('ToolboxDataProvider', () => {
 
 	describe('getAllGroups()', () => {
 		it('return empty array if configuration is false', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, false);
+			const dataProvider = new ToolboxDataProvider(i18n, iconProvider, false);
 
 			expect(dataProvider.getAllGroups()).toEqual([]);
 		});
 
 		it('returns groups with correct labels and descriptions', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, {
+			const dataProvider = new ToolboxDataProvider(i18n, iconProvider, {
 				groups
 			});
 
@@ -53,7 +53,7 @@ describe('ToolboxDataProvider', () => {
 		});
 
 		it('returns groups with correct labels and descriptions when custom providers are provided', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, {
+			const dataProvider = new ToolboxDataProvider(i18n, iconProvider, {
 				groups,
 				labelProvider: reverseStepName,
 				descriptionProvider: step => `Description of ${step.name}`
@@ -75,7 +75,7 @@ describe('ToolboxDataProvider', () => {
 
 	describe('applyFilter()', () => {
 		it('filters by label', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, {
+			const dataProvider = new ToolboxDataProvider(i18n, iconProvider, {
 				groups
 			});
 
@@ -98,7 +98,7 @@ describe('ToolboxDataProvider', () => {
 		});
 
 		it('filters by custom label', () => {
-			const dataProvider = new ToolboxDataProvider(iconProvider, i18n, {
+			const dataProvider = new ToolboxDataProvider(i18n, iconProvider, {
 				groups,
 				labelProvider: reverseStepName
 			});

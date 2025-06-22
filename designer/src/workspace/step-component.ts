@@ -22,8 +22,8 @@ export class StepComponent implements Component {
 		if (this.step.id === stepId) {
 			return this;
 		}
-		if (this.view.sequenceComponents) {
-			for (const component of this.view.sequenceComponents) {
+		if (this.view.components) {
+			for (const component of this.view.components) {
 				const result = component.findById(stepId);
 				if (result) {
 					return result;
@@ -34,9 +34,17 @@ export class StepComponent implements Component {
 	}
 
 	public resolveClick(click: ClickDetails): ClickCommand | null {
-		if (this.view.sequenceComponents) {
-			for (const component of this.view.sequenceComponents) {
+		if (this.view.components) {
+			for (const component of this.view.components) {
 				const result = component.resolveClick(click);
+				if (result) {
+					return result;
+				}
+			}
+		}
+		if (this.view.placeholders) {
+			for (const placeholder of this.view.placeholders) {
+				const result = placeholder.resolveClick(click);
 				if (result) {
 					return result;
 				}
@@ -60,8 +68,8 @@ export class StepComponent implements Component {
 
 	public resolvePlaceholders(skipComponent: StepComponent | undefined, result: FoundPlaceholders) {
 		if (skipComponent !== this) {
-			if (this.view.sequenceComponents) {
-				this.view.sequenceComponents.forEach(component => component.resolvePlaceholders(skipComponent, result));
+			if (this.view.components) {
+				this.view.components.forEach(component => component.resolvePlaceholders(skipComponent, result));
 			}
 			if (this.view.placeholders) {
 				this.view.placeholders.forEach(ph => result.placeholders.push(ph));
@@ -83,8 +91,8 @@ export class StepComponent implements Component {
 	}
 
 	public updateBadges(result: BadgesResult) {
-		if (this.view.sequenceComponents) {
-			this.view.sequenceComponents.forEach(component => component.updateBadges(result));
+		if (this.view.components) {
+			this.view.components.forEach(component => component.updateBadges(result));
 		}
 		this.badges.update(result);
 	}

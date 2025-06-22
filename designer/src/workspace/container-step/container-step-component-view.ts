@@ -47,7 +47,7 @@ export const createContainerStepComponentViewFactory =
 				height,
 				joinX,
 				placeholders: null,
-				sequenceComponents: [sequenceComponent],
+				components: [sequenceComponent],
 				hasOutput: sequenceComponent.hasOutput,
 
 				getClientPosition(): Vector {

@@ -29,6 +29,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	steps: StepsConfiguration;
 
 	/**
+	 * @description The configuration of the placeholders.
+	 */
+	placeholder?: PlaceholderConfiguration;
+
+	/**
 	 * @description The configuration of the toolbox. If not set, the toolbox will be hidden.
 	 */
 	toolbox: false | ToolboxConfiguration;
@@ -177,6 +182,11 @@ export interface StepsConfiguration {
 }
 
 export type StepIconUrlProvider = (componentType: ComponentType, type: string) => string | null;
+
+export interface PlaceholderConfiguration {
+	canCreate?: (sequence: Sequence, index: number) => boolean;
+	canShow?: (sequence: Sequence, index: number, draggingStepComponentType: ComponentType, draggingStepType: string) => boolean;
+}
 
 export interface ValidatorConfiguration {
 	step?: StepValidator;

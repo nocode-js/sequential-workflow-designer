@@ -6,11 +6,14 @@ import { SwitchStepExtensionConfiguration } from '../workspace/switch-step/switc
 import { SwitchStepExtension } from '../workspace/switch-step/switch-step-extension';
 import { TaskStepExtensionConfiguration } from '../workspace/task-step/task-step-extension-configuration';
 import { TaskStepExtension } from '../workspace/task-step/task-step-extension';
+import { LaunchPadStepExtensionConfiguration } from '../workspace/launch-pad-step/launch-pad-step-extension-configuration';
+import { LaunchPadStepExtension } from '../workspace/launch-pad-step/launch-pad-step-extension';
 
 export interface StepsDesignerExtensionConfiguration {
 	container?: ContainerStepExtensionConfiguration;
 	switch?: SwitchStepExtensionConfiguration;
 	task?: TaskStepExtensionConfiguration;
+	launchPad?: LaunchPadStepExtensionConfiguration;
 }
 
 export class StepsDesignerExtension implements DesignerExtension {
@@ -24,6 +27,9 @@ export class StepsDesignerExtension implements DesignerExtension {
 		}
 		if (configuration.task) {
 			steps.push(TaskStepExtension.create(configuration.task));
+		}
+		if (configuration.launchPad) {
+			steps.push(LaunchPadStepExtension.create(configuration.launchPad));
 		}
 		return new StepsDesignerExtension(steps);
 	}

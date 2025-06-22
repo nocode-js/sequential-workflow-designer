@@ -1,6 +1,6 @@
 import { Sequence } from '../../definition';
 import { Vector } from '../../core';
-import { PlaceholderExtension } from '../../designer-extension';
+import { PlaceholderExtension, PlaceholderGapOrientation } from '../../designer-extension';
 import { PlaceholderDirection, Placeholder } from '../component';
 import { RectPlaceholder } from './rect-placeholder';
 import { RectPlaceholderConfiguration } from './rect-placeholder-configuration';
@@ -17,12 +17,26 @@ export class RectPlaceholderExtension implements PlaceholderExtension {
 		return new RectPlaceholderExtension(configuration ?? defaultConfiguration);
 	}
 
-	public readonly gapSize = new Vector(this.configuration.gapWidth, this.configuration.gapHeight);
+	private readonly alongGapSize = new Vector(defaultConfiguration.gapWidth, defaultConfiguration.gapHeight);
+	private readonly perpendicularGapSize = new Vector(defaultConfiguration.gapHeight, defaultConfiguration.gapWidth);
 
 	private constructor(private readonly configuration: RectPlaceholderConfiguration) {}
 
-	public createForGap(parent: SVGElement, parentSequence: Sequence, index: number): Placeholder {
-		return RectPlaceholder.create(parent, this.gapSize, PlaceholderDirection.none, parentSequence, index, this.configuration);
+	public getGapSize(orientation: PlaceholderGapOrientation): Vector {
+		return orientation === PlaceholderGapOrientation.perpendicular ? this.perpendicularGapSize : this.alongGapSize;
+	}
+
+	public createForGap(parent: SVGElement, parentSequence: Sequence, index: number, orientation: PlaceholderGapOrientation): Placeholder {
+		const gapSize = this.getGapSize(orientation);
+		return RectPlaceholder.create(
+			parent,
+			gapSize,
+			PlaceholderDirection.gap,
+			parentSequence,
+			index,
+			this.configuration.radius,
+			this.configuration.iconSize
+		);
 	}
 
 	public createForArea(
@@ -32,6 +46,14 @@ export class RectPlaceholderExtension implements PlaceholderExtension {
 		parentSequence: Sequence,
 		index: number
 	): Placeholder {
-		return RectPlaceholder.create(parent, size, direction, parentSequence, index, this.configuration);
+		return RectPlaceholder.create(
+			parent,
+			size,
+			direction,
+			parentSequence,
+			index,
+			this.configuration.radius,
+			this.configuration.iconSize
+		);
 	}
 }

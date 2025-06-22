@@ -4,8 +4,8 @@ import { I18n, StepDefinition, ToolboxConfiguration } from '../designer-configur
 
 export class ToolboxDataProvider {
 	public constructor(
-		private readonly iconProvider: IconProvider,
 		private readonly i18n: I18n,
+		private readonly iconProvider: IconProvider,
 		private readonly configuration: ToolboxConfiguration | false
 	) {}
 

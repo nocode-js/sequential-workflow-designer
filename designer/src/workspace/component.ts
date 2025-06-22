@@ -25,7 +25,7 @@ export interface ComponentView {
 }
 
 export interface StepComponentView extends ComponentView {
-	sequenceComponents: SequenceComponent[] | null;
+	components: Component[] | null;
 	placeholders: Placeholder[] | null;
 
 	hasOutput: boolean;
@@ -120,7 +120,7 @@ export interface Placeholder {
 }
 
 export enum PlaceholderDirection {
-	none = 0,
+	gap = 0,
 	in = 1,
 	out = 2
 }

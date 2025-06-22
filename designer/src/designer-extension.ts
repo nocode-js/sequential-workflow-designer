@@ -15,6 +15,7 @@ import {
 	Placeholder,
 	PlaceholderDirection,
 	SequenceComponent,
+	StepComponent,
 	StepComponentView
 } from './workspace';
 
@@ -28,7 +29,6 @@ export interface DesignerExtension {
 	draggedComponent?: DraggedComponentExtension;
 	wheelController?: WheelControllerExtension;
 	viewportController?: ViewportControllerExtension;
-	placeholderController?: PlaceholderControllerExtension;
 	placeholder?: PlaceholderExtension;
 	regionComponentView?: RegionComponentViewExtension;
 	grid?: GridExtension;
@@ -51,7 +51,15 @@ export interface StepComponentViewContext {
 	i18n: I18n;
 	getStepName(): string;
 	getStepIconUrl(): string | null;
+	createStepComponent(parentElement: SVGElement, parentSequence: Sequence, step: Step, position: number): StepComponent;
 	createSequenceComponent(parentElement: SVGElement, sequence: Sequence): SequenceComponent;
+	getPlaceholderGapSize(orientation: PlaceholderGapOrientation): Vector;
+	createPlaceholderForGap(
+		parentElement: SVGElement,
+		sequence: Sequence,
+		index: number,
+		orientation: PlaceholderGapOrientation
+	): Placeholder;
 	createPlaceholderForArea(
 		parentElement: SVGElement,
 		size: Vector,
@@ -204,22 +212,16 @@ export interface ContextMenuItem {
 	readonly callback?: () => void;
 }
 
-// PlaceholderControllerExtension
-
-export interface PlaceholderControllerExtension {
-	create(): PlaceholderController;
-}
-
-export interface PlaceholderController {
-	canCreate(sequence: Sequence, index: number): boolean;
-	canShow?: (sequence: Sequence, index: number, draggingStepComponentType: ComponentType, draggingStepType: string) => boolean;
-}
-
 // PlaceholderExtension
 
+export enum PlaceholderGapOrientation {
+	along = 0, // Goes along with the flow
+	perpendicular = 1 // Goes perpendicular to the flow
+}
+
 export interface PlaceholderExtension {
-	gapSize: Vector;
-	createForGap(parentElement: SVGElement, sequence: Sequence, index: number): Placeholder;
+	getGapSize(orientation: PlaceholderGapOrientation): Vector;
+	createForGap(parentElement: SVGElement, sequence: Sequence, index: number, orientation: PlaceholderGapOrientation): Placeholder;
 	createForArea(parentElement: SVGElement, size: Vector, direction: PlaceholderDirection, sequence: Sequence, index: number): Placeholder;
 }
 

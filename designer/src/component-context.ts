@@ -2,20 +2,20 @@ import { DefinitionWalker } from 'sequential-workflow-model';
 import { DefinitionValidator } from './core/definition-validator';
 import { IconProvider } from './core/icon-provider';
 import { DesignerConfiguration, I18n, PreferenceStorage } from './designer-configuration';
-import { PlaceholderController } from './designer-extension';
 import { DesignerState } from './designer-state';
 import { Services } from './services';
 import { StepComponentFactory } from './workspace/step-component-factory';
 import { StepExtensionResolver } from './workspace/step-extension-resolver';
+import { PlaceholderController } from './workspace/placeholder/placeholder-controller';
 
 export class ComponentContext {
 	public static create(
 		configuration: DesignerConfiguration,
 		state: DesignerState,
 		stepExtensionResolver: StepExtensionResolver,
+		placeholderController: PlaceholderController,
 		definitionWalker: DefinitionWalker,
 		preferenceStorage: PreferenceStorage,
-		placeholderController: PlaceholderController,
 		i18n: I18n,
 		services: Services
 	): ComponentContext {
