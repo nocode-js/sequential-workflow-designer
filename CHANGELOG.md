@@ -1,3 +1,13 @@
+# 0.30.0
+
+This version introduces a new step component: `launchPad`.
+
+The `launchPad` step component allows you to place multiple steps along a horizontal axis. Its design suggests that any of the contained steps can be executed independently or simultaneously. You can use it as a container for parallel execution or as a trigger hub-waiting for one or more embedded trigger steps to activate the workflow.
+
+The main goal of this addition is to enable the creation of workflows with multiple triggers in the standard version of the designer.
+
+To see how it looks, please check out [this example](https://nocode-js.github.io/sequential-workflow-designer/examples/triggers.html).
+
 # 0.29.2
 
 Added a new theme: `soft`.
