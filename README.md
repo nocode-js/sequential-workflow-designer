@@ -88,6 +88,7 @@ If you use [css-loader](https://webpack.js.org/loaders/css-loader/) or similar, 
 ```ts
 import 'sequential-workflow-designer/css/designer.css';
 import 'sequential-workflow-designer/css/designer-light.css';
+import 'sequential-workflow-designer/css/designer-soft.css';
 import 'sequential-workflow-designer/css/designer-dark.css';
 ```
 
