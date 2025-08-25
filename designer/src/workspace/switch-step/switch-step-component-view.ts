@@ -7,6 +7,7 @@ import { InputView } from '../common-views/input-view';
 import { ClickDetails, StepComponentView, ClickCommand, SequenceComponent } from '../component';
 import { RegionView, StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
 import { SwitchStepComponentViewConfiguration } from './switch-step-component-view-configuration';
+import { BranchNamesResolver } from './switch-step-extension-configuration';
 
 const COMPONENT_CLASS_NAME = 'switch';
 
@@ -57,7 +58,7 @@ function createView(
 }
 
 export const createSwitchStepComponentViewFactory =
-	(cfg: SwitchStepComponentViewConfiguration): StepComponentViewFactory =>
+	(cfg: SwitchStepComponentViewConfiguration, branchNameResolver: BranchNamesResolver | undefined): StepComponentViewFactory =>
 	(parent: SVGElement, stepContext: StepContext<BranchedStep>, viewContext: StepComponentViewContext): StepComponentView => {
 		return viewContext.createRegionComponentView(parent, COMPONENT_CLASS_NAME, (g, regionViewBuilder) => {
 			const step = stepContext.step;
@@ -65,7 +66,7 @@ export const createSwitchStepComponentViewFactory =
 
 			const name = viewContext.getStepName();
 			const nameLabelView = LabelView.create(g, paddingTop, cfg.nameLabel, name, 'primary');
-			const branchNames = Object.keys(step.branches);
+			const branchNames = branchNameResolver ? branchNameResolver(step) : Object.keys(step.branches);
 
 			if (branchNames.length === 0) {
 				const width = Math.max(nameLabelView.width, cfg.minBranchWidth) + cfg.paddingX * 2;
