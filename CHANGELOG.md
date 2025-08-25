@@ -1,3 +1,19 @@
+# 0.30.1
+
+Added a configurable branch name resolver for the switch step component, allowing you to define custom logic for resolving branch names [#193](https://github.com/nocode-js/sequential-workflow-designer/issues/193).
+
+```ts
+import { StepsDesignerExtension } from 'sequential-workflow-designer';
+
+const extensions = [
+  StepsDesignerExtension.create({
+    switch: {
+      branchNamesResolver: (step) => Object.keys(step.branches)
+    }
+  })
+];
+```
+
 # 0.30.0
 
 This version introduces a new step component: `launchPad`.

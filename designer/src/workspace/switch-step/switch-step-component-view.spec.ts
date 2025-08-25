@@ -38,20 +38,23 @@ describe('SwitchStepComponentView', () => {
 			minWidth: 50,
 			radius: 10
 		};
-		const factory = createSwitchStepComponentViewFactory({
-			minBranchWidth: 40,
-			paddingX: 20,
-			paddingTop1: 0,
-			paddingTop2: 20,
-			connectionHeight: 16,
-			noBranchPaddingBottom: 24,
-			inputSize: 18,
-			inputIconSize: 14,
-			inputRadius: 4,
-			autoHideInputOnDrag: true,
-			branchNameLabel: labelViewCfg,
-			nameLabel: labelViewCfg
-		});
+		const factory = createSwitchStepComponentViewFactory(
+			{
+				minBranchWidth: 40,
+				paddingX: 20,
+				paddingTop1: 0,
+				paddingTop2: 20,
+				connectionHeight: 16,
+				noBranchPaddingBottom: 24,
+				inputSize: 18,
+				inputIconSize: 14,
+				inputRadius: 4,
+				autoHideInputOnDrag: true,
+				branchNameLabel: labelViewCfg,
+				nameLabel: labelViewCfg
+			},
+			undefined
+		);
 		factory(parent, stepContext, viewContext);
 
 		expect(parent.children.length).not.toEqual(0);
