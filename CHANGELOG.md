@@ -1,3 +1,7 @@
+# 0.30.2
+
+This version fixes a bug related to identifying the touched element [#195](https://github.com/nocode-js/sequential-workflow-designer/issues/195).
+
 # 0.30.1
 
 Added a configurable branch name resolver for the switch step component, allowing you to define custom logic for resolving branch names [#193](https://github.com/nocode-js/sequential-workflow-designer/issues/193).

@@ -85,7 +85,8 @@ export class BehaviorController {
 		}
 
 		const position = this.state.lastPosition ?? this.state.startPosition;
-		const element = this.dom.elementFromPoint(position.x, position.y);
+		const clientPosition = position.subtract(new Vector(window.scrollX, window.scrollY));
+		const element = this.dom.elementFromPoint(clientPosition.x, clientPosition.y);
 		this.stop(false, element);
 	};
 
