@@ -1,3 +1,7 @@
+# 0.30.3
+
+This version adds a new argument to the `canCreate` and `canShow` callbacks in the placeholder configuration, providing access to the current definition.
+
 # 0.30.2
 
 This version fixes a bug related to identifying the touched element [#195](https://github.com/nocode-js/sequential-workflow-designer/issues/195).

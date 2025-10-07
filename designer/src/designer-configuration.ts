@@ -184,8 +184,14 @@ export interface StepsConfiguration {
 export type StepIconUrlProvider = (componentType: ComponentType, type: string) => string | null;
 
 export interface PlaceholderConfiguration {
-	canCreate?: (sequence: Sequence, index: number) => boolean;
-	canShow?: (sequence: Sequence, index: number, draggingStepComponentType: ComponentType, draggingStepType: string) => boolean;
+	canCreate?: (sequence: Sequence, index: number, definition: Definition) => boolean;
+	canShow?: (
+		sequence: Sequence,
+		index: number,
+		draggingStepComponentType: ComponentType,
+		draggingStepType: string,
+		definition: Definition
+	) => boolean;
 }
 
 export interface ValidatorConfiguration {

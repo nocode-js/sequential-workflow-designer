@@ -1,15 +1,26 @@
 import { Sequence } from 'sequential-workflow-model';
 import { PlaceholderConfiguration } from '../../designer-configuration';
+import { DesignerState } from '../../designer-state';
 
 export class PlaceholderController {
-	public static create(configuration: PlaceholderConfiguration | undefined): PlaceholderController {
-		return new PlaceholderController(configuration);
+	public static create(state: DesignerState, configuration: PlaceholderConfiguration | undefined): PlaceholderController {
+		return new PlaceholderController(state, configuration);
 	}
 
-	private constructor(private readonly configuration: PlaceholderConfiguration | undefined) {}
+	public readonly canCreate: (sequence: Sequence, index: number) => boolean;
+	public readonly canShow: (sequence: Sequence, index: number, draggingStepComponentType: string, draggingStepType: string) => boolean;
 
-	public readonly canCreate: (sequence: Sequence, index: number) => boolean = this.configuration?.canCreate ?? (() => true);
+	private constructor(
+		state: DesignerState,
+		private readonly configuration: PlaceholderConfiguration | undefined
+	) {
+		const canCreate = this.configuration?.canCreate;
+		const canShow = this.configuration?.canShow;
 
-	public readonly canShow: (sequence: Sequence, index: number, draggingStepComponentType: string, draggingStepType: string) => boolean =
-		this.configuration?.canShow ?? (() => true);
+		this.canCreate = canCreate ? (sequence, index) => canCreate(sequence, index, state.definition) : () => true;
+		this.canShow = canShow
+			? (sequence, index, draggingStepComponentType, draggingStepType) =>
+					canShow(sequence, index, draggingStepComponentType, draggingStepType, state.definition)
+			: () => true;
+	}
 }
