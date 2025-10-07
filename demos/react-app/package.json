@@ -6,8 +6,8 @@
 	"dependencies": {
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"sequential-workflow-designer": "^0.30.2",
-		"sequential-workflow-designer-react": "^0.30.2"
+		"sequential-workflow-designer": "^0.30.3",
+		"sequential-workflow-designer-react": "^0.30.3"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.2.5",

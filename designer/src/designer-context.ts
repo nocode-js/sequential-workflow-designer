@@ -35,7 +35,7 @@ export class DesignerContext {
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = BehaviorController.create(configuration.shadowRoot);
 		const stepExtensionResolver = StepExtensionResolver.create(services);
-		const placeholderController = PlaceholderController.create(configuration.placeholder);
+		const placeholderController = PlaceholderController.create(state, configuration.placeholder);
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
 		const i18n: I18n = configuration.i18n ?? ((_, defaultValue) => defaultValue);
 		const uidGenerator = configuration.uidGenerator ?? Uid.next;

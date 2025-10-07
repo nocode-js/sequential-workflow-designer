@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration, ValidatorConfiguration } from 'sequential-workflow-designer';
+import {
+	ObjectCloner,
+	PlaceholderConfiguration,
+	Step,
+	StepsConfiguration,
+	ToolboxConfiguration,
+	ValidatorConfiguration
+} from 'sequential-workflow-designer';
 import { SequentialWorkflowDesigner, wrapDefinition } from 'sequential-workflow-designer-react';
 import { RootEditor } from './RootEditor';
 import { StepEditor } from './StepEditor';
@@ -32,6 +39,14 @@ export function Playground() {
 		() => ({
 			step: (step: Step) => Boolean(step.name),
 			root: (definition: WorkflowDefinition) => Boolean(definition.properties.alfa)
+		}),
+		[]
+	);
+	const placeholderConfiguration: PlaceholderConfiguration = useMemo(
+		() => ({
+			canShow() {
+				return true;
+			}
 		}),
 		[]
 	);
@@ -133,6 +148,7 @@ export function Playground() {
 					onIsToolboxCollapsedChanged={setIsToolboxCollapsed}
 					stepsConfiguration={stepsConfiguration}
 					validatorConfiguration={validatorConfiguration}
+					placeholderConfiguration={placeholderConfiguration}
 					controlBar={true}
 					rootEditor={<RootEditor />}
 					stepEditor={<StepEditor />}
