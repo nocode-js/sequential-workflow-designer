@@ -17,8 +17,8 @@ export class RectPlaceholderExtension implements PlaceholderExtension {
 		return new RectPlaceholderExtension(configuration ?? defaultConfiguration);
 	}
 
-	private readonly alongGapSize = new Vector(defaultConfiguration.gapWidth, defaultConfiguration.gapHeight);
-	private readonly perpendicularGapSize = new Vector(defaultConfiguration.gapHeight, defaultConfiguration.gapWidth);
+	private readonly alongGapSize = new Vector(this.configuration.gapWidth, this.configuration.gapHeight);
+	private readonly perpendicularGapSize = new Vector(this.configuration.gapHeight, this.configuration.gapWidth);
 
 	private constructor(private readonly configuration: RectPlaceholderConfiguration) {}
 
