@@ -1,3 +1,7 @@
+# 0.30.5
+
+This version fixes the configuration usage in the `RectPlaceholderDesignerExtension` class.
+
 # 0.30.4
 
 This version exposes the `RectPlaceholderDesignerExtension` class.
