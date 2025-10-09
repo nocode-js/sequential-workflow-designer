@@ -1,3 +1,7 @@
+# 0.30.4
+
+This version exposes the `RectPlaceholderDesignerExtension` class.
+
 # 0.30.3
 
 This version adds a new argument to the `canCreate` and `canShow` callbacks in the placeholder configuration, providing access to the current definition.
