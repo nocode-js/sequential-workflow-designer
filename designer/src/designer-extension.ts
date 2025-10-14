@@ -222,7 +222,13 @@ export enum PlaceholderGapOrientation {
 export interface PlaceholderExtension {
 	getGapSize(orientation: PlaceholderGapOrientation): Vector;
 	createForGap(parentElement: SVGElement, sequence: Sequence, index: number, orientation: PlaceholderGapOrientation): Placeholder;
-	createForArea(parentElement: SVGElement, size: Vector, direction: PlaceholderDirection, sequence: Sequence, index: number): Placeholder;
+	createForArea(
+		parentElement: SVGElement,
+		size: Vector,
+		direction: PlaceholderDirection | null,
+		sequence: Sequence,
+		index: number
+	): Placeholder;
 }
 
 // ViewportControllerExtension

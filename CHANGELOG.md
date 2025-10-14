@@ -1,3 +1,7 @@
+# 0.31.0
+
+This version introduces a new feature: you can now add a custom icon to placeholders that appear while dragging a step.
+
 # 0.30.5
 
 This version fixes the configuration usage in the `RectPlaceholderDesignerExtension` class.

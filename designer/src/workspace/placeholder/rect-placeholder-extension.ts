@@ -1,5 +1,5 @@
 import { Sequence } from '../../definition';
-import { Vector } from '../../core';
+import { Icons, Vector } from '../../core';
 import { PlaceholderExtension, PlaceholderGapOrientation } from '../../designer-extension';
 import { PlaceholderDirection, Placeholder } from '../component';
 import { RectPlaceholder } from './rect-placeholder';
@@ -31,10 +31,10 @@ export class RectPlaceholderExtension implements PlaceholderExtension {
 		return RectPlaceholder.create(
 			parent,
 			gapSize,
-			PlaceholderDirection.gap,
 			parentSequence,
 			index,
 			this.configuration.radius,
+			this.configuration.iconD,
 			this.configuration.iconSize
 		);
 	}
@@ -42,18 +42,16 @@ export class RectPlaceholderExtension implements PlaceholderExtension {
 	public createForArea(
 		parent: SVGElement,
 		size: Vector,
-		direction: PlaceholderDirection,
+		direction: PlaceholderDirection | null,
 		parentSequence: Sequence,
 		index: number
 	): Placeholder {
-		return RectPlaceholder.create(
-			parent,
-			size,
-			direction,
-			parentSequence,
-			index,
-			this.configuration.radius,
-			this.configuration.iconSize
-		);
+		let iconD: string | undefined;
+		if (direction === PlaceholderDirection.in) {
+			iconD = Icons.folderIn;
+		} else if (direction === PlaceholderDirection.out) {
+			iconD = Icons.folderOut;
+		}
+		return RectPlaceholder.create(parent, size, parentSequence, index, this.configuration.radius, iconD, this.configuration.iconSize);
 	}
 }

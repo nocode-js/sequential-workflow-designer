@@ -1,20 +1,20 @@
 import { Vector } from '../../core';
 import { Sequence } from '../../definition';
-import { Placeholder, PlaceholderDirection } from '../component';
+import { Placeholder } from '../component';
 import { RectPlaceholderView } from './rect-placeholder-view';
 
 export class RectPlaceholder implements Placeholder {
 	public static create(
 		parent: SVGElement,
 		size: Vector,
-		direction: PlaceholderDirection,
-		sequence: Sequence,
+		parentSequence: Sequence,
 		index: number,
 		radius: number,
+		iconD: string | undefined,
 		iconSize: number
 	): RectPlaceholder {
-		const view = RectPlaceholderView.create(parent, size.x, size.y, radius, iconSize, direction);
-		return new RectPlaceholder(view, sequence, index);
+		const view = RectPlaceholderView.create(parent, size.x, size.y, radius, iconD, iconSize);
+		return new RectPlaceholder(view, parentSequence, index);
 	}
 
 	public constructor(
