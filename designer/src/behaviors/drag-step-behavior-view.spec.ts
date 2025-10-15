@@ -15,7 +15,7 @@ describe('DragStepView', () => {
 		const step = createStepStub();
 		const componentContext = createComponentContextStub();
 
-		const component = DragStepView.create(step, 'light', componentContext);
+		const component = DragStepView.create(step, false, 'light', componentContext);
 
 		expect(component).toBeDefined();
 		expect(appendChildSpy).toHaveBeenCalled();
@@ -43,7 +43,7 @@ describe('DragStepView', () => {
 		const createForGapSpy = spyOn(componentContext.services.placeholder, 'createForGap').and.callThrough();
 		const createForAreaSpy = spyOn(componentContext.services.placeholder, 'createForArea').and.callThrough();
 
-		const component = DragStepView.create(step, 'light', componentContext);
+		const component = DragStepView.create(step, false, 'light', componentContext);
 
 		expect(component).toBeDefined();
 		expect(appendChildSpy).toHaveBeenCalled();

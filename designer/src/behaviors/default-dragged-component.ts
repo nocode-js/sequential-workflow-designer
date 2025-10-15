@@ -6,7 +6,7 @@ import { DraggedComponent, StepContext } from '../designer-extension';
 const SAFE_OFFSET = 10;
 
 export class DefaultDraggedComponent implements DraggedComponent {
-	public static create(parent: HTMLElement, step: Step, componentContext: ComponentContext): DefaultDraggedComponent {
+	public static create(parent: HTMLElement, step: Step, _: boolean, componentContext: ComponentContext): DefaultDraggedComponent {
 		const canvas = Dom.svg('svg');
 		canvas.style.marginLeft = -SAFE_OFFSET + 'px';
 		canvas.style.marginTop = -SAFE_OFFSET + 'px';

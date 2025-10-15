@@ -153,7 +153,7 @@ export interface UiComponent {
 // DraggedComponentExtension
 
 export interface DraggedComponentExtension {
-	create(parentElement: HTMLElement, step: Step, componentContext: ComponentContext): DraggedComponent;
+	create(parentElement: HTMLElement, step: Step, isAttached: boolean, componentContext: ComponentContext): DraggedComponent;
 }
 
 export interface DraggedComponent {
