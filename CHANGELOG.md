@@ -1,3 +1,7 @@
+# 0.32.0
+
+This introduces internal changes related to the dragged component.
+
 # 0.31.0
 
 This version introduces a new feature: you can now add a custom icon to placeholders that appear while dragging a step.

@@ -12,8 +12,9 @@ import { StepComponent } from '../workspace/step-component';
 import { PlaceholderController } from '../workspace/placeholder/placeholder-controller';
 
 export class DragStepBehavior implements Behavior {
-	public static create(designerContext: DesignerContext, step: Step, draggedStepComponent?: StepComponent): DragStepBehavior {
-		const view = DragStepView.create(step, designerContext.theme, designerContext.componentContext);
+	public static create(designerContext: DesignerContext, step: Step, attachedStepComponent?: StepComponent): DragStepBehavior {
+		const isAttached = Boolean(attachedStepComponent);
+		const view = DragStepView.create(step, isAttached, designerContext.theme, designerContext.componentContext);
 		return new DragStepBehavior(
 			view,
 			designerContext.workspaceController,
@@ -21,7 +22,7 @@ export class DragStepBehavior implements Behavior {
 			designerContext.state,
 			step,
 			designerContext.stateModifier,
-			draggedStepComponent
+			attachedStepComponent
 		);
 	}
 
@@ -39,22 +40,22 @@ export class DragStepBehavior implements Behavior {
 		private readonly designerState: DesignerState,
 		private readonly step: Step,
 		private readonly stateModifier: StateModifier,
-		private readonly draggedStepComponent?: StepComponent
+		private readonly attachedStepComponent?: StepComponent
 	) {}
 
 	public onStart(position: Vector) {
 		let offset: Vector | null = null;
 
-		if (this.draggedStepComponent) {
-			this.draggedStepComponent.setIsDisabled(true);
-			this.draggedStepComponent.setIsDragging(true);
+		if (this.attachedStepComponent) {
+			this.attachedStepComponent.setIsDisabled(true);
+			this.attachedStepComponent.setIsDragging(true);
 
 			const hasSameSize =
-				this.draggedStepComponent.view.width === this.view.component.width &&
-				this.draggedStepComponent.view.height === this.view.component.height;
+				this.attachedStepComponent.view.width === this.view.component.width &&
+				this.attachedStepComponent.view.height === this.view.component.height;
 			if (hasSameSize) {
 				// Mouse cursor will be positioned on the same place as the source component.
-				const pagePosition = this.draggedStepComponent.view.getClientPosition();
+				const pagePosition = this.attachedStepComponent.view.getClientPosition();
 				offset = position.subtract(pagePosition);
 			}
 		}
@@ -66,7 +67,7 @@ export class DragStepBehavior implements Behavior {
 		this.view.setPosition(position.subtract(offset));
 		this.designerState.setIsDragging(true);
 
-		const { placeholders, components } = this.resolvePlaceholders(this.draggedStepComponent);
+		const { placeholders, components } = this.resolvePlaceholders(this.attachedStepComponent);
 		this.state = {
 			placeholders,
 			components,
@@ -114,10 +115,10 @@ export class DragStepBehavior implements Behavior {
 		let modified = false;
 
 		if (!interrupt && this.currentPlaceholder) {
-			if (this.draggedStepComponent) {
+			if (this.attachedStepComponent) {
 				modified = this.stateModifier.tryMove(
-					this.draggedStepComponent.parentSequence,
-					this.draggedStepComponent.step,
+					this.attachedStepComponent.parentSequence,
+					this.attachedStepComponent.step,
 					this.currentPlaceholder.parentSequence,
 					this.currentPlaceholder.index
 				);
@@ -126,9 +127,9 @@ export class DragStepBehavior implements Behavior {
 			}
 		}
 		if (!modified) {
-			if (this.draggedStepComponent) {
-				this.draggedStepComponent.setIsDisabled(false);
-				this.draggedStepComponent.setIsDragging(false);
+			if (this.attachedStepComponent) {
+				this.attachedStepComponent.setIsDisabled(false);
+				this.attachedStepComponent.setIsDragging(false);
 			}
 			if (this.currentPlaceholder) {
 				this.currentPlaceholder.setIsHover(false);
