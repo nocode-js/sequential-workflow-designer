@@ -9,6 +9,8 @@ export class MoveViewportBehavior implements Behavior {
 		return new MoveViewportBehavior(context.state.viewport.position, resetSelectedStep, context.state, context.stateModifier);
 	}
 
+	private lastDelta?: Vector;
+
 	private constructor(
 		private readonly startPosition: Vector,
 		private readonly resetSelectedStep: boolean,
@@ -17,17 +19,12 @@ export class MoveViewportBehavior implements Behavior {
 	) {}
 
 	public onStart() {
-		if (this.resetSelectedStep) {
-			const stepIdOrNull = this.state.tryGetLastStepIdFromFolderPath();
-			if (stepIdOrNull) {
-				this.stateModifier.trySelectStepById(stepIdOrNull);
-			} else {
-				this.state.setSelectedStepId(null);
-			}
-		}
+		// Nothing to do.
 	}
 
 	public onMove(delta: Vector) {
+		this.lastDelta = delta;
+
 		this.state.setViewport({
 			position: this.startPosition.subtract(delta),
 			scale: this.state.viewport.scale
@@ -35,6 +32,12 @@ export class MoveViewportBehavior implements Behavior {
 	}
 
 	public onEnd() {
-		// Nothing to do.
+		if (this.resetSelectedStep) {
+			const distance = this.lastDelta ? this.lastDelta.distance() : 0;
+			if (distance > 2) {
+				return;
+			}
+			this.stateModifier.tryResetSelectedStep();
+		}
 	}
 }

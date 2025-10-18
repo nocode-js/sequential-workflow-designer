@@ -1,0 +1,11 @@
+.unselectionBlocked {
+	position: fixed;
+	z-index: 9999;
+	left: 0;
+	top: 0;
+	right: 0;
+	background: #ed4800;
+	color: white;
+	text-align: center;
+	padding: 20px;
+}

@@ -135,51 +135,55 @@ export function Playground() {
 
 	return (
 		<>
-			{isVisible && (
-				<SequentialWorkflowDesigner
-					undoStackSize={10}
-					definition={definition}
-					onDefinitionChange={setDefinition}
-					selectedStepId={selectedStepId}
-					isReadonly={isReadonly}
-					onSelectedStepIdChanged={setSelectedStepId}
-					toolboxConfiguration={toolboxConfiguration}
-					isToolboxCollapsed={isToolboxCollapsed}
-					onIsToolboxCollapsedChanged={setIsToolboxCollapsed}
-					stepsConfiguration={stepsConfiguration}
-					validatorConfiguration={validatorConfiguration}
-					placeholderConfiguration={placeholderConfiguration}
-					controlBar={true}
-					rootEditor={<RootEditor />}
-					stepEditor={<StepEditor />}
-					isEditorCollapsed={isEditorCollapsed}
-					onIsEditorCollapsedChanged={setIsEditorCollapsed}
-					controller={controller}
-				/>
-			)}
-
-			<ul>
-				<li>Definition: {definitionJson.length} bytes</li>
-				<li>Selected step: {selectedStepId}</li>
-				<li>Is readonly: {yesOrNo(isReadonly)}</li>
-				<li>Is valid: {definition.isValid === undefined ? '?' : yesOrNo(definition.isValid)}</li>
-				<li>Is toolbox collapsed: {yesOrNo(isToolboxCollapsed)}</li>
-				<li>Is editor collapsed: {yesOrNo(isEditorCollapsed)}</li>
-			</ul>
-
-			<div>
-				<button onClick={toggleVisibilityClicked}>Toggle visibility</button>
-				<button onClick={reloadDefinitionClicked}>Reload definition</button>
-				<button onClick={toggleSelectionClicked}>Toggle selection</button>
-				<button onClick={toggleIsReadonlyClicked}>Toggle readonly</button>
-				<button onClick={toggleToolboxClicked}>Toggle toolbox</button>
-				<button onClick={toggleEditorClicked}>Toggle editor</button>
-				<button onClick={moveViewportToFirstStepClicked}>Move viewport to first step</button>
-				<button onClick={appendStepClicked}>Append step</button>
+			<div className="designer">
+				{isVisible && (
+					<SequentialWorkflowDesigner
+						undoStackSize={10}
+						theme="soft"
+						definition={definition}
+						onDefinitionChange={setDefinition}
+						selectedStepId={selectedStepId}
+						isReadonly={isReadonly}
+						onSelectedStepIdChanged={setSelectedStepId}
+						toolboxConfiguration={toolboxConfiguration}
+						isToolboxCollapsed={isToolboxCollapsed}
+						onIsToolboxCollapsedChanged={setIsToolboxCollapsed}
+						stepsConfiguration={stepsConfiguration}
+						validatorConfiguration={validatorConfiguration}
+						placeholderConfiguration={placeholderConfiguration}
+						controlBar={true}
+						rootEditor={<RootEditor />}
+						stepEditor={<StepEditor />}
+						isEditorCollapsed={isEditorCollapsed}
+						onIsEditorCollapsedChanged={setIsEditorCollapsed}
+						controller={controller}
+					/>
+				)}
 			</div>
+			<div className="sidebar">
+				<ul>
+					<li>Definition: {definitionJson.length} bytes</li>
+					<li>Selected step: {selectedStepId}</li>
+					<li>Is readonly: {yesOrNo(isReadonly)}</li>
+					<li>Is valid: {definition.isValid === undefined ? '?' : yesOrNo(definition.isValid)}</li>
+					<li>Is toolbox collapsed: {yesOrNo(isToolboxCollapsed)}</li>
+					<li>Is editor collapsed: {yesOrNo(isEditorCollapsed)}</li>
+				</ul>
 
-			<div>
-				<textarea value={definitionJson} readOnly={true} cols={100} rows={15} />
+				<div>
+					<button onClick={toggleVisibilityClicked}>Toggle visibility</button>
+					<button onClick={reloadDefinitionClicked}>Reload definition</button>
+					<button onClick={toggleSelectionClicked}>Toggle selection</button>
+					<button onClick={toggleIsReadonlyClicked}>Toggle readonly</button>
+					<button onClick={toggleToolboxClicked}>Toggle toolbox</button>
+					<button onClick={toggleEditorClicked}>Toggle editor</button>
+					<button onClick={moveViewportToFirstStepClicked}>Move viewport to first step</button>
+					<button onClick={appendStepClicked}>Append step</button>
+				</div>
+
+				<div>
+					<textarea value={definitionJson} readOnly={true} cols={100} rows={4} />
+				</div>
 			</div>
 		</>
 	);

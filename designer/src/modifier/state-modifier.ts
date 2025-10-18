@@ -36,24 +36,51 @@ export class StateModifier {
 		return this.configuration.isSelectable ? this.configuration.isSelectable(step, parentSequence) : true;
 	}
 
-	public trySelectStep(step: Step, parentSequence: Sequence): boolean {
-		if (this.isSelectable(step, parentSequence)) {
-			this.state.setSelectedStepId(step.id);
+	public isSelectableById(stepId: string): boolean {
+		if (this.configuration.isSelectable) {
+			const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
+			return this.configuration.isSelectable(result.step, result.parentSequence);
+		}
+		return true;
+	}
+
+	private canUnselectSelectedStep(): boolean | null {
+		if (this.state.selectedStepId) {
+			if (this.configuration.canUnselectStep) {
+				const result = this.definitionWalker.getParentSequence(this.state.definition, this.state.selectedStepId);
+				return this.configuration.canUnselectStep(result.step, result.parentSequence);
+			}
 			return true;
 		}
+		return null;
+	}
+
+	/**
+	 * @description Check the `isSelectable` callback before calling this method.
+	 */
+	public trySelectStepById(stepIdOrNull: string | null): boolean {
+		const can = this.canUnselectSelectedStep();
+		if (can === true || can === null) {
+			this.state.setSelectedStepId(stepIdOrNull);
+			return true;
+		}
+		this.state.notifyStepUnselectionBlocked(stepIdOrNull);
 		return false;
 	}
 
-	public trySelectStepById(stepId: string) {
-		if (this.configuration.isSelectable) {
-			const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
-			this.trySelectStep(result.step, result.parentSequence);
-		} else {
-			this.state.setSelectedStepId(stepId);
+	public tryResetSelectedStep() {
+		let stepIdOrNull = this.state.tryGetLastStepIdFromFolderPath();
+		if (stepIdOrNull && !this.isSelectableById(stepIdOrNull)) {
+			stepIdOrNull = null;
 		}
+		this.trySelectStepById(stepIdOrNull);
 	}
 
-	public isDeletable(stepId: string): boolean {
+	public isDeletable(step: Step, parentSequence: Sequence): boolean {
+		return this.configuration.isDeletable ? this.configuration.isDeletable(step, parentSequence) : true;
+	}
+
+	public isDeletableById(stepId: string): boolean {
 		if (this.configuration.isDeletable) {
 			const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
 			return this.configuration.isDeletable(result.step, result.parentSequence);
@@ -61,7 +88,10 @@ export class StateModifier {
 		return true;
 	}
 
-	public tryDelete(stepId: string): boolean {
+	/**
+	 * @description Check the `isDeletable` callback before calling this method.
+	 */
+	public tryDeleteById(stepId: string): boolean {
 		const result = this.definitionWalker.getParentSequence(this.state.definition, stepId);
 
 		const canDeleteStep = this.configuration.canDeleteStep
@@ -87,7 +117,7 @@ export class StateModifier {
 		SequenceModifier.insertStep(step, targetSequence, targetIndex);
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepInserted, step.id);
 
-		if (!this.configuration.isAutoSelectDisabled) {
+		if (!this.configuration.isAutoSelectDisabled && this.isSelectable(step, targetSequence)) {
 			this.trySelectStepById(step.id);
 		}
 		return true;
@@ -113,8 +143,8 @@ export class StateModifier {
 		apply();
 		this.state.notifyDefinitionChanged(DefinitionChangeType.stepMoved, step.id);
 
-		if (!this.configuration.isAutoSelectDisabled) {
-			this.trySelectStep(step, targetSequence);
+		if (!this.configuration.isAutoSelectDisabled && this.isSelectable(step, targetSequence)) {
+			this.trySelectStepById(step.id);
 		}
 		return true;
 	}
@@ -123,6 +153,9 @@ export class StateModifier {
 		return this.configuration.isDuplicable ? this.configuration.isDuplicable(step, parentSequence) : false;
 	}
 
+	/**
+	 * @description Check the `isDuplicable` callback before calling this method.
+	 */
 	public tryDuplicate(step: Step, parentSequence: Sequence): boolean {
 		const duplicator = new StepDuplicator(this.uidGenerator, this.definitionWalker);
 

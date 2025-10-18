@@ -11,7 +11,9 @@ export function RootEditor() {
 
 	return (
 		<>
-			<h2>Root editor</h2>
+			<h2>🍭 Playground Demo</h2>
+
+			<p>This demo showcases how several features of the Sequential Workflow Designer can be used within a React application.</p>
 
 			<h4>Alfa</h4>
 

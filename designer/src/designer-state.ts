@@ -12,6 +12,7 @@ export interface DefinitionChangedEvent {
 export class DesignerState {
 	public readonly onViewportChanged = new SimpleEvent<Viewport>();
 	public readonly onSelectedStepIdChanged = new SimpleEvent<string | null>();
+	public readonly onStepUnselectionBlocked = new SimpleEvent<string | null>();
 	public readonly onFolderPathChanged = new SimpleEvent<string[]>();
 	public readonly onIsReadonlyChanged = new SimpleEvent<boolean>();
 	public readonly onIsDraggingChanged = new SimpleEvent<boolean>();
@@ -64,6 +65,10 @@ export class DesignerState {
 
 	public notifyDefinitionChanged(changeType: DefinitionChangeType, stepId: string | null) {
 		this.onDefinitionChanged.forward({ changeType, stepId });
+	}
+
+	public notifyStepUnselectionBlocked(stepId: string | null) {
+		this.onStepUnselectionBlocked.forward(stepId);
 	}
 
 	public setViewport(viewport: Viewport) {

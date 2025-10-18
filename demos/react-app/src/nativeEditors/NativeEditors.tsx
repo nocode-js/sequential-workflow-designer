@@ -16,8 +16,15 @@ export const startDefinition: Definition = {
 };
 
 function rootEditorProvider(): HTMLElement {
+	const h2 = document.createElement('h2');
+	h2.innerText = '🔌 Native Editors Demo';
+
+	const p = document.createElement('p');
+	p.innerHTML = 'This demo demonstrates how to use natively implemented editors inside React application.';
+
 	const editor = document.createElement('div');
-	editor.innerHTML = 'Root editor';
+	editor.appendChild(h2);
+	editor.appendChild(p);
 	return editor;
 }
 
@@ -40,9 +47,10 @@ export function NativeEditors() {
 	const [definition, setDefinition] = useState(() => wrapDefinition(startDefinition));
 
 	return (
-		<>
+		<div className="designer">
 			<SequentialWorkflowDesigner
 				definition={definition}
+				theme="soft"
 				onDefinitionChange={setDefinition}
 				toolboxConfiguration={false}
 				stepsConfiguration={{}}
@@ -51,6 +59,6 @@ export function NativeEditors() {
 				rootEditor={rootEditorProvider}
 				stepEditor={stepEditorProvider}
 			/>
-		</>
+		</div>
 	);
 }

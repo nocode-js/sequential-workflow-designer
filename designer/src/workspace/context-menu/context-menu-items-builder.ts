@@ -38,7 +38,7 @@ export class ContextMenuItemsBuilder {
 						label: this.i18n('contextMenu.unselect', 'Unselect'),
 						order: 10,
 						callback: () => {
-							this.state.setSelectedStepId(null);
+							this.stateModifier.tryResetSelectedStep();
 						}
 					});
 				} else {
@@ -53,12 +53,12 @@ export class ContextMenuItemsBuilder {
 			}
 
 			if (!this.state.isReadonly) {
-				if (this.stateModifier.isDeletable(step.id)) {
+				if (this.stateModifier.isDeletable(step, parentSequence)) {
 					items.push({
 						label: this.i18n('contextMenu.delete', 'Delete'),
 						order: 30,
 						callback: () => {
-							this.stateModifier.tryDelete(step.id);
+							this.stateModifier.tryDeleteById(step.id);
 						}
 					});
 				}

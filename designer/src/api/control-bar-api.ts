@@ -71,8 +71,7 @@ export class ControlBarApi {
 
 	public tryDelete(): boolean {
 		if (this.canDelete() && this.state.selectedStepId) {
-			this.stateModifier.tryDelete(this.state.selectedStepId);
-			return true;
+			return this.stateModifier.tryDeleteById(this.state.selectedStepId);
 		}
 		return false;
 	}
@@ -82,7 +81,7 @@ export class ControlBarApi {
 			!!this.state.selectedStepId &&
 			!this.state.isReadonly &&
 			!this.state.isDragging &&
-			this.stateModifier.isDeletable(this.state.selectedStepId)
+			this.stateModifier.isDeletableById(this.state.selectedStepId)
 		);
 	}
 }

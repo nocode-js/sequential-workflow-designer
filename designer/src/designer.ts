@@ -69,6 +69,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 		designerContext.state.onViewportChanged.subscribe(designer.onViewportChanged.forward);
 		designerContext.state.onIsToolboxCollapsedChanged.subscribe(designer.onIsToolboxCollapsedChanged.forward);
 		designerContext.state.onIsEditorCollapsedChanged.subscribe(designer.onIsEditorCollapsedChanged.forward);
+		designerContext.state.onStepUnselectionBlocked.subscribe(designer.onStepUnselectionBlocked.forward);
 		return designer;
 	}
 
@@ -100,6 +101,11 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Fires when the selected step has changed.
 	 */
 	public readonly onSelectedStepIdChanged = new SimpleEvent<string | null>();
+
+	/**
+	 * @description Fires when the designer could not unselect the currently selected step due to restrictions.
+	 */
+	public readonly onStepUnselectionBlocked = new SimpleEvent<string | null>();
 
 	/**
 	 * @description Fires when the toolbox is collapsed or expanded.
@@ -150,7 +156,14 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Selects a step by the id.
 	 */
 	public selectStepById(stepId: string) {
-		this.stateModifier.trySelectStepById(stepId);
+		this.state.setSelectedStepId(stepId);
+	}
+
+	/**
+	 * @description Unselects the selected step.
+	 */
+	public clearSelectedStep() {
+		this.state.setSelectedStepId(null);
 	}
 
 	/**
@@ -173,13 +186,6 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 */
 	public resetViewport() {
 		this.api.viewport.resetViewport();
-	}
-
-	/**
-	 * @description Unselects the selected step.
-	 */
-	public clearSelectedStep() {
-		this.state.setSelectedStepId(null);
 	}
 
 	/**
