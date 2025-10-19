@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Definition, Step, StepsConfiguration, Uid } from 'sequential-workflow-designer';
 import { SequentialWorkflowDesigner, wrapDefinition, WrappedDefinition } from 'sequential-workflow-designer-react';
 import { StepEditor } from './StepEditor';
@@ -38,6 +38,20 @@ export function SaveRequiredEditor() {
 		[changeController]
 	);
 
+	useEffect(() => {
+		if (isUnselectionBlocked) {
+			let to: ReturnType<typeof setTimeout> | null = setTimeout(() => {
+				setIsUnselectionBlocked(false);
+				to = null;
+			}, 2000);
+			return () => {
+				if (to) {
+					clearTimeout(to);
+				}
+			};
+		}
+	}, [isUnselectionBlocked]);
+
 	function onDefinitionChange(definition: WrappedDefinition) {
 		setDefinition(definition);
 		if (changeController.isChanged) {
@@ -48,7 +62,6 @@ export function SaveRequiredEditor() {
 	function onStepUnselectionBlocked() {
 		if (!isUnselectionBlocked) {
 			setIsUnselectionBlocked(true);
-			setTimeout(() => setIsUnselectionBlocked(false), 2500);
 		}
 	}
 

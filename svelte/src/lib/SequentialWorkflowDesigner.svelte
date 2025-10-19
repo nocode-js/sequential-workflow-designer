@@ -31,6 +31,9 @@
 		selectedStepIdChanged: {
 			stepId: string | null;
 		};
+		stepUnselectionBlocked: {
+			targetStepId: string | null;
+		};
 		isToolboxCollapsedChanged: {
 			isCollapsed: boolean;
 		};
@@ -158,6 +161,7 @@
 			})
 		);
 		d.onSelectedStepIdChanged.subscribe(stepId => dispatch('selectedStepIdChanged', { stepId }));
+		d.onStepUnselectionBlocked.subscribe(targetStepId => dispatch('stepUnselectionBlocked', { targetStepId }));
 		d.onIsToolboxCollapsedChanged.subscribe(isCollapsed => dispatch('isToolboxCollapsedChanged', { isCollapsed }));
 		d.onIsEditorCollapsedChanged.subscribe(isCollapsed => dispatch('isEditorCollapsedChanged', { isCollapsed }));
 

@@ -1,3 +1,22 @@
+# 0.33.0
+
+This version introduces a new restriction callback: `canUnselectStep`. You can now prevent a step from being unselected based on your custom logic. When an unselection is blocked, the `onStepUnselectionBlocked` event is triggered.
+
+```ts
+const configuration = {
+  steps: {
+    canUnselectStep: (step, parentSequence) => {
+      return areChangesSaved() === true;
+    },
+  },
+  // ...
+};
+
+designer.onStepUnselectionBlocked((targetStepId) => { /* ... */ });
+```
+
+Please note that you should NOT use `window.confirm()` or other blocking functions inside the `canUnselectStep` callback, as this callback may be invoked multiple times during drag operations. To handle this correctly, implement your own UI logic to notify the user about any required actions before unselection can proceed. Please check [this example](https://nocode-js.github.io/sequential-workflow-designer/react-app/#save-required-editor).
+
 # 0.32.0
 
 This introduces internal changes related to the dragged component.

@@ -113,6 +113,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Output()
 	public readonly onSelectedStepIdChanged = new EventEmitter<string | null>();
 	@Output()
+	public readonly onStepUnselectionBlocked = new EventEmitter<string | null>();
+	@Output()
 	public readonly onIsToolboxCollapsedChanged = new EventEmitter<boolean>();
 	@Output()
 	public readonly onIsEditorCollapsedChanged = new EventEmitter<boolean>();
@@ -242,6 +244,9 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 			});
 			designer.onSelectedStepIdChanged.subscribe(stepId => {
 				this.ngZone.run(() => this.onSelectedStepIdChanged.emit(stepId));
+			});
+			designer.onStepUnselectionBlocked.subscribe(targetStepId => {
+				this.ngZone.run(() => this.onStepUnselectionBlocked.emit(targetStepId));
 			});
 			designer.onIsToolboxCollapsedChanged.subscribe(isCollapsed => {
 				this.ngZone.run(() => this.onIsToolboxCollapsedChanged.emit(isCollapsed));

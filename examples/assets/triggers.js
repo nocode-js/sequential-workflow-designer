@@ -127,13 +127,6 @@ const configuration = {
 			view: {
 				start: null
 			}
-		}),
-		sequentialWorkflowDesigner.RectPlaceholderDesignerExtension.create({
-			gapWidth: 88,
-			gapHeight: 24,
-			radius: 6,
-			iconD: 'M21.2 27.04H5.6v-5.19h15.6V6.29h5.2v15.56H42v5.19H26.4V42.6h-5.2V27.04z',
-			iconSize: 16
 		})
 	]
 };
