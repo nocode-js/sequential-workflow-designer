@@ -5,8 +5,7 @@ import { App } from './App';
 import './index.css';
 
 import 'sequential-workflow-designer/css/designer.css';
-import 'sequential-workflow-designer/css/designer-light.css';
-import 'sequential-workflow-designer/css/designer-dark.css';
+import 'sequential-workflow-designer/css/designer-soft.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

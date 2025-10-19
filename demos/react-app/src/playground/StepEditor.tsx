@@ -31,7 +31,7 @@ export function StepEditor() {
 
 	return (
 		<>
-			<h2>Step Editor {type}</h2>
+			<h2>Step Editor - {type}</h2>
 
 			<h4>Name</h4>
 			<input type="text" value={name} readOnly={isReadonly} onChange={onNameChanged} />

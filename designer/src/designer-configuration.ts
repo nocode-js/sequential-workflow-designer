@@ -166,12 +166,14 @@ export interface PreferenceStorage {
 
 export interface StepsConfiguration {
 	isSelectable?: (step: Step, parentSequence: Sequence) => boolean;
-	canInsertStep?: (step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
 	isDraggable?: (step: Step, parentSequence: Sequence) => boolean;
-	canMoveStep?: (sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
 	isDeletable?: (step: Step, parentSequence: Sequence) => boolean;
-	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
 	isDuplicable?: (step: Step, parentSequence: Sequence) => boolean;
+
+	canUnselectStep?: (step: Step, parentSequence: Sequence) => boolean;
+	canInsertStep?: (step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
+	canMoveStep?: (sourceSequence: Sequence, step: Step, targetSequence: Sequence, targetIndex: number) => boolean;
+	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
 
 	/**
 	 * @description The designer automatically selects the step after it is dropped. If true, the step will not be selected.

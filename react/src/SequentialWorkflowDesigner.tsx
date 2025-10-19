@@ -36,6 +36,7 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	onDefinitionChange: (state: WrappedDefinition<TDefinition>) => void;
 	selectedStepId?: string | null;
 	onSelectedStepIdChanged?: (stepId: string | null) => void;
+	onStepUnselectionBlocked?: (targetStepId: string | null) => void;
 	isReadonly?: boolean;
 
 	rootEditor: false | JSX.Element | RootEditorProvider;
@@ -69,6 +70,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 
 	const onDefinitionChangeRef = useRef(props.onDefinitionChange);
 	const onSelectedStepIdChangedRef = useRef(props.onSelectedStepIdChanged);
+	const onStepUnselectionBlockedRef = useRef(props.onStepUnselectionBlocked);
 	const onIsEditorCollapsedChangedRef = useRef(props.onIsEditorCollapsedChanged);
 	const onIsToolboxCollapsedChangedRef = useRef(props.onIsToolboxCollapsedChanged);
 	const rootEditorRef = useRef(props.rootEditor);
@@ -162,6 +164,10 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	useEffect(() => {
 		onSelectedStepIdChangedRef.current = props.onSelectedStepIdChanged;
 	}, [props.onSelectedStepIdChanged]);
+
+	useEffect(() => {
+		onStepUnselectionBlockedRef.current = props.onStepUnselectionBlocked;
+	}, [props.onStepUnselectionBlocked]);
 
 	useEffect(() => {
 		onIsEditorCollapsedChangedRef.current = props.onIsEditorCollapsedChanged;
@@ -261,6 +267,11 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		designer.onSelectedStepIdChanged.subscribe(stepId => {
 			if (onSelectedStepIdChangedRef.current) {
 				onSelectedStepIdChangedRef.current(stepId);
+			}
+		});
+		designer.onStepUnselectionBlocked.subscribe(targetStepId => {
+			if (onStepUnselectionBlockedRef.current) {
+				onStepUnselectionBlockedRef.current(targetStepId);
 			}
 		});
 		designer.onIsToolboxCollapsedChanged.subscribe(isCollapsed => {

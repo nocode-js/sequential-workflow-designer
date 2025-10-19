@@ -33,7 +33,7 @@ export class SelectStepBehavior implements Behavior {
 		if (delta.distance() > 2) {
 			const canDrag = !this.state.isReadonly && !this.isDragDisabled;
 			if (canDrag) {
-				this.state.setSelectedStepId(null);
+				this.stateModifier.tryResetSelectedStep();
 				return DragStepBehavior.create(this.context, this.pressedStepComponent.step, this.pressedStepComponent);
 			} else {
 				return MoveViewportBehavior.create(false, this.context);
@@ -46,9 +46,11 @@ export class SelectStepBehavior implements Behavior {
 			return;
 		}
 
-		if (!this.stateModifier.trySelectStep(this.pressedStepComponent.step, this.pressedStepComponent.parentSequence)) {
-			// If we cannot select the step, we clear the selection.
-			this.state.setSelectedStepId(null);
+		if (this.stateModifier.isSelectable(this.pressedStepComponent.step, this.pressedStepComponent.parentSequence)) {
+			this.stateModifier.trySelectStepById(this.pressedStepComponent.step.id);
+		} else {
+			// If the step is not selectable, we try to reset the selection.
+			this.stateModifier.tryResetSelectedStep();
 		}
 		return new SelectStepBehaviorEndToken(this.pressedStepComponent.step.id, Date.now());
 	}
