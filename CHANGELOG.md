@@ -1,3 +1,7 @@
+# 0.33.1
+
+This version fixes a bug with the rendering of the `drop-shadow` filter in some browsers.
+
 # 0.33.0
 
 This version introduces a new restriction callback: `canUnselectStep`. You can now prevent a step from being unselected based on your custom logic. When an unselection is blocked, the `onStepUnselectionBlocked` event is triggered.
