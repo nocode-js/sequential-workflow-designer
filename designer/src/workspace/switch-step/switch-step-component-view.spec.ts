@@ -50,6 +50,7 @@ describe('SwitchStepComponentView', () => {
 				inputIconSize: 14,
 				inputRadius: 4,
 				autoHideInputOnDrag: true,
+				isRegionClickable: true,
 				branchNameLabel: labelViewCfg,
 				nameLabel: labelViewCfg
 			},

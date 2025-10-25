@@ -8,4 +8,9 @@ export interface ContainerStepComponentViewConfiguration {
 	inputIconSize: number;
 	autoHideInputOnDrag: boolean;
 	label: LabelViewConfiguration;
+
+	/**
+	 * If `true`, the entire region of the switch step is clickable; otherwise, only the labels and icon are clickable.
+	 */
+	isRegionClickable: boolean;
 }

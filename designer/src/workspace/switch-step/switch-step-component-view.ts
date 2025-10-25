@@ -18,6 +18,7 @@ function createView(
 	joinX: number,
 	viewContext: StepComponentViewContext,
 	sequenceComponents: SequenceComponent[] | null,
+	labelViews: LabelView[],
 	regionView: RegionView,
 	cfg: SwitchStepComponentViewConfiguration
 ): StepComponentView {
@@ -40,11 +41,16 @@ function createView(
 			return regionView.getClientPosition();
 		},
 		resolveClick(click: ClickDetails): true | ClickCommand | null {
-			const result = regionView.resolveClick(click);
-			return result === true || (result === null && g.contains(click.element)) ? true : result;
+			if (cfg.isRegionClickable) {
+				const result = regionView.resolveClick(click);
+				if (result !== null) {
+					return result;
+				}
+			}
+			return labelViews.some(v => v.g.contains(click.element) || (inputView && inputView.g.contains(click.element))) ? true : null;
 		},
 		setIsDragging(isDragging: boolean) {
-			if (cfg.autoHideInputOnDrag && inputView) {
+			if (inputView && cfg.autoHideInputOnDrag) {
 				inputView.setIsHidden(isDragging);
 			}
 		},
@@ -77,16 +83,18 @@ export const createSwitchStepComponentViewFactory =
 				Dom.translate(nameLabelView.g, joinX, 0);
 				JoinView.createStraightJoin(g, new Vector(joinX, 0), height);
 
-				return createView(g, width, height, joinX, viewContext, null, regionView, cfg);
+				return createView(g, width, height, joinX, viewContext, null, [nameLabelView], regionView, cfg);
 			}
 
-			const branchComponents: SequenceComponent[] = [];
-			const branchLabelViews: LabelView[] = [];
-			const branchSizes: BranchSize[] = [];
+			const branchComponents = new Array<SequenceComponent>(branchNames.length);
+			const branchSizes = new Array<BranchSize>(branchNames.length);
+			const labelViews = new Array<LabelView>(branchNames.length + 1);
+			labelViews[branchNames.length] = nameLabelView;
+
 			let totalBranchesWidth = 0;
 			let maxBranchesHeight = 0;
 
-			branchNames.forEach(branchName => {
+			branchNames.forEach((branchName, i) => {
 				const labelY = paddingTop + cfg.nameLabel.height + cfg.connectionHeight;
 				const translatedBranchName = viewContext.i18n(`stepComponent.${step.type}.branchName`, branchName);
 				const labelView = LabelView.create(g, labelY, cfg.branchNameLabel, translatedBranchName, 'secondary');
@@ -106,9 +114,9 @@ export const createSwitchStepComponentViewFactory =
 				totalBranchesWidth += width;
 				maxBranchesHeight = Math.max(maxBranchesHeight, component.view.height);
 
-				branchComponents.push(component);
-				branchLabelViews.push(labelView);
-				branchSizes.push({ width, branchOffsetLeft, offsetX, joinX });
+				branchComponents[i] = component;
+				branchSizes[i] = { width, branchOffsetLeft, offsetX, joinX };
+				labelViews[i] = labelView;
 			});
 
 			const centerBranchIndex = Math.floor(branchNames.length / 2);
@@ -135,7 +143,7 @@ export const createSwitchStepComponentViewFactory =
 				const branchSize = branchSizes[i];
 				const branchOffsetLeft = switchOffsetLeft + branchSize.offsetX + branchSize.branchOffsetLeft;
 
-				Dom.translate(branchLabelViews[i].g, switchOffsetLeft + branchSize.offsetX + branchSize.joinX, 0);
+				Dom.translate(labelViews[i].g, switchOffsetLeft + branchSize.offsetX + branchSize.joinX, 0);
 				Dom.translate(component.view.g, branchOffsetLeft, branchOffsetTop);
 
 				if (component.hasOutput && stepContext.isOutputConnected) {
@@ -183,7 +191,7 @@ export const createSwitchStepComponentViewFactory =
 			regions[regions.length - 1] += switchOffsetRight;
 			const regionView = regionViewBuilder(g, regions, viewHeight);
 
-			return createView(g, viewWidth, viewHeight, shiftedJoinX, viewContext, branchComponents, regionView, cfg);
+			return createView(g, viewWidth, viewHeight, shiftedJoinX, viewContext, branchComponents, labelViews, regionView, cfg);
 		});
 	};
 

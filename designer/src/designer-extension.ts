@@ -241,7 +241,7 @@ export interface ViewportController {
 	smoothDeltaYLimit: number;
 	getDefault(): Viewport;
 	getZoomed(direction: boolean): Viewport | null;
-	getFocusedOnComponent(componentPosition: Vector, componentSize: Vector): Viewport;
+	getFocusedOnComponent(componentPosition: Vector, componentSize: Vector, componentType: string, componentElement: SVGElement): Viewport;
 	getNextScale(scale: number, direction: boolean): NextScale;
 	limitScale(scale: number): number;
 }

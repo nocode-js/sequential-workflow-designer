@@ -34,6 +34,7 @@ describe('ContainerStepComponentView', () => {
 			inputSize: 14,
 			inputRadius: 4,
 			autoHideInputOnDrag: true,
+			isRegionClickable: true,
 			paddingTop: 20,
 			paddingX: 20,
 			label: {

@@ -1,3 +1,7 @@
+# 0.34.1
+
+This version adds the ability to configure whether the regions of the switch step component and the container step component are clickable. By default, these regions are clickable; when disabled, the components can only be dragged by their labels or icons.
+
 # 0.33.1
 
 This version fixes a bug with the rendering of the `drop-shadow` filter in some browsers.

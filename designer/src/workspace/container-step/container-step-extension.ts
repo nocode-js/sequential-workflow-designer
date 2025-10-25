@@ -11,6 +11,7 @@ const defaultConfiguration: ContainerStepExtensionConfiguration = {
 		inputRadius: 4,
 		inputIconSize: 14,
 		autoHideInputOnDrag: true,
+		isRegionClickable: true,
 		label: {
 			height: 22,
 			paddingX: 10,
