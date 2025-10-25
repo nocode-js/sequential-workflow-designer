@@ -1,4 +1,4 @@
-# 0.34.0
+# 0.34.1
 
 This version adds the ability to configure whether the regions of the switch step component and the container step component are clickable. By default, these regions are clickable; when disabled, the components can only be dragged by their labels or icons.
 
