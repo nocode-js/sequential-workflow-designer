@@ -54,11 +54,16 @@ export const createContainerStepComponentViewFactory =
 					return regionView.getClientPosition();
 				},
 				resolveClick(click: ClickDetails): true | ClickCommand | null {
-					const result = regionView.resolveClick(click);
-					return result === true || (result === null && g.contains(click.element)) ? true : result;
+					if (cfg.isRegionClickable) {
+						const result = regionView.resolveClick(click);
+						if (result !== null) {
+							return result;
+						}
+					}
+					return labelView.g.contains(click.element) || (inputView && inputView.g.contains(click.element)) ? true : null;
 				},
 				setIsDragging(isDragging: boolean) {
-					if (cfg.autoHideInputOnDrag && inputView) {
+					if (inputView && cfg.autoHideInputOnDrag) {
 						inputView.setIsHidden(isDragging);
 					}
 				},

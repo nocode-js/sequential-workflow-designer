@@ -38,7 +38,12 @@ export class ViewportApi {
 		const componentPosition = clientPosition.subtract(canvasPosition);
 
 		const componentSize = new Vector(component.view.width, component.view.height);
-		const viewport = this.viewportController.getFocusedOnComponent(componentPosition, componentSize);
+		const viewport = this.viewportController.getFocusedOnComponent(
+			componentPosition,
+			componentSize,
+			component.step.componentType,
+			component.view.g
+		);
 		this.animator.execute(viewport);
 	}
 

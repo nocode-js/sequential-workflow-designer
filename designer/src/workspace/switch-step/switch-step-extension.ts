@@ -15,6 +15,7 @@ const defaultViewConfiguration: SwitchStepComponentViewConfiguration = {
 	inputIconSize: 14,
 	inputRadius: 4,
 	autoHideInputOnDrag: true,
+	isRegionClickable: true,
 	branchNameLabel: {
 		height: 22,
 		paddingX: 10,
