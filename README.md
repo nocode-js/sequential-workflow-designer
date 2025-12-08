@@ -10,7 +10,7 @@ Features:
 
 * 0 external dependencies,
 * fully generic and configurable,
-* use light/dark themes or customize easily,
+* use light/dark/soft themes or customize easily,
 * compatible with modern browsers and mobile devices,
 * the definition is stored as JSON,
 * supports [Angular](./angular/designer/), [React](./react/) and [Svelte](./svelte/).
