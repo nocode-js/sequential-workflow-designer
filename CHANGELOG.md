@@ -1,3 +1,7 @@
+# 0.35.1
+
+This version fixes a bug in the calculation of the placeholder position when dragging a step component.
+
 # 0.35.0
 
 This version changes the behavior of the drag step component. The dragged component is now scaled according to the current zoom level of the designer [#206](https://github.com/nocode-js/sequential-workflow-designer/issues/206).

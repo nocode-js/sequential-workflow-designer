@@ -86,7 +86,12 @@ export class DragStepBehavior implements Behavior {
 			const newPosition = this.state.startPosition.subtract(delta).subtract(this.state.offset);
 			this.view.setPosition(newPosition);
 
-			const placeholder = this.state.finder.find(newPosition, this.view.component.width, this.view.component.height);
+			const placeholder = this.state.finder.find(
+				newPosition,
+				this.view.component.width,
+				this.view.component.height,
+				this.view.component.scale
+			);
 
 			if (this.currentPlaceholder !== placeholder) {
 				if (this.currentPlaceholder) {
