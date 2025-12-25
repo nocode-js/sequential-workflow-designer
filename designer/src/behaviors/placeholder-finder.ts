@@ -22,7 +22,7 @@ export class PlaceholderFinder {
 		private readonly state: DesignerState
 	) {}
 
-	public find(vLt: Vector, vWidth: number, vHeight: number): Placeholder | undefined {
+	public find(vLt: Vector, vWidth: number, vHeight: number, vScale: number): Placeholder | undefined {
 		if (!this.cache) {
 			const scroll = new Vector(window.scrollX, window.scrollY);
 
@@ -39,8 +39,8 @@ export class PlaceholderFinder {
 			});
 			this.cache.sort((a, b) => a.diagSq - b.diagSq);
 		}
-		const vR = vLt.x + vWidth;
-		const vB = vLt.y + vHeight;
+		const vR = vLt.x + vWidth * vScale;
+		const vB = vLt.y + vHeight * vScale;
 		return this.cache.find(p => {
 			return Math.max(vLt.x, p.lt.x) < Math.min(vR, p.br.x) && Math.max(vLt.y, p.lt.y) < Math.min(vB, p.br.y);
 		})?.placeholder;
