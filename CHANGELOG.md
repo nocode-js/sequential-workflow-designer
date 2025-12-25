@@ -1,3 +1,7 @@
+# 0.35.0
+
+This version changes the behavior of the drag step component. The dragged component is now scaled according to the current zoom level of the designer [#206](https://github.com/nocode-js/sequential-workflow-designer/issues/206).
+
 # 0.34.1
 
 This version adds the ability to configure whether the regions of the switch step component and the container step component are clickable. By default, these regions are clickable; when disabled, the components can only be dragged by their labels or icons.

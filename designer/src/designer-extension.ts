@@ -159,6 +159,7 @@ export interface DraggedComponentExtension {
 export interface DraggedComponent {
 	width: number;
 	height: number;
+	scale: number;
 	destroy(): void;
 }
 
