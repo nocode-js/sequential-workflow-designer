@@ -17,10 +17,10 @@ export class DragStepBehavior implements Behavior {
 		const view = DragStepView.create(step, isAttached, designerContext.theme, designerContext.componentContext);
 		return new DragStepBehavior(
 			view,
+			step,
 			designerContext.workspaceController,
 			designerContext.placeholderController,
 			designerContext.state,
-			step,
 			designerContext.stateModifier,
 			attachedStepComponent
 		);
@@ -35,10 +35,10 @@ export class DragStepBehavior implements Behavior {
 
 	private constructor(
 		private readonly view: DragStepView,
+		private readonly step: Step,
 		private readonly workspaceController: WorkspaceController,
 		private readonly placeholderController: PlaceholderController,
 		private readonly designerState: DesignerState,
-		private readonly step: Step,
 		private readonly stateModifier: StateModifier,
 		private readonly attachedStepComponent?: StepComponent
 	) {}
@@ -56,13 +56,14 @@ export class DragStepBehavior implements Behavior {
 			if (hasSameSize) {
 				// Mouse cursor will be positioned on the same place as the source component.
 				const pagePosition = this.attachedStepComponent.view.getClientPosition();
-				offset = position.subtract(pagePosition);
+				offset = position.subtract(pagePosition).divideByScalar(this.designerState.viewport.scale);
 			}
 		}
 		if (!offset) {
 			// Mouse cursor will be positioned in the center of the component.
 			offset = new Vector(this.view.component.width, this.view.component.height).divideByScalar(2);
 		}
+		offset = offset.multiplyByScalar(this.view.component.scale);
 
 		this.view.setPosition(position.subtract(offset));
 		this.designerState.setIsDragging(true);
