@@ -4,6 +4,7 @@ import { SwitchStepComponentViewConfiguration } from './switch-step-component-vi
 export type BranchNamesResolver = (step: BranchedStep) => string[];
 
 export interface SwitchStepExtensionConfiguration {
+	componentType?: string;
 	view?: SwitchStepComponentViewConfiguration;
 
 	/**
