@@ -35,7 +35,7 @@ export class SwitchStepExtension implements StepExtension<BranchedStep> {
 		return new SwitchStepExtension(configuration);
 	}
 
-	public readonly componentType = 'switch';
+	public readonly componentType = this.configuration?.componentType ?? 'switch';
 
 	private constructor(private readonly configuration: SwitchStepExtensionConfiguration | undefined) {}
 

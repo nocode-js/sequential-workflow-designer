@@ -1,3 +1,7 @@
+# 0.35.2
+
+This version introduces a configurable `componentType` for step extensions.
+
 # 0.35.1
 
 This version fixes a bug in the calculation of the placeholder position when dragging a step component.
