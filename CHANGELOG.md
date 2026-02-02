@@ -1,3 +1,7 @@
+# 0.35.3
+
+Added support for Angular 20.
+
 # 0.35.2
 
 This version introduces a configurable `componentType` for step extensions.
