@@ -19,7 +19,8 @@ import {
 	KeyboardConfiguration,
 	I18n,
 	PreferenceStorage,
-	PlaceholderConfiguration
+	PlaceholderConfiguration,
+	DefinitionChangedEvent
 } from 'sequential-workflow-designer';
 import { RootEditorWrapperContext } from './RootEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -33,7 +34,7 @@ export type ReactToolboxConfiguration = Omit<ToolboxConfiguration, 'isCollapsed'
 
 export interface SequentialWorkflowDesignerProps<TDefinition extends Definition> {
 	definition: WrappedDefinition<TDefinition>;
-	onDefinitionChange: (state: WrappedDefinition<TDefinition>) => void;
+	onDefinitionChange: (state: WrappedDefinition<TDefinition>, event?: DefinitionChangedEvent) => void;
 	selectedStepId?: string | null;
 	onSelectedStepIdChanged?: (stepId: string | null) => void;
 	onStepUnselectionBlocked?: (targetStepId: string | null) => void;
@@ -99,10 +100,10 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 	const extensions = props.extensions;
 	const i18n = props.i18n;
 
-	function forwardDefinition() {
+	function forwardDefinition(event?: DefinitionChangedEvent) {
 		if (designerRef.current) {
 			const wd = wrapDefinition(designerRef.current.getDefinition(), designerRef.current.isValid());
-			onDefinitionChangeRef.current(wd);
+			onDefinitionChangeRef.current(wd, event);
 		}
 	}
 
@@ -261,7 +262,7 @@ export function SequentialWorkflowDesigner<TDefinition extends Definition>(props
 		}
 		// console.log('sqd: designer rendered');
 
-		designer.onReady.subscribe(forwardDefinition);
+		designer.onReady.subscribe(() => forwardDefinition());
 		designer.onDefinitionChanged.subscribe(forwardDefinition);
 
 		designer.onSelectedStepIdChanged.subscribe(stepId => {

@@ -190,10 +190,10 @@ function getStartDefinition() {
 
 const placeholder = document.getElementById('designer');
 designer = sequentialWorkflowDesigner.Designer.create(placeholder, initialState.definition, configuration);
-designer.onDefinitionChanged.subscribe(newDefinition => {
+designer.onDefinitionChanged.subscribe(event => {
 	refreshValidationStatus();
 	saveState();
-	console.log('the definition has changed', newDefinition);
+	console.log('the definition has changed', event);
 });
 
 changeReadonlyButton = document.getElementById('changeReadonlyButton');

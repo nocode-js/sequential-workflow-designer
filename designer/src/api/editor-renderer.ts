@@ -1,7 +1,7 @@
 import { DefinitionWalker, Step } from '../definition';
 import { SimpleEvent, race } from '../core';
-import { DefinitionChangedEvent, DesignerState } from '../designer-state';
-import { DefinitionChangeType } from '../designer-configuration';
+import { DesignerState } from '../designer-state';
+import { DefinitionChangedEvent, DefinitionChangeType } from '../designer-configuration';
 import { SelectedStepIdProvider } from './editor-api';
 
 export type EditorRendererHandler = (step: Step | null) => void;

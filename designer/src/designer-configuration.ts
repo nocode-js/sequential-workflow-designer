@@ -262,3 +262,12 @@ export enum DefinitionChangeType {
 	rootPropertyChanged,
 	rootReplaced
 }
+
+export type DuplicatedStepId = [sourceStepId: string, newStepId: string];
+
+export interface DefinitionChangedEvent<TDefinition extends Definition = Definition> {
+	definition: TDefinition;
+	changeType: DefinitionChangeType;
+	stepId: string | null;
+	duplicatedStepIds?: DuplicatedStepId[];
+}

@@ -104,7 +104,7 @@ function mount(lang) {
 		i18n
 	};
 	designer = sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
-	designer.onDefinitionChanged.subscribe(d => (definition = d));
+	designer.onDefinitionChanged.subscribe(event => (definition = event.definition));
 }
 
 window.addEventListener('load', () => {

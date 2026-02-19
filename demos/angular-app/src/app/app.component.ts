@@ -10,7 +10,8 @@ import {
 	StepsConfiguration,
 	ToolboxConfiguration,
 	ValidatorConfiguration,
-	BranchedStep
+	BranchedStep,
+	DefinitionChangedEvent
 } from 'sequential-workflow-designer';
 
 function createJob(): Step {
@@ -87,8 +88,8 @@ export class AppComponent implements OnInit {
 		console.log('designer ready', this.designer);
 	}
 
-	public onDefinitionChanged(definition: Definition) {
-		this.definition = definition;
+	public onDefinitionChanged(event: DefinitionChangedEvent) {
+		this.definition = event.definition;
 		this.updateIsValid();
 		this.updateDefinitionJSON();
 		console.log('definition has changed');

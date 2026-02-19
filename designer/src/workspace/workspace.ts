@@ -3,7 +3,7 @@ import { Vector } from '../core/vector';
 import { DesignerContext } from '../designer-context';
 import { ClickCommand, ClickDetails, Component, FoundPlaceholders } from './component';
 import { WorkspaceView } from './workspace-view';
-import { DefinitionChangedEvent, DesignerState } from '../designer-state';
+import { DesignerState } from '../designer-state';
 import { WorkspaceController } from './workspace-controller';
 import { ClickBehaviorResolver } from '../behaviors/click-behavior-resolver';
 import { BehaviorController } from '../behaviors/behavior-controller';
@@ -17,7 +17,7 @@ import { ContextMenuController } from './context-menu/context-menu-controller';
 import { ViewportApi } from '../api/viewport-api';
 import { DesignerApi } from '../api/designer-api';
 import { WorkspaceApi } from '../api/workspace-api';
-import { DefinitionChangeType } from '../designer-configuration';
+import { DefinitionChangedEvent, DefinitionChangeType } from '../designer-configuration';
 import { ContextMenuItemsBuilder } from './context-menu/context-menu-items-builder';
 import { PinchToZoomController } from './viewport/pinch-to-zoom-controller';
 

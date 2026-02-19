@@ -1,13 +1,10 @@
 import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
 import { Definition } from './definition';
-import { DefinitionChangeType } from './designer-configuration';
+import { DefinitionChangedEvent, DefinitionChangeType } from './designer-configuration';
 import { Viewport } from './designer-extension';
 
-export interface DefinitionChangedEvent {
-	changeType: DefinitionChangeType;
-	stepId: string | null;
-}
+export type DefinitionChangedEventDetails = Omit<DefinitionChangedEvent, 'definition' | 'changeType' | 'stepId'>;
 
 export class DesignerState {
 	public readonly onViewportChanged = new SimpleEvent<Viewport>();
@@ -63,8 +60,16 @@ export class DesignerState {
 		this.notifyDefinitionChanged(DefinitionChangeType.rootReplaced, null);
 	}
 
-	public notifyDefinitionChanged(changeType: DefinitionChangeType, stepId: string | null) {
-		this.onDefinitionChanged.forward({ changeType, stepId });
+	public notifyDefinitionChanged(changeType: DefinitionChangeType, stepId: string | null, details?: DefinitionChangedEventDetails) {
+		const event: DefinitionChangedEvent = {
+			definition: this.definition,
+			changeType,
+			stepId
+		};
+		if (details) {
+			Object.assign(event, details);
+		}
+		this.onDefinitionChanged.forward(event);
 	}
 
 	public notifyStepUnselectionBlocked(stepId: string | null) {

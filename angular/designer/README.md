@@ -71,8 +71,8 @@ export class AppComponent {
     this.designer = designer;
   }
 
-  public onDefinitionChanged(definition: Definition) {
-    this.definition = definition;
+  public onDefinitionChanged(event: DefinitionChangedEvent) {
+    this.definition = event.definition;
   }
 
   public onSelectedStepIdChanged(stepId: string | null) {

@@ -1,6 +1,11 @@
 import { DefinitionWalker, Step } from '../definition';
-import { UidGenerator } from '../designer-configuration';
+import { DuplicatedStepId, UidGenerator } from '../designer-configuration';
 import { ObjectCloner } from './object-cloner';
+
+export interface StepDuplicatorResult {
+	step: Step;
+	duplicatedIds: DuplicatedStepId[];
+}
 
 export class StepDuplicator {
 	public constructor(
@@ -8,13 +13,22 @@ export class StepDuplicator {
 		private readonly definitionWalker: DefinitionWalker
 	) {}
 
-	public duplicate(step: Step): Step {
+	public duplicate(step: Step): StepDuplicatorResult {
 		const newStep = ObjectCloner.deepClone(step);
-		newStep.id = this.uidGenerator();
+		const duplicatedIds: DuplicatedStepId[] = [];
+
+		const newId = this.uidGenerator();
+		duplicatedIds.push([step.id, newId]);
+		newStep.id = newId;
 
 		this.definitionWalker.forEachChildren(newStep, s => {
-			s.id = this.uidGenerator();
+			const newId = this.uidGenerator();
+			duplicatedIds.push([s.id, newId]);
+			s.id = newId;
 		});
-		return newStep;
+		return {
+			step: newStep,
+			duplicatedIds
+		};
 	}
 }

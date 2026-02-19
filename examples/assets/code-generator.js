@@ -251,6 +251,6 @@ const startDefinition = {
 window.addEventListener('load', () => {
 	const placeholder = document.getElementById('designer');
 	designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
-	designer.onDefinitionChanged.subscribe(reload);
+	designer.onDefinitionChanged.subscribe(event => reload(event.definition));
 	reload(startDefinition);
 });

@@ -1,7 +1,7 @@
 import { SimpleEvent } from './core/simple-event';
 import { isElementAttached } from './core/is-element-attached';
 import { Definition, DefinitionWalker, Sequence, Step, StepOrName } from './definition';
-import { DesignerConfiguration, UndoStack } from './designer-configuration';
+import { DefinitionChangedEvent, DesignerConfiguration, UndoStack } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
 import { DesignerState } from './designer-state';
@@ -11,7 +11,6 @@ import { DesignerApi } from './api';
 import { HistoryController } from './history-controller';
 import { Viewport } from './designer-extension';
 import { race } from './core';
-import { StateModifier } from './modifier/state-modifier';
 
 export class Designer<TDefinition extends Definition = Definition> {
 	/**
@@ -48,7 +47,6 @@ export class Designer<TDefinition extends Definition = Definition> {
 		const designer = new Designer<TDef>(
 			view,
 			designerContext.state,
-			designerContext.stateModifier,
 			designerContext.definitionWalker,
 			designerContext.historyController,
 			designerApi
@@ -58,7 +56,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 		race(0, designerContext.state.onDefinitionChanged, designerContext.state.onSelectedStepIdChanged).subscribe(
 			([definition, selectedStepId]) => {
 				if (definition !== undefined) {
-					designer.onDefinitionChanged.forward(designerContext.state.definition as TDef);
+					designer.onDefinitionChanged.forward(definition as DefinitionChangedEvent<TDef>);
 				}
 				if (selectedStepId !== undefined) {
 					designer.onSelectedStepIdChanged.forward(designerContext.state.selectedStepId);
@@ -76,7 +74,6 @@ export class Designer<TDefinition extends Definition = Definition> {
 	private constructor(
 		private readonly view: DesignerView,
 		private readonly state: DesignerState,
-		private readonly stateModifier: StateModifier,
 		private readonly walker: DefinitionWalker,
 		private readonly historyController: HistoryController | undefined,
 		private readonly api: DesignerApi
@@ -90,7 +87,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	/**
 	 * @description Fires when the definition has changed.
 	 */
-	public readonly onDefinitionChanged = new SimpleEvent<TDefinition>();
+	public readonly onDefinitionChanged = new SimpleEvent<DefinitionChangedEvent<TDefinition>>();
 
 	/**
 	 * @description Fires when the viewport has changed.
