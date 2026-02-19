@@ -31,7 +31,8 @@ import {
 	ValidatorConfiguration,
 	PlaceholderConfiguration,
 	I18n,
-	PreferenceStorage
+	PreferenceStorage,
+	DefinitionChangedEvent
 } from 'sequential-workflow-designer';
 
 export interface RootEditorWrapper {
@@ -109,7 +110,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Output()
 	public readonly onReady = new EventEmitter<Designer>();
 	@Output()
-	public readonly onDefinitionChanged = new EventEmitter<Definition>();
+	public readonly onDefinitionChanged = new EventEmitter<DefinitionChangedEvent>();
 	@Output()
 	public readonly onSelectedStepIdChanged = new EventEmitter<string | null>();
 	@Output()
@@ -239,8 +240,8 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 			designer.onReady.subscribe(() => {
 				this.ngZone.run(() => this.onReady.emit(designer));
 			});
-			designer.onDefinitionChanged.subscribe(definition => {
-				this.ngZone.run(() => this.onDefinitionChanged.emit(definition));
+			designer.onDefinitionChanged.subscribe(event => {
+				this.ngZone.run(() => this.onDefinitionChanged.emit(event));
 			});
 			designer.onSelectedStepIdChanged.subscribe(stepId => {
 				this.ngZone.run(() => this.onSelectedStepIdChanged.emit(stepId));

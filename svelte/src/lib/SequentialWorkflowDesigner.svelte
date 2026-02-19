@@ -20,13 +20,15 @@
 		type RootEditorProvider,
 		type KeyboardConfiguration,
 		type I18n,
-		type PreferenceStorage
+		type PreferenceStorage,
+		type DuplicatedStepId
 	} from 'sequential-workflow-designer';
 
 	const dispatch = createEventDispatcher<{
 		definitionChanged: {
 			definition: Definition;
 			isValid: boolean;
+			duplicatedStepIds?: DuplicatedStepId[];
 		};
 		selectedStepIdChanged: {
 			stepId: string | null;
@@ -154,10 +156,11 @@
 				isValid: d.isValid()
 			})
 		);
-		d.onDefinitionChanged.subscribe(definition =>
+		d.onDefinitionChanged.subscribe(event =>
 			dispatch('definitionChanged', {
-				definition,
-				isValid: d.isValid()
+				definition: event.definition,
+				isValid: d.isValid(),
+				duplicatedStepIds: event.duplicatedStepIds
 			})
 		);
 		d.onSelectedStepIdChanged.subscribe(stepId => dispatch('selectedStepIdChanged', { stepId }));

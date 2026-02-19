@@ -1,3 +1,33 @@
+# 0.36.0
+
+This version introduces a change to the `onDefinitionChanged` event. Previously, the payload of this event was the workflow definition itself. Now, the payload has been extended to the following structure:
+
+```ts
+export interface DefinitionChangedEvent {
+  definition: Definition;
+  changeType: DefinitionChangeType;
+  stepId: string | null;
+  duplicatedStepIds?: DuplicatedStepId[];
+}
+```
+
+This change is NOT backward compatible. If you are using the `onDefinitionChanged` event, you must update your code to read the definition from the definition property of the event payload.
+
+```ts
+// before
+designer.onDefinitionChanged((definition) => { /* ... */ });
+
+// now
+designer.onDefinitionChanged((event) => {
+  const definition = event.definition;
+  // ...
+});
+```
+
+This change also affects the Angular package. Previously, the `onDefinitionChanged` event emitted the definition directly, it now emits a `DefinitionChangedEvent` object.
+
+The change has also been propagated to the React and Svelte packages. However, for those packages, the update is backward compatible.
+
 # 0.35.3
 
 Added support for Angular 20.

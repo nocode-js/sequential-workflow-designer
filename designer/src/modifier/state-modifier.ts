@@ -2,7 +2,7 @@ import { SequenceModifier } from './sequence-modifier';
 import { StepDuplicator } from '../core/step-duplicator';
 import { Definition, DefinitionWalker, Sequence, Step } from '../definition';
 import { DefinitionChangeType, StepsConfiguration, UidGenerator } from '../designer-configuration';
-import { DesignerState } from '../designer-state';
+import { DefinitionChangedEventDetails, DesignerState } from '../designer-state';
 import { StateModifierDependency } from './state-modifier-dependency';
 import { FolderPathDefinitionModifierDependency } from './folder-path-definition-modifier-dependency';
 import { SelectedStepIdDefinitionModifierDependency } from './selected-step-id-definition-modifier-dependency';
@@ -108,14 +108,14 @@ export class StateModifier {
 		return true;
 	}
 
-	public tryInsert(step: Step, targetSequence: Sequence, targetIndex: number): boolean {
+	public tryInsert(step: Step, targetSequence: Sequence, targetIndex: number, details?: DefinitionChangedEventDetails): boolean {
 		const canInsertStep = this.configuration.canInsertStep ? this.configuration.canInsertStep(step, targetSequence, targetIndex) : true;
 		if (!canInsertStep) {
 			return false;
 		}
 
 		SequenceModifier.insertStep(step, targetSequence, targetIndex);
-		this.state.notifyDefinitionChanged(DefinitionChangeType.stepInserted, step.id);
+		this.state.notifyDefinitionChanged(DefinitionChangeType.stepInserted, step.id, details);
 
 		if (!this.configuration.isAutoSelectDisabled && this.isSelectable(step, targetSequence)) {
 			this.trySelectStepById(step.id);
@@ -160,9 +160,11 @@ export class StateModifier {
 		const duplicator = new StepDuplicator(this.uidGenerator, this.definitionWalker);
 
 		const index = parentSequence.indexOf(step);
-		const newStep = duplicator.duplicate(step);
+		const result = duplicator.duplicate(step);
 
-		return this.tryInsert(newStep, parentSequence, index + 1);
+		return this.tryInsert(result.step, parentSequence, index + 1, {
+			duplicatedStepIds: result.duplicatedIds
+		});
 	}
 
 	public replaceDefinition(definition: Definition) {

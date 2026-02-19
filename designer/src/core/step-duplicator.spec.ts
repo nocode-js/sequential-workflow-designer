@@ -35,7 +35,7 @@ describe('StepDuplicator', () => {
 	it('duplicates correctly', () => {
 		const duplicator = new StepDuplicator(Uid.next, new DefinitionWalker());
 
-		const duplicatedIf = duplicator.duplicate(ifStep) as BranchedStep;
+		const duplicatedIf = duplicator.duplicate(ifStep).step as BranchedStep;
 
 		expect(duplicatedIf).not.toBe(ifStep);
 		expect(duplicatedIf.id).not.toBe(ifStep.id);
