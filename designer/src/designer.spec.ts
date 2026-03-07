@@ -10,7 +10,7 @@ import { Workspace } from './workspace/workspace';
 describe('Designer', () => {
 	it('create() creates designer', () => {
 		const workspaceSpy = spyOn(Workspace, 'create').and.returnValues({
-			onRendered: new SimpleEvent<void>()
+			onRootComponentUpdated: new SimpleEvent<void>()
 		} as Workspace);
 		const toolboxSpy = spyOn(Toolbox, 'create');
 		const controlBarSpy = spyOn(ControlBar, 'create');

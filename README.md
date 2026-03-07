@@ -4,16 +4,16 @@
 
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fb4rtaz%2Fsequential-workflow-designer%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/b4rtaz/sequential-workflow-designer/goto?ref=main) [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](/LICENSE) [![View this project on NPM](https://img.shields.io/npm/v/sequential-workflow-designer.svg?style=flat-square)](https://npmjs.org/package/sequential-workflow-designer)
 
-Sequential workflow designer with 0 external dependencies for web applications. It's written in pure TypeScript and uses SVG for rendering. This designer is not associated with any workflow engine. It's full generic. You may create any kind application by this, from graphical programming languages to workflow builders.
+Sequential workflow designer with no external dependencies for web applications. It is written in pure TypeScript and uses SVG for rendering. This designer is not associated with any workflow engine, it is fully generic. You can use it to create any kind of application, from graphical programming languages to workflow builders.
 
 Features:
 
-* 0 external dependencies,
-* fully generic and configurable,
-* use light/dark/soft themes or customize easily,
-* compatible with modern browsers and mobile devices,
-* the definition is stored as JSON,
-* supports [Angular](./angular/designer/), [React](./react/) and [Svelte](./svelte/).
+- No external dependencies
+- Fully generic and configurable
+- Supports light, dark, and soft themes, with easy customization
+- Compatible with modern browsers and mobile devices
+- Definitions are stored as JSON
+- Supports [Angular](./angular/designer/), [React](./react/) and [Svelte](./svelte/).
 
 📝 Check the [documentation](https://nocode-js.com/docs/category/sequential-workflow-designer) for more details.
 
@@ -21,51 +21,51 @@ Features:
 
 ## 👀 Examples
 
-* [⏩ Live Testing](https://nocode-js.github.io/sequential-workflow-designer/examples/live-testing.html)
-* [💥 Triggers](https://nocode-js.github.io/sequential-workflow-designer/examples/triggers.html)
-* [❎ Fullscreen](https://nocode-js.github.io/sequential-workflow-designer/examples/fullscreen.html)
-* [🌅 Image Filter](https://nocode-js.github.io/sequential-workflow-designer/examples/image-filter.html)
-* [🔴 Particles](https://nocode-js.github.io/sequential-workflow-designer/examples/particles.html)
-* [🌍 Internationalization](https://nocode-js.github.io/sequential-workflow-designer/examples/i18n.html)
-* [⛅ Light Dark](https://nocode-js.github.io/sequential-workflow-designer/examples/light-dark.html)
-* [🤖 Code Generator](https://nocode-js.github.io/sequential-workflow-designer/examples/code-generator.html)
-* [🌻 Rendering Test](https://nocode-js.github.io/sequential-workflow-designer/examples/rendering-test.html)
-* [🚄 Stress Test](https://nocode-js.github.io/sequential-workflow-designer/examples/stress-test.html)
-* [🚪 Editing Restrictions](https://nocode-js.github.io/sequential-workflow-designer/examples/editing-restrictions.html)
-* [📜 Scrollable Page](https://nocode-js.github.io/sequential-workflow-designer/examples/scrollable-page.html)
-* [🌵 Multi-Conditional Switch](https://nocode-js.github.io/sequential-workflow-designer/examples/multi-conditional-switch.html)
-* [🌀 Auto-Select](https://nocode-js.github.io/sequential-workflow-designer/examples/auto-select.html)
-* [Angular Demo](https://nocode-js.github.io/sequential-workflow-designer/angular-app/)
-* [React Demo](https://nocode-js.github.io/sequential-workflow-designer/react-app/)
-* [Svelte Demo](https://nocode-js.github.io/sequential-workflow-designer/svelte-app/)
+- [⏩ Live Testing](https://nocode-js.github.io/sequential-workflow-designer/examples/live-testing.html)
+- [💥 Triggers](https://nocode-js.github.io/sequential-workflow-designer/examples/triggers.html)
+- [❎ Fullscreen](https://nocode-js.github.io/sequential-workflow-designer/examples/fullscreen.html)
+- [🌅 Image Filter](https://nocode-js.github.io/sequential-workflow-designer/examples/image-filter.html)
+- [🔴 Particles](https://nocode-js.github.io/sequential-workflow-designer/examples/particles.html)
+- [🌍 Internationalization](https://nocode-js.github.io/sequential-workflow-designer/examples/i18n.html)
+- [⛅ Light Dark](https://nocode-js.github.io/sequential-workflow-designer/examples/light-dark.html)
+- [🤖 Code Generator](https://nocode-js.github.io/sequential-workflow-designer/examples/code-generator.html)
+- [🌻 Rendering Test](https://nocode-js.github.io/sequential-workflow-designer/examples/rendering-test.html)
+- [🚄 Stress Test](https://nocode-js.github.io/sequential-workflow-designer/examples/stress-test.html)
+- [🚪 Editing Restrictions](https://nocode-js.github.io/sequential-workflow-designer/examples/editing-restrictions.html)
+- [📜 Scrollable Page](https://nocode-js.github.io/sequential-workflow-designer/examples/scrollable-page.html)
+- [🌵 Multi-Conditional Switch](https://nocode-js.github.io/sequential-workflow-designer/examples/multi-conditional-switch.html)
+- [🌀 Auto-Select](https://nocode-js.github.io/sequential-workflow-designer/examples/auto-select.html)
+- [Angular Demo](https://nocode-js.github.io/sequential-workflow-designer/angular-app/)
+- [React Demo](https://nocode-js.github.io/sequential-workflow-designer/react-app/)
+- [Svelte Demo](https://nocode-js.github.io/sequential-workflow-designer/svelte-app/)
 
 Pro:
 
-* [🤩 Pro Components](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/pro-components.html)
-* [🍬 Custom Theme Flat](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-theme-flat.html)
-* [🌹 Custom Step Types](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-step-types.html)
-* [📺 Popup Editor](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/popup-editor.html)
-* [🔽 Collapsible Region](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/collapsible-region.html)
-* [💼 Copy Paste](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/copy-paste.html)
-* [👈 Goto](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/goto.html)
-* [📁 Folders](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/folders.html)
-* [⭕ Wheel Mode](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/wheel-mode.html)
-* [💠 Grid](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/grid.html)
-* [🐭 Minimal Root Component](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/minimal-root-component.html)
-* [🦁 External UI Components](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/external-ui-components.html)
-* [👋 Custom Dragged Component](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-dragged-component.html)
-* [🔰 Badges](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/badges.html)
-* [🎩 Custom Viewport](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-viewport.html)
-* [👊 Double Click](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/double-click.html)
-* [🛎 Clickable Placeholder](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/clickable-placeholder.html)
-* [📮 Conditional Placeholders](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/conditional-placeholders.html)
-* [React Pro Demo](https://nocode-js.com/examples/sequential-workflow-designer-pro/react-pro-app/build/index.html)
-* [Angular Pro Demo](https://nocode-js.com/examples/sequential-workflow-designer-pro/angular-pro-app/angular-app/index.html)
+- [🤩 Pro Components](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/pro-components.html)
+- [🍬 Custom Theme Flat](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-theme-flat.html)
+- [🌹 Custom Step Types](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-step-types.html)
+- [📺 Popup Editor](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/popup-editor.html)
+- [🔽 Collapsible Region](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/collapsible-region.html)
+- [💼 Copy Paste](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/copy-paste.html)
+- [👈 Goto](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/goto.html)
+- [📁 Folders](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/folders.html)
+- [⭕ Wheel Mode](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/wheel-mode.html)
+- [💠 Grid](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/grid.html)
+- [🐭 Minimal Root Component](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/minimal-root-component.html)
+- [🦁 External UI Components](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/external-ui-components.html)
+- [👋 Custom Dragged Component](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-dragged-component.html)
+- [🔰 Badges](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/badges.html)
+- [🎩 Custom Viewport](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/custom-viewport.html)
+- [👊 Double Click](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/double-click.html)
+- [🛎 Clickable Placeholder](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/clickable-placeholder.html)
+- [📮 Conditional Placeholders](https://nocode-js.com/examples/sequential-workflow-designer-pro/webpack-pro-app/public/conditional-placeholders.html)
+- [React Pro Demo](https://nocode-js.com/examples/sequential-workflow-designer-pro/react-pro-app/build/index.html)
+- [Angular Pro Demo](https://nocode-js.com/examples/sequential-workflow-designer-pro/angular-pro-app/angular-app/index.html)
 
 ## 👩‍💻 Integrations
 
-* [⛽ Sequential Workflow Editor](https://github.com/nocode-js/sequential-workflow-editor) - Powerful step editor builder. Don't write step editors manually, build them.
-* [🚚 Sequential Workflow Machine](https://github.com/nocode-js/sequential-workflow-machine) - Workflow engine for browser and NodeJS apps, powered by the xstate library.
+- [⛽ Sequential Workflow Editor](https://github.com/nocode-js/sequential-workflow-editor) - Powerful step editor builder. Don't write step editors manually, build them.
+- [🚚 Sequential Workflow Machine](https://github.com/nocode-js/sequential-workflow-machine) - Workflow engine for browser and NodeJS apps, powered by the xstate library.
 
 ## 🚀 Installation
 
@@ -105,11 +105,12 @@ Add the below code to your head section in HTML document.
 
 ```html
 <head>
-...
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.36.0/css/designer.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.36.0/css/designer-light.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.36.0/css/designer-dark.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.36.0/dist/index.umd.js"></script>
+  ...
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.37.0/css/designer.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.37.0/css/designer-light.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.37.0/css/designer-dark.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.37.0/dist/index.umd.js"></script>
+</head>
 ```
 
 Call the designer by:
@@ -129,12 +130,12 @@ const placeholder = document.getElementById('placeholder');
 
 const definition = {
   properties: {
-    'myProperty': 'my-value',
+    myProperty: 'my-value',
     // root properties...
   },
   sequence: [
     // steps...
-  ]
+  ],
 };
 
 const configuration = {
@@ -156,7 +157,7 @@ const configuration = {
       return step.properties['isDeletable'];
     },
     isDuplicable: (step, parentSequence) => {
-        return true;
+      return true;
     },
     canInsertStep: (step, targetSequence, targetIndex) => {
       return targetSequence.length < 5;
@@ -166,7 +167,7 @@ const configuration = {
     },
     canDeleteStep: (step, parentSequence) => {
       return step.name !== 'x';
-    }
+    },
   },
 
   validator: {
@@ -175,9 +176,9 @@ const configuration = {
     step: (step, parentSequence, definition) => {
       return /^[a-z]+$/.test(step.name);
     },
-    root: (definition) => {
+    root: definition => {
       return definition.properties['memory'] > 256;
-    }
+    },
   },
 
   toolbox: {
@@ -187,15 +188,15 @@ const configuration = {
         name: 'Files',
         steps: [
           // steps for the toolbox's group
-        ]
+        ],
       },
       {
         name: 'Notification',
         steps: [
           // steps for the toolbox's group
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
 
   editors: {
@@ -209,7 +210,7 @@ const configuration = {
       const editor = document.createElement('div');
       // ...
       return editor;
-    }
+    },
   },
 
   controlBar: true,
@@ -217,7 +218,7 @@ const configuration = {
 };
 
 const designer = Designer.create(placeholder, definition, configuration);
-designer.onDefinitionChanged.subscribe((event) => {
+designer.onDefinitionChanged.subscribe(event => {
   // ...
 });
 ```
@@ -231,7 +232,7 @@ const configuration = {
   controlBar: false,
   contextMenu: false,
   // ...
-}
+};
 ```
 
 ## 💡 License

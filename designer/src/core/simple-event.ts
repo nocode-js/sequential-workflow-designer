@@ -24,7 +24,7 @@ export class SimpleEvent<T> {
 		return this.listeners.length;
 	}
 
-	public first(): Promise<T> {
+	public once(): Promise<T> {
 		return new Promise(resolve => {
 			const handler = (value: T) => {
 				this.unsubscribe(handler);

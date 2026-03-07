@@ -1,7 +1,7 @@
 import { SimpleEvent } from './core/simple-event';
 import { isElementAttached } from './core/is-element-attached';
 import { Definition, DefinitionWalker, Sequence, Step, StepOrName } from './definition';
-import { DefinitionChangedEvent, DesignerConfiguration, UndoStack } from './designer-configuration';
+import { DefinitionChangedEvent, DesignerConfiguration, PreferencesChangedEvent, UndoStack } from './designer-configuration';
 import { DesignerContext } from './designer-context';
 import { DesignerView } from './designer-view';
 import { DesignerState } from './designer-state';
@@ -51,7 +51,8 @@ export class Designer<TDefinition extends Definition = Definition> {
 			designerContext.historyController,
 			designerApi
 		);
-		view.workspace.onRendered.first().then(designer.onReady.forward);
+		view.workspace.onRootComponentUpdated.subscribe(designer.onRootComponentUpdated.forward);
+		view.workspace.onRootComponentUpdated.once().then(designer.onReady.forward);
 
 		race(0, designerContext.state.onDefinitionChanged, designerContext.state.onSelectedStepIdChanged).subscribe(
 			([definition, selectedStepId]) => {
@@ -68,6 +69,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 		designerContext.state.onIsToolboxCollapsedChanged.subscribe(designer.onIsToolboxCollapsedChanged.forward);
 		designerContext.state.onIsEditorCollapsedChanged.subscribe(designer.onIsEditorCollapsedChanged.forward);
 		designerContext.state.onStepUnselectionBlocked.subscribe(designer.onStepUnselectionBlocked.forward);
+		designerContext.state.onPreferencesChanged.subscribe(designer.onPreferencesChanged.forward);
 		return designer;
 	}
 
@@ -113,6 +115,16 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Fires when the editor is collapsed or expanded.
 	 */
 	public readonly onIsEditorCollapsedChanged = new SimpleEvent<boolean>();
+
+	/**
+	 * @description Fires when the root component and all its children are rerendered.
+	 */
+	public readonly onRootComponentUpdated = new SimpleEvent<void>();
+
+	/**
+	 * @description Fires when any of the designer preferences has changed.
+	 */
+	public readonly onPreferencesChanged = new SimpleEvent<PreferencesChangedEvent>();
 
 	/**
 	 * @returns the current definition of the workflow.
@@ -257,8 +269,8 @@ export class Designer<TDefinition extends Definition = Definition> {
 		this.getHistoryController().replaceDefinition(definition);
 
 		await Promise.all([
-			this.view.workspace.onRendered.first(), // This should be fired first
-			this.onDefinitionChanged.first()
+			this.view.workspace.onRootComponentUpdated.once(), // This should be fired first
+			this.onDefinitionChanged.once()
 		]);
 	}
 

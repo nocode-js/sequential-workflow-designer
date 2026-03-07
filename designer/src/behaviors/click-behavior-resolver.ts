@@ -4,7 +4,7 @@ import { Behavior } from './behavior';
 import { MoveViewportBehavior } from './move-viewport-behavior';
 import { SelectStepBehavior } from './select-step-behavior';
 import { PressingBehavior } from './pressing-behaviors/pressing-behavior';
-import { RerenderStepPressingBehaviorHandler } from './pressing-behaviors/rerender-step-pressing-behavior-handler';
+import { ChangePreferencesBehaviorHandler } from './pressing-behaviors/change-preferences-behavior-handler';
 import { OpenFolderPressingBehaviorHandler } from './pressing-behaviors/open-folder-pressing-behavior-handler';
 import { TriggerCustomActionPressingBehaviorHandler } from './pressing-behaviors/trigger-custom-action-pressing-behavior-handler';
 
@@ -20,8 +20,8 @@ export class ClickBehaviorResolver {
 			case ClickCommandType.selectStep:
 				return SelectStepBehavior.create(commandOrNull.component, forceMove, this.context);
 
-			case ClickCommandType.rerenderStep:
-				return PressingBehavior.create(element, new RerenderStepPressingBehaviorHandler(commandOrNull, this.context));
+			case ClickCommandType.changePreferences:
+				return PressingBehavior.create(element, new ChangePreferencesBehaviorHandler(commandOrNull, this.context));
 
 			case ClickCommandType.openFolder:
 				return PressingBehavior.create(element, new OpenFolderPressingBehaviorHandler(commandOrNull, this.context));

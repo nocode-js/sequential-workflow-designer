@@ -63,6 +63,7 @@ export class Workspace implements WorkspaceController {
 
 		designerContext.setWorkspaceController(workspace);
 		designerContext.state.onViewportChanged.subscribe(workspace.onViewportChanged);
+		designerContext.state.onPreferencesChanged.subscribe(workspace.onPreferencesChanged);
 
 		race(
 			0,
@@ -82,7 +83,7 @@ export class Workspace implements WorkspaceController {
 		return workspace;
 	}
 
-	public readonly onRendered = new SimpleEvent<void>();
+	public readonly onRootComponentUpdated = new SimpleEvent<void>();
 	public isValid = false;
 
 	private initTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -111,7 +112,7 @@ export class Workspace implements WorkspaceController {
 		});
 	}
 
-	public updateRootComponent() {
+	public updateRootComponent = () => {
 		this.selectedStepComponent = null;
 
 		const rootSequence = this.workspaceApi.getRootSequence();
@@ -126,8 +127,8 @@ export class Workspace implements WorkspaceController {
 		this.trySelectStepComponent(this.state.selectedStepId);
 		this.updateBadges();
 
-		this.onRendered.forward();
-	}
+		this.onRootComponentUpdated.forward();
+	};
 
 	public updateBadges() {
 		const result = BadgesResultFactory.create(this.services);
@@ -214,6 +215,10 @@ export class Workspace implements WorkspaceController {
 
 	private readonly onViewportChanged = (viewport: Viewport) => {
 		this.view.setPositionAndScale(viewport.position, viewport.scale);
+	};
+
+	private readonly onPreferencesChanged = () => {
+		this.updateRootComponent();
 	};
 
 	private onStateChanged(

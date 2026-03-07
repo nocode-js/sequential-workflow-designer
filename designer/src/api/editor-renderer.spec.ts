@@ -2,6 +2,7 @@ import { DesignerState } from '../designer-state';
 import { EditorRenderer } from './editor-renderer';
 import { Definition, DefinitionWalker, Step } from '../definition';
 import { DefinitionChangeType } from '../designer-configuration';
+import { MemoryPreferenceStorage } from '../core/memory-preference-storage';
 
 const step: Step = {
 	componentType: 'task',
@@ -23,7 +24,7 @@ describe('EditorRenderer', () => {
 
 	beforeEach(() => {
 		walker = new DefinitionWalker();
-		state = new DesignerState(definition, false, false, false);
+		state = new DesignerState(definition, false, false, false, new MemoryPreferenceStorage());
 		callback = jasmine.createSpy('callback');
 	});
 

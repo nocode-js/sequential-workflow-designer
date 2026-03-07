@@ -5,6 +5,7 @@ import { createDefinitionStub, createDesignerConfigurationStub, createStepStub }
 import { StateModifier } from '../modifier/state-modifier';
 import { Editor } from './editor';
 import { Uid } from '../core';
+import { MemoryPreferenceStorage } from '../core/memory-preference-storage';
 
 describe('Editor', () => {
 	const step = createStepStub();
@@ -25,7 +26,7 @@ describe('Editor', () => {
 		parent = document.createElement('div');
 
 		const configuration = createDesignerConfigurationStub();
-		state = new DesignerState(definition, false, false, false);
+		state = new DesignerState(definition, false, false, false, new MemoryPreferenceStorage());
 
 		const walker = new DefinitionWalker();
 		const modifier = StateModifier.create(walker, Uid.next, state, configuration.steps);

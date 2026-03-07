@@ -1,7 +1,13 @@
 import { SimpleEvent } from './core/simple-event';
 import { Vector } from './core/vector';
 import { Definition } from './definition';
-import { DefinitionChangedEvent, DefinitionChangeType } from './designer-configuration';
+import {
+	DefinitionChangedEvent,
+	DefinitionChangeType,
+	PreferenceChange,
+	PreferencesChangedEvent,
+	PreferenceStorage
+} from './designer-configuration';
 import { Viewport } from './designer-extension';
 
 export type DefinitionChangedEventDetails = Omit<DefinitionChangedEvent, 'definition' | 'changeType' | 'stepId'>;
@@ -17,6 +23,7 @@ export class DesignerState {
 	public readonly onDefinitionChanged = new SimpleEvent<DefinitionChangedEvent>();
 	public readonly onIsToolboxCollapsedChanged = new SimpleEvent<boolean>();
 	public readonly onIsEditorCollapsedChanged = new SimpleEvent<boolean>();
+	public readonly onPreferencesChanged = new SimpleEvent<PreferencesChangedEvent>();
 
 	public viewport: Viewport = {
 		position: new Vector(0, 0),
@@ -31,7 +38,8 @@ export class DesignerState {
 		public definition: Definition,
 		public isReadonly: boolean,
 		public isToolboxCollapsed: boolean,
-		public isEditorCollapsed: boolean
+		public isEditorCollapsed: boolean,
+		private readonly preferenceStorage: PreferenceStorage
 	) {}
 
 	public setSelectedStepId(stepId: string | null) {
@@ -114,5 +122,16 @@ export class DesignerState {
 			this.isEditorCollapsed = isCollapsed;
 			this.onIsEditorCollapsedChanged.forward(isCollapsed);
 		}
+	}
+
+	public setPreferences(changes: PreferenceChange[], stepId: string) {
+		for (const change of changes) {
+			this.preferenceStorage.setItem(change.key, change.value);
+		}
+		this.onPreferencesChanged.forward({ changes, stepId });
+	}
+
+	public getPreference(key: string): string | null {
+		return this.preferenceStorage.getItem(key);
 	}
 }

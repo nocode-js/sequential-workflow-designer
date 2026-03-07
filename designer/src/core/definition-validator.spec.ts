@@ -3,6 +3,7 @@ import { DesignerState } from '../designer-state';
 import { createStepStub } from '../test-tools/stubs';
 import { createDefinitionStub } from '../test-tools/stubs';
 import { DefinitionValidator } from './definition-validator';
+import { MemoryPreferenceStorage } from './memory-preference-storage';
 
 describe('DefinitionValidator', () => {
 	const testStep = createStepStub();
@@ -11,7 +12,7 @@ describe('DefinitionValidator', () => {
 	let state: DesignerState;
 
 	beforeEach(() => {
-		state = new DesignerState(testDefinition, false, false, false);
+		state = new DesignerState(testDefinition, false, false, false, new MemoryPreferenceStorage());
 	});
 
 	it('returns true if providers are not set in configuration', () => {
