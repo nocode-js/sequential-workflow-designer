@@ -271,3 +271,13 @@ export interface DefinitionChangedEvent<TDefinition extends Definition = Definit
 	stepId: string | null;
 	duplicatedStepIds?: DuplicatedStepId[];
 }
+
+export interface PreferenceChange {
+	key: string;
+	value: string;
+}
+
+export interface PreferencesChangedEvent {
+	stepId: string;
+	changes: PreferenceChange[];
+}

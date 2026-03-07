@@ -1,3 +1,4 @@
+import { MemoryPreferenceStorage } from '../core/memory-preference-storage';
 import { Definition, DefinitionWalker } from '../definition';
 import { DesignerState } from '../designer-state';
 import { SelectedStepIdDefinitionModifierDependency } from './selected-step-id-definition-modifier-dependency';
@@ -16,7 +17,7 @@ describe('SelectedStepIdDefinitionModifierDependency', () => {
 			}
 		]
 	};
-	const state = new DesignerState(definition, false, true, true);
+	const state = new DesignerState(definition, false, true, true, new MemoryPreferenceStorage());
 	const dependency = new SelectedStepIdDefinitionModifierDependency(state, walker);
 
 	it('should unselect step when it is deleted', () => {

@@ -52,7 +52,12 @@ export class StepComponentViewContextFactory {
 			createPlaceholderForGap: componentContext.services.placeholder.createForGap.bind(componentContext.services.placeholder),
 			createPlaceholderForArea: componentContext.services.placeholder.createForArea.bind(componentContext.services.placeholder),
 			getPreference: (key: string) => componentContext.preferenceStorage.getItem(preferenceKeyPrefix + key),
-			setPreference: (key: string, value: string) => componentContext.preferenceStorage.setItem(preferenceKeyPrefix + key, value)
+			createPreferenceChange: (key: string, value: string) => {
+				return {
+					key: preferenceKeyPrefix + key,
+					value
+				};
+			}
 		};
 	}
 }

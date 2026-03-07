@@ -1,6 +1,6 @@
 import { Vector } from '../core/vector';
 import { Sequence, Step } from '../definition';
-import { CustomAction } from '../designer-configuration';
+import { CustomAction, PreferenceChange } from '../designer-configuration';
 import { StepComponent } from './step-component';
 
 export interface Component {
@@ -54,7 +54,7 @@ export interface ClickDetails {
 	scale: number;
 }
 
-export type ClickCommand = SelectStepClickCommand | RerenderStepClickCommand | OpenFolderClickCommand | TriggerCustomActionClickCommand;
+export type ClickCommand = SelectStepClickCommand | SetPreferencesClickCommand | OpenFolderClickCommand | TriggerCustomActionClickCommand;
 
 export interface BaseClickCommand {
 	type: ClickCommandType;
@@ -65,10 +65,10 @@ export interface SelectStepClickCommand extends BaseClickCommand {
 	component: StepComponent;
 }
 
-export interface RerenderStepClickCommand extends BaseClickCommand {
-	type: ClickCommandType.rerenderStep;
+export interface SetPreferencesClickCommand extends BaseClickCommand {
+	type: ClickCommandType.changePreferences;
 	step: Step;
-	beforeCallback?: () => void;
+	changes: PreferenceChange[];
 }
 
 export interface OpenFolderClickCommand extends BaseClickCommand {
@@ -85,7 +85,7 @@ export interface TriggerCustomActionClickCommand extends BaseClickCommand {
 
 export enum ClickCommandType {
 	selectStep = 1,
-	rerenderStep = 2,
+	changePreferences = 2,
 	openFolder = 3,
 	triggerCustomAction = 4
 }

@@ -1,3 +1,7 @@
+# 0.37.0
+
+This version introduces a small internal refactor that allows exposing new events in the Designer class: `onRootComponentUpdated` and `onPreferencesChanged`.
+
 # 0.36.0
 
 This version introduces a change to the `onDefinitionChanged` event. Previously, the payload of this event was the workflow definition itself. Now, the payload has been extended to the following structure:
@@ -15,10 +19,12 @@ This change is NOT backward compatible. If you are using the `onDefinitionChange
 
 ```ts
 // before
-designer.onDefinitionChanged((definition) => { /* ... */ });
+designer.onDefinitionChanged(definition => {
+  /* ... */
+});
 
 // now
-designer.onDefinitionChanged((event) => {
+designer.onDefinitionChanged(event => {
   const definition = event.definition;
   // ...
 });
@@ -61,12 +67,14 @@ const configuration = {
   steps: {
     canUnselectStep: (step, parentSequence) => {
       return areChangesSaved() === true;
-    },
-  },
+    }
+  }
   // ...
 };
 
-designer.onStepUnselectionBlocked((targetStepId) => { /* ... */ });
+designer.onStepUnselectionBlocked(targetStepId => {
+  /* ... */
+});
 ```
 
 Please note that you should NOT use `window.confirm()` or other blocking functions inside the `canUnselectStep` callback, as this callback may be invoked multiple times during drag operations. To handle this correctly, implement your own UI logic to notify the user about any required actions before unselection can proceed. Please check [this example](https://nocode-js.github.io/sequential-workflow-designer/react-app/#save-required-editor).
@@ -105,7 +113,7 @@ import { StepsDesignerExtension } from 'sequential-workflow-designer';
 const extensions = [
   StepsDesignerExtension.create({
     switch: {
-      branchNamesResolver: (step) => Object.keys(step.branches)
+      branchNamesResolver: step => Object.keys(step.branches)
     }
   })
 ];
@@ -210,7 +218,9 @@ This version introduces a new function in the `Designer` class: `updateLayout()`
 This release updates the CSS selectors for the toolbox, allowing you to adjust its width with a single CSS override.
 
 ```css
-.sqd-toolbox { width: 170px !important; }
+.sqd-toolbox {
+  width: 170px !important;
+}
 ```
 
 # 0.22.1
@@ -277,8 +287,8 @@ Fixed the bug with refreshing the state modifier dependencies.
 
 ## 0.19.0
 
-* Added the `isSelectable` callback to the `StepsConfiguration` interface. Now it's possible to disable the selection of steps.
-* Deleted deprecated methods and interfaces.
+- Added the `isSelectable` callback to the `StepsConfiguration` interface. Now it's possible to disable the selection of steps.
+- Deleted deprecated methods and interfaces.
 
 ## 0.18.5
 
@@ -290,7 +300,9 @@ This version removes the features introduced in the previous release. We noticed
 
 ```ts
 function appendStep() {
-  const newStep: Step = { /* ... */ };
+  const newStep: Step = {
+    /* ... */
+  };
 
   const newDefinition = ObjectCloner.deepClone(designer.getDefinition());
   newDefinition.sequence.push(newStep);
@@ -330,7 +342,9 @@ This version finally renames the "global editor" into the "root editor". This ch
 const configuration = {
   editors: {
     // globalEditorProvider: () => {}, is not supported anymore, use `rootEditorProvider` instead.
-    rootEditorProvider: (definition, rootContext, isReadonly) => { /* ... */ },
+    rootEditorProvider: (definition, rootContext, isReadonly) => {
+      /* ... */
+    }
     // ...
   }
 };
@@ -350,8 +364,7 @@ This version also renames the `sqd-global-editor` class of the root editor into 
 
 ```html
 <!-- [globalEditor]="" is not supported anymore, use [rootEditor]="" instead. -->
-<sqd-designer ...
-  [rootEditor]="rootEditor"></sqd-designer>
+<sqd-designer ... [rootEditor]="rootEditor"></sqd-designer>
 ```
 
 ## 0.16.10
@@ -367,7 +380,7 @@ This version adds a possibility to disable keyboard shortcuts. Additionally you 
 ```js
 // Disabled shortcuts
 const configuration = {
-  keyboard: false,
+  keyboard: false
   // ...
 };
 ```
@@ -405,7 +418,7 @@ This version introduces the `isAutoSelectDisabled` option. Now it's possible to 
 ```js
 const configuration = {
   steps: {
-    isAutoSelectDisabled: true,
+    isAutoSelectDisabled: true
     // ...
   }
 };
@@ -416,7 +429,7 @@ Additionally, this version introduces possibility to initialize the designer wit
 ```js
 const configuration = {
   undoStackSize: 10,
-  undoStack: myUndoStack,
+  undoStack: myUndoStack
   // ...
 };
 ```
@@ -436,9 +449,7 @@ This version adds: `isReadonly`, `selectedStepId`, `uidGenerator`, `isToolboxCol
 This version adds the `onSelectedStepIdChanged` event to the Angular package.
 
 ```html
-<sqd-designer ...
-  (onSelectedStepIdChanged)="onSelectedStepIdChanged($event)">
-</sqd-designer>
+<sqd-designer ... (onSelectedStepIdChanged)="onSelectedStepIdChanged($event)"> </sqd-designer>
 ```
 
 ## 0.16.1
@@ -469,8 +480,8 @@ Please note that the `designer.css`, `designer-light.css`, and `designer-dark.cs
 
 ### Breaking Changes
 
-* The `sqd-grid-path` class of the line grid is renamed to `sqd-line-grid-path`.
-* Selectors in the `designer.css`, `designer-light.css` and `designer-dark.css` files have been changed.
+- The `sqd-grid-path` class of the line grid is renamed to `sqd-line-grid-path`.
+- Selectors in the `designer.css`, `designer-light.css` and `designer-dark.css` files have been changed.
 
 ## 0.14.2
 
@@ -498,7 +509,7 @@ This version introduces the context menu, providing a new and interactive way to
 
 ```ts
 const configuration = {
-  contextMenu: false,
+  contextMenu: false
   // ...
 };
 ```
@@ -510,8 +521,8 @@ const configuration = {
   steps: {
     isDuplicable: (step, parentSequence) => {
       return true;
-    },
-  },
+    }
+  }
   // ...
 };
 ```
@@ -531,7 +542,9 @@ Now it's possible to configure the size of grid cells. The default size is `48` 
 We have added a third parameter, `definition`, to the step editor provider.
 
 ```js
-function stepEditorProvider(step, stepContext, definition) { /* ... */ }
+function stepEditorProvider(step, stepContext, definition) {
+  /* ... */
+}
 ```
 
 ## 0.13.4
@@ -546,26 +559,26 @@ designer.getStepParents('eb4f481ee1b90c6e3fc9b42dd010d2a5');
 
 This version introduces 4 new features:
 
-* The custom label provider for the toolbox. By default, the toolbox displays a label of a step from the `name` field. You may override this behaviour and pass own label provider now.
+- The custom label provider for the toolbox. By default, the toolbox displays a label of a step from the `name` field. You may override this behaviour and pass own label provider now.
 
 ```js
 const configuration = {
   toolbox: {
-    labelProvider: (step) => `** ${step.name} **`,
+    labelProvider: step => `** ${step.name} **`
     // ...
-  },
+  }
   // ...
 };
 ```
 
-* Control the collapse of the toolbox.
+- Control the collapse of the toolbox.
 
 ```js
 const configuration = {
   toolbox: {
-    isCollapsed: true, // or false
+    isCollapsed: true // or false
     // ...
-  },
+  }
   // ...
 };
 
@@ -573,14 +586,14 @@ designer.isToolboxCollapsed(); // returns true or false
 designer.setIsToolboxCollapsed(true);
 ```
 
-* Control the collapse of the editor.
+- Control the collapse of the editor.
 
 ```js
 const configuration = {
   editors: {
-    isCollapsed: true, // or false
+    isCollapsed: true // or false
     // ...
-  },
+  }
   // ...
 };
 
@@ -588,11 +601,11 @@ designer.isEditorCollapsed(); // returns true or false
 designer.setIsEditorCollapsed(true);
 ```
 
-* It's possible now to replace the default unique identifier generator by a custom one.
+- It's possible now to replace the default unique identifier generator by a custom one.
 
 ```js
 const configuration = {
-  uidGenerator: () => Math.random().toString(),
+  uidGenerator: () => Math.random().toString()
   // ...
 };
 ```
@@ -629,9 +642,9 @@ The designer has allowed only the validation of the steps so far. The root of th
 
 ### Breaking Changes
 
-* The `validator` property in the `steps` group of the configuration is deleted. Use the `step` property in the `validator` group instead. 
-* The step validator has a new parameter: `definition`.
-* Added the root validator.
+- The `validator` property in the `steps` group of the configuration is deleted. Use the `step` property in the `validator` group instead.
+- The step validator has a new parameter: `definition`.
+- Added the root validator.
 
 ```js
 const configuration = {
@@ -650,22 +663,22 @@ const configuration = {
 
 ### Breaking Changes
 
-* This version introduces a few changes in the `customActionHandler` handler:
-  * the first parameter is an object now, previously it was a string. To read action type you need to read the `type` property from the object.
-  * the `step` parameter is nullable now,
-  * we added a `context` parameter that allows to notify about changes in the definition.
-* Added new classes for label components: `sqd-label-primary` and `sqd-label-secondary`.
+- This version introduces a few changes in the `customActionHandler` handler:
+  - the first parameter is an object now, previously it was a string. To read action type you need to read the `type` property from the object.
+  - the `step` parameter is nullable now,
+  - we added a `context` parameter that allows to notify about changes in the definition.
+- Added new classes for label components: `sqd-label-primary` and `sqd-label-secondary`.
 
 ## 0.10.2
 
-* Fixed the bug with moving the viewport by the scroll wheel button.
-* Added a simple animation to placeholders during dragging.
+- Fixed the bug with moving the viewport by the scroll wheel button.
+- Added a simple animation to placeholders during dragging.
 
 ## 0.10.1
 
-* Fixed the bug with the auto-hide feature in the smart editor.
-* Fixed the bug with rendering wide components in the sequence component.
-* Fixed the bug with dragging when the designer is attached to a scrolled page.
+- Fixed the bug with the auto-hide feature in the smart editor.
+- Fixed the bug with rendering wide components in the sequence component.
+- Fixed the bug with dragging when the designer is attached to a scrolled page.
 
 ## 0.10.0
 
@@ -674,7 +687,7 @@ Refactored the step component interface. Extracted the logic of the step validat
 Additionally, now it's possible manually refreshing the validation from outside of the designer. The validation is a special case of a badge. To refresh the validation you need to call the `updateBadges` method.
 
 ```ts
-designer.updateBadges(); 
+designer.updateBadges();
 ```
 
 ## 0.9.2
@@ -695,7 +708,7 @@ This version changes the main configuration. The "isHidden" properties are prohi
 const configuration = {
   toolbox: false,
   editors: false,
-  controlBar: false,
+  controlBar: false
   // ...
 };
 ```
@@ -705,13 +718,19 @@ To display components you need to set a proper value.
 ```js
 const configuration = {
   toolbox: {
-    groups: [ /* ... */ ]
+    groups: [
+      /* ... */
+    ]
   },
   editors: {
-    globalEditorProvider: () => { /* ... */ },
-    stepEditorProvider: () => { /* ... */ },
+    globalEditorProvider: () => {
+      /* ... */
+    },
+    stepEditorProvider: () => {
+      /* ... */
+    }
   },
-  controlBar: true,
+  controlBar: true
   // ...
 };
 ```
@@ -724,13 +743,13 @@ The `controlBar` property is required from now. This change applies for the `seq
 
 Changed format of bundles:
 
-* `sequential-workflow-designer` to UMD, ESM and CommonJS,
-* `sequential-workflow-designer-react` to ESM and CommonJS.
+- `sequential-workflow-designer` to UMD, ESM and CommonJS,
+- `sequential-workflow-designer-react` to ESM and CommonJS.
 
 ## 0.8.0
 
-* This release introduces a better support for TypeScript.
-* The model of the workflow definition is moved from the `sequential-workflow-designer` package to the `sequential-workflow-model` package. By this it's possible to create a common package with your workflow model and use it for the front-end and back-end applications at the same time. The `sequential-workflow-designer` package exports definition types as before, but these types come from the `sequential-workflow-model` package. You don't have to include the `sequential-workflow-model` package to your project if you don't need it. You can read more about this approach [here](https://nocode-js.com/docs/sequential-workflow-designer/sharing-types-between-frontend-and-backend).
+- This release introduces a better support for TypeScript.
+- The model of the workflow definition is moved from the `sequential-workflow-designer` package to the `sequential-workflow-model` package. By this it's possible to create a common package with your workflow model and use it for the front-end and back-end applications at the same time. The `sequential-workflow-designer` package exports definition types as before, but these types come from the `sequential-workflow-model` package. You don't have to include the `sequential-workflow-model` package to your project if you don't need it. You can read more about this approach [here](https://nocode-js.com/docs/sequential-workflow-designer/sharing-types-between-frontend-and-backend).
 
 #### Breaking Changes
 
@@ -740,13 +759,13 @@ Changed format of bundles:
 
 ## 0.7.0
 
-* The step validator has two parameters from now: `step` and `parentSequence`.
-* Added new editing restrictions: `isDraggable` and `isDeletable`.
+- The step validator has two parameters from now: `step` and `parentSequence`.
+- Added new editing restrictions: `isDraggable` and `isDeletable`.
 
 #### Breaking Changes
 
-* Refactored step components by introducing the `StepContext` interface.
-* Renamed `.sqd-step-start-stop*` CSS selectors to `.sqd-root-start-stop*`.
+- Refactored step components by introducing the `StepContext` interface.
+- Renamed `.sqd-step-start-stop*` CSS selectors to `.sqd-root-start-stop*`.
 
 ## 0.6.0
 
@@ -754,7 +773,7 @@ Fixed support for touchpad.
 
 #### Breaking Changes
 
-* Redesigned the `DesignerExtension` interface. This change increases the extensibility of the designer.
+- Redesigned the `DesignerExtension` interface. This change increases the extensibility of the designer.
 
 ## 0.5.4
 
@@ -762,8 +781,8 @@ This version introduces the first release of the [Sequential Workflow Designer f
 
 ## 0.5.3
 
-* The disabled drag mode doesn't block the step selecting anymore.
-* Replaced custom shapes by icons from the `Icons` class for `StartStopComponentView`.
+- The disabled drag mode doesn't block the step selecting anymore.
+- Replaced custom shapes by icons from the `Icons` class for `StartStopComponentView`.
 
 ## 0.5.2
 
@@ -771,19 +790,19 @@ This version introduces the first release of the [Sequential Workflow Designer f
 
 ## 0.5.1
 
-* Fixed calculation of label width in the switch step.
-* Added an exclamation mark to the warning icon.
+- Fixed calculation of label width in the switch step.
+- Added an exclamation mark to the warning icon.
 
 ## 0.5.0
 
-* Fixed losing the disabled state during dragging.
-* Fixed steps rendering with long labels.
-* Added to the global editor and the step editor the common class: `sqd-editor`.
+- Fixed losing the disabled state during dragging.
+- Fixed steps rendering with long labels.
+- Added to the global editor and the step editor the common class: `sqd-editor`.
 
 #### Breaking Changes
 
-* Changed a behavior of the default zoom. From now the designer shows a whole flow at the start.
-* Zoom is aligned to the predefined constants.
+- Changed a behavior of the default zoom. From now the designer shows a whole flow at the start.
+- Zoom is aligned to the predefined constants.
 
 ## 0.4.0
 
@@ -791,8 +810,8 @@ This version brings rendering speed improvements. Check the `stress-test.html` e
 
 #### Breaking Changes
 
-* Replaced all icons to material icons.
-* Normalized step CSS classes. All components have the `sqd-step-<componentType>-` prefix from now.
+- Replaced all icons to material icons.
+- Normalized step CSS classes. All components have the `sqd-step-<componentType>-` prefix from now.
 
 ## 0.3.0
 
@@ -802,7 +821,8 @@ This version introduces new build formats (ESM, UMD) of the package.
 
 #### Breaking Changes
 
-* Default export of the `Designer` class is removed. Now you should import directly the `Designer` class.
+- Default export of the `Designer` class is removed. Now you should import directly the `Designer` class.
+
   ```ts
   import { Designer } from 'sequential-workflow-designer';
   Designer.create(/* ... */);
@@ -813,27 +833,30 @@ This version introduces new build formats (ESM, UMD) of the package.
   ```html
   <script src="https://cdn.jsdelivr.net/..."></script>
   <script>
-  sequentialWorkflowDesigner.Designer.create(/* ... */);
+    sequentialWorkflowDesigner.Designer.create(/* ... */);
   </script>
   ```
-* The package now contains two type of build: ESM and UMD. ESM build is located in the `lib` folder. UMD build is located in the `dist` folder. That means the URL to the CDN is also changed.
-  
+
+- The package now contains two type of build: ESM and UMD. ESM build is located in the `lib` folder. UMD build is located in the `dist` folder. That means the URL to the CDN is also changed.
+
   ```html
   <script src="https://cdn.jsdelivr.net/.../dist/index.umd.js"></script>
   ```
-* Static method `Designer.utils.nextId()` is deleted. You should use the `next()` from the `Uid` class. Example: 
+
+- Static method `Designer.utils.nextId()` is deleted. You should use the `next()` from the `Uid` class. Example:
 
   ```ts
   import { Uid } from 'sequential-workflow-designer';
   Uid.next();
   ```
 
-* Static method `Designer.utils.getParents()` is deleted. You should use the `getStepParents()` method from the `Designer` class. Example: 
+- Static method `Designer.utils.getParents()` is deleted. You should use the `getStepParents()` method from the `Designer` class. Example:
 
   ```ts
   designer.getStepParents(needleStep);
   ```
-* The `ComponentType` is not an enum anymore. It's a type (`string`). This change doesn't affect serialized JSONs.
+
+- The `ComponentType` is not an enum anymore. It's a type (`string`). This change doesn't affect serialized JSONs.
 
 ## 0.2.3
 
@@ -849,7 +872,7 @@ Support undo and redo. This feature is disabled by default. To enable it add the
 
 ```js
 const config = {
-  undoStackSize: 10,
+  undoStackSize: 10
   // ...
 };
 ```
@@ -891,11 +914,11 @@ const config = {
 
 The `type` of a step cannot contain special characters from now. Check [the type validator](src/core/type-validator.ts).
 
-* ✅ `someType`
-* ✅ `some-type`
-* ✅ `some_type`
-* ❌ `some type`
-* ❌ `someType!`
+- ✅ `someType`
+- ✅ `some-type`
+- ✅ `some_type`
+- ❌ `some type`
+- ❌ `someType!`
 
 By this, we could add the `type` to an element's class on the SVG canvas. That allows to customize components by CSS. Check [this example](examples/code-generator.html).
 

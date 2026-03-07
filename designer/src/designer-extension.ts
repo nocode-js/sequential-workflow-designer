@@ -6,7 +6,7 @@ import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { CustomActionController } from './custom-action-controller';
 import { ComponentType, Definition, Sequence, Step } from './definition';
-import { I18n } from './designer-configuration';
+import { I18n, PreferenceChange } from './designer-configuration';
 import {
 	Badge,
 	ClickCommand,
@@ -73,7 +73,7 @@ export interface StepComponentViewContext {
 		contentFactory: RegionComponentViewContentFactory
 	): StepComponentView;
 	getPreference(key: string): string | null;
-	setPreference(key: string, value: string): void;
+	createPreferenceChange(key: string, value: string): PreferenceChange;
 }
 
 export interface StepContext<S extends Step = Step> {

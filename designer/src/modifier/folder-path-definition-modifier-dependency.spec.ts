@@ -1,3 +1,4 @@
+import { MemoryPreferenceStorage } from '../core/memory-preference-storage';
 import { Definition, DefinitionWalker, Sequence, SequentialStep } from '../definition';
 import { DesignerState } from '../designer-state';
 import { FolderPathDefinitionModifierDependency } from './folder-path-definition-modifier-dependency';
@@ -24,7 +25,7 @@ describe('FolderPathDefinitionModifierDependency', () => {
 			properties: {},
 			sequence: [createFolderStep('0x1', [createFolderStep('0x2', [createFolderStep('0x3', [])])])]
 		};
-		state = new DesignerState(definition, false, true, true);
+		state = new DesignerState(definition, false, true, true, new MemoryPreferenceStorage());
 		state.setFolderPath(['0x1', '0x2', '0x3']);
 		dependency = new FolderPathDefinitionModifierDependency(state, walker);
 	});

@@ -30,8 +30,10 @@ export class DesignerContext {
 		const isToolboxCollapsed = configuration.toolbox ? configuration.toolbox.isCollapsed ?? layoutController.isMobile() : false;
 		const isEditorCollapsed = configuration.editors ? configuration.editors.isCollapsed ?? layoutController.isMobile() : false;
 
+		const preferenceStorage = configuration.preferenceStorage ?? new MemoryPreferenceStorage();
+
 		const theme = configuration.theme || 'light';
-		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed);
+		const state = new DesignerState(definition, isReadonly, isToolboxCollapsed, isEditorCollapsed, preferenceStorage);
 		const workspaceController = new WorkspaceControllerWrapper();
 		const behaviorController = BehaviorController.create(configuration.shadowRoot);
 		const stepExtensionResolver = StepExtensionResolver.create(services);
@@ -47,7 +49,6 @@ export class DesignerContext {
 			historyController = HistoryController.create(configuration.undoStack, state, stateModifier, configuration);
 		}
 
-		const preferenceStorage = configuration.preferenceStorage ?? new MemoryPreferenceStorage();
 		const componentContext = ComponentContext.create(
 			configuration,
 			state,

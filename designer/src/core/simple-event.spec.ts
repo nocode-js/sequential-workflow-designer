@@ -22,11 +22,11 @@ describe('SimpleEvent', () => {
 		expect(e.count()).toEqual(0);
 	});
 
-	it('first() works as expected', done => {
+	it('once() works as expected', done => {
 		const e = new SimpleEvent<number>();
 		let lastValue: number | undefined;
 
-		e.first().then(v => (lastValue = v));
+		e.once().then(v => (lastValue = v));
 
 		e.forward(1);
 		e.forward(2);
