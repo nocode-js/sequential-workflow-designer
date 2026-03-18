@@ -1,7 +1,9 @@
-import { BranchedStep } from 'sequential-workflow-model';
+import { BranchedStep, Step } from 'sequential-workflow-model';
 import { SwitchStepComponentViewConfiguration } from './switch-step-component-view-configuration';
 
 export type BranchNamesResolver = (step: BranchedStep) => string[];
+
+export type BranchNameLabelResolver = (branchName: string, step: Step) => string;
 
 export interface SwitchStepExtensionConfiguration {
 	componentType?: string;
@@ -13,4 +15,11 @@ export interface SwitchStepExtensionConfiguration {
 	 * You can use this to provide custom ordering or filtering of branch names.
 	 */
 	branchNamesResolver?: BranchNamesResolver;
+
+	/**
+	 * A function that takes a branch name and a step, and returns the label to display for that branch.
+	 * If not provided, the branch name itself will be used as the label.
+	 * Before rendering, the label is translated using the i18n callback.
+	 */
+	branchNameLabelResolver?: BranchNameLabelResolver;
 }
