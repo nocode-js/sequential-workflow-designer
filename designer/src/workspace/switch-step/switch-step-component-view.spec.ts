@@ -54,6 +54,7 @@ describe('SwitchStepComponentView', () => {
 				branchNameLabel: labelViewCfg,
 				nameLabel: labelViewCfg
 			},
+			undefined,
 			undefined
 		);
 		factory(parent, stepContext, viewContext);

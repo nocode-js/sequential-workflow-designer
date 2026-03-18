@@ -7,7 +7,7 @@ import { InputView } from '../common-views/input-view';
 import { ClickDetails, StepComponentView, ClickCommand, SequenceComponent } from '../component';
 import { RegionView, StepComponentViewContext, StepComponentViewFactory, StepContext } from '../../designer-extension';
 import { SwitchStepComponentViewConfiguration } from './switch-step-component-view-configuration';
-import { BranchNamesResolver } from './switch-step-extension-configuration';
+import { BranchNameLabelResolver, BranchNamesResolver } from './switch-step-extension-configuration';
 
 const COMPONENT_CLASS_NAME = 'switch';
 
@@ -64,7 +64,11 @@ function createView(
 }
 
 export const createSwitchStepComponentViewFactory =
-	(cfg: SwitchStepComponentViewConfiguration, branchNameResolver: BranchNamesResolver | undefined): StepComponentViewFactory =>
+	(
+		cfg: SwitchStepComponentViewConfiguration,
+		branchNameResolver: BranchNamesResolver | undefined,
+		branchNameLabelResolver: BranchNameLabelResolver | undefined
+	): StepComponentViewFactory =>
 	(parent: SVGElement, stepContext: StepContext<BranchedStep>, viewContext: StepComponentViewContext): StepComponentView => {
 		return viewContext.createRegionComponentView(parent, COMPONENT_CLASS_NAME, (g, regionViewBuilder) => {
 			const step = stepContext.step;
@@ -95,9 +99,11 @@ export const createSwitchStepComponentViewFactory =
 			let maxBranchesHeight = 0;
 
 			branchNames.forEach((branchName, i) => {
+				const label = branchNameLabelResolver ? branchNameLabelResolver(branchName, step) : branchName;
+				const translatedLabel = viewContext.i18n(`stepComponent.${step.type}.branchName`, label);
+
 				const labelY = paddingTop + cfg.nameLabel.height + cfg.connectionHeight;
-				const translatedBranchName = viewContext.i18n(`stepComponent.${step.type}.branchName`, branchName);
-				const labelView = LabelView.create(g, labelY, cfg.branchNameLabel, translatedBranchName, 'secondary');
+				const labelView = LabelView.create(g, labelY, cfg.branchNameLabel, translatedLabel, 'secondary');
 
 				const component = viewContext.createSequenceComponent(g, step.branches[branchName]);
 

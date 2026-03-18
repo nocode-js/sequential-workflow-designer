@@ -1,3 +1,7 @@
+# 0.37.1
+
+This version adds a new property, `branchNameLabelResolver`, to the `SwitchStepExtensionConfiguration` interface. This property allows you to override the default labels of the switch step branches.
+
 # 0.37.0
 
 This version introduces a small internal refactor that allows exposing new events in the Designer class: `onRootComponentUpdated` and `onPreferencesChanged`.
@@ -67,8 +71,8 @@ const configuration = {
   steps: {
     canUnselectStep: (step, parentSequence) => {
       return areChangesSaved() === true;
-    }
-  }
+    },
+  },
   // ...
 };
 
@@ -113,9 +117,9 @@ import { StepsDesignerExtension } from 'sequential-workflow-designer';
 const extensions = [
   StepsDesignerExtension.create({
     switch: {
-      branchNamesResolver: step => Object.keys(step.branches)
-    }
-  })
+      branchNamesResolver: step => Object.keys(step.branches),
+    },
+  }),
 ];
 ```
 
@@ -264,7 +268,7 @@ const configuration = {
       }
     }
     return defaultValue;
-  }
+  },
   // ...
 };
 ```
@@ -344,9 +348,9 @@ const configuration = {
     // globalEditorProvider: () => {}, is not supported anymore, use `rootEditorProvider` instead.
     rootEditorProvider: (definition, rootContext, isReadonly) => {
       /* ... */
-    }
+    },
     // ...
-  }
+  },
 };
 ```
 
@@ -380,7 +384,7 @@ This version adds a possibility to disable keyboard shortcuts. Additionally you 
 ```js
 // Disabled shortcuts
 const configuration = {
-  keyboard: false
+  keyboard: false,
   // ...
 };
 ```
@@ -418,9 +422,9 @@ This version introduces the `isAutoSelectDisabled` option. Now it's possible to 
 ```js
 const configuration = {
   steps: {
-    isAutoSelectDisabled: true
+    isAutoSelectDisabled: true,
     // ...
-  }
+  },
 };
 ```
 
@@ -429,7 +433,7 @@ Additionally, this version introduces possibility to initialize the designer wit
 ```js
 const configuration = {
   undoStackSize: 10,
-  undoStack: myUndoStack
+  undoStack: myUndoStack,
   // ...
 };
 ```
@@ -509,7 +513,7 @@ This version introduces the context menu, providing a new and interactive way to
 
 ```ts
 const configuration = {
-  contextMenu: false
+  contextMenu: false,
   // ...
 };
 ```
@@ -521,8 +525,8 @@ const configuration = {
   steps: {
     isDuplicable: (step, parentSequence) => {
       return true;
-    }
-  }
+    },
+  },
   // ...
 };
 ```
@@ -564,9 +568,9 @@ This version introduces 4 new features:
 ```js
 const configuration = {
   toolbox: {
-    labelProvider: step => `** ${step.name} **`
+    labelProvider: step => `** ${step.name} **`,
     // ...
-  }
+  },
   // ...
 };
 ```
@@ -576,9 +580,9 @@ const configuration = {
 ```js
 const configuration = {
   toolbox: {
-    isCollapsed: true // or false
+    isCollapsed: true, // or false
     // ...
-  }
+  },
   // ...
 };
 
@@ -591,9 +595,9 @@ designer.setIsToolboxCollapsed(true);
 ```js
 const configuration = {
   editors: {
-    isCollapsed: true // or false
+    isCollapsed: true, // or false
     // ...
-  }
+  },
   // ...
 };
 
@@ -605,7 +609,7 @@ designer.setIsEditorCollapsed(true);
 
 ```js
 const configuration = {
-  uidGenerator: () => Math.random().toString()
+  uidGenerator: () => Math.random().toString(),
   // ...
 };
 ```
@@ -708,7 +712,7 @@ This version changes the main configuration. The "isHidden" properties are prohi
 const configuration = {
   toolbox: false,
   editors: false,
-  controlBar: false
+  controlBar: false,
   // ...
 };
 ```
@@ -720,7 +724,7 @@ const configuration = {
   toolbox: {
     groups: [
       /* ... */
-    ]
+    ],
   },
   editors: {
     globalEditorProvider: () => {
@@ -728,9 +732,9 @@ const configuration = {
     },
     stepEditorProvider: () => {
       /* ... */
-    }
+    },
   },
-  controlBar: true
+  controlBar: true,
   // ...
 };
 ```
@@ -872,7 +876,7 @@ Support undo and redo. This feature is disabled by default. To enable it add the
 
 ```js
 const config = {
-  undoStackSize: 10
+  undoStackSize: 10,
   // ...
 };
 ```
@@ -905,8 +909,8 @@ const config = {
       // ...
       context.notifyPropertiesChanged();
       // ...
-    }
-  }
+    },
+  },
 };
 ```
 
@@ -938,9 +942,9 @@ const config = {
     },
     canDeleteStep: (step, parentSequence) => {
       return step.name !== 'x';
-    }
+    },
     // ...
-  }
+  },
 };
 ```
 

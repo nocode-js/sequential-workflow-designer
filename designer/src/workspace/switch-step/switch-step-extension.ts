@@ -41,6 +41,7 @@ export class SwitchStepExtension implements StepExtension<BranchedStep> {
 
 	public readonly createComponentView = createSwitchStepComponentViewFactory(
 		this.configuration?.view ?? defaultViewConfiguration,
-		this.configuration?.branchNamesResolver
+		this.configuration?.branchNamesResolver,
+		this.configuration?.branchNameLabelResolver
 	);
 }
