@@ -41,11 +41,13 @@ function createView(
 			return regionView.getClientPosition();
 		},
 		resolveClick(click: ClickDetails): true | ClickCommand | null {
-			if (cfg.isRegionClickable) {
-				const result = regionView.resolveClick(click);
-				if (result !== null) {
-					return result;
+			const result = regionView.resolveClick(click);
+			if (result === true) {
+				if (cfg.isRegionClickable) {
+					return true;
 				}
+			} else if (result !== null) {
+				return result;
 			}
 			return labelViews.some(v => v.g.contains(click.element) || (inputView && inputView.g.contains(click.element))) ? true : null;
 		},

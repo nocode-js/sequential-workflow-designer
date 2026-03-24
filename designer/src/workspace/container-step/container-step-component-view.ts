@@ -54,11 +54,13 @@ export const createContainerStepComponentViewFactory =
 					return regionView.getClientPosition();
 				},
 				resolveClick(click: ClickDetails): true | ClickCommand | null {
-					if (cfg.isRegionClickable) {
-						const result = regionView.resolveClick(click);
-						if (result !== null) {
-							return result;
+					const result = regionView.resolveClick(click);
+					if (result === true) {
+						if (cfg.isRegionClickable) {
+							return true;
 						}
+					} else if (result !== null) {
+						return result;
 					}
 					return labelView.g.contains(click.element) || (inputView && inputView.g.contains(click.element)) ? true : null;
 				},

@@ -1,3 +1,7 @@
+# 0.37.2
+
+This version fixes a bug where commands were not forwarded in collapsible regions when `isRegionClickable` was set to `false`.
+
 # 0.37.1
 
 This version adds a new property, `branchNameLabelResolver`, to the `SwitchStepExtensionConfiguration` interface. This property allows you to override the default labels of the switch step branches.
