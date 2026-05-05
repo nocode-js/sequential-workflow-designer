@@ -1,3 +1,7 @@
+# 0.37.3
+
+Added support for Angular 21.
+
 # 0.37.2
 
 This version fixes a bug where commands were not forwarded in collapsible regions when `isRegionClickable` was set to `false`.
