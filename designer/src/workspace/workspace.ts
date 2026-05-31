@@ -127,7 +127,7 @@ export class Workspace implements WorkspaceController {
 		this.trySelectStepComponent(this.state.selectedStepId);
 		this.updateBadges();
 
-		this.onRootComponentUpdated.forward();
+		this.onRootComponentUpdated.emit();
 	};
 
 	public updateBadges() {

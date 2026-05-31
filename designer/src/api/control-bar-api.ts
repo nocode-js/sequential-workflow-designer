@@ -17,7 +17,7 @@ export class ControlBarApi {
 			state.onSelectedStepIdChanged,
 			state.onIsDragDisabledChanged,
 			api.isUndoRedoSupported() ? state.onDefinitionChanged : undefined
-		).subscribe(api.onStateChanged.forward);
+		).subscribe(api.onStateChanged.emit);
 		return api;
 	}
 

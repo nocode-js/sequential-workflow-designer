@@ -45,18 +45,18 @@ export class DesignerState {
 	public setSelectedStepId(stepId: string | null) {
 		if (this.selectedStepId !== stepId) {
 			this.selectedStepId = stepId;
-			this.onSelectedStepIdChanged.forward(stepId);
+			this.onSelectedStepIdChanged.emit(stepId);
 		}
 	}
 
 	public pushStepIdToFolderPath(stepId: string) {
 		this.folderPath.push(stepId);
-		this.onFolderPathChanged.forward(this.folderPath);
+		this.onFolderPathChanged.emit(this.folderPath);
 	}
 
 	public setFolderPath(path: string[]) {
 		this.folderPath = path;
-		this.onFolderPathChanged.forward(path);
+		this.onFolderPathChanged.emit(path);
 	}
 
 	public tryGetLastStepIdFromFolderPath(): string | null {
@@ -77,50 +77,50 @@ export class DesignerState {
 		if (details) {
 			Object.assign(event, details);
 		}
-		this.onDefinitionChanged.forward(event);
+		this.onDefinitionChanged.emit(event);
 	}
 
 	public notifyStepUnselectionBlocked(stepId: string | null) {
-		this.onStepUnselectionBlocked.forward(stepId);
+		this.onStepUnselectionBlocked.emit(stepId);
 	}
 
 	public setViewport(viewport: Viewport) {
 		this.viewport = viewport;
-		this.onViewportChanged.forward(viewport);
+		this.onViewportChanged.emit(viewport);
 	}
 
 	public setIsReadonly(isReadonly: boolean) {
 		if (this.isReadonly !== isReadonly) {
 			this.isReadonly = isReadonly;
-			this.onIsReadonlyChanged.forward(isReadonly);
+			this.onIsReadonlyChanged.emit(isReadonly);
 		}
 	}
 
 	public setIsDragging(isDragging: boolean) {
 		if (this.isDragging !== isDragging) {
 			this.isDragging = isDragging;
-			this.onIsDraggingChanged.forward(isDragging);
+			this.onIsDraggingChanged.emit(isDragging);
 		}
 	}
 
 	public setIsDragDisabled(isDragDisabled: boolean) {
 		if (this.isDragDisabled !== isDragDisabled) {
 			this.isDragDisabled = isDragDisabled;
-			this.onIsDragDisabledChanged.forward(isDragDisabled);
+			this.onIsDragDisabledChanged.emit(isDragDisabled);
 		}
 	}
 
 	public setIsToolboxCollapsed(isCollapsed: boolean) {
 		if (this.isToolboxCollapsed !== isCollapsed) {
 			this.isToolboxCollapsed = isCollapsed;
-			this.onIsToolboxCollapsedChanged.forward(isCollapsed);
+			this.onIsToolboxCollapsedChanged.emit(isCollapsed);
 		}
 	}
 
 	public setIsEditorCollapsed(isCollapsed: boolean) {
 		if (this.isEditorCollapsed !== isCollapsed) {
 			this.isEditorCollapsed = isCollapsed;
-			this.onIsEditorCollapsedChanged.forward(isCollapsed);
+			this.onIsEditorCollapsedChanged.emit(isCollapsed);
 		}
 	}
 
@@ -128,7 +128,7 @@ export class DesignerState {
 		for (const change of changes) {
 			this.preferenceStorage.setItem(change.key, change.value);
 		}
-		this.onPreferencesChanged.forward({ changes, stepId });
+		this.onPreferencesChanged.emit({ changes, stepId });
 	}
 
 	public getPreference(key: string): string | null {

@@ -11,14 +11,14 @@ export function race<A, B, C, D>(
 	const result = new SimpleEvent<[A?, B?, C?, D?]>();
 	let scheduled = false;
 
-	function forward() {
+	function emit() {
 		if (scheduled) {
 			return;
 		}
 		scheduled = true;
 		setTimeout(() => {
 			try {
-				result.forward(value);
+				result.emit(value);
 			} finally {
 				scheduled = false;
 				value.fill(undefined);
@@ -29,7 +29,7 @@ export function race<A, B, C, D>(
 	function subscribe<T extends A | B | C | D>(event: SimpleEvent<T>, index: number) {
 		event.subscribe(v => {
 			value[index] = v;
-			forward();
+			emit();
 		});
 	}
 

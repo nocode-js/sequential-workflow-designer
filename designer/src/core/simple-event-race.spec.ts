@@ -17,8 +17,8 @@ describe('race', () => {
 			done();
 		});
 
-		a.forward(0x128);
-		b.forward(0x256);
+		a.emit(0x128);
+		b.emit(0x256);
 	});
 
 	it('forwards first event only', done => {
@@ -28,7 +28,7 @@ describe('race', () => {
 			done();
 		});
 
-		a.forward(0x128);
+		a.emit(0x128);
 	});
 
 	it('forwards second event only', done => {
@@ -38,6 +38,6 @@ describe('race', () => {
 			done();
 		});
 
-		b.forward(0x256);
+		b.emit(0x256);
 	});
 });
