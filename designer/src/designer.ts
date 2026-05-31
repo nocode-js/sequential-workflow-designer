@@ -51,25 +51,26 @@ export class Designer<TDefinition extends Definition = Definition> {
 			designerContext.historyController,
 			designerApi
 		);
-		view.workspace.onRootComponentUpdated.subscribe(designer.onRootComponentUpdated.forward);
-		view.workspace.onRootComponentUpdated.once().then(designer.onReady.forward);
+		view.workspace.onRootComponentUpdated.subscribe(designer.onRootComponentUpdated.emit);
+		view.workspace.onRootComponentUpdated.once().then(designer.onReady.emit);
 
 		race(0, designerContext.state.onDefinitionChanged, designerContext.state.onSelectedStepIdChanged).subscribe(
 			([definition, selectedStepId]) => {
 				if (definition !== undefined) {
-					designer.onDefinitionChanged.forward(definition as DefinitionChangedEvent<TDef>);
+					designer.onDefinitionChanged.emit(definition as DefinitionChangedEvent<TDef>);
 				}
 				if (selectedStepId !== undefined) {
-					designer.onSelectedStepIdChanged.forward(designerContext.state.selectedStepId);
+					designer.onSelectedStepIdChanged.emit(designerContext.state.selectedStepId);
 				}
 			}
 		);
 
-		designerContext.state.onViewportChanged.subscribe(designer.onViewportChanged.forward);
-		designerContext.state.onIsToolboxCollapsedChanged.subscribe(designer.onIsToolboxCollapsedChanged.forward);
-		designerContext.state.onIsEditorCollapsedChanged.subscribe(designer.onIsEditorCollapsedChanged.forward);
-		designerContext.state.onStepUnselectionBlocked.subscribe(designer.onStepUnselectionBlocked.forward);
-		designerContext.state.onPreferencesChanged.subscribe(designer.onPreferencesChanged.forward);
+		designerContext.state.onViewportChanged.subscribe(designer.onViewportChanged.emit);
+		designerContext.state.onIsToolboxCollapsedChanged.subscribe(designer.onIsToolboxCollapsedChanged.emit);
+		designerContext.state.onIsEditorCollapsedChanged.subscribe(designer.onIsEditorCollapsedChanged.emit);
+		designerContext.state.onStepUnselectionBlocked.subscribe(designer.onStepUnselectionBlocked.emit);
+		designerContext.state.onIsDraggingChanged.subscribe(designer.onIsDraggingChanged.emit);
+		designerContext.state.onPreferencesChanged.subscribe(designer.onPreferencesChanged.emit);
 		return designer;
 	}
 
@@ -120,6 +121,11 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 * @description Fires when the root component and all its children are rerendered.
 	 */
 	public readonly onRootComponentUpdated = new SimpleEvent<void>();
+
+	/**
+	 * @description Fires when the dragging state has changed. `true` if the step is being dragged, otherwise `false`.
+	 */
+	public readonly onIsDraggingChanged = new SimpleEvent<boolean>();
 
 	/**
 	 * @description Fires when any of the designer preferences has changed.
@@ -245,6 +251,13 @@ export class Designer<TDefinition extends Definition = Definition> {
 	 */
 	public isEditorCollapsed(): boolean {
 		return this.state.isEditorCollapsed;
+	}
+
+	/**
+	 * @returns a flag that indicates whether the step is being dragged.
+	 */
+	public isDragging(): boolean {
+		return this.state.isDragging;
 	}
 
 	/**

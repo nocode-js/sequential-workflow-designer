@@ -1,3 +1,7 @@
+# 0.37.4
+
+This version adds a new event: `onIsDraggingChanged`. This event is triggered when the dragging state of the designer changes. Additionally, the `Designer` class now includes the `isDragging()` method, which allows you to check if the designer is currently in a dragging state.
+
 # 0.37.3
 
 Added support for Angular 21.

@@ -14,11 +14,16 @@ export class SimpleEvent<T> {
 		}
 	}
 
-	public readonly forward = (value: T) => {
-		if (this.listeners.length > 0) {
-			this.listeners.forEach(listener => listener(value));
+	public readonly emit = (value: T) => {
+		for (const listener of this.listeners) {
+			listener(value);
 		}
 	};
+
+	/**
+	 * @deprecated Use `emit` method instead.
+	 */
+	public readonly forward = this.emit;
 
 	public count(): number {
 		return this.listeners.length;
