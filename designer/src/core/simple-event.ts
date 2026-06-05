@@ -20,11 +20,6 @@ export class SimpleEvent<T> {
 		}
 	};
 
-	/**
-	 * @deprecated Use `emit` method instead.
-	 */
-	public readonly forward = this.emit;
-
 	public count(): number {
 		return this.listeners.length;
 	}

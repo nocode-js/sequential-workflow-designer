@@ -10,12 +10,7 @@
 		"declaration": true,
 		"declarationDir": "./build/",
 		"moduleResolution": "node",
-		"lib": [
-			"es2015",
-			"dom"
-		]
+		"lib": ["es2015", "dom"]
 	},
-	"include": [
-		"./src/"
-	]
+	"include": ["./src/"]
 }

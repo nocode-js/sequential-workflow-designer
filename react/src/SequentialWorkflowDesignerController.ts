@@ -65,7 +65,7 @@ export class SequentialWorkflowDesignerController {
 			throw new Error('Designer is already set');
 		}
 		this.designer = designer;
-		this.onIsReadyChanged.forward();
+		this.onIsReadyChanged.emit();
 	}
 
 	private getDesigner(): Designer {

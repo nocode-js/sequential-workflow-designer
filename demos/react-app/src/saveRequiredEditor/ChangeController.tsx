@@ -8,7 +8,7 @@ export class ChangeController {
 	public set(isChanged: boolean) {
 		if (this.isChanged !== isChanged) {
 			this.isChanged = isChanged;
-			this.onIsChangedChanged.forward(isChanged);
+			this.onIsChangedChanged.emit(isChanged);
 		}
 	}
 }

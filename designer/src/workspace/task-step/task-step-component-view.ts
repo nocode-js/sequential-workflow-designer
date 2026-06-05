@@ -27,9 +27,11 @@ export const createTaskStepComponentViewFactory =
 		});
 		text.textContent = viewContext.getStepName();
 		g.appendChild(text);
-		const textWidth = Math.max(text.getBBox().width, cfg.minTextWidth);
 
-		const boxWidth = cfg.iconSize + cfg.paddingLeft + cfg.paddingRight + cfg.textMarginLeft + textWidth;
+		const textWidth = viewContext.textWidthMeasurer(text);
+		const width = Math.max(textWidth, cfg.minTextWidth);
+
+		const boxWidth = cfg.iconSize + cfg.paddingLeft + cfg.paddingRight + cfg.textMarginLeft + width;
 
 		const rect = Dom.svg('rect', {
 			x: 0.5,
@@ -40,7 +42,6 @@ export const createTaskStepComponentViewFactory =
 			rx: cfg.radius,
 			ry: cfg.radius
 		});
-		g.insertBefore(rect, text);
 
 		const iconUrl = viewContext.getStepIconUrl();
 		const icon = iconUrl
@@ -58,6 +59,8 @@ export const createTaskStepComponentViewFactory =
 			width: cfg.iconSize,
 			height: cfg.iconSize
 		});
+
+		g.insertBefore(rect, text);
 		g.appendChild(icon);
 
 		const isInputViewHidden = !stepContext.isInputConnected; // TODO: handle inside the folder
