@@ -1,3 +1,7 @@
+# 0.38.1
+
+This version fixes a bug in the `Dom` class that caused an unhandled error during rendering.
+
 # 0.38.0
 
 This version introduces a new configuration property: `textWidthMeasurer`. You can now set a custom function to measure the width of text in the designer. Measuring text width is necessary to calculate the layout of the designer components. By default, the designer uses the `getBBox()` method to measure text width. This method is universal and always works, but unfortunately, it is not the fastest option. You can now provide your own implementation, for example, by using the `CanvasRenderingContext2D.measureText()` method.
