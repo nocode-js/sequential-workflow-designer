@@ -17,7 +17,7 @@ export class Dom {
 
 	public static attrs(element: Element, attributes: Attributes) {
 		const names = Object.keys(attributes);
-		for (const name in names) {
+		for (const name of names) {
 			const value = attributes[name];
 			element.setAttribute(name, typeof value === 'string' ? value : value.toString());
 		}
