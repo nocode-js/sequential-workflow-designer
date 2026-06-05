@@ -2,13 +2,29 @@
 
 const uid = sequentialWorkflowDesigner.Uid.next;
 
+// In this example, we are using a custom text width measurer that uses canvas to measure the width of the text.
+// This approach is much faster than the default one, which uses `getBBox`, but the downside is that
+// we need to set the same font that is used in the designer.
+class TextWidthMeasurer {
+	constructor() {
+		this.canvas = document.createElement('canvas');
+		this.context = this.canvas.getContext('2d');
+		this.context.font = '14px "Open Sans", Arial, Verdana, Serif';
+	}
+
+	measure = text => {
+		return this.context.measureText(text.textContent).width;
+	};
+}
+
 class Steps {
 	static createTask() {
+		const n = Math.floor(Math.random() * 10) + 1;
 		return {
 			id: uid(),
 			componentType: 'task',
 			type: 'task',
-			name: 'Stress test',
+			name: 'Str' + 'e'.repeat(n) + 'ss test',
 			properties: {}
 		};
 	}
@@ -37,7 +53,8 @@ const configuration = {
 	},
 	toolbox: false,
 	editors: false,
-	controlBar: true
+	controlBar: true,
+	textWidthMeasurer: new TextWidthMeasurer().measure
 };
 
 const LIMIT = 256;
@@ -87,4 +104,13 @@ const startDefinition = {
 };
 
 const placeholder = document.getElementById('designer');
-sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
+let startTime = Date.now();
+const designer = sequentialWorkflowDesigner.Designer.create(placeholder, startDefinition, configuration);
+designer.onRootComponentUpdated.subscribe(() => {
+	if (startTime === null) {
+		return;
+	}
+	const endTime = Date.now();
+	console.log(`First render time: ${endTime - startTime}ms`);
+	startTime = null;
+});

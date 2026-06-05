@@ -94,6 +94,11 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	i18n?: I18n;
 
 	/**
+	 * @description Custom text width measurer. By default, the designer uses `getBBox()` method to measure the width of the text.
+	 */
+	textWidthMeasurer?: TextWidthMeasurer;
+
+	/**
 	 * @description Pass the shadow root of the shadow root to the designer if the designer is placed inside the shadow DOM.
 	 */
 	shadowRoot?: ShadowRoot;
@@ -163,6 +168,8 @@ export interface PreferenceStorage {
 	setItem(key: string, value: string): void;
 	getItem(key: string): string | null;
 }
+
+export type TextWidthMeasurer = (text: SVGTextElement) => number;
 
 export interface StepsConfiguration {
 	isSelectable?: (step: Step, parentSequence: Sequence) => boolean;

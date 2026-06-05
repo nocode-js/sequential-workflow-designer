@@ -1,4 +1,5 @@
 import { Dom } from '../../core/dom';
+import { measureTextWidth } from '../../core/measure-text-width';
 import { LabelView } from './label-view';
 
 describe('LabelView', () => {
@@ -14,7 +15,8 @@ describe('LabelView', () => {
 				radius: 10
 			},
 			'test',
-			'primary'
+			'primary',
+			measureTextWidth
 		);
 		expect(parent.children.length).not.toEqual(0);
 	});

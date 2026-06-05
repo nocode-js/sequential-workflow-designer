@@ -77,7 +77,7 @@ export const createSwitchStepComponentViewFactory =
 			const paddingTop = cfg.paddingTop1 + cfg.paddingTop2;
 
 			const name = viewContext.getStepName();
-			const nameLabelView = LabelView.create(g, paddingTop, cfg.nameLabel, name, 'primary');
+			const nameLabelView = LabelView.create(g, paddingTop, cfg.nameLabel, name, 'primary', viewContext.textWidthMeasurer);
 			const branchNames = branchNameResolver ? branchNameResolver(step) : Object.keys(step.branches);
 
 			if (branchNames.length === 0) {
@@ -105,7 +105,14 @@ export const createSwitchStepComponentViewFactory =
 				const translatedLabel = viewContext.i18n(`stepComponent.${step.type}.branchName`, label);
 
 				const labelY = paddingTop + cfg.nameLabel.height + cfg.connectionHeight;
-				const labelView = LabelView.create(g, labelY, cfg.branchNameLabel, translatedLabel, 'secondary');
+				const labelView = LabelView.create(
+					g,
+					labelY,
+					cfg.branchNameLabel,
+					translatedLabel,
+					'secondary',
+					viewContext.textWidthMeasurer
+				);
 
 				const component = viewContext.createSequenceComponent(g, step.branches[branchName]);
 

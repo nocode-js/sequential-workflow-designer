@@ -14,6 +14,7 @@ import { WorkspaceController, WorkspaceControllerWrapper } from './workspace/wor
 import { MemoryPreferenceStorage } from './core/memory-preference-storage';
 import { PlaceholderController } from './workspace/placeholder/placeholder-controller';
 import { Uid } from './core';
+import { measureTextWidth } from './core/measure-text-width';
 
 export class DesignerContext {
 	public static create(
@@ -41,6 +42,7 @@ export class DesignerContext {
 		const definitionWalker = configuration.definitionWalker ?? new DefinitionWalker();
 		const i18n: I18n = configuration.i18n ?? ((_, defaultValue) => defaultValue);
 		const uidGenerator = configuration.uidGenerator ?? Uid.next;
+		const textWidthMeasurer = configuration.textWidthMeasurer ?? measureTextWidth;
 		const stateModifier = StateModifier.create(definitionWalker, uidGenerator, state, configuration.steps);
 		const customActionController = new CustomActionController(configuration, state, stateModifier);
 
@@ -57,6 +59,7 @@ export class DesignerContext {
 			definitionWalker,
 			preferenceStorage,
 			i18n,
+			textWidthMeasurer,
 			services
 		);
 

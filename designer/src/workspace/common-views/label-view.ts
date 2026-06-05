@@ -1,4 +1,5 @@
 import { Dom } from '../../core/dom';
+import { TextWidthMeasurer } from '../../designer-configuration';
 import { LabelViewConfiguration } from './label-view-configuration';
 
 export class LabelView {
@@ -7,7 +8,8 @@ export class LabelView {
 		y: number,
 		cfg: LabelViewConfiguration,
 		text: string,
-		theme: 'primary' | 'secondary'
+		theme: 'primary' | 'secondary',
+		textWidthMeasurer: TextWidthMeasurer
 	): LabelView {
 		const g = Dom.svg('g', {
 			class: `sqd-label sqd-label-${theme}`
@@ -20,7 +22,8 @@ export class LabelView {
 		});
 		nameText.textContent = text;
 		g.appendChild(nameText);
-		const width = Math.max(nameText.getBBox().width + cfg.paddingX * 2, cfg.minWidth);
+		const nameWidth = textWidthMeasurer(nameText);
+		const width = Math.max(nameWidth + cfg.paddingX * 2, cfg.minWidth);
 
 		const nameRect = Dom.svg('rect', {
 			class: 'sqd-label-rect',

@@ -1,3 +1,9 @@
+# 0.38.0
+
+This version introduces a new configuration property: `textWidthMeasurer`. You can now set a custom function to measure the width of text in the designer. Measuring text width is necessary to calculate the layout of the designer components. By default, the designer uses the `getBBox()` method to measure text width. This method is universal and always works, but unfortunately, it is not the fastest option. You can now provide your own implementation, for example, by using the `CanvasRenderingContext2D.measureText()` method.
+
+Added support for Angular 22.
+
 # 0.37.4
 
 This version adds a new event: `onIsDraggingChanged`. This event is triggered when the dragging state of the designer changes. Additionally, the `Designer` class now includes the `isDragging()` method, which allows you to check if the designer is currently in a dragging state.

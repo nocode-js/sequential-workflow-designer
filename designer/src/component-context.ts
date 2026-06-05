@@ -1,7 +1,7 @@
 import { DefinitionWalker } from 'sequential-workflow-model';
 import { DefinitionValidator } from './core/definition-validator';
 import { IconProvider } from './core/icon-provider';
-import { DesignerConfiguration, I18n, PreferenceStorage } from './designer-configuration';
+import { DesignerConfiguration, I18n, PreferenceStorage, TextWidthMeasurer } from './designer-configuration';
 import { DesignerState } from './designer-state';
 import { Services } from './services';
 import { StepComponentFactory } from './workspace/step-component-factory';
@@ -17,6 +17,7 @@ export class ComponentContext {
 		definitionWalker: DefinitionWalker,
 		preferenceStorage: PreferenceStorage,
 		i18n: I18n,
+		textWidthMeasurer: TextWidthMeasurer,
 		services: Services
 	): ComponentContext {
 		const validator = new DefinitionValidator(configuration.validator, state);
@@ -32,6 +33,7 @@ export class ComponentContext {
 			services,
 			preferenceStorage,
 			i18n,
+			textWidthMeasurer,
 			state
 		);
 	}
@@ -46,6 +48,7 @@ export class ComponentContext {
 		public readonly services: Services,
 		public readonly preferenceStorage: PreferenceStorage,
 		public readonly i18n: I18n,
+		public readonly textWidthMeasurer: TextWidthMeasurer,
 		private readonly state: DesignerState
 	) {}
 

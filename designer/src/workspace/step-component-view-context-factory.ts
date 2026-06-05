@@ -8,6 +8,8 @@ export class StepComponentViewContextFactory {
 
 		return {
 			i18n: componentContext.i18n,
+			textWidthMeasurer: componentContext.textWidthMeasurer,
+
 			getStepIconUrl: () => componentContext.iconProvider.getIconUrl(stepContext.step),
 			getStepName: () => componentContext.i18n(`step.${stepContext.step.type}.name`, stepContext.step.name),
 			createStepComponent: (parentElement: SVGElement, parentSequence: Sequence, step: Step, position: number) => {

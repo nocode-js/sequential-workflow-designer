@@ -20,7 +20,9 @@ export class DefaultSequenceComponentView implements ComponentView {
 		const g = Dom.svg('g');
 		parent.appendChild(g);
 
-		const components: StepComponent[] = [];
+		const components = new Array<StepComponent>(sequence.length);
+		let restWidth = 0;
+		let joinX = 0;
 		for (let index = 0; index < sequence.length; index++) {
 			const stepContext: StepContext = {
 				parentSequence: sequenceContext.sequence,
@@ -31,15 +33,15 @@ export class DefaultSequenceComponentView implements ComponentView {
 				isOutputConnected: index === sequence.length - 1 ? sequenceContext.isOutputConnected : true,
 				isPreview: sequenceContext.isPreview
 			};
-			components[index] = componentContext.stepComponentFactory.create(g, stepContext, componentContext);
+			const component = componentContext.stepComponentFactory.create(g, stepContext, componentContext);
+			components[index] = component;
+
+			restWidth = Math.max(restWidth, component.view.width - component.view.joinX);
+			joinX = Math.max(joinX, component.view.joinX);
 		}
 
-		let joinX: number;
 		let totalWidth: number;
-		if (components.length > 0) {
-			const restWidth = Math.max(...components.map(c => c.view.width - c.view.joinX));
-
-			joinX = Math.max(...components.map(c => c.view.joinX));
+		if (sequence.length > 0) {
 			totalWidth = joinX + restWidth;
 		} else {
 			joinX = phWidth / 2;

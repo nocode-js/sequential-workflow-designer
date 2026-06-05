@@ -16,10 +16,11 @@ export class Dom {
 	}
 
 	public static attrs(element: Element, attributes: Attributes) {
-		Object.keys(attributes).forEach(name => {
+		const names = Object.keys(attributes);
+		for (const name in names) {
 			const value = attributes[name];
 			element.setAttribute(name, typeof value === 'string' ? value : value.toString());
-		});
+		}
 	}
 
 	public static element<T extends keyof HTMLElementTagNameMap>(name: T, attributes?: Attributes): HTMLElementTagNameMap[T] {

@@ -6,7 +6,7 @@ import { ComponentContext } from './component-context';
 import { Vector } from './core';
 import { CustomActionController } from './custom-action-controller';
 import { ComponentType, Definition, Sequence, Step } from './definition';
-import { I18n, PreferenceChange } from './designer-configuration';
+import { I18n, PreferenceChange, TextWidthMeasurer } from './designer-configuration';
 import {
 	Badge,
 	ClickCommand,
@@ -49,6 +49,8 @@ export type StepComponentViewFactory = StepExtension['createComponentView'];
 
 export interface StepComponentViewContext {
 	i18n: I18n;
+	textWidthMeasurer: TextWidthMeasurer;
+
 	getStepName(): string;
 	getStepIconUrl(): string | null;
 	createStepComponent(parentElement: SVGElement, parentSequence: Sequence, step: Step, position: number): StepComponent;
