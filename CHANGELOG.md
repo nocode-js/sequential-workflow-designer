@@ -1,3 +1,7 @@
+# 0.38.2
+
+Version update only.
+
 # 0.38.1
 
 This version fixes a bug in the `Dom` class that caused an unhandled error during rendering.
