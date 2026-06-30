@@ -9,12 +9,12 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	theme?: string;
 
 	/**
-	 * @description The readonly mode of the designer.
+	 * @description The read-only mode of the designer.
 	 */
 	isReadonly?: boolean;
 
 	/**
-	 * @description The depth of the undo stack. If not set, undo/redo feature will be disabled.
+	 * @description The depth of the undo stack. If not set, the undo/redo feature will be disabled.
 	 */
 	undoStackSize?: number;
 
@@ -24,7 +24,7 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	undoStack?: UndoStack;
 
 	/**
-	 * @description The common configuration of the steps.
+	 * @description The common configuration for steps.
 	 */
 	steps: StepsConfiguration;
 
@@ -44,17 +44,17 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	editors: false | EditorsConfiguration<TDefinition>;
 
 	/**
-	 * @description If true, the control bar will be displayed. In the next version, this property will be required.
+	 * @description If set to `true` or a configuration object, the control bar will be displayed.
 	 */
-	controlBar: boolean;
+	controlBar: boolean | ControlBarConfiguration;
 
 	/**
-	 * @description If false, the context menu will be disabled. By default, the context menu is enabled.
+	 * @description If set to `false`, the context menu will be disabled. By default, the context menu is enabled.
 	 */
-	contextMenu?: boolean;
+	contextMenu?: boolean | ContextMenuConfiguration;
 
 	/**
-	 * @description The configuration of validators.
+	 * @description The configuration of the validators.
 	 */
 	validator?: ValidatorConfiguration;
 
@@ -79,12 +79,12 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	definitionWalker?: DefinitionWalker;
 
 	/**
-	 * @description Custom preference storage. By default, all preferences are stored in the memory.
+	 * @description Custom preference storage. By default, all preferences are stored in memory.
 	 */
 	preferenceStorage?: PreferenceStorage;
 
 	/**
-	 * @description Custom generator of unique identifiers.
+	 * @description Custom unique identifier generator.
 	 */
 	uidGenerator?: UidGenerator;
 
@@ -94,12 +94,12 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	i18n?: I18n;
 
 	/**
-	 * @description Custom text width measurer. By default, the designer uses `getBBox()` method to measure the width of the text.
+	 * @description Custom text width measurer. By default, the designer uses the `getBBox()` method to measure the width of the text.
 	 */
 	textWidthMeasurer?: TextWidthMeasurer;
 
 	/**
-	 * @description Pass the shadow root of the shadow root to the designer if the designer is placed inside the shadow DOM.
+	 * @description Pass the shadow root to the designer if the designer is placed inside the shadow DOM.
 	 */
 	shadowRoot?: ShadowRoot;
 }
@@ -117,6 +117,11 @@ export type CustomActionHandler = (
 
 export interface CustomAction {
 	type: string;
+}
+
+export interface ControlBarButtonClickedCustomAction extends CustomAction {
+	type: 'controlBarButtonClicked';
+	id: string;
 }
 
 export interface CustomActionHandlerContext {
@@ -183,7 +188,7 @@ export interface StepsConfiguration {
 	canDeleteStep?: (step: Step, parentSequence: Sequence) => boolean;
 
 	/**
-	 * @description The designer automatically selects the step after it is dropped. If true, the step will not be selected.
+	 * @description The designer automatically selects the step after it is dropped. If `true`, the step will not be selected.
 	 */
 	isAutoSelectDisabled?: boolean;
 
@@ -210,6 +215,35 @@ export interface ValidatorConfiguration {
 
 export type StepValidator = (step: Step, parentSequence: Sequence, definition: Definition) => boolean;
 export type RootValidator = (definition: Definition) => boolean;
+
+export interface ControlBarConfiguration {
+	/**
+	 * @description Custom buttons displayed in the control bar.
+	 */
+	buttons?: ControlBarButton[];
+}
+
+export interface ControlBarButton {
+	/**
+	 * @description The unique identifier of the custom button.
+	 */
+	id: string;
+	/**
+	 * @description The SVG path data used as the button icon.
+	 */
+	iconD: string;
+	/**
+	 * @description The button label, used as the button title.
+	 */
+	label: string;
+}
+
+export interface ContextMenuConfiguration {
+	/**
+	 * @description If set to `true`, the default "Reset view" item will be hidden.
+	 */
+	isResetViewDisabled?: boolean;
+}
 
 export interface KeyboardConfiguration {
 	canHandleKey?: (action: KeyboardAction, event: KeyboardEvent) => boolean;

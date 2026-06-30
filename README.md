@@ -4,7 +4,7 @@
 
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fb4rtaz%2Fsequential-workflow-designer%2Fbadge%3Fref%3Dmain&style=flat-square)](https://actions-badge.atrox.dev/b4rtaz/sequential-workflow-designer/goto?ref=main) [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](/LICENSE) [![View this project on NPM](https://img.shields.io/npm/v/sequential-workflow-designer.svg?style=flat-square)](https://npmjs.org/package/sequential-workflow-designer)
 
-Sequential workflow designer with no external dependencies for web applications. It is written in pure TypeScript and uses SVG for rendering. This designer is not associated with any workflow engine, it is fully generic. You can use it to create any kind of application, from graphical programming languages to workflow builders.
+A sequential workflow designer with no external dependencies for web applications. It is written in pure TypeScript and uses SVG for rendering. This designer is not associated with any workflow engine; it is fully generic. You can use it to create any kind of application, from graphical programming languages to workflow builders.
 
 Features:
 
@@ -70,11 +70,11 @@ Pro:
 
 ## 🚀 Installation
 
-To use the designer you should add JS/TS files and CSS files to your project.
+To use the designer, add the JS/TS and CSS files to your project.
 
 ### NPM
 
-Install this package by [NPM](https://www.npmjs.com/) command:
+Install this package with the [NPM](https://www.npmjs.com/) command:
 
 `npm i sequential-workflow-designer`
 
@@ -93,7 +93,7 @@ import 'sequential-workflow-designer/css/designer-soft.css';
 import 'sequential-workflow-designer/css/designer-dark.css';
 ```
 
-To create the designer write the below code:
+To create the designer, write the code below:
 
 ```ts
 // ...
@@ -102,19 +102,19 @@ Designer.create(placeholder, definition, configuration);
 
 ### CDN
 
-Add the below code to your head section in HTML document.
+Add the code below to the head section of your HTML document.
 
 ```html
 <head>
   ...
-  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.38.2/css/designer.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.38.2/css/designer-light.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.38.2/css/designer-dark.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.38.2/dist/index.umd.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.0/css/designer.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.0/css/designer-light.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.0/css/designer-dark.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.0/dist/index.umd.js"></script>
 </head>
 ```
 
-Call the designer by:
+Create the designer with:
 
 ```js
 sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuration);
@@ -122,7 +122,7 @@ sequentialWorkflowDesigner.Designer.create(placeholder, definition, configuratio
 
 ## 🎬 Usage
 
-Check [examples](/examples) directory.
+Check the [examples](/examples) directory.
 
 ```ts
 import { Designer } from 'sequential-workflow-designer';
@@ -188,13 +188,13 @@ const configuration = {
       {
         name: 'Files',
         steps: [
-          // steps for the toolbox's group
+          // steps for the toolbox group
         ],
       },
       {
         name: 'Notification',
         steps: [
-          // steps for the toolbox's group
+          // steps for the toolbox group
         ],
       },
     ],

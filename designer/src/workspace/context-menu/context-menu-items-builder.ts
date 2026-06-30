@@ -17,7 +17,7 @@ export class ContextMenuItemsBuilder {
 		private readonly customMenuItemsProvider: ContextMenuItemsProvider | undefined
 	) {}
 
-	public build(commandOrNull: ClickCommand | null): ContextMenuItem[] {
+	public build(commandOrNull: ClickCommand | null, isResetViewDisabled: boolean): ContextMenuItem[] {
 		const items: ContextMenuItem[] = [];
 
 		if (commandOrNull && commandOrNull.type === ClickCommandType.selectStep) {
@@ -77,13 +77,15 @@ export class ContextMenuItemsBuilder {
 			this.tryAppendCustomItems(items, null, rootSequence.sequence);
 		}
 
-		items.push({
-			label: this.i18n('contextMenu.resetView', 'Reset view'),
-			order: 50,
-			callback: () => {
-				this.viewportApi.resetViewport();
-			}
-		});
+		if (!isResetViewDisabled) {
+			items.push({
+				label: this.i18n('contextMenu.resetView', 'Reset view'),
+				order: 50,
+				callback: () => {
+					this.viewportApi.resetViewport();
+				}
+			});
+		}
 
 		items.sort((a, b) => a.order - b.order);
 		return items;
