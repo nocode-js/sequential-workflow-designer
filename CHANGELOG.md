@@ -1,3 +1,9 @@
+# 0.39.0
+
+This version adds support for custom buttons in the control bar. Button clicks are forwarded to the custom action handler with the `controlBarButtonClicked` action.
+
+It also introduces a context menu configuration option that allows hiding the default "Reset view" item.
+
 # 0.38.2
 
 Version update only.

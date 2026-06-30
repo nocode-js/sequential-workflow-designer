@@ -1,9 +1,14 @@
 import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
-import { I18n } from '../designer-configuration';
+import { ControlBarButton, I18n } from '../designer-configuration';
 
 export class ControlBarView {
-	public static create(parent: HTMLElement, isUndoRedoSupported: boolean, i18n: I18n): ControlBarView {
+	public static create(
+		parent: HTMLElement,
+		isUndoRedoSupported: boolean,
+		buttons: ControlBarButton[] | null,
+		i18n: I18n
+	): ControlBarView {
 		const root = Dom.element('div', {
 			class: 'sqd-control-bar'
 		});
@@ -36,8 +41,27 @@ export class ControlBarView {
 		deleteButton.classList.add('sqd-hidden');
 		root.appendChild(deleteButton);
 
+		const customButtons: HTMLElement[] = [];
+		if (buttons) {
+			for (const customButton of buttons) {
+				const button = createButton(customButton.iconD, customButton.label);
+				button.setAttribute('data-id', customButton.id);
+				root.appendChild(button);
+				customButtons.push(button);
+			}
+		}
+
 		parent.appendChild(root);
-		return new ControlBarView(resetButton, zoomInButton, zoomOutButton, undoButton, redoButton, disableDragButton, deleteButton);
+		return new ControlBarView(
+			resetButton,
+			zoomInButton,
+			zoomOutButton,
+			undoButton,
+			redoButton,
+			disableDragButton,
+			deleteButton,
+			customButtons
+		);
 	}
 
 	private constructor(
@@ -47,7 +71,8 @@ export class ControlBarView {
 		private readonly undoButton: HTMLElement | null,
 		private readonly redoButton: HTMLElement | null,
 		private readonly disableDragButton: HTMLElement,
-		private readonly deleteButton: HTMLElement
+		private readonly deleteButton: HTMLElement,
+		private readonly customButtons: HTMLElement[]
 	) {}
 
 	public bindResetButtonClick(handler: () => void) {
@@ -82,6 +107,15 @@ export class ControlBarView {
 
 	public bindDeleteButtonClick(handler: () => void) {
 		bindClick(this.deleteButton, handler);
+	}
+
+	public bindCustomButtonClick(handler: (id: string) => void) {
+		for (const customButton of this.customButtons) {
+			const id = customButton.getAttribute('data-id');
+			if (id) {
+				bindClick(customButton, () => handler(id));
+			}
+		}
 	}
 
 	public setIsDeleteButtonHidden(isHidden: boolean) {

@@ -16,8 +16,8 @@ export class Designer<TDefinition extends Definition = Definition> {
 	/**
 	 * Creates a designer.
 	 * @param placeholder Placeholder where the designer will be attached.
-	 * @param startDefinition Start definition of a flow.
-	 * @param configuration Designer's configuration.
+	 * @param startDefinition Initial definition of the workflow.
+	 * @param configuration The designer configuration.
 	 * @returns An instance of the designer.
 	 */
 	public static create<TDef extends Definition>(
@@ -133,42 +133,42 @@ export class Designer<TDefinition extends Definition = Definition> {
 	public readonly onPreferencesChanged = new SimpleEvent<PreferencesChangedEvent>();
 
 	/**
-	 * @returns the current definition of the workflow.
+	 * @returns The current definition of the workflow.
 	 */
 	public getDefinition(): TDefinition {
 		return this.state.definition as TDefinition;
 	}
 
 	/**
-	 * @returns the validation result of the current definition.
+	 * @returns The validation result of the current definition.
 	 */
 	public isValid(): boolean {
 		return this.view.workspace.isValid;
 	}
 
 	/**
-	 * @returns the readonly flag.
+	 * @returns The read-only flag.
 	 */
 	public isReadonly(): boolean {
 		return this.state.isReadonly;
 	}
 
 	/**
-	 * @description Changes the readonly flag.
+	 * @description Changes the read-only flag.
 	 */
 	public setIsReadonly(isReadonly: boolean) {
 		this.state.setIsReadonly(isReadonly);
 	}
 
 	/**
-	 * @returns current selected step id or `null` if nothing is selected.
+	 * @returns The currently selected step id, or `null` if nothing is selected.
 	 */
 	public getSelectedStepId(): string | null {
 		return this.state.selectedStepId;
 	}
 
 	/**
-	 * @description Selects a step by the id.
+	 * @description Selects a step by id.
 	 */
 	public selectStepById(stepId: string) {
 		this.state.setSelectedStepId(stepId);
@@ -182,7 +182,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
-	 * @returns the current viewport.
+	 * @returns The current viewport.
 	 */
 	public getViewport(): Viewport {
 		return this.state.viewport;
@@ -204,14 +204,14 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
-	 * @description Moves the viewport to the step with the animation.
+	 * @description Moves the viewport to the step with animation.
 	 */
 	public moveViewportToStep(stepId: string) {
 		this.api.viewport.moveViewportToStep(stepId);
 	}
 
 	/**
-	 * @description Rerender the root component and all its children.
+	 * @description Rerenders the root component and all its children.
 	 */
 	public updateRootComponent() {
 		this.api.workspace.updateRootComponent();
@@ -233,42 +233,42 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
-	 * @returns a flag that indicates whether the toolbox is collapsed.
+	 * @returns A flag that indicates whether the toolbox is collapsed.
 	 */
 	public isToolboxCollapsed(): boolean {
 		return this.state.isToolboxCollapsed;
 	}
 
 	/**
-	 * @description Sets a flag that indicates whether the toolbox is collapsed.
+	 * @description Sets the flag that indicates whether the toolbox is collapsed.
 	 */
 	public setIsToolboxCollapsed(isCollapsed: boolean) {
 		this.state.setIsToolboxCollapsed(isCollapsed);
 	}
 
 	/**
-	 * @returns a flag that indicates whether the editor is collapsed.
+	 * @returns A flag that indicates whether the editor is collapsed.
 	 */
 	public isEditorCollapsed(): boolean {
 		return this.state.isEditorCollapsed;
 	}
 
 	/**
-	 * @returns a flag that indicates whether the step is being dragged.
+	 * @returns A flag that indicates whether a step is being dragged.
 	 */
 	public isDragging(): boolean {
 		return this.state.isDragging;
 	}
 
 	/**
-	 * @description Sets a flag that indicates whether the editor is collapsed.
+	 * @description Sets the flag that indicates whether the editor is collapsed.
 	 */
 	public setIsEditorCollapsed(isCollapsed: boolean) {
 		this.state.setIsEditorCollapsed(isCollapsed);
 	}
 
 	/**
-	 * @description Dump the undo stack.
+	 * @description Dumps the undo stack.
 	 */
 	public dumpUndoStack(): UndoStack {
 		return this.getHistoryController().dump();
@@ -289,14 +289,14 @@ export class Designer<TDefinition extends Definition = Definition> {
 
 	/**
 	 * @param needle A step, a sequence or a step id.
-	 * @returns parent steps and branch names.
+	 * @returns Parent steps and branch names.
 	 */
 	public getStepParents(needle: Sequence | Step | string): StepOrName[] {
 		return this.walker.getParents(this.state.definition, needle);
 	}
 
 	/**
-	 * @returns the definition walker.
+	 * @returns The definition walker.
 	 */
 	public getWalker(): DefinitionWalker {
 		return this.walker;

@@ -21,7 +21,13 @@ export class DesignerApi {
 
 		return new DesignerApi(
 			context.configuration.shadowRoot,
-			ControlBarApi.create(context.state, context.historyController, context.stateModifier),
+			ControlBarApi.create(
+				context.state,
+				context.historyController,
+				context.customActionController,
+				context.stateModifier,
+				context.configuration.controlBar
+			),
 			new ToolboxApi(context.state, context, context.behaviorController, toolboxDataProvider, context.uidGenerator),
 			new EditorApi(context.state, context.definitionWalker, context.stateModifier),
 			workspace,

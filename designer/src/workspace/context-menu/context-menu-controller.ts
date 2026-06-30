@@ -23,8 +23,13 @@ export class ContextMenuController {
 			this.current.tryDestroy();
 		}
 
-		const items = this.itemsBuilder.build(commandOrNull);
-		this.current = ContextMenu.create(this.configuration.shadowRoot, position, this.theme, items);
+		const isResetViewDisabled =
+			this.configuration.contextMenu === true ? false : this.configuration.contextMenu?.isResetViewDisabled ?? false;
+
+		const items = this.itemsBuilder.build(commandOrNull, isResetViewDisabled);
+		if (items.length > 0) {
+			this.current = ContextMenu.create(this.configuration.shadowRoot, position, this.theme, items);
+		}
 	}
 
 	public destroy() {

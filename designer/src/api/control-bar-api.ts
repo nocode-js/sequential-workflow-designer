@@ -2,14 +2,18 @@ import { race, SimpleEvent } from '../core';
 import { StateModifier } from '../modifier/state-modifier';
 import { DesignerState } from '../designer-state';
 import { HistoryController } from '../history-controller';
+import { ControlBarConfiguration, ControlBarButton, ControlBarButtonClickedCustomAction } from '../designer-configuration';
+import { CustomActionController } from '../custom-action-controller';
 
 export class ControlBarApi {
 	public static create(
 		state: DesignerState,
 		historyController: HistoryController | undefined,
-		stateModifier: StateModifier
+		customActionController: CustomActionController,
+		stateModifier: StateModifier,
+		configuration: ControlBarConfiguration | boolean
 	): ControlBarApi {
-		const api = new ControlBarApi(state, historyController, stateModifier);
+		const api = new ControlBarApi(state, historyController, customActionController, stateModifier, configuration);
 
 		race(
 			0,
@@ -24,7 +28,9 @@ export class ControlBarApi {
 	private constructor(
 		private readonly state: DesignerState,
 		private readonly historyController: HistoryController | undefined,
-		private readonly stateModifier: StateModifier
+		private readonly customActionController: CustomActionController,
+		private readonly stateModifier: StateModifier,
+		private readonly configuration: ControlBarConfiguration | boolean
 	) {}
 
 	public readonly onStateChanged = new SimpleEvent<unknown>();
@@ -83,5 +89,17 @@ export class ControlBarApi {
 			!this.state.isDragging &&
 			this.stateModifier.isDeletableById(this.state.selectedStepId)
 		);
+	}
+
+	public getButtons(): ControlBarButton[] | null {
+		return typeof this.configuration === 'boolean' ? null : this.configuration.buttons || null;
+	}
+
+	public triggerButtonClick(id: string) {
+		const action: ControlBarButtonClickedCustomAction = {
+			type: 'controlBarButtonClicked',
+			id
+		};
+		this.customActionController.trigger(action, null, this.state.definition.sequence);
 	}
 }
