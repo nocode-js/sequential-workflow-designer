@@ -107,10 +107,10 @@ Add the code below to the head section of your HTML document.
 ```html
 <head>
   ...
-  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.0/css/designer.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.0/css/designer-light.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.0/css/designer-dark.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.0/dist/index.umd.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.1/css/designer.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.1/css/designer-light.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.1/css/designer-dark.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sequential-workflow-designer@0.39.1/dist/index.umd.js"></script>
 </head>
 ```
 

@@ -1,3 +1,7 @@
+# 0.39.1
+
+Angular, React, and Svelte wrappers now accept configuration objects for the control bar and context menu.
+
 # 0.39.0
 
 This version adds support for custom buttons in the control bar. Button clicks are forwarded to the custom action handler with the `controlBarButtonClicked` action.

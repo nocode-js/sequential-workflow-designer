@@ -20,7 +20,9 @@ import {
 	I18n,
 	PreferenceStorage,
 	PlaceholderConfiguration,
-	DefinitionChangedEvent
+	DefinitionChangedEvent,
+	ContextMenuConfiguration,
+	ControlBarConfiguration
 } from 'sequential-workflow-designer';
 import { RootEditorWrapperContext } from './RootEditorWrapper';
 import { StepEditorWrapperContext } from './StepEditorWrapper';
@@ -54,10 +56,13 @@ export interface SequentialWorkflowDesignerProps<TDefinition extends Definition>
 	isToolboxCollapsed?: boolean;
 	onIsToolboxCollapsedChanged?: (isCollapsed: boolean) => void;
 	/**
-	 * @description If true, the control bar will be displayed.
+	 * @description If set to `true` or a configuration object, the control bar will be displayed.
 	 */
-	controlBar: boolean;
-	contextMenu?: boolean;
+	controlBar: boolean | ControlBarConfiguration;
+	/**
+	 * @description If set to `false`, the context menu will be disabled. By default, the context menu is enabled.
+	 */
+	contextMenu?: boolean | ContextMenuConfiguration;
 	keyboard?: boolean | KeyboardConfiguration;
 	preferenceStorage?: PreferenceStorage;
 	controller?: SequentialWorkflowDesignerController;
