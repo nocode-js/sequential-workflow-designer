@@ -1,3 +1,7 @@
+# 0.40.0
+
+Removed control bar customization from the core configuration. Advanced control bar customization has moved to the Pro package with the extended control bar, including `isDisableDragDisabled` and refreshable dynamic extra buttons.
+
 # 0.39.1
 
 Angular, React, and Svelte wrappers now accept configuration objects for the control bar and context menu.

@@ -1,7 +1,6 @@
 import { BehaviorController } from './behaviors/behavior-controller';
 import { ComponentContext } from './component-context';
 import { ObjectCloner } from './core/object-cloner';
-import { CustomActionController } from './custom-action-controller';
 import { Definition, DefinitionWalker } from './definition';
 import { StateModifier } from './modifier/state-modifier';
 import { DesignerConfiguration, I18n, UidGenerator } from './designer-configuration';
@@ -44,7 +43,6 @@ export class DesignerContext {
 		const uidGenerator = configuration.uidGenerator ?? Uid.next;
 		const textWidthMeasurer = configuration.textWidthMeasurer ?? measureTextWidth;
 		const stateModifier = StateModifier.create(definitionWalker, uidGenerator, state, configuration.steps);
-		const customActionController = new CustomActionController(configuration, state, stateModifier);
 
 		let historyController: HistoryController | undefined = undefined;
 		if (configuration.undoStackSize) {
@@ -77,7 +75,6 @@ export class DesignerContext {
 			workspaceController,
 			placeholderController,
 			behaviorController,
-			customActionController,
 			historyController
 		);
 	}
@@ -96,7 +93,6 @@ export class DesignerContext {
 		public readonly workspaceController: WorkspaceControllerWrapper,
 		public readonly placeholderController: PlaceholderController,
 		public readonly behaviorController: BehaviorController,
-		public readonly customActionController: CustomActionController,
 		public readonly historyController: HistoryController | undefined
 	) {}
 

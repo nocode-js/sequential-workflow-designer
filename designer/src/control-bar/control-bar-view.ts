@@ -1,163 +1,112 @@
 import { Dom } from '../core/dom';
 import { Icons } from '../core/icons';
-import { ControlBarButton, I18n } from '../designer-configuration';
+import { I18n } from '../designer-configuration';
+import { ControlBarAddon, ControlBarAddonFactory } from './control-bar';
+import { ControlBarButtonView } from './control-bar-button-view';
 
 export class ControlBarView {
 	public static create(
 		parent: HTMLElement,
 		isUndoRedoSupported: boolean,
-		buttons: ControlBarButton[] | null,
-		i18n: I18n
+		isDisableDragDisabled: boolean,
+		i18n: I18n,
+		addonFactory: ControlBarAddonFactory | null
 	): ControlBarView {
 		const root = Dom.element('div', {
 			class: 'sqd-control-bar'
 		});
 
-		const resetButton = createButton(Icons.center, i18n('controlBar.resetView', 'Reset view'));
-		root.appendChild(resetButton);
+		const resetButton = ControlBarButtonView.create(root, Icons.center, i18n('controlBar.resetView', 'Reset view'));
+		const zoomInButton = ControlBarButtonView.create(root, Icons.zoomIn, i18n('controlBar.zoomIn', 'Zoom in'));
+		const zoomOutButton = ControlBarButtonView.create(root, Icons.zoomOut, i18n('controlBar.zoomOut', 'Zoom out'));
 
-		const zoomInButton = createButton(Icons.zoomIn, i18n('controlBar.zoomIn', 'Zoom in'));
-		root.appendChild(zoomInButton);
-
-		const zoomOutButton = createButton(Icons.zoomOut, i18n('controlBar.zoomOut', 'Zoom out'));
-		root.appendChild(zoomOutButton);
-
-		let undoButton: HTMLElement | null = null;
-		let redoButton: HTMLElement | null = null;
-
+		let undoButton: ControlBarButtonView | null = null;
+		let redoButton: ControlBarButtonView | null = null;
 		if (isUndoRedoSupported) {
-			undoButton = createButton(Icons.undo, i18n('controlBar.undo', 'Undo'));
-			root.appendChild(undoButton);
-			redoButton = createButton(Icons.redo, i18n('controlBar.redo', 'Redo'));
-			root.appendChild(redoButton);
+			undoButton = ControlBarButtonView.create(root, Icons.undo, i18n('controlBar.undo', 'Undo'));
+			redoButton = ControlBarButtonView.create(root, Icons.redo, i18n('controlBar.redo', 'Redo'));
 		}
 
-		const disableDragButton = createButton(Icons.move, i18n('controlBar.turnOnOffDragAndDrop', 'Turn on/off drag and drop'));
-		disableDragButton.classList.add('sqd-disabled');
-		root.appendChild(disableDragButton);
-
-		const deleteButton = createButton(Icons.delete, i18n('controlBar.deleteSelectedStep', 'Delete selected step'));
-		deleteButton.classList.add('sqd-delete');
-		deleteButton.classList.add('sqd-hidden');
-		root.appendChild(deleteButton);
-
-		const customButtons: HTMLElement[] = [];
-		if (buttons) {
-			for (const customButton of buttons) {
-				const button = createButton(customButton.iconD, customButton.label);
-				button.setAttribute('data-id', customButton.id);
-				root.appendChild(button);
-				customButtons.push(button);
-			}
+		let disableDragButton: ControlBarButtonView | null = null;
+		if (!isDisableDragDisabled) {
+			disableDragButton = ControlBarButtonView.create(
+				root,
+				Icons.move,
+				i18n('controlBar.turnOnOffDragAndDrop', 'Turn on/off drag and drop')
+			);
+			disableDragButton.setIsDisabled(true);
 		}
+
+		const deleteButton = ControlBarButtonView.create(
+			root,
+			Icons.delete,
+			i18n('controlBar.deleteSelectedStep', 'Delete selected step'),
+			'sqd-delete'
+		);
+		deleteButton.setIsHidden(true);
+
+		const addon = addonFactory ? addonFactory(root) : null;
 
 		parent.appendChild(root);
-		return new ControlBarView(
-			resetButton,
-			zoomInButton,
-			zoomOutButton,
-			undoButton,
-			redoButton,
-			disableDragButton,
-			deleteButton,
-			customButtons
-		);
+		return new ControlBarView(resetButton, zoomInButton, zoomOutButton, undoButton, redoButton, disableDragButton, deleteButton, addon);
 	}
 
 	private constructor(
-		private readonly resetButton: HTMLElement,
-		private readonly zoomInButton: HTMLElement,
-		private readonly zoomOutButton: HTMLElement,
-		private readonly undoButton: HTMLElement | null,
-		private readonly redoButton: HTMLElement | null,
-		private readonly disableDragButton: HTMLElement,
-		private readonly deleteButton: HTMLElement,
-		private readonly customButtons: HTMLElement[]
+		private readonly resetButton: ControlBarButtonView,
+		private readonly zoomInButton: ControlBarButtonView,
+		private readonly zoomOutButton: ControlBarButtonView,
+		private readonly undoButton: ControlBarButtonView | null,
+		private readonly redoButton: ControlBarButtonView | null,
+		private readonly disableDragButton: ControlBarButtonView | null,
+		private readonly deleteButton: ControlBarButtonView,
+		private readonly addon: ControlBarAddon | null
 	) {}
 
 	public bindResetButtonClick(handler: () => void) {
-		bindClick(this.resetButton, handler);
+		this.resetButton.bindClick(handler);
 	}
 
 	public bindZoomInButtonClick(handler: () => void) {
-		bindClick(this.zoomInButton, handler);
+		this.zoomInButton.bindClick(handler);
 	}
 
 	public bindZoomOutButtonClick(handler: () => void) {
-		bindClick(this.zoomOutButton, handler);
+		this.zoomOutButton.bindClick(handler);
 	}
 
-	public bindUndoButtonClick(handler: () => void) {
-		if (!this.undoButton) {
-			throw new Error('Undo button is disabled');
-		}
-		bindClick(this.undoButton, handler);
+	public tryBindUndoButtonClick(handler: () => void) {
+		this.undoButton?.bindClick(handler);
 	}
 
-	public bindRedoButtonClick(handler: () => void) {
-		if (!this.redoButton) {
-			throw new Error('Redo button is disabled');
-		}
-		bindClick(this.redoButton, handler);
+	public tryBindRedoButtonClick(handler: () => void) {
+		this.redoButton?.bindClick(handler);
 	}
 
-	public bindDisableDragButtonClick(handler: () => void) {
-		bindClick(this.disableDragButton, handler);
+	public tryBindDisableDragButtonClick(handler: () => void) {
+		this.disableDragButton?.bindClick(handler);
 	}
 
 	public bindDeleteButtonClick(handler: () => void) {
-		bindClick(this.deleteButton, handler);
-	}
-
-	public bindCustomButtonClick(handler: (id: string) => void) {
-		for (const customButton of this.customButtons) {
-			const id = customButton.getAttribute('data-id');
-			if (id) {
-				bindClick(customButton, () => handler(id));
-			}
-		}
+		this.deleteButton.bindClick(handler);
 	}
 
 	public setIsDeleteButtonHidden(isHidden: boolean) {
-		Dom.toggleClass(this.deleteButton, isHidden, 'sqd-hidden');
+		this.deleteButton.setIsHidden(isHidden);
 	}
 
-	public setDisableDragButtonDisabled(isDisabled: boolean) {
-		Dom.toggleClass(this.disableDragButton, isDisabled, 'sqd-disabled');
+	public trySetDisableDragButtonDisabled(isDisabled: boolean) {
+		this.disableDragButton?.setIsDisabled(isDisabled);
 	}
 
-	public setUndoButtonDisabled(isDisabled: boolean) {
-		if (!this.undoButton) {
-			throw new Error('Undo button is disabled');
-		}
-		Dom.toggleClass(this.undoButton, isDisabled, 'sqd-disabled');
+	public trySetUndoButtonDisabled(isDisabled: boolean) {
+		this.undoButton?.setIsDisabled(isDisabled);
 	}
 
-	public setRedoButtonDisabled(isDisabled: boolean) {
-		if (!this.redoButton) {
-			throw new Error('Redo button is disabled');
-		}
-		Dom.toggleClass(this.redoButton, isDisabled, 'sqd-disabled');
+	public trySetRedoButtonDisabled(isDisabled: boolean) {
+		this.redoButton?.setIsDisabled(isDisabled);
 	}
-}
 
-function bindClick(element: HTMLElement, handler: () => void) {
-	element.addEventListener(
-		'click',
-		e => {
-			e.preventDefault();
-			handler();
-		},
-		false
-	);
-}
-
-function createButton(d: string, title: string): HTMLElement {
-	const button = Dom.element('div', {
-		class: 'sqd-control-bar-button',
-		title
-	});
-	const icon = Icons.createSvg('sqd-control-bar-button-icon', d);
-	button.appendChild(icon);
-	return button;
+	public tryRefreshAddon() {
+		this.addon?.refresh();
+	}
 }

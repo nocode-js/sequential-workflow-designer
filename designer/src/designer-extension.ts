@@ -1,10 +1,10 @@
 import { WorkspaceApi } from './api';
+import { CustomActionApi } from './api/custom-action-api';
 import { DesignerApi } from './api/designer-api';
 import { ViewportApi } from './api/viewport-api';
 import { Behavior } from './behaviors';
 import { ComponentContext } from './component-context';
-import { Vector } from './core';
-import { CustomActionController } from './custom-action-controller';
+import { Vector } from './core/vector';
 import { ComponentType, Definition, Sequence, Step } from './definition';
 import { I18n, PreferenceChange, TextWidthMeasurer } from './designer-configuration';
 import {
@@ -115,7 +115,7 @@ export interface BadgesDecorator {
 // ClickBehaviorWrapperExtension
 
 export interface ClickBehaviorWrapperExtension {
-	create(customActionController: CustomActionController): ClickBehaviorWrapper;
+	create(customActionApi: CustomActionApi): ClickBehaviorWrapper;
 }
 
 export interface ClickBehaviorWrapper {
@@ -202,7 +202,7 @@ export interface SequenceComponentExtension {
 // ContextMenuExtension
 
 export interface ContextMenuExtension {
-	createItemsProvider?: (customActionController: CustomActionController) => ContextMenuItemsProvider;
+	createItemsProvider?: (customActionApi: CustomActionApi) => ContextMenuItemsProvider;
 }
 
 export interface ContextMenuItemsProvider {

@@ -8,6 +8,7 @@ import { ViewportApi } from './viewport-api';
 import { WorkspaceApi } from './workspace-api';
 import { DefinitionWalker } from '../definition';
 import { I18n } from '../designer-configuration';
+import { CustomActionApi } from './custom-action-api';
 
 export class DesignerApi {
 	public static create(context: DesignerContext): DesignerApi {
@@ -21,18 +22,13 @@ export class DesignerApi {
 
 		return new DesignerApi(
 			context.configuration.shadowRoot,
-			ControlBarApi.create(
-				context.state,
-				context.historyController,
-				context.customActionController,
-				context.stateModifier,
-				context.configuration.controlBar
-			),
+			workspace,
+			ControlBarApi.create(context.state, context.historyController, context.stateModifier),
 			new ToolboxApi(context.state, context, context.behaviorController, toolboxDataProvider, context.uidGenerator),
 			new EditorApi(context.state, context.definitionWalker, context.stateModifier),
-			workspace,
 			new ViewportApi(context.state, context.workspaceController, viewportController),
 			new PathBarApi(context.state, context.definitionWalker),
+			new CustomActionApi(context.configuration.customActionHandler, context.state, context.stateModifier),
 			context.definitionWalker,
 			context.i18n
 		);
@@ -40,12 +36,13 @@ export class DesignerApi {
 
 	private constructor(
 		public readonly shadowRoot: ShadowRoot | undefined,
+		public readonly workspace: WorkspaceApi,
 		public readonly controlBar: ControlBarApi,
 		public readonly toolbox: ToolboxApi,
 		public readonly editor: EditorApi,
-		public readonly workspace: WorkspaceApi,
 		public readonly viewport: ViewportApi,
 		public readonly pathBar: PathBarApi,
+		public readonly customAction: CustomActionApi,
 		public readonly definitionWalker: DefinitionWalker,
 		public readonly i18n: I18n
 	) {}

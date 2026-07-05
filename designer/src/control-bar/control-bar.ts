@@ -4,31 +4,39 @@ import { ControlBarApi } from '../api/control-bar-api';
 import { DesignerApi } from '../api/designer-api';
 import { ViewportApi } from '../api';
 
-export class ControlBar implements UiComponent {
-	public static create(parent: HTMLElement, api: DesignerApi): UiComponent {
-		const isUndoRedoSupported = api.controlBar.isUndoRedoSupported();
-		const customButtons = api.controlBar.getButtons();
+export type ControlBarAddonFactory = (parent: HTMLElement) => ControlBarAddon | null;
 
-		const view = ControlBarView.create(parent, isUndoRedoSupported, customButtons, api.i18n);
-		const bar = new ControlBar(view, api.controlBar, api.viewport, isUndoRedoSupported);
+export interface ControlBarAddon {
+	refresh(): void;
+}
+
+export class ControlBar implements UiComponent {
+	public static create(
+		parent: HTMLElement,
+		api: DesignerApi,
+		isDisableDragDisabled: boolean,
+		addonFactory: ControlBarAddonFactory | null
+	): ControlBar {
+		const isUndoRedoSupported = api.controlBar.isUndoRedoSupported();
+
+		const view = ControlBarView.create(parent, isUndoRedoSupported, isDisableDragDisabled, api.i18n, addonFactory);
+		const bar = new ControlBar(view, api.controlBar, api.viewport, isUndoRedoSupported, isDisableDragDisabled);
 
 		view.bindResetButtonClick(bar.onResetButtonClicked);
 		view.bindZoomInButtonClick(bar.onZoomInButtonClicked);
 		view.bindZoomOutButtonClick(bar.onZoomOutButtonClicked);
-		view.bindDisableDragButtonClick(bar.onMoveButtonClicked);
 		view.bindDeleteButtonClick(bar.onDeleteButtonClicked);
-		api.controlBar.onStateChanged.subscribe(bar.refreshButtons);
+		api.controlBar.onStateChanged.subscribe(bar.refresh);
 
 		if (isUndoRedoSupported) {
-			view.bindUndoButtonClick(bar.onUndoButtonClicked);
-			view.bindRedoButtonClick(bar.onRedoButtonClicked);
+			view.tryBindUndoButtonClick(bar.onUndoButtonClicked);
+			view.tryBindRedoButtonClick(bar.onRedoButtonClicked);
+		}
+		if (!isDisableDragDisabled) {
+			view.tryBindDisableDragButtonClick(bar.onDisableDragButtonClicked);
 		}
 
-		if (customButtons) {
-			view.bindCustomButtonClick(bar.onCustomButtonClicked);
-		}
-
-		bar.refreshButtons();
+		bar.refresh();
 		return bar;
 	}
 
@@ -36,11 +44,16 @@ export class ControlBar implements UiComponent {
 		private readonly view: ControlBarView,
 		private readonly controlBarApi: ControlBarApi,
 		private readonly viewportApi: ViewportApi,
-		private readonly isUndoRedoSupported: boolean
+		private readonly isUndoRedoSupported: boolean,
+		private readonly isDisableDragDisabled: boolean
 	) {}
 
 	public updateLayout() {
 		//
+	}
+
+	public tryUpdateAddon() {
+		this.view.tryRefreshAddon();
 	}
 
 	public destroy() {
@@ -59,7 +72,7 @@ export class ControlBar implements UiComponent {
 		this.viewportApi.zoom(false);
 	};
 
-	private readonly onMoveButtonClicked = () => {
+	private readonly onDisableDragButtonClicked = () => {
 		this.controlBarApi.toggleIsDragDisabled();
 	};
 
@@ -75,30 +88,29 @@ export class ControlBar implements UiComponent {
 		this.controlBarApi.tryDelete();
 	};
 
-	private readonly refreshButtons = () => {
+	private readonly refresh = () => {
 		this.refreshDeleteButtonVisibility();
-		this.refreshIsDragDisabled();
-		if (this.isUndoRedoSupported) {
-			this.refreshUndoRedoAvailability();
-		}
-	};
-
-	private readonly onCustomButtonClicked = (id: string) => {
-		this.controlBarApi.triggerButtonClick(id);
+		this.tryRefreshIsDragDisabled();
+		this.tryRefreshUndoRedoAvailability();
+		this.tryUpdateAddon();
 	};
 
 	//
 
-	private refreshIsDragDisabled() {
-		const isDragDisabled = this.controlBarApi.isDragDisabled();
-		this.view.setDisableDragButtonDisabled(!isDragDisabled);
+	private tryRefreshIsDragDisabled() {
+		if (!this.isDisableDragDisabled) {
+			const isDragDisabled = this.controlBarApi.isDragDisabled();
+			this.view.trySetDisableDragButtonDisabled(!isDragDisabled);
+		}
 	}
 
-	private refreshUndoRedoAvailability() {
-		const canUndo = this.controlBarApi.canUndo();
-		const canRedo = this.controlBarApi.canRedo();
-		this.view.setUndoButtonDisabled(!canUndo);
-		this.view.setRedoButtonDisabled(!canRedo);
+	private tryRefreshUndoRedoAvailability() {
+		if (this.isUndoRedoSupported) {
+			const canUndo = this.controlBarApi.canUndo();
+			const canRedo = this.controlBarApi.canRedo();
+			this.view.trySetUndoButtonDisabled(!canUndo);
+			this.view.trySetRedoButtonDisabled(!canRedo);
+		}
 	}
 
 	private refreshDeleteButtonVisibility() {

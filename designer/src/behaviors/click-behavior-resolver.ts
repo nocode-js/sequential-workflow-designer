@@ -7,9 +7,13 @@ import { PressingBehavior } from './pressing-behaviors/pressing-behavior';
 import { ChangePreferencesBehaviorHandler } from './pressing-behaviors/change-preferences-behavior-handler';
 import { OpenFolderPressingBehaviorHandler } from './pressing-behaviors/open-folder-pressing-behavior-handler';
 import { TriggerCustomActionPressingBehaviorHandler } from './pressing-behaviors/trigger-custom-action-pressing-behavior-handler';
+import { DesignerApi } from '../api';
 
 export class ClickBehaviorResolver {
-	public constructor(private readonly context: DesignerContext) {}
+	public constructor(
+		private readonly context: DesignerContext,
+		private readonly api: DesignerApi
+	) {}
 
 	public resolve(commandOrNull: ClickCommand | null, element: Element, forceMove: boolean): Behavior {
 		if (!commandOrNull) {
@@ -29,7 +33,7 @@ export class ClickBehaviorResolver {
 			case ClickCommandType.triggerCustomAction:
 				return PressingBehavior.create(
 					element,
-					new TriggerCustomActionPressingBehaviorHandler(commandOrNull, this.context.customActionController)
+					new TriggerCustomActionPressingBehaviorHandler(commandOrNull, this.api.customAction)
 				);
 
 			default:

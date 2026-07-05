@@ -7,7 +7,7 @@ describe('ControlBar', () => {
 		const parent = Dom.element('div');
 		const api = createDesignerApiStub();
 
-		const bar = ControlBar.create(parent, api);
+		const bar = ControlBar.create(parent, api, false, null);
 
 		expect(bar).toBeDefined();
 		expect(parent.children.length).not.toEqual(0);

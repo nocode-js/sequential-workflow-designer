@@ -1,4 +1,5 @@
 export * from './control-bar-api';
+export * from './custom-action-api';
 export * from './designer-api';
 export * from './editor-api';
 export * from './path-bar-api';

@@ -44,9 +44,9 @@ export interface DesignerConfiguration<TDefinition extends Definition = Definiti
 	editors: false | EditorsConfiguration<TDefinition>;
 
 	/**
-	 * @description If set to `true` or a configuration object, the control bar will be displayed.
+	 * @description If set to `true`, the control bar will be displayed.
 	 */
-	controlBar: boolean | ControlBarConfiguration;
+	controlBar: boolean;
 
 	/**
 	 * @description If set to `false`, the context menu will be disabled. By default, the context menu is enabled.
@@ -117,11 +117,6 @@ export type CustomActionHandler = (
 
 export interface CustomAction {
 	type: string;
-}
-
-export interface ControlBarButtonClickedCustomAction extends CustomAction {
-	type: 'controlBarButtonClicked';
-	id: string;
 }
 
 export interface CustomActionHandlerContext {
@@ -215,28 +210,6 @@ export interface ValidatorConfiguration {
 
 export type StepValidator = (step: Step, parentSequence: Sequence, definition: Definition) => boolean;
 export type RootValidator = (definition: Definition) => boolean;
-
-export interface ControlBarConfiguration {
-	/**
-	 * @description Custom buttons displayed in the control bar.
-	 */
-	buttons?: ControlBarButton[];
-}
-
-export interface ControlBarButton {
-	/**
-	 * @description The unique identifier of the custom button.
-	 */
-	id: string;
-	/**
-	 * @description The SVG path data used as the button icon.
-	 */
-	iconD: string;
-	/**
-	 * @description The button label, used as the button title.
-	 */
-	label: string;
-}
 
 export interface ContextMenuConfiguration {
 	/**

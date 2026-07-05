@@ -33,8 +33,7 @@ import {
 	I18n,
 	PreferenceStorage,
 	DefinitionChangedEvent,
-	ContextMenuConfiguration,
-	ControlBarConfiguration
+	ContextMenuConfiguration
 } from 'sequential-workflow-designer';
 
 export interface RootEditorWrapper {
@@ -78,7 +77,7 @@ export class DesignerComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Input('toolboxConfiguration')
 	public toolboxConfiguration?: AngularToolboxConfiguration | false;
 	@Input('controlBar')
-	public controlBar?: boolean | ControlBarConfiguration;
+	public controlBar?: boolean;
 	@Input('contextMenu')
 	public contextMenu?: boolean | ContextMenuConfiguration;
 	@Input('keyboard')

@@ -25,8 +25,8 @@ export class Workspace implements WorkspaceController {
 	public static create(parent: HTMLElement, designerContext: DesignerContext, api: DesignerApi): Workspace {
 		const view = WorkspaceView.create(parent, designerContext.componentContext);
 
-		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext);
-		const clickBehaviorWrapper = designerContext.services.clickBehaviorWrapperExtension.create(designerContext.customActionController);
+		const clickBehaviorResolver = new ClickBehaviorResolver(designerContext, api);
+		const clickBehaviorWrapper = designerContext.services.clickBehaviorWrapperExtension.create(api.customAction);
 
 		const wheelController = designerContext.services.wheelController.create(api.viewport, api.workspace);
 		const pinchToZoomController = PinchToZoomController.create(api.workspace, api.viewport, api.shadowRoot);
@@ -38,7 +38,7 @@ export class Workspace implements WorkspaceController {
 			designerContext.stateModifier,
 			designerContext.state,
 			designerContext.services.contextMenu?.createItemsProvider
-				? designerContext.services.contextMenu.createItemsProvider(designerContext.customActionController)
+				? designerContext.services.contextMenu.createItemsProvider(api.customAction)
 				: undefined
 		);
 		const contextMenuController = new ContextMenuController(

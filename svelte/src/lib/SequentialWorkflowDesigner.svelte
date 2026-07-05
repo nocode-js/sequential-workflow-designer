@@ -22,8 +22,7 @@
 		type I18n,
 		type PreferenceStorage,
 		type DuplicatedStepId,
-		type ContextMenuConfiguration,
-		type ControlBarConfiguration
+		type ContextMenuConfiguration
 	} from 'sequential-workflow-designer';
 
 	const dispatch = createEventDispatcher<{
@@ -51,7 +50,7 @@
 	export let toolbox: Omit<ToolboxConfiguration, 'isCollapsed'> | false = false;
 	export let isToolboxCollapsed = false;
 	export let theme = 'light';
-	export let controlBar: boolean | ControlBarConfiguration = true;
+	export let controlBar: boolean = true;
 	export let contextMenu: boolean | ContextMenuConfiguration = true;
 	export let keyboard: boolean | KeyboardConfiguration | undefined = undefined;
 	export let preferenceStorage: PreferenceStorage | undefined = undefined;

@@ -1,24 +1,23 @@
-import { Sequence, Step } from './definition';
-import { CustomAction, DefinitionChangeType, DesignerConfiguration } from './designer-configuration';
-import { DesignerState } from './designer-state';
-import { StateModifier } from './modifier/state-modifier';
+import { Sequence, Step } from 'sequential-workflow-model';
+import { CustomAction, CustomActionHandler, DefinitionChangeType } from '../designer-configuration';
+import { DesignerState } from '../designer-state';
+import { StateModifier } from '../modifier/state-modifier';
 
-export class CustomActionController {
+export class CustomActionApi {
 	public constructor(
-		private readonly configuration: DesignerConfiguration,
+		private readonly customActionHandler: CustomActionHandler | undefined,
 		private readonly state: DesignerState,
 		private readonly stateModifier: StateModifier
 	) {}
 
 	public trigger(action: CustomAction, step: Step | null, sequence: Sequence) {
-		const handler = this.configuration.customActionHandler;
-		if (!handler) {
+		if (!this.customActionHandler) {
 			console.warn(`Custom action handler is not defined (action type: ${action.type})`);
 			return;
 		}
 
 		const context = this.createCustomActionHandlerContext();
-		handler(action, step, sequence, context);
+		this.customActionHandler(action, step, sequence, context);
 	}
 
 	private createCustomActionHandlerContext() {
