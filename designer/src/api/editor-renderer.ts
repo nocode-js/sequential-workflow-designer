@@ -32,6 +32,10 @@ export class EditorRenderer {
 		private readonly raceEvent: SimpleEvent<RaceEventArgs>
 	) {}
 
+	public update() {
+		this.render(this.selectedStepIdProvider.selectedStepId);
+	}
+
 	public destroy() {
 		this.raceEvent.unsubscribe(this.raceEventHandler);
 	}

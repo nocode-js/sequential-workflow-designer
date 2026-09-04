@@ -60,6 +60,10 @@ export class SmartEditorView {
 		this.toggle.appendChild(this.toggleIcon);
 	}
 
+	public update() {
+		this.editor.update();
+	}
+
 	public destroy() {
 		this.editor.destroy();
 	}

@@ -15,8 +15,8 @@ import { race } from './core';
 export class Designer<TDefinition extends Definition = Definition> {
 	/**
 	 * Creates a designer.
-	 * @param placeholder Placeholder where the designer will be attached.
-	 * @param startDefinition Initial definition of the workflow.
+	 * @param placeholder The placeholder element to which the designer will be attached.
+	 * @param startDefinition The initial workflow definition.
 	 * @param configuration The designer configuration.
 	 * @returns An instance of the designer.
 	 */
@@ -103,7 +103,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	public readonly onSelectedStepIdChanged = new SimpleEvent<string | null>();
 
 	/**
-	 * @description Fires when the designer could not unselect the currently selected step due to restrictions.
+	 * @description Fires when restrictions prevent the designer from unselecting the currently selected step.
 	 */
 	public readonly onStepUnselectionBlocked = new SimpleEvent<string | null>();
 
@@ -118,7 +118,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	public readonly onIsEditorCollapsedChanged = new SimpleEvent<boolean>();
 
 	/**
-	 * @description Fires when the root component and all its children are rerendered.
+	 * @description Fires when the root component and all its children are re-rendered.
 	 */
 	public readonly onRootComponentUpdated = new SimpleEvent<void>();
 
@@ -128,7 +128,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	public readonly onIsDraggingChanged = new SimpleEvent<boolean>();
 
 	/**
-	 * @description Fires when any of the designer preferences has changed.
+	 * @description Fires when any designer preference changes.
 	 */
 	public readonly onPreferencesChanged = new SimpleEvent<PreferencesChangedEvent>();
 
@@ -161,14 +161,14 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
-	 * @returns The currently selected step id, or `null` if nothing is selected.
+	 * @returns The currently selected step ID, or `null` if nothing is selected.
 	 */
 	public getSelectedStepId(): string | null {
 		return this.state.selectedStepId;
 	}
 
 	/**
-	 * @description Selects a step by id.
+	 * @description Selects a step by ID.
 	 */
 	public selectStepById(stepId: string) {
 		this.state.setSelectedStepId(stepId);
@@ -190,7 +190,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 
 	/**
 	 * @description Sets the viewport.
-	 * @param viewport Viewport.
+	 * @param viewport The viewport.
 	 */
 	public setViewport(viewport: Viewport) {
 		this.state.setViewport(viewport);
@@ -211,10 +211,17 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
-	 * @description Rerenders the root component and all its children.
+	 * @description Re-renders the root component and all its children.
 	 */
 	public updateRootComponent() {
 		this.api.workspace.updateRootComponent();
+	}
+
+	/**
+	 * @description Re-renders the editor.
+	 */
+	public updateEditor() {
+		this.state.onEditorUpdateRequested.emit();
 	}
 
 	/**
@@ -282,13 +289,13 @@ export class Designer<TDefinition extends Definition = Definition> {
 		this.getHistoryController().replaceDefinition(definition);
 
 		await Promise.all([
-			this.view.workspace.onRootComponentUpdated.once(), // This should be fired first
+			this.view.workspace.onRootComponentUpdated.once(), // This should fire first
 			this.onDefinitionChanged.once()
 		]);
 	}
 
 	/**
-	 * @param needle A step, a sequence or a step id.
+	 * @param needle A step, a sequence, or a step ID.
 	 * @returns Parent steps and branch names.
 	 */
 	public getStepParents(needle: Sequence | Step | string): StepOrName[] {
@@ -303,7 +310,7 @@ export class Designer<TDefinition extends Definition = Definition> {
 	}
 
 	/**
-	 * @description Destroys the designer and deletes all nodes from the placeholder.
+	 * @description Destroys the designer and removes all nodes from the placeholder.
 	 */
 	public destroy() {
 		this.view.destroy();

@@ -23,6 +23,7 @@ export class DesignerState {
 	public readonly onDefinitionChanged = new SimpleEvent<DefinitionChangedEvent>();
 	public readonly onIsToolboxCollapsedChanged = new SimpleEvent<boolean>();
 	public readonly onIsEditorCollapsedChanged = new SimpleEvent<boolean>();
+	public readonly onEditorUpdateRequested = new SimpleEvent<void>();
 	public readonly onPreferencesChanged = new SimpleEvent<PreferencesChangedEvent>();
 
 	public viewport: Viewport = {

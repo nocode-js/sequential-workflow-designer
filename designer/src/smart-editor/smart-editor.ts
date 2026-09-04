@@ -11,8 +11,9 @@ export class SmartEditor implements UiComponent {
 
 		const editor = new SmartEditor(view, api.editor, api.workspace);
 		editor.updateVisibility();
-		view.bindToggleClick(() => editor.onToggleClicked());
-		api.editor.subscribeIsCollapsed(() => editor.onIsCollapsedChanged());
+		view.bindToggleClick(editor.onToggleClicked);
+		api.editor.subscribeIsCollapsed(editor.onEditorUpdateRequested);
+		api.editor.subscribeToUpdateRequests(editor.onIsCollapsedChanged);
 		return editor;
 	}
 
@@ -22,18 +23,22 @@ export class SmartEditor implements UiComponent {
 		private workspaceApi: WorkspaceApi
 	) {}
 
-	private onToggleClicked() {
+	private readonly onToggleClicked = () => {
 		this.editorApi.toggleIsCollapsed();
-	}
+	};
 
 	private setIsCollapsed(isCollapsed: boolean) {
 		this.view.setIsCollapsed(isCollapsed);
 	}
 
-	private onIsCollapsedChanged() {
+	private readonly onIsCollapsedChanged = () => {
 		this.updateVisibility();
 		this.workspaceApi.updateCanvasSize();
-	}
+	};
+
+	private readonly onEditorUpdateRequested = () => {
+		this.view.update();
+	};
 
 	private updateVisibility() {
 		this.setIsCollapsed(this.editorApi.isCollapsed());

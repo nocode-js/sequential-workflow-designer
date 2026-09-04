@@ -7,18 +7,16 @@ export class SequentialWorkflowDesignerController {
 	}
 
 	/**
-	 * @description Event that is raised when the controller is ready to be used.
+	 * @description Fires when the controller is ready to use.
 	 */
 	public readonly onIsReadyChanged = new SimpleEvent<void>();
 
 	private designer: Designer | null = null;
 
-	private constructor() {
-		// Nothing...
-	}
+	private constructor() {}
 
 	/**
-	 * @description Moves the viewport to the step with the animation.
+	 * @description Moves the viewport to the step with animation.
 	 */
 	public readonly moveViewportToStep = (stepId: string) => {
 		this.getDesigner().moveViewportToStep(stepId);
@@ -32,10 +30,17 @@ export class SequentialWorkflowDesignerController {
 	};
 
 	/**
-	 * @description Rerender the root component and all its children.
+	 * @description Re-renders the root component and all its children.
 	 */
 	public readonly updateRootComponent = () => {
 		this.getDesigner().updateRootComponent();
+	};
+
+	/**
+	 * @description Re-renders the editor.
+	 */
+	public readonly updateEditor = () => {
+		this.getDesigner().updateEditor();
 	};
 
 	/**
@@ -54,7 +59,7 @@ export class SequentialWorkflowDesignerController {
 	};
 
 	/**
-	 * @returns `true` if the controller is ready to be used, `false` otherwise.
+	 * @returns `true` if the controller is ready to use; otherwise, `false`.
 	 */
 	public isReady(): boolean {
 		return Boolean(this.designer);
