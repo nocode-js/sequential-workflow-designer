@@ -13,7 +13,9 @@ export class SequentialWorkflowDesignerController {
 
 	private designer: Designer | null = null;
 
-	private constructor() {}
+	private constructor() {
+		// Private.
+	}
 
 	/**
 	 * @description Moves the viewport to the step with animation.
