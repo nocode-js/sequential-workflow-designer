@@ -1,3 +1,7 @@
+# 0.40.2
+
+Fixed a bug that prevented the editor from being manually re-rendered.
+
 # 0.40.1
 
 Added the ability to manually re-render the editor.

@@ -12,8 +12,8 @@ export class SmartEditor implements UiComponent {
 		const editor = new SmartEditor(view, api.editor, api.workspace);
 		editor.updateVisibility();
 		view.bindToggleClick(editor.onToggleClicked);
-		api.editor.subscribeIsCollapsed(editor.onEditorUpdateRequested);
-		api.editor.subscribeToUpdateRequests(editor.onIsCollapsedChanged);
+		api.editor.subscribeIsCollapsed(editor.onIsCollapsedChanged);
+		api.editor.subscribeToUpdateRequests(editor.onEditorUpdateRequested);
 		return editor;
 	}
 
