@@ -34,6 +34,10 @@ export class EditorApi {
 		this.state.onIsEditorCollapsedChanged.subscribe(listener);
 	}
 
+	public subscribeToUpdateRequests(listener: SimpleEventListener<void>) {
+		this.state.onEditorUpdateRequested.subscribe(listener);
+	}
+
 	public getDefinition(): Definition {
 		return this.state.definition;
 	}

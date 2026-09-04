@@ -41,6 +41,10 @@ export class Editor {
 		private readonly renderer: EditorRenderer
 	) {}
 
+	public update() {
+		this.renderer.update();
+	}
+
 	public destroy() {
 		this.view.destroy();
 		this.renderer.destroy();
