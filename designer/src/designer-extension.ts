@@ -206,7 +206,7 @@ export interface ContextMenuExtension {
 }
 
 export interface ContextMenuItemsProvider {
-	getItems(step: Step | null, parentSequence: Sequence, definition: Definition): ContextMenuItem[];
+	getItems(step: Step | null, parentSequence: Sequence, definition: Definition, target: Element): ContextMenuItem[];
 }
 
 export interface ContextMenuItem {

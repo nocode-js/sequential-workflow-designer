@@ -13,7 +13,7 @@ export class ContextMenuController {
 		private readonly itemsBuilder: ContextMenuItemsBuilder
 	) {}
 
-	public tryOpen(position: Vector, commandOrNull: ClickCommand | null) {
+	public tryOpen(target: Element, position: Vector, commandOrNull: ClickCommand | null) {
 		if (this.configuration.contextMenu === false) {
 			// Context menu is disabled.
 			return;
@@ -26,7 +26,7 @@ export class ContextMenuController {
 		const isResetViewDisabled =
 			this.configuration.contextMenu === true ? false : this.configuration.contextMenu?.isResetViewDisabled ?? false;
 
-		const items = this.itemsBuilder.build(commandOrNull, isResetViewDisabled);
+		const items = this.itemsBuilder.build(commandOrNull, target, isResetViewDisabled);
 		if (items.length > 0) {
 			this.current = ContextMenu.create(this.configuration.shadowRoot, position, this.theme, items);
 		}

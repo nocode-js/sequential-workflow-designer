@@ -210,7 +210,7 @@ export class Workspace implements WorkspaceController {
 
 	private readonly onContextMenu = (position: Vector, target: Element) => {
 		const commandOrNull = this.resolveClick(target, position);
-		this.contextMenuController.tryOpen(position, commandOrNull);
+		this.contextMenuController.tryOpen(target, position, commandOrNull);
 	};
 
 	private readonly onViewportChanged = (viewport: Viewport) => {

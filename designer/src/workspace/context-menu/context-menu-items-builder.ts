@@ -17,7 +17,7 @@ export class ContextMenuItemsBuilder {
 		private readonly customMenuItemsProvider: ContextMenuItemsProvider | undefined
 	) {}
 
-	public build(commandOrNull: ClickCommand | null, isResetViewDisabled: boolean): ContextMenuItem[] {
+	public build(commandOrNull: ClickCommand | null, target: Element, isResetViewDisabled: boolean): ContextMenuItem[] {
 		const items: ContextMenuItem[] = [];
 
 		if (commandOrNull && commandOrNull.type === ClickCommandType.selectStep) {
@@ -30,7 +30,7 @@ export class ContextMenuItemsBuilder {
 				label: name,
 				order: 0
 			});
-			this.tryAppendCustomItems(items, step, parentSequence);
+			this.tryAppendCustomItems(items, step, parentSequence, target);
 
 			if (this.stateModifier.isSelectable(step, parentSequence)) {
 				if (this.state.selectedStepId === step.id) {
@@ -74,7 +74,7 @@ export class ContextMenuItemsBuilder {
 			}
 		} else if (!commandOrNull) {
 			const rootSequence = this.workspaceApi.getRootSequence();
-			this.tryAppendCustomItems(items, null, rootSequence.sequence);
+			this.tryAppendCustomItems(items, null, rootSequence.sequence, target);
 		}
 
 		if (!isResetViewDisabled) {
@@ -91,9 +91,9 @@ export class ContextMenuItemsBuilder {
 		return items;
 	}
 
-	private tryAppendCustomItems(items: ContextMenuItem[], step: Step | null, parentSequence: Sequence) {
+	private tryAppendCustomItems(items: ContextMenuItem[], step: Step | null, parentSequence: Sequence, target: Element) {
 		if (this.customMenuItemsProvider) {
-			const customItems = this.customMenuItemsProvider.getItems(step, parentSequence, this.state.definition);
+			const customItems = this.customMenuItemsProvider.getItems(step, parentSequence, this.state.definition, target);
 			for (const customItem of customItems) {
 				items.push(customItem);
 			}
