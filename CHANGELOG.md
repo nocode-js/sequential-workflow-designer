@@ -1,3 +1,7 @@
+# 0.40.3
+
+The `ContextMenuItemsProvider.getItems()` method now receives the clicked DOM `Element` as its fourth argument, allowing custom context menu items to depend on the exact element that opened the menu.
+
 # 0.40.2
 
 Fixed a bug that prevented the editor from being manually re-rendered.
